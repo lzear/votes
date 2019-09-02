@@ -1,16 +1,18 @@
-// Import here Polyfills if needed. Recommended core-js (npm i -D core-js)
-import borda from './votes/methods/borda'
-import { Method, PollType } from './votes/types'
-import approbation from './votes/methods/approbation'
-import majority from './votes/methods/majority'
-import runoff from './votes/methods/runoff'
-import kemeny from './votes/methods/kemeny'
+import borda from './methods/borda'
+import approbation from './methods/approbation'
+import majority from './methods/majority'
+import runoff from './methods/runoff'
+import kemeny from './methods/kemeny'
+import { System, VotingSystem } from './types'
 
-const methods: { [type in PollType]: Method } = {
-  [PollType.Majority]: majority,
-  [PollType.Approbation]: approbation,
-  [PollType.Borda]: borda,
-  [PollType.Kemeny]: kemeny,
-  [PollType.Runoff]: runoff
+const methods: { [type in VotingSystem]: System } = {
+  [VotingSystem.Majority]: majority,
+  [VotingSystem.Approbation]: approbation,
+  [VotingSystem.Borda]: borda,
+  [VotingSystem.Kemeny]: kemeny,
+  [VotingSystem.Runoff]: runoff
 }
+
 export default methods
+
+export { VotingSystem, System }

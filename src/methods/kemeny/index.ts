@@ -1,5 +1,5 @@
 import * as _ from 'lodash'
-import { MethodFromMatrix, PollType, Matrix, ScoreObject } from '../../types'
+import { SystemUsingMatrix, VotingSystem, Matrix, ScoreObject } from '../../types'
 
 const rankingPenalty = (ranking: number[], matrix: number[][]) => {
   let p = 0
@@ -47,10 +47,10 @@ const nextPermutation = (arrayy: number[]) => {
   return array
 }
 
-const kemeny: MethodFromMatrix = {
-  type: PollType.Kemeny,
+const kemeny: SystemUsingMatrix = {
+  type: VotingSystem.Kemeny,
   computeScoresFromMatrix(matrix: Matrix): ScoreObject {
-    let bestP = _.range(matrix.candidateIds.length)
+    let bestP = _.range(matrix.candidates.length)
     let bestScore = rankingPenalty(bestP, matrix.array)
     let p: number[] | false = bestP
     while (p) {
@@ -61,7 +61,7 @@ const kemeny: MethodFromMatrix = {
       }
       p = nextPermutation(p)
     }
-    return _.fromPairs(bestP.map((cIdx, index) => [matrix.candidateIds[cIdx], index]))
+    return _.fromPairs(bestP.map((cIdx, index) => [matrix.candidates[cIdx], index]))
   }
 }
 

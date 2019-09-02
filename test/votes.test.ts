@@ -1,19 +1,19 @@
 import * as _ from 'lodash'
 import methods from '../src/votes'
-import borda from '../src/votes/methods/borda'
-import kemeny from '../src/votes/methods/kemeny'
-import { Bulletin, Matrix, PollType } from '../src/votes/types'
-import majority from '../src/votes/methods/majority'
-import runoff from '../src/votes/methods/runoff'
-import approbation from '../src/votes/methods/approbation'
-import { matrixFromBulletins } from '../src/votes/utils/makeMatrix'
+import borda from '../src/methods/borda'
+import kemeny from '../src/methods/kemeny'
+import { Ballot, Matrix, VotingSystem } from '../src/types'
+import majority from '../src/methods/majority'
+import runoff from '../src/methods/runoff'
+import approbation from '../src/methods/approbation'
+import { matrixFromBallots } from '../src/utils/makeMatrix'
 
 /**
  * Dummy test
  */
 
 const abcde = ['a', 'b', 'c', 'd', 'e']
-const balinski: Bulletin[] = [
+const balinski: Ballot[] = [
   ..._.fill(Array(33), [['a'], ['b'], ['c'], ['d'], ['e']]),
   ..._.fill(Array(16), [['b'], ['d'], ['c'], ['e'], ['a']]),
   ..._.fill(Array(3), [['c'], ['d'], ['b'], ['a'], ['e']]),
@@ -26,7 +26,7 @@ describe('Dummy test', () => {
     expect(true).toBeTruthy()
   })
   it('matches type', () => {
-    const types: PollType[] = Object.values(PollType)
+    const types: VotingSystem[] = Object.values(VotingSystem)
     types.forEach(type => {
       expect(methods[type].type).toEqual(type)
     })
@@ -70,8 +70,8 @@ describe('Dummy test', () => {
   it('votes with kemeny', () => {
     expect(
       kemeny.computeScoresFromMatrix({
-        candidateIds: abcde,
-        array: matrixFromBulletins(balinski, abcde)
+        candidates: abcde,
+        array: matrixFromBallots(balinski, abcde)
       })
     ).toMatchObject({
       a: 0,

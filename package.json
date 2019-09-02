@@ -12,7 +12,7 @@
   "author": "lzear",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lzear/votes.git"
+    "url": "git+https://github.com/lzear/votes.git"
   },
   "license": "MIT",
   "engines": {
