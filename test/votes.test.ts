@@ -68,12 +68,7 @@ describe('Dummy test', () => {
     })
   })
   it('votes with kemeny', () => {
-    expect(
-      kemeny.computeScoresFromMatrix({
-        candidates: abcde,
-        array: matrixFromBallots(balinski, abcde)
-      })
-    ).toMatchObject({
+    expect(kemeny.computeScoresFromMatrix(matrixFromBallots(balinski, abcde))).toMatchObject({
       a: 0,
       b: 1,
       c: 2,
