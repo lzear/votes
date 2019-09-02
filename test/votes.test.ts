@@ -1,4 +1,5 @@
 import * as _ from 'lodash'
+import descriptions from '../src/descriptions'
 import methods from '../src/votes'
 import borda from '../src/methods/borda'
 import kemeny from '../src/methods/kemeny'
@@ -75,5 +76,8 @@ describe('Dummy test', () => {
       d: 3,
       e: 4
     })
+  })
+  it('loads description', () => {
+    expect(Object.keys(descriptions)).toHaveLength(Object.keys(VotingSystem).length)
   })
 })
