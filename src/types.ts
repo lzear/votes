@@ -7,7 +7,7 @@ export type Ballot = string[][]
 
 export type Rule = (rankings: WeightedBallot[]) => string[][]
 
-export type ScoreObject = { [candidateId: string]: number }
+export type ScoreObject = { [candidate: string]: number }
 
 export enum VotingSystem {
   Majority = 'MAJORITY',
