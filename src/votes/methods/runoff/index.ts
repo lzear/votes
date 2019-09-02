@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import * as _ from 'lodash'
 
 import { Bulletin, MethodFromRankings, ScoreObject, PollType } from '../../types'
 import majority from '../majority'

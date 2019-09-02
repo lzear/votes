@@ -1,5 +1,5 @@
-import _ from 'lodash'
-import { MethodFromMatrix, PollType, matrix, ScoreObject } from '../../types'
+import * as _ from 'lodash'
+import { MethodFromMatrix, PollType, Matrix, ScoreObject } from '../../types'
 
 const rankingPenalty = (ranking: number[], matrix: number[][]) => {
   let p = 0
@@ -49,7 +49,7 @@ const nextPermutation = (arrayy: number[]) => {
 
 const kemeny: MethodFromMatrix = {
   type: PollType.Kemeny,
-  computeScoresFromMatrix(matrix: matrix): ScoreObject {
+  computeScoresFromMatrix(matrix: Matrix): ScoreObject {
     let bestP = _.range(matrix.candidateIds.length)
     let bestScore = rankingPenalty(bestP, matrix.array)
     let p: number[] | false = bestP

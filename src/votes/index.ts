@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import * as _ from 'lodash'
 import { ScoreObject } from './types'
 
 export const score2array = (score: ScoreObject): string[][] => {

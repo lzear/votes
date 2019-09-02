@@ -17,7 +17,7 @@ export enum PollType {
   Approbation = 'APPROBATION'
 }
 
-export type matrix = {
+export type Matrix = {
   candidateIds: string[]
   array: number[][]
 }
@@ -29,7 +29,7 @@ export type MethodFromRankings = {
 
 export type MethodFromMatrix = {
   type: PollType
-  computeScoresFromMatrix(matrix: matrix): ScoreObject
+  computeScoresFromMatrix(matrix: Matrix): ScoreObject
 }
 
 export type Method = MethodFromRankings | MethodFromMatrix
