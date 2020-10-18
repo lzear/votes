@@ -12,13 +12,14 @@
     "emitDecoratorMetadata": true,
     "declarationDir": "dist/types",
     "outDir": "dist/lib",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "typeRoots": ["node_modules/@types"],
+    "preserveConstEnums": false,
     "noEmitHelpers": true,
-    "importHelpers": true
+    "importHelpers": true,
+    "types": ["node", "jest"]
   },
+  "types": ["node", "jest"],
   "include": [
-    "src"
+    "src", "test"
   ]
 }
