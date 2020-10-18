@@ -12,7 +12,7 @@
   "author": "lzear",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lzear/votes.git"
+    "url": "https://github.com/lzear/votes.git"
   },
   "license": "MIT",
   "engines": {
@@ -30,7 +30,7 @@
     "deploy-docs": "ts-node tools/gh-pages-publish",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "commit": "git-cz",
-    "semantic-release": "dotenv -e .env semantic-release",
+    "semantic-release": "semantic-release",
     "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
     "precommit": "lint-staged",
     "travis-deploy-once": "travis-deploy-once",
@@ -60,6 +60,7 @@
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
+    "@semantic-release/exec": "^5.0.0",
     "@types/jest": "^26.0.14",
     "@types/lodash": "^4.14.162",
     "@types/node": "^14.11.10",
@@ -108,5 +109,11 @@
   "directories": {
     "doc": "docs",
     "test": "test"
+  },
+  "release": {
+    "branches": [
+      "master",
+      "next"
+    ]
   }
 }

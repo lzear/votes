@@ -19,7 +19,5 @@
     "types": ["node", "jest"]
   },
   "types": ["node", "jest"],
-  "include": [
-    "src", "test"
-  ]
+  "include": ["src"]
 }
