@@ -108,5 +108,8 @@
   "directories": {
     "doc": "docs",
     "test": "test"
+  },
+  "release": {
+    "branches": ["master", "next"]
   }
 }
