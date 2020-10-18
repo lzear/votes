@@ -1,6 +1,6 @@
 {
   "name": "votes",
-  "version": "0.0.2-development",
+  "version": "",
   "description": "Implementation of some [electoral systems](https://en.wikipedia.org/wiki/Electoral_system)",
   "keywords": [],
   "main": "dist/votes.umd.js",
