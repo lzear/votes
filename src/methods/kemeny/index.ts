@@ -11,9 +11,9 @@ const rankingPenalty = (ranking: number[], matrix: number[][]) => {
   return p
 }
 
-const nextPermutation = (arrayy: number[]) => {
+const nextPermutation = (arr: number[]) => {
   // Find longest non-increasing suffix
-  const array = [...arrayy]
+  const array = [...arr]
   let i = array.length - 1
   while (i > 0 && array[i - 1] >= array[i]) i -= 1
   // Now i is the head index of the suffix
@@ -49,7 +49,7 @@ const nextPermutation = (arrayy: number[]) => {
 
 const kemeny: SystemUsingMatrix = {
   type: VotingSystem.Kemeny,
-  computeScoresFromMatrix(matrix: Matrix): ScoreObject {
+  computeFromMatrix(matrix: Matrix): ScoreObject {
     let bestP = _.range(matrix.candidates.length)
     let bestScore = rankingPenalty(bestP, matrix.array)
     let p: number[] | false = bestP
@@ -62,7 +62,7 @@ const kemeny: SystemUsingMatrix = {
       p = nextPermutation(p)
     }
     return _.fromPairs(bestP.map((cIdx, index) => [matrix.candidates[cIdx], index]))
-  }
+  },
 }
 
 export default kemeny

@@ -1,20 +1,20 @@
-export interface WeightedBallot {
-  ranking: Ballot
+export interface Ballot {
+  ranking: string[][]
   weight: number
 }
-
-export type Ballot = string[][]
-
-export type Rule = (rankings: WeightedBallot[]) => string[][]
+export type Rule = (rankings: Ballot[]) => string[][]
 
 export type ScoreObject = { [candidate: string]: number }
 
 export enum VotingSystem {
-  Majority = 'MAJORITY',
+  FirstPastThePost = 'FIRST_PAST_THE_POST',
   Borda = 'BORDA',
-  Runoff = 'RUNOFF',
+  InstantRunoff = 'INSTANT_RUNOFF',
+  TwoRoundRunoff = 'TWO_ROUND_RUNOFF',
   Kemeny = 'KEMENY',
-  Approbation = 'APPROBATION'
+  Approbation = 'APPROBATION',
+  Schulze = 'SCHULZE',
+  Minimax = 'MINIMAX',
 }
 
 export type Matrix = {
@@ -24,12 +24,12 @@ export type Matrix = {
 
 export type SystemUsingRankings = {
   type: VotingSystem
-  computeScoresFromRankings(candidates: string[], rankings: Ballot[]): ScoreObject
+  computeFromBallots(ballots: Ballot[], candidates: string[]): ScoreObject
 }
 
 export type SystemUsingMatrix = {
   type: VotingSystem
-  computeScoresFromMatrix(matrix: Matrix): ScoreObject
+  computeFromMatrix(matrix: Matrix): ScoreObject
 }
 
 export type System = SystemUsingRankings | SystemUsingMatrix
