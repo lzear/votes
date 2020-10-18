@@ -20,8 +20,6 @@ let parsedUrl = url.parse(repoUrl)
 let repository = (parsedUrl.host || "") + (parsedUrl.path || "")
 let ghToken = process.env.GH_TOKEN
 
-console.log('process.env', process.env);
-
 echo("Deploying docs!!!")
 cd("docs")
 touch(".nojekyll")
