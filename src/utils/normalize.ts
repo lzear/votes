@@ -44,8 +44,9 @@ export const toWeightedBallots = (ballots: string[][][]): Ballot[] =>
 export const checkDuplicatedCandidate = (ranking: string[][]): void => {
   ranking.reduce((acc, rank) => {
     const inter = _.intersection(acc, rank)
-    if (inter.length)
+    if (inter.length) {
       throw Error(`Some candidates are present multiple times: ${inter}`)
+    }
     return [...acc, ...rank]
   }, [])
 }

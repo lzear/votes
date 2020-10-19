@@ -19,9 +19,9 @@ const schulze: SystemUsingMatrix = {
     for (let i = 0; i < n; i++) {
       for (let j = 0; j < n; j++) {
         if (i !== j) {
-          if (matrix.array[i][j] > matrix.array[j][i])
+          if (matrix.array[i][j] > matrix.array[j][i]) {
             p[i][j] = matrix.array[i][j]
-          else p[i][j] = 0
+          } else p[i][j] = 0
         }
       }
     }

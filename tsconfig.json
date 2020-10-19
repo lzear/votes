@@ -2,7 +2,7 @@
   "compilerOptions": {
     "moduleResolution": "node",
     "target": "es5",
-    "module":"es2015",
+    "module": "es2015",
     "lib": ["es7", "es2015", "es2016", "es2017", "dom"],
     "strict": true,
     "sourceMap": true,
@@ -16,7 +16,8 @@
     "preserveConstEnums": false,
     "noEmitHelpers": true,
     "importHelpers": true,
-    "types": ["node", "jest"]
+    "types": ["node", "jest"],
+    "resolveJsonModule": true
   },
   "types": ["node", "jest"],
   "include": ["src"]

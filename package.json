@@ -19,9 +19,10 @@
     "node": ">=6.0.0"
   },
   "scripts": {
+    "eslint": "eslint --ext .js --ext .ts .",
     "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
     "prebuild": "rimraf dist",
-    "build": "tsc --module commonjs && rollup -c rollup.config.ts && typedoc --out docs --target es6 --theme minimal --mode file src",
+    "build": "tsc --module commonjs && rollup -c rollup.config.ts && typedoc --exclude \"**/*.test.ts\" --out docs --target es6 --theme minimal --mode file src",
     "build:watch": "tsc --module commonjs && rollup -c rollup.config.ts -w",
     "start": "rollup -c rollup.config.ts -w",
     "test": "jest --coverage",
@@ -47,10 +48,6 @@
       "path": "node_modules/cz-conventional-changelog"
     }
   },
-  "prettier": {
-    "semi": false,
-    "singleQuote": true
-  },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
@@ -66,12 +63,17 @@
     "@types/rollup-plugin-json": "^3.0.2",
     "@types/rollup-plugin-node-resolve": "^4.1.0",
     "@types/rollup-plugin-sourcemaps": "^0.4.2",
+    "@typescript-eslint/eslint-plugin": "^4.5.0",
+    "@typescript-eslint/parser": "^4.5.0",
     "colors": "^1.4.0",
     "commitizen": "^4.2.1",
     "coveralls": "^3.1.0",
     "cross-env": "^7.0.2",
     "cz-conventional-changelog": "^3.3.0",
     "dotenv-cli": "^4.0.0",
+    "eslint": "^7.11.0",
+    "eslint-config-prettier": "^6.13.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "husky": "^4.3.0",
     "jest": "^26.5.3",
     "jest-config": "^26.5.3",
