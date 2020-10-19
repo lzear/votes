@@ -16,5 +16,10 @@ const b = [
 export const test = (rule: Rule): boolean => {
   const A = rule(a)
   const B = rule(b)
-  return !(A[0].length === 1 && B[0].length === 1 && A[0][0] === 'b' && B[0][0] !== 'b')
+  return !(
+    A[0].length === 1 &&
+    B[0].length === 1 &&
+    A[0][0] === 'b' &&
+    B[0][0] !== 'b'
+  )
 }

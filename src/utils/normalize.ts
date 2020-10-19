@@ -4,7 +4,9 @@ import { Ballot } from '../types'
 const isBallotEqual = (a: string[][], b: string[][]): boolean =>
   _.every(a, (rank, k) => _.isEqual([...rank].sort(), [...b[k]].sort()))
 
-export const normalizeRankinput = (rankinput: (string | string[])[]): string[][] =>
+export const normalizeRankinput = (
+  rankinput: (string | string[])[],
+): string[][] =>
   rankinput.map((rank) => (typeof rank === 'string' ? [rank] : rank))
 
 export const groupBallots = <B extends Ballot>(ballots: B[]): B[] =>
@@ -19,7 +21,7 @@ export const groupBallots = <B extends Ballot>(ballots: B[]): B[] =>
             ...b,
             weight: b.weight + ballot.weight,
           }
-        : b
+        : b,
     )
   }, [] as B[])
 
@@ -35,14 +37,15 @@ export const toWeightedBallots = (ballots: string[][][]): Ballot[] =>
             ranking: w[match].ranking,
             weight: w[match].weight + 1,
           }
-        : ww
+        : ww,
     )
   }, [] as Ballot[])
 
 export const checkDuplicatedCandidate = (ranking: string[][]): void => {
   ranking.reduce((acc, rank) => {
     const inter = _.intersection(acc, rank)
-    if (inter.length) throw Error(`Some candidates are present multiple times: ${inter}`)
+    if (inter.length)
+      throw Error(`Some candidates are present multiple times: ${inter}`)
     return [...acc, ...rank]
   }, [])
 }
@@ -56,26 +59,41 @@ export const removeDuplicatedCandidates = (ranking: string[][]): string[][] =>
         usedCandidates: [...acc.usedCandidates, ...unique],
       }
     },
-    { ranking: [] as string[][], usedCandidates: [] as string[] }
+    { ranking: [] as string[][], usedCandidates: [] as string[] },
   ).ranking
 
-export const removeInvalidCandidates = (ranking: string[][], candidates: string[]): string[][] =>
+export const removeInvalidCandidates = (
+  ranking: string[][],
+  candidates: string[],
+): string[][] =>
   ranking
     .map((names) => names.filter((name) => candidates.includes(name)))
     .filter((rank) => rank.length)
 
-export const normalizeRanking = (ranking: string[][], candidates: string[]): string[][] =>
+export const normalizeRanking = (
+  ranking: string[][],
+  candidates: string[],
+): string[][] =>
   removeDuplicatedCandidates(removeInvalidCandidates(ranking, candidates))
 
-export const normalizeBallot = <B extends Ballot>(ballot: B, candidates: string[]): B => ({
+export const normalizeBallot = <B extends Ballot>(
+  ballot: B,
+  candidates: string[],
+): B => ({
   ...ballot,
   ranking: normalizeRanking(ballot.ranking, candidates),
 })
 
 export const candidatesFromBallots = (ballots: Ballot[]): string[] =>
-  ballots.reduce((acc, curr) => _.uniq([...acc, ..._.flatten(curr.ranking)]), [] as string[])
+  ballots.reduce(
+    (acc, curr) => _.uniq([...acc, ..._.flatten(curr.ranking)]),
+    [] as string[],
+  )
 
-export const normalizeBallots = <B extends Ballot>(ballots: B[], candidates?: string[]): B[] => {
+export const normalizeBallots = <B extends Ballot>(
+  ballots: B[],
+  candidates?: string[],
+): B[] => {
   const c = candidates || candidatesFromBallots(ballots)
   return ballots.map((ballot) => normalizeBallot(ballot, c))
 }

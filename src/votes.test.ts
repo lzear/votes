@@ -1,20 +1,17 @@
 import * as _ from 'lodash'
 import descriptions from './descriptions'
 import { methods } from './votes'
-import borda from './methods/borda'
-import kemeny from './methods/kemeny'
 import { VotingSystem, Ballot } from './types'
+import { matrixFromBallots, toWeightedBallots } from './utils'
+import approbation from './methods/approbation'
+import borda from './methods/borda'
+import copeland from './methods/copeland'
 import firstPastThePost from './methods/first-past-the-post'
 import instantRunoff from './methods/instant-runoff'
-import twoRountRunoff from './methods/two-round-runoff'
-import approbation from './methods/approbation'
-import { matrixFromBallots, toWeightedBallots } from './utils'
-import schulze from './methods/schulze'
+import kemeny from './methods/kemeny'
 import minimax from './methods/minimax'
-
-/**
- * Dummy test
- */
+import schulze from './methods/schulze'
+import twoRountRunoff from './methods/two-round-runoff'
 
 const abcde = ['a', 'b', 'c', 'd', 'e']
 
@@ -48,7 +45,25 @@ describe('Dummy test', () => {
       expect(methods[type].type).toEqual(type)
     })
   })
-  it('votes with majority', () => {
+  it('votes with approbation', () => {
+    expect(approbation.computeFromBallots(balinski, abcde)).toMatchObject({
+      a: 33,
+      b: 16,
+      c: 11,
+      d: 18,
+      e: 22,
+    })
+  })
+  it('votes with borda', () => {
+    expect(borda.computeFromBallots(balinski, abcde)).toMatchObject({
+      a: 135,
+      b: 247,
+      c: 244,
+      d: 192,
+      e: 182,
+    })
+  })
+  it('votes with FPTP', () => {
     expect(firstPastThePost.computeFromBallots(balinski, abcde)).toMatchObject({
       a: 33,
       b: 16,
@@ -75,26 +90,21 @@ describe('Dummy test', () => {
       e: 64,
     })
   })
-  it('votes with borda', () => {
-    expect(borda.computeFromBallots(balinski, abcde)).toMatchObject({
-      a: 135,
-      b: 247,
-      c: 244,
-      d: 192,
-      e: 182,
-    })
-  })
-  it('votes with approbation', () => {
-    expect(approbation.computeFromBallots(balinski, abcde)).toMatchObject({
-      a: 33,
-      b: 16,
-      c: 11,
-      d: 18,
-      e: 22,
+  it('votes with copeland', () => {
+    expect(
+      copeland.computeFromMatrix(matrixFromBallots(balinski, abcde)),
+    ).toMatchObject({
+      a: -4,
+      b: 1.76,
+      c: 3.84,
+      d: -0.24,
+      e: -2.16,
     })
   })
   it('votes with kemeny', () => {
-    expect(kemeny.computeFromMatrix(matrixFromBallots(balinski, abcde))).toMatchObject({
+    expect(
+      kemeny.computeFromMatrix(matrixFromBallots(balinski, abcde)),
+    ).toMatchObject({
       a: 0,
       b: 3,
       c: 4,
@@ -103,7 +113,9 @@ describe('Dummy test', () => {
     })
   })
   it('votes with schulze', () => {
-    expect(schulze.computeFromMatrix(matrixFromBallots(sW, abcde))).toMatchObject({
+    expect(
+      schulze.computeFromMatrix(matrixFromBallots(sW, abcde)),
+    ).toMatchObject({
       a: 3,
       b: 1,
       c: 2,
@@ -112,7 +124,9 @@ describe('Dummy test', () => {
     })
   })
   it('votes with minimax', () => {
-    expect(minimax.computeFromMatrix(matrixFromBallots(sW, abcde))).toMatchObject({
+    expect(
+      minimax.computeFromMatrix(matrixFromBallots(sW, abcde)),
+    ).toMatchObject({
       a: -5,
       b: -13,
       c: -11,
@@ -121,6 +135,8 @@ describe('Dummy test', () => {
     })
   })
   it('loads description', () => {
-    expect(Object.keys(descriptions)).toHaveLength(Object.keys(VotingSystem).length)
+    expect(Object.keys(descriptions)).toHaveLength(
+      Object.keys(VotingSystem).length,
+    )
   })
 })
