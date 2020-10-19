@@ -7,14 +7,15 @@ export type Rule = (rankings: Ballot[]) => string[][]
 export type ScoreObject = { [candidate: string]: number }
 
 export enum VotingSystem {
-  FirstPastThePost = 'FIRST_PAST_THE_POST',
-  Borda = 'BORDA',
-  InstantRunoff = 'INSTANT_RUNOFF',
-  TwoRoundRunoff = 'TWO_ROUND_RUNOFF',
-  Kemeny = 'KEMENY',
   Approbation = 'APPROBATION',
-  Schulze = 'SCHULZE',
+  Borda = 'BORDA',
+  Copeland = 'COPELAND',
+  FirstPastThePost = 'FIRST_PAST_THE_POST',
+  Kemeny = 'KEMENY',
+  InstantRunoff = 'INSTANT_RUNOFF',
   Minimax = 'MINIMAX',
+  Schulze = 'SCHULZE',
+  TwoRoundRunoff = 'TWO_ROUND_RUNOFF',
 }
 
 export type Matrix = {

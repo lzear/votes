@@ -1,5 +1,10 @@
 import * as _ from 'lodash'
-import { SystemUsingMatrix, VotingSystem, Matrix, ScoreObject } from '../../types'
+import {
+  SystemUsingMatrix,
+  VotingSystem,
+  Matrix,
+  ScoreObject,
+} from '../../types'
 
 const rankingPenalty = (ranking: number[], matrix: number[][]) => {
   let p = 0
@@ -61,7 +66,9 @@ const kemeny: SystemUsingMatrix = {
       }
       p = nextPermutation(p)
     }
-    return _.fromPairs(bestP.map((cIdx, index) => [matrix.candidates[cIdx], index]))
+    return _.fromPairs(
+      bestP.map((cIdx, index) => [matrix.candidates[cIdx], index]),
+    )
   },
 }
 

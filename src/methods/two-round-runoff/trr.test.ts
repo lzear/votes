@@ -1,5 +1,7 @@
 import twoRoundRunoff from '.'
 
 it('skips empty votes', () => {
-  expect(twoRoundRunoff.computeFromBallots([{ weight: 1, ranking: [] }], ['a'])).toMatchObject({})
+  expect(
+    twoRoundRunoff.computeFromBallots([{ weight: 1, ranking: [] }], ['a']),
+  ).toMatchObject({})
 })
