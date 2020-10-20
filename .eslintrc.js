@@ -18,8 +18,6 @@ module.exports = {
   },
   plugins: ['@typescript-eslint', 'prettier'],
   rules: {
-    quotes: [2, 'single'],
-    semi: [2, 'never'],
     'prettier/prettier': 2,
   },
 }
