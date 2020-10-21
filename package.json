@@ -6,7 +6,7 @@
   "sideEffects": false,
   "main": "dist/votes.umd.js",
   "module": "dist/votes.es5.js",
-  "typings": "dist/types/src/votes.d.ts",
+  "types": "dist/votes.d.ts",
   "files": [
     "dist"
   ],
