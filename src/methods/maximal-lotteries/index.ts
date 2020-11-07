@@ -8,7 +8,7 @@ import {
 } from '../../types'
 import { makeAntisymetric } from '../../utils'
 
-const maximalLotteries: SystemUsingMatrix = {
+export const maximalLotteries: SystemUsingMatrix = {
   type: VotingSystem.MaximalLotteries,
   computeFromMatrix(matrix: Matrix): ScoreObject {
     const antisymetric = makeAntisymetric(matrix)
@@ -23,5 +23,3 @@ const maximalLotteries: SystemUsingMatrix = {
     return _.zipObject(antisymetric.candidates, normalizedVector)
   },
 }
-
-export default maximalLotteries

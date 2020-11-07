@@ -1,4 +1,4 @@
-export const matrixString = (matrix: number[][]) => {
+export const matrixString = (matrix: number[][]): string => {
   const size = 6
 
   return (

@@ -1,6 +1,6 @@
 import { performPivots, simplexTableau } from '../../simplex'
 import { matrixString } from '../../simplex/utils'
-import ml from './index'
+import { maximalLotteries } from './index'
 
 const example1 = [
   [0, -2, 8],
@@ -29,7 +29,10 @@ const candidates = ['a', 'b', 'c', 'd', 'e']
 describe('maximal lotteries', () => {
   it('works with "simple" example', () => {
     expect(
-      ml.computeFromMatrix({ candidates: ['a', 'b', 'c'], array: example1 }),
+      maximalLotteries.computeFromMatrix({
+        array: example1,
+        candidates: ['a', 'b', 'c'],
+      }),
     ).toEqual({
       a: 0.2857142857142857,
       b: 0.5714285714285714,
@@ -37,7 +40,9 @@ describe('maximal lotteries', () => {
     })
   })
   it('works with "complexer" example', () => {
-    expect(ml.computeFromMatrix({ candidates, array: example2 })).toEqual({
+    expect(
+      maximalLotteries.computeFromMatrix({ array: example2, candidates }),
+    ).toEqual({
       a: 0,
       b: 0.2857142857142857,
       c: 0.5714285714285714,
@@ -47,9 +52,9 @@ describe('maximal lotteries', () => {
   })
   it('works with "example3" example', () => {
     expect(
-      ml.computeFromMatrix({
-        candidates: ['a', 'b', 'c', 'd', 'e'],
+      maximalLotteries.computeFromMatrix({
         array: example3,
+        candidates: ['a', 'b', 'c', 'd', 'e'],
       }),
     ).toEqual({
       a: 0.6428571428571428,

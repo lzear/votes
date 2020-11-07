@@ -1,5 +1,3 @@
-import { matrixString } from './utils'
-
 export const simplexTableau = (A: number[][]): number[][] => {
   const n = A.length
   const extraZeros = Array(n).fill(0)
