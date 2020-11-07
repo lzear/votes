@@ -8,6 +8,7 @@ import { copeland } from './methods/copeland'
 import { firstPastThePost } from './methods/first-past-the-post'
 import { instantRunoff } from './methods/instant-runoff'
 import { kemeny } from './methods/kemeny'
+import { maximalLotteries } from './methods/maximal-lotteries'
 import { minimax } from './methods/minimax'
 import { rankedPairs } from './methods/ranked-pairs'
 import { schulze } from './methods/schulze'
@@ -157,6 +158,18 @@ describe('Test all methods', () => {
       c: -11,
       d: -21,
       e: -3,
+    })
+  })
+
+  it('votes with maximal lotteries', () => {
+    expect(
+      maximalLotteries.computeFromMatrix(matrixFromBallots(sW, abcde)),
+    ).toMatchObject({
+      a: 0.6428571428571428,
+      b: 0,
+      c: 0,
+      d: 0,
+      e: 0.3571428571428572,
     })
   })
   it('votes with ranked pairs', () => {

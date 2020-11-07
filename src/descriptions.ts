@@ -13,6 +13,8 @@ const descriptions: { [type in VotingSystem]: string } = {
     "Considering only voter's top choice, the candidate with the fewest votes is eliminated. The election repeats until there is a winner",
   [VotingSystem.Kemeny]:
     'Create a preference ranking that minimizes the amount of pairwise preferences contradiction the voters opinion',
+  [VotingSystem.MaximalLotteries]:
+    'Creates probabilities for the Condorcet winners',
   [VotingSystem.Minimax]:
     'Minimax selects the winner as the candidate whose greatest pairwise defeat is smaller',
   [VotingSystem.RankedPairs]: 'https://en.wikipedia.org/wiki/Ranked_pairs',

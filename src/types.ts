@@ -13,6 +13,7 @@ export enum VotingSystem {
   FirstPastThePost = 'FIRST_PAST_THE_POST',
   Kemeny = 'KEMENY',
   InstantRunoff = 'INSTANT_RUNOFF',
+  MaximalLotteries = 'MAXIMAL_LOTTERIES',
   Minimax = 'MINIMAX',
   RankedPairs = 'RANKED_PAIRS',
   Schulze = 'SCHULZE',
