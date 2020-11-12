@@ -1,4 +1,4 @@
-import firstPastThePost from '.'
+import { firstPastThePost } from '.'
 
 it('skips empty votes', () => {
   expect(

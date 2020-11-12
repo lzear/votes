@@ -1,4 +1,4 @@
-import approbation from '.'
+import { approbation } from '.'
 
 it('skips empty votes', () => {
   expect(

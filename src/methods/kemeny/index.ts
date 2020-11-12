@@ -52,7 +52,7 @@ const nextPermutation = (arr: number[]) => {
   return array
 }
 
-const kemeny: SystemUsingMatrix = {
+export const kemeny: SystemUsingMatrix = {
   type: VotingSystem.Kemeny,
   computeFromMatrix(matrix: Matrix): ScoreObject {
     let bestP = _.range(matrix.candidates.length)
@@ -71,5 +71,3 @@ const kemeny: SystemUsingMatrix = {
     )
   },
 }
-
-export default kemeny

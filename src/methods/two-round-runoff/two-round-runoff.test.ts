@@ -1,4 +1,4 @@
-import twoRoundRunoff from '.'
+import { twoRoundRunoff } from '.'
 
 it('skips empty votes', () => {
   expect(

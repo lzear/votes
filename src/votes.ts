@@ -1,12 +1,12 @@
-import approbation from './methods/approbation'
-import borda from './methods/borda'
-import copeland from './methods/copeland'
-import firstPastThePost from './methods/first-past-the-post'
-import instantRunoff from './methods/instant-runoff'
-import kemeny from './methods/kemeny'
-import minimax from './methods/minimax'
-import schulze from './methods/schulze'
-import twoRoundRunoff from './methods/two-round-runoff'
+import { approbation } from './methods/approbation'
+import { borda } from './methods/borda'
+import { copeland } from './methods/copeland'
+import { firstPastThePost } from './methods/first-past-the-post'
+import { instantRunoff } from './methods/instant-runoff'
+import { kemeny } from './methods/kemeny'
+import { minimax } from './methods/minimax'
+import { schulze } from './methods/schulze'
+import { twoRoundRunoff } from './methods/two-round-runoff'
 import {
   System,
   VotingSystem,
