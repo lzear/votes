@@ -1,7 +1,7 @@
 import descriptions from './descriptions'
 import { methods, SystemUsingMatrix, SystemUsingRankings, utils } from './votes'
-import { VotingSystem, Ballot } from './types'
-import { matrixFromBallots, toWeightedBallots } from './utils'
+import { VotingSystem } from './types'
+import { matrixFromBallots } from './utils'
 import { approbation } from './methods/approbation'
 import { borda } from './methods/borda'
 import { copeland } from './methods/copeland'
@@ -9,6 +9,7 @@ import { firstPastThePost } from './methods/first-past-the-post'
 import { instantRunoff } from './methods/instant-runoff'
 import { kemeny } from './methods/kemeny'
 import { minimax } from './methods/minimax'
+import { rankedPairs } from './methods/ranked-pairs'
 import { schulze } from './methods/schulze'
 import { twoRoundRunoff } from './methods/two-round-runoff'
 import { abcde, balinski, dummyProfile, sW } from './utils/testUtils'
@@ -64,6 +65,7 @@ describe('Test all methods', () => {
       COPELAND: ['a'],
       KEMENY: ['a'],
       MINIMAX: ['a'],
+      RANKED_PAIRS: ['a'],
       SCHULZE: ['a'],
     })
     Object.values(allResults).forEach((v) => expect(v).toStrictEqual(['a']))
@@ -155,6 +157,17 @@ describe('Test all methods', () => {
       c: -11,
       d: -22,
       e: -3,
+    })
+  })
+  it('votes with ranked pairs', () => {
+    expect(
+      rankedPairs.computeFromMatrix(matrixFromBallots(sW, abcde)),
+    ).toMatchObject({
+      a: 5,
+      b: 2,
+      c: 4,
+      d: 1,
+      e: 3,
     })
   })
   it('loads description', () => {

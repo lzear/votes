@@ -15,6 +15,7 @@ const descriptions: { [type in VotingSystem]: string } = {
     'Create a preference ranking that minimizes the amount of pairwise preferences contradiction the voters opinion',
   [VotingSystem.Minimax]:
     'Minimax selects the winner as the candidate whose greatest pairwise defeat is smaller',
+  [VotingSystem.RankedPairs]: 'https://en.wikipedia.org/wiki/Ranked_pairs',
   [VotingSystem.Schulze]: 'https://en.wikipedia.org/wiki/Schulze_method',
   [VotingSystem.TwoRoundRunoff]:
     'Majority vote followed by another majority vote amongst the 2 best ranked candidates',
