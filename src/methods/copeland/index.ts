@@ -10,7 +10,7 @@ import {
 /**
  * https://en.wikipedia.org/wiki/Copeland%27s_method
  */
-const copeland: SystemUsingMatrix = {
+export const copeland: SystemUsingMatrix = {
   type: VotingSystem.Copeland,
   computeFromMatrix(matrix: Matrix): ScoreObject {
     const n = matrix.candidates.length
@@ -37,5 +37,3 @@ const copeland: SystemUsingMatrix = {
     return _.zipObject(matrix.candidates, scores2)
   },
 }
-
-export default copeland

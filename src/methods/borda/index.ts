@@ -6,7 +6,7 @@ import {
   Ballot,
 } from '../../types'
 
-const borda: SystemUsingRankings = {
+export const borda: SystemUsingRankings = {
   type: VotingSystem.Borda,
   computeFromBallots(ballots: Ballot[], candidates: string[]): ScoreObject {
     const result: ScoreObject = _.zipObject(
@@ -26,5 +26,3 @@ const borda: SystemUsingRankings = {
     return result
   },
 }
-
-export default borda

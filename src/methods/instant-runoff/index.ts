@@ -4,10 +4,10 @@ import {
   VotingSystem,
   Ballot,
 } from '../../types'
-import firstPastThePost from '../first-past-the-post'
+import { firstPastThePost } from '../first-past-the-post'
 import { normalizeBallots } from '../../utils'
 
-const irunoff: SystemUsingRankings = {
+export const instantRunoff: SystemUsingRankings = {
   type: VotingSystem.InstantRunoff,
   computeFromBallots(ballots: Ballot[], candidates: string[]): ScoreObject {
     const round1: ScoreObject = firstPastThePost.computeFromBallots(
@@ -19,12 +19,10 @@ const irunoff: SystemUsingRankings = {
     const candidates2 = candidates.filter((c) => round1[c] > minScore)
     return {
       ...round1,
-      ...irunoff.computeFromBallots(
+      ...instantRunoff.computeFromBallots(
         normalizeBallots(ballots, candidates2),
         candidates2,
       ),
     }
   },
 }
-
-export default irunoff

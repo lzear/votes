@@ -7,7 +7,7 @@ import {
   Ballot,
 } from '../../types'
 
-const firstPastThePost: SystemUsingRankings = {
+export const firstPastThePost: SystemUsingRankings = {
   type: VotingSystem.FirstPastThePost,
   computeFromBallots(ballots: Ballot[], candidates: string[]): ScoreObject {
     const result: ScoreObject = _.zipObject(
@@ -25,5 +25,3 @@ const firstPastThePost: SystemUsingRankings = {
     return result
   },
 }
-
-export default firstPastThePost

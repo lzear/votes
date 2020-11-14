@@ -6,7 +6,7 @@ import {
   Ballot,
 } from '../../types'
 
-const approbation: SystemUsingRankings = {
+export const approbation: SystemUsingRankings = {
   type: VotingSystem.Approbation,
   computeFromBallots(ballots: Ballot[], candidates: string[]): ScoreObject {
     const result: ScoreObject = _.zipObject(
@@ -24,5 +24,3 @@ const approbation: SystemUsingRankings = {
     return result
   },
 }
-
-export default approbation

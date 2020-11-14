@@ -10,7 +10,7 @@ import {
 /**
  * https://en.wikipedia.org/wiki/Schulze_method
  */
-const schulze: SystemUsingMatrix = {
+export const schulze: SystemUsingMatrix = {
   type: VotingSystem.Schulze,
   computeFromMatrix(matrix: Matrix): ScoreObject {
     const n = matrix.candidates.length
@@ -43,5 +43,3 @@ const schulze: SystemUsingMatrix = {
     return s
   },
 }
-
-export default schulze
