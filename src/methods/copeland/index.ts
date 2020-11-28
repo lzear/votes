@@ -1,5 +1,6 @@
 /* eslint-disable no-plusplus */
-import * as _ from 'lodash'
+import range from 'lodash/range'
+import zipObject from 'lodash/zipObject'
 import {
   SystemUsingMatrix,
   VotingSystem,
@@ -15,7 +16,7 @@ export const copeland: SystemUsingMatrix = {
   computeFromMatrix(matrix: Matrix): ScoreObject {
     const n = matrix.candidates.length
 
-    const p: number[][] = _.range(n).map(() => _.range(n).map(() => 0))
+    const p: number[][] = range(n).map(() => range(n).map(() => 0))
     for (let i = 0; i < n; i++) {
       for (let j = 0; j < n; j++) {
         if (i !== j) {
@@ -34,6 +35,6 @@ export const copeland: SystemUsingMatrix = {
         p[k].reduce((acc, cur, k2) => acc + (cur > 0 ? scores1[k2] : 0), 0) /
           (n * n),
     )
-    return _.zipObject(matrix.candidates, scores2)
+    return zipObject(matrix.candidates, scores2)
   },
 }

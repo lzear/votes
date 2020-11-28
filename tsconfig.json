@@ -17,7 +17,8 @@
     "noEmitHelpers": true,
     "importHelpers": true,
     "types": ["node", "jest"],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "esModuleInterop": true
   },
   "types": ["node", "jest"],
   "include": ["src"]

@@ -1,4 +1,5 @@
-import * as _ from 'lodash'
+import range from 'lodash/range'
+import zipObject from 'lodash/zipObject'
 import {
   SystemUsingMatrix,
   VotingSystem,
@@ -36,12 +37,12 @@ export const rankedPairs: SystemUsingMatrix = {
       return [...graph, edgeToAdd]
     }, [] as Edge[])
 
-    const winnersIdx = _.range(matrix.candidates.length).filter(
+    const winnersIdx = range(matrix.candidates.length).filter(
       (candidate, key) => !acyclicGraph.some(({ to }) => to === key),
     )
 
     if (winnersIdx.length === matrix.candidates.length)
-      return _.zipObject(
+      return zipObject(
         matrix.candidates,
         Array(matrix.candidates.length).fill(1),
       )

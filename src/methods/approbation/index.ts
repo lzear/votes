@@ -1,4 +1,4 @@
-import * as _ from 'lodash'
+import zipObject from 'lodash/zipObject'
 import {
   SystemUsingRankings,
   ScoreObject,
@@ -9,7 +9,7 @@ import {
 export const approbation: SystemUsingRankings = {
   type: VotingSystem.Approbation,
   computeFromBallots(ballots: Ballot[], candidates: string[]): ScoreObject {
-    const result: ScoreObject = _.zipObject(
+    const result: ScoreObject = zipObject(
       candidates,
       new Array(candidates.length).fill(0),
     )
