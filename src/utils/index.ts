@@ -10,7 +10,7 @@ import {
   removeDuplicatedCandidates,
   checkDuplicatedCandidate,
 } from './normalize'
-import { matrixFromBallots } from './makeMatrix'
+import { makeAntisymetric, matrixFromBallots } from './makeMatrix'
 import { scoresToRanking } from './scores'
 
 export {
@@ -26,4 +26,5 @@ export {
   checkDuplicatedCandidate,
   matrixFromBallots,
   scoresToRanking,
+  makeAntisymetric,
 }

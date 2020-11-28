@@ -1,4 +1,5 @@
-import * as _ from 'lodash'
+import fromPairs from 'lodash/fromPairs'
+import range from 'lodash/range'
 import {
   SystemUsingMatrix,
   VotingSystem,
@@ -55,7 +56,7 @@ const nextPermutation = (arr: number[]) => {
 export const kemeny: SystemUsingMatrix = {
   type: VotingSystem.Kemeny,
   computeFromMatrix(matrix: Matrix): ScoreObject {
-    let bestP = _.range(matrix.candidates.length)
+    let bestP = range(matrix.candidates.length)
     let bestScore = rankingPenalty(bestP, matrix.array)
     let p: number[] | false = bestP
     while (p) {
@@ -66,7 +67,7 @@ export const kemeny: SystemUsingMatrix = {
       }
       p = nextPermutation(p)
     }
-    return _.fromPairs(
+    return fromPairs(
       bestP.map((cIdx, index) => [matrix.candidates[cIdx], index]),
     )
   },

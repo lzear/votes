@@ -12,7 +12,7 @@ import { minimax } from './methods/minimax'
 import { rankedPairs } from './methods/ranked-pairs'
 import { schulze } from './methods/schulze'
 import { twoRoundRunoff } from './methods/two-round-runoff'
-import { abcde, balinski, dummyProfile, sW } from './utils/testUtils'
+import { abcde, balinski, dummyProfile, sW } from './test/testUtils'
 
 describe('Test all methods', () => {
   it('works if true is truthy', () => {
@@ -155,7 +155,7 @@ describe('Test all methods', () => {
       a: -5,
       b: -13,
       c: -11,
-      d: -22,
+      d: -21,
       e: -3,
     })
   })
