@@ -1,4 +1,4 @@
-import * as _ from 'lodash'
+import zipObject from 'lodash/zipObject'
 import {
   SystemUsingRankings,
   ScoreObject,
@@ -6,10 +6,10 @@ import {
   Ballot,
 } from '../../types'
 
-const borda: SystemUsingRankings = {
+export const borda: SystemUsingRankings = {
   type: VotingSystem.Borda,
   computeFromBallots(ballots: Ballot[], candidates: string[]): ScoreObject {
-    const result: ScoreObject = _.zipObject(
+    const result: ScoreObject = zipObject(
       candidates,
       new Array(candidates.length).fill(0),
     )
@@ -26,5 +26,3 @@ const borda: SystemUsingRankings = {
     return result
   },
 }
-
-export default borda

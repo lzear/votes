@@ -1,41 +1,20 @@
-import * as _ from 'lodash'
 import descriptions from './descriptions'
-import { methods } from './votes'
-import { VotingSystem, Ballot } from './types'
-import { matrixFromBallots, toWeightedBallots } from './utils'
-import approbation from './methods/approbation'
-import borda from './methods/borda'
-import copeland from './methods/copeland'
-import firstPastThePost from './methods/first-past-the-post'
-import instantRunoff from './methods/instant-runoff'
-import kemeny from './methods/kemeny'
-import minimax from './methods/minimax'
-import schulze from './methods/schulze'
-import twoRountRunoff from './methods/two-round-runoff'
+import { methods, SystemUsingMatrix, SystemUsingRankings, utils } from './votes'
+import { VotingSystem } from './types'
+import { matrixFromBallots } from './utils'
+import { approbation } from './methods/approbation'
+import { borda } from './methods/borda'
+import { copeland } from './methods/copeland'
+import { firstPastThePost } from './methods/first-past-the-post'
+import { instantRunoff } from './methods/instant-runoff'
+import { kemeny } from './methods/kemeny'
+import { minimax } from './methods/minimax'
+import { rankedPairs } from './methods/ranked-pairs'
+import { schulze } from './methods/schulze'
+import { twoRoundRunoff } from './methods/two-round-runoff'
+import { abcde, balinski, dummyProfile, sW } from './test/testUtils'
 
-const abcde = ['a', 'b', 'c', 'd', 'e']
-
-const balinski: Ballot[] = toWeightedBallots([
-  ..._.fill(Array(33), [['a'], ['b'], ['c'], ['d'], ['e']]),
-  ..._.fill(Array(16), [['b'], ['d'], ['c'], ['e'], ['a']]),
-  ..._.fill(Array(3), [['c'], ['d'], ['b'], ['a'], ['e']]),
-  ..._.fill(Array(8), [['c'], ['e'], ['b'], ['d'], ['a']]),
-  ..._.fill(Array(18), [['d'], ['e'], ['c'], ['b'], ['a']]),
-  ..._.fill(Array(22), [['e'], ['c'], ['b'], ['d'], ['a']]),
-])
-
-const sW: Ballot[] = toWeightedBallots([
-  ..._.fill(Array(5), [['a'], ['c'], ['b'], ['e'], ['e']]),
-  ..._.fill(Array(5), [['a'], ['d'], ['e'], ['c'], ['b']]),
-  ..._.fill(Array(8), [['b'], ['e'], ['d'], ['a'], ['c']]),
-  ..._.fill(Array(3), [['c'], ['a'], ['b'], ['e'], ['d']]),
-  ..._.fill(Array(7), [['c'], ['a'], ['e'], ['b'], ['d']]),
-  ..._.fill(Array(2), [['c'], ['b'], ['a'], ['d'], ['e']]),
-  ..._.fill(Array(7), [['d'], ['c'], ['e'], ['b'], ['a']]),
-  ..._.fill(Array(8), [['e'], ['b'], ['a'], ['d'], ['c']]),
-])
-
-describe('Dummy test', () => {
+describe('Test all methods', () => {
   it('works if true is truthy', () => {
     expect(true).toBeTruthy()
   })
@@ -44,6 +23,52 @@ describe('Dummy test', () => {
     types.forEach((type) => {
       expect(methods[type].type).toEqual(type)
     })
+  })
+  it('gets the winner from a single profile', () => {
+    const m = Object.values(VotingSystem).filter(
+      (k) => 'computeFromBallots' in methods[k as VotingSystem],
+    ) as VotingSystem[]
+    const allResults = m.reduce((acc, methodKey) => {
+      const method = methods[methodKey] as SystemUsingRankings
+      const score = method.computeFromBallots(dummyProfile, abcde)
+      const maxScore = Math.max(...Object.values(score))
+      return {
+        ...acc,
+        [methodKey]: Object.keys(score).filter((k) => score[k] === maxScore),
+      }
+    }, {})
+    expect(allResults).toStrictEqual({
+      APPROBATION: ['a'],
+      BORDA: ['a'],
+      FIRST_PAST_THE_POST: ['a'],
+      INSTANT_RUNOFF: ['a'],
+      TWO_ROUND_RUNOFF: ['a'],
+    })
+    Object.values(allResults).forEach((v) => expect(v).toStrictEqual(['a']))
+  })
+  it('gets the matrix winner from a single profile', () => {
+    const m = Object.values(VotingSystem).filter(
+      (k) => 'computeFromMatrix' in methods[k as VotingSystem],
+    ) as VotingSystem[]
+    const allResults = m.reduce((acc, methodKey) => {
+      const method = methods[methodKey] as SystemUsingMatrix
+      const score = method.computeFromMatrix(
+        utils.matrixFromBallots(dummyProfile, abcde),
+      )
+      const maxScore = Math.max(...Object.values(score))
+      return {
+        ...acc,
+        [methodKey]: Object.keys(score).filter((k) => score[k] === maxScore),
+      }
+    }, {})
+    expect(allResults).toStrictEqual({
+      COPELAND: ['a'],
+      KEMENY: ['a'],
+      MINIMAX: ['a'],
+      RANKED_PAIRS: ['a'],
+      SCHULZE: ['a'],
+    })
+    Object.values(allResults).forEach((v) => expect(v).toStrictEqual(['a']))
   })
   it('votes with approbation', () => {
     expect(approbation.computeFromBallots(balinski, abcde)).toMatchObject({
@@ -82,7 +107,7 @@ describe('Dummy test', () => {
     })
   })
   it('votes with two-round runoff', () => {
-    expect(twoRountRunoff.computeFromBallots(balinski, abcde)).toMatchObject({
+    expect(twoRoundRunoff.computeFromBallots(balinski, abcde)).toMatchObject({
       a: 36,
       b: 16,
       c: 11,
@@ -130,8 +155,19 @@ describe('Dummy test', () => {
       a: -5,
       b: -13,
       c: -11,
-      d: -22,
+      d: -21,
       e: -3,
+    })
+  })
+  it('votes with ranked pairs', () => {
+    expect(
+      rankedPairs.computeFromMatrix(matrixFromBallots(sW, abcde)),
+    ).toMatchObject({
+      a: 5,
+      b: 2,
+      c: 4,
+      d: 1,
+      e: 3,
     })
   })
   it('loads description', () => {

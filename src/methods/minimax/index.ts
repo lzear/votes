@@ -8,7 +8,7 @@ import {
 /**
  * https://en.wikipedia.org/wiki/Schulze_method
  */
-const minimax: SystemUsingMatrix = {
+export const minimax: SystemUsingMatrix = {
   type: VotingSystem.Minimax,
   computeFromMatrix(matrix: Matrix): ScoreObject {
     const s: ScoreObject = {}
@@ -20,4 +20,3 @@ const minimax: SystemUsingMatrix = {
     return s
   },
 }
-export default minimax

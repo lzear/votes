@@ -5,9 +5,9 @@ import {
   Ballot,
 } from '../../types'
 import { normalizeBallots } from '../../utils'
-import firstPastThePost from '../first-past-the-post'
+import { firstPastThePost } from '../first-past-the-post'
 
-const twoRoundRunoff: SystemUsingRankings = {
+export const twoRoundRunoff: SystemUsingRankings = {
   type: VotingSystem.TwoRoundRunoff,
   computeFromBallots(ballots: Ballot[], candidates: string[]): ScoreObject {
     const round1: ScoreObject = firstPastThePost.computeFromBallots(
@@ -25,5 +25,3 @@ const twoRoundRunoff: SystemUsingRankings = {
     }
   },
 }
-
-export default twoRoundRunoff

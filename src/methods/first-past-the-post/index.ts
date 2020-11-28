@@ -1,4 +1,4 @@
-import * as _ from 'lodash'
+import zipObject from 'lodash/zipObject'
 
 import {
   SystemUsingRankings,
@@ -7,10 +7,10 @@ import {
   Ballot,
 } from '../../types'
 
-const firstPastThePost: SystemUsingRankings = {
+export const firstPastThePost: SystemUsingRankings = {
   type: VotingSystem.FirstPastThePost,
   computeFromBallots(ballots: Ballot[], candidates: string[]): ScoreObject {
-    const result: ScoreObject = _.zipObject(
+    const result: ScoreObject = zipObject(
       candidates,
       new Array(candidates.length).fill(0),
     )
@@ -25,5 +25,3 @@ const firstPastThePost: SystemUsingRankings = {
     return result
   },
 }
-
-export default firstPastThePost

@@ -14,6 +14,7 @@ export enum VotingSystem {
   Kemeny = 'KEMENY',
   InstantRunoff = 'INSTANT_RUNOFF',
   Minimax = 'MINIMAX',
+  RankedPairs = 'RANKED_PAIRS',
   Schulze = 'SCHULZE',
   TwoRoundRunoff = 'TWO_ROUND_RUNOFF',
 }
