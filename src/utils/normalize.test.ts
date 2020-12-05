@@ -2,10 +2,14 @@ import {
   candidatesFromBallots,
   checkDuplicatedCandidate,
   groupBallots,
+  normalizeBallot,
   normalizeBallots,
+  normalizeRanking,
   normalizeRankinput,
   removeDuplicatedCandidates,
-} from './normalize'
+  removeInvalidCandidates,
+  scoresToRanking,
+} from '.'
 
 it('groups ballots', () => {
   expect(
@@ -77,4 +81,25 @@ it('normalizes ballots', () => {
     { weight: 4, ranking: [['b'], ['c']] },
     { weight: 5, ranking: [['a', 'b'], ['c']] },
   ])
+})
+
+it('scoresToRanking', () => {
+  expect(scoresToRanking({ a: 3, b: 0, c: 5 })).toEqual([['c'], ['a'], ['b']])
+})
+
+it('removeInvalidCandidates', () => {
+  expect(removeInvalidCandidates([['a', 'b']], ['b'])).toEqual([['b']])
+})
+
+it('normalizeRanking', () => {
+  expect(normalizeRanking([['a', 'b']], ['b'])).toEqual([['b']])
+})
+
+it('normalizeBallot', () => {
+  expect(normalizeBallot({ ranking: [['a', 'b']], weight: 10 }, ['b'])).toEqual(
+    {
+      ranking: [['b']],
+      weight: 10,
+    },
+  )
 })
