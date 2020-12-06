@@ -19,10 +19,7 @@ export enum VotingSystem {
   TwoRoundRunoff = 'TWO_ROUND_RUNOFF',
 }
 
-export type Matrix = {
-  candidates: string[]
-  array: number[][]
-}
+export type Matrix = { candidates: string[]; array: number[][] }
 
 export type SystemUsingRankings = {
   type: VotingSystem

@@ -1,6 +1,6 @@
 import { scoresToRanking, scoresFromBallots } from './scores'
 import { VotingSystem } from '../votes'
-import { abcde, dummyProfile } from '../test/testUtils'
+import { abcde, dummyProfile, dummyProfile10 } from '../test/testUtils'
 
 describe('sanity check', () => {
   it.each(Object.values(VotingSystem) as VotingSystem[])(
@@ -64,6 +64,14 @@ describe('sanity check', () => {
     (system) => {
       expect(
         scoresToRanking(scoresFromBallots(dummyProfile, abcde, system))[0],
+      ).toMatchObject(['a'])
+    },
+  )
+  it.each(Object.values(VotingSystem) as VotingSystem[])(
+    'dummyProfile10 %p',
+    (system) => {
+      expect(
+        scoresToRanking(scoresFromBallots(dummyProfile10, abcde, system))[0],
       ).toMatchObject(['a'])
     },
   )

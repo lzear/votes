@@ -1,18 +1,15 @@
-import zipObject from 'lodash/zipObject'
 import {
   SystemUsingRankings,
   ScoreObject,
   VotingSystem,
   Ballot,
 } from '../../types'
+import { scoresZero } from '../../utils/scoresZero'
 
 export const borda: SystemUsingRankings = {
   type: VotingSystem.Borda,
   computeFromBallots(ballots: Ballot[], candidates: string[]): ScoreObject {
-    const result: ScoreObject = zipObject(
-      candidates,
-      new Array(candidates.length).fill(0),
-    )
+    const result: ScoreObject = scoresZero(candidates)
     ballots.forEach((ballot) => {
       let voteValue = candidates.length - 1
       ballot.ranking.forEach((candidatesAtRank) => {

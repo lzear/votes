@@ -58,10 +58,7 @@ const dedupe = (graphs: Edge[][]) =>
         signatures: [...acc.signatures, signature],
       }
     },
-    { deduped: [], signatures: [] } as {
-      deduped: Edge[][]
-      signatures: string[]
-    },
+    { deduped: [] as Edge[][], signatures: [] as string[] },
   ).deduped
 
 const generateAcyclicGraphs = (graph: Edge[], edgesToAdd: Edge[]): Edge[][] => {
@@ -83,22 +80,15 @@ const generateAcyclicGraphs = (graph: Edge[], edgesToAdd: Edge[]): Edge[][] => {
 const sortTopEdges = (group: Edge[]): Edge[][] => {
   const sources = findGraphRoots(group)
   if (sources.length) {
-    const { tops, bots } = group.reduce(
-      ({ tops, bots }, cur) =>
+    const { bot, top } = group.reduce(
+      ({ top, bot }, cur) =>
         sources.includes(cur.from)
-          ? {
-              tops: [...tops, cur],
-              bots,
-            }
-          : {
-              tops,
-              bots: [...bots, cur],
-            },
-      { tops: [] as Edge[], bots: [] as Edge[] },
+          ? { bot, top: [...top, cur] }
+          : { bot: [...bot, cur], top },
+      { bot: [] as Edge[], top: [] as Edge[] },
     )
-
-    if (tops.length > 0 && tops.length < group.length)
-      return [tops, ...sortTopEdges(bots)]
+    if (top.length > 0 && top.length < group.length)
+      return [top, ...sortTopEdges(bot)]
   }
   return [group]
 }
