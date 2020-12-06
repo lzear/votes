@@ -7,7 +7,7 @@ import uniq from 'lodash/uniq'
 
 import { Ballot } from '../types'
 
-const isBallotEqual = (a: string[][], b: string[][]): boolean =>
+export const isBallotEqual = (a: string[][], b: string[][]): boolean =>
   every(a, (rank, k) => isEqual([...rank].sort(), [...b[k]].sort()))
 
 export const normalizeRankinput = (
@@ -16,20 +16,22 @@ export const normalizeRankinput = (
   rankinput.map((rank) => (typeof rank === 'string' ? [rank] : rank))
 
 export const groupBallots = <B extends Ballot>(ballots: B[]): B[] =>
-  ballots.reduce((acc, ballot) => {
-    const match = acc.findIndex((b) => isBallotEqual(b.ranking, ballot.ranking))
-    if (match === -1) {
-      return [...acc, ballot]
-    }
-    return acc.map((b, k) =>
-      k === match
-        ? {
-            ...b,
-            weight: b.weight + ballot.weight,
-          }
-        : b,
-    )
-  }, [] as B[])
+  ballots
+    .reduce((acc, ballot) => {
+      const match = acc.findIndex((b) =>
+        isBallotEqual(b.ranking, ballot.ranking),
+      )
+      if (match === -1) return [...acc, ballot]
+      return acc.map((b, k) =>
+        k === match
+          ? {
+              ...b,
+              weight: b.weight + ballot.weight,
+            }
+          : b,
+      )
+    }, [] as B[])
+    .filter((b) => b.weight !== 0)
 
 export const toWeightedBallots = (ballots: string[][][]): Ballot[] =>
   ballots.reduce((w, ballot) => {

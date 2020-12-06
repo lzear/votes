@@ -1,8 +1,8 @@
-name: "Semantic release"
+name: 'Semantic release'
 
 on:
   push:
-    branches: [master,next]
+    branches: [master, next]
 
 jobs:
   release:

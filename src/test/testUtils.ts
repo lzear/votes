@@ -35,7 +35,7 @@ export const dummyProfile10: Ballot[] = toWeightedBallots(
   fill(Array(10), [['a'], ['b'], ['c'], ['d'], ['e']]),
 )
 
-const randomBallot = (candidates: string[], minWeight = 1, maxWeight = 10) => ({
+const randomBallot = (candidates: string[], minWeight = 1, maxWeight = 30) => ({
   ranking: shuffle(candidates).map((c) => [c]),
   weight: random(minWeight, maxWeight),
 })
@@ -58,4 +58,24 @@ export const randomBallots = (
     ballots: range(nBallots).map(() => randomBallot(candidates)),
     candidates,
   }
+}
+
+export const matrixString = (matrix: number[][]): string => {
+  const size = 6
+
+  return (
+    '\n' +
+    matrix
+      .map((r) =>
+        r
+          .map((c) =>
+            (Math.round(c * 1000) / 1000)
+              .toString()
+              .padStart(size, ' ')
+              .substr(0, size),
+          )
+          .join(' '),
+      )
+      .join('\n')
+  )
 }
