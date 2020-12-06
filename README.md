@@ -14,15 +14,78 @@
 ![language](https://img.shields.io/github/languages/top/lzear/votes)
 [![license](https://img.shields.io/github/license/lzear/votes)](https://github.com/lzear/votes/blob/master/LICENSE)
 
-> Implementation of some [electoral systems](https://en.wikipedia.org/wiki/Electoral_system)
+> Implementation of some
+> [electoral systems](https://en.wikipedia.org/wiki/Electoral_system)
 
-## Install
+## 🧑‍💻 Install
 
 ```sh
-yarn install
+yarn add votes
 ```
+
+## 🗳️ Use
+
+```typescript
+import { utils as voteUtils, VotingSystem } from 'votes'
+
+const scores = scoresFromBallots(
+  [
+    { ranking: [['Lion'], ['Bear'], ['Sheep']], weight: 4 },
+    { ranking: [['Sheep'], ['Bear'], ['Lion']], weight: 3 },
+    { ranking: [['Bear', 'Sheep'], ['Lion']], weight: 2 },
+  ],
+  ['Lion', 'Bear', 'Sheep'],
+  VotingSystem.Schulze,
+)
+// -> { Lion: 0, Bear: 2, Sheep: 1 }
+
+const ranking = scoresToRanking({ Bear: 2, Lion: 0, Sheep: 1 })
+// -> [ [ 'Bear' ], [ 'Sheep' ], [ 'Lion' ] ]
+```
+
+## 📊 Voting systems
+
+See
+[Comparison of electoral systems (Wikipedia)](https://en.wikipedia.org/wiki/Comparison_of_electoral_systems)
+for more information.
+
+**Ranked pairs**: Using the duel results as edges, build an acyclic graph
+starting by the strongest score differences. The roots of the graph are the
+winners.
+
+**Schulze method**: From the votes, compute the results of all possible duels.
+Then remove the most indecisive (closest to 50/50) duels until there is an
+undefeated candidate, the winner. This popular voting system is used by several
+organizations (Ubuntu, Debian, Wikimedia...).
+
+**Kemeny–Young method**: A relatively complex computation generating a
+preference order aiming to minimize dissatisfaction of the voters. Also known as
+Kemeny rule, VoteFair popularity ranking, the maximum likelihood method, and the
+median relation.
+
+**Minimax Condorcet method**: Ranking the candidates by smallest pairwise
+defeat.
+
+**Copeland's method**: Rank candidates by number of duels won against other
+candidates.
+
+**Approval voting**: Each voter can select (“approve”) any number of candidates.
+The winner is the most-approved candidate.
+
+**Borda's count**: For each voter, every candidate is given a number of points
+which equals the number of candidates ranked lower in the voter's preference.
+
+**Instant runoff**: Considering only the top choice of each voter, the candidate
+with the fewest votes is eliminated. The election repeats until there is a
+winner. This voting system is very similar to single transferable vote method.
+
+**Two-round system**: If no candidate receives 50% of the votes in the first
+round, then a second round of voting is held with only the top two candidates.
+
+**Plurality**: Simple voting method where only the preferred candidate of each
+voter gets 1 point. AKA first-past-the-post.
 
 ## 🤝 Contributing
 
-Contributions, issues and feature requests are welcome!<br />
-Feel free to check [issues page](https://github.com/lzear/votes/issues).
+Contributions, issues and feature requests are welcome!<br /> Feel free to check
+[issues page](https://github.com/lzear/votes/issues).

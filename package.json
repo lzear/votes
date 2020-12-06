@@ -21,8 +21,9 @@
   },
   "scripts": {
     "eslint": "eslint --ext .js --ext .ts .",
+    "fix:prettier": "prettier --write \"**/*.*\"",
     "prebuild": "rimraf dist",
-    "build": "tsc --module commonjs && rollup -c rollup.config.js && typedoc --exclude \"**/*.test.ts\" --out docs --target es6 --theme minimal --mode file src",
+    "build": "tsc --module commonjs && rollup -c rollup.config.js && typedoc",
     "build:watch": "tsc --module commonjs && rollup -c rollup.config.js -w",
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watch",

@@ -1,6 +1,6 @@
-import { scoresToRanking, scoresFromBallots } from './scores'
 import { VotingSystem } from '../votes'
 import { abcde, dummyProfile, dummyProfile10 } from '../test/testUtils'
+import { scoresFromBallots, scoresToRanking } from '.'
 
 describe('sanity check', () => {
   it.each(Object.values(VotingSystem) as VotingSystem[])(

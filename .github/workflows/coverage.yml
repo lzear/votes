@@ -1,4 +1,4 @@
-name: "Code coverage"
+name: 'Code coverage'
 
 on: [push]
 
@@ -14,7 +14,10 @@ jobs:
           node-version: '12'
       - run: yarn install
       - run: yarn test
-      - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+      - run:
+          curl -L
+          https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+          > ./cc-test-reporter
       - run: ./tools/codacy-cov.sh
         env:
           CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
