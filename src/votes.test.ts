@@ -1,4 +1,3 @@
-import descriptions from './descriptions'
 import { methods, SystemUsingMatrix, SystemUsingRankings, utils } from './votes'
 import { VotingSystem } from './types'
 import { matrixFromBallots } from './utils'
@@ -65,7 +64,9 @@ describe('Test all methods', () => {
     expect(allResults).toStrictEqual({
       COPELAND: ['a'],
       KEMENY: ['a'],
+      MAXIMAL_LOTTERIES: ['a'],
       MINIMAX: ['a'],
+      RANDOMIZED_CONDORCET: ['a'],
       RANKED_PAIRS: ['a'],
       SCHULZE: ['a'],
     })
@@ -182,10 +183,5 @@ describe('Test all methods', () => {
       d: 1,
       e: 3,
     })
-  })
-  it('loads description', () => {
-    expect(Object.keys(descriptions)).toHaveLength(
-      Object.keys(VotingSystem).length,
-    )
   })
 })
