@@ -1,4 +1,3 @@
-import descriptions from './descriptions'
 import { methods, SystemUsingMatrix, SystemUsingRankings, utils } from './votes'
 import { VotingSystem } from './types'
 import { matrixFromBallots } from './utils'
@@ -8,6 +7,7 @@ import { copeland } from './methods/copeland'
 import { firstPastThePost } from './methods/first-past-the-post'
 import { instantRunoff } from './methods/instant-runoff'
 import { kemeny } from './methods/kemeny'
+import { maximalLotteries } from './methods/maximal-lotteries'
 import { minimax } from './methods/minimax'
 import { rankedPairs } from './methods/ranked-pairs'
 import { schulze } from './methods/schulze'
@@ -64,7 +64,9 @@ describe('Test all methods', () => {
     expect(allResults).toStrictEqual({
       COPELAND: ['a'],
       KEMENY: ['a'],
+      MAXIMAL_LOTTERIES: ['a'],
       MINIMAX: ['a'],
+      RANDOMIZED_CONDORCET: ['a'],
       RANKED_PAIRS: ['a'],
       SCHULZE: ['a'],
     })
@@ -159,6 +161,18 @@ describe('Test all methods', () => {
       e: -3,
     })
   })
+
+  it('votes with maximal lotteries', () => {
+    expect(
+      maximalLotteries.computeFromMatrix(matrixFromBallots(sW, abcde)),
+    ).toMatchObject({
+      a: 0.6428571428571428,
+      b: 0,
+      c: 0,
+      d: 0,
+      e: 0.3571428571428572,
+    })
+  })
   it('votes with ranked pairs', () => {
     expect(
       rankedPairs.computeFromMatrix(matrixFromBallots(sW, abcde)),
@@ -169,10 +183,5 @@ describe('Test all methods', () => {
       d: 1,
       e: 3,
     })
-  })
-  it('loads description', () => {
-    expect(Object.keys(descriptions)).toHaveLength(
-      Object.keys(VotingSystem).length,
-    )
   })
 })

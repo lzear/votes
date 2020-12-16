@@ -17,22 +17,15 @@ export default {
       name: 'votes',
       format: 'umd',
       sourcemap: true,
-      globals: {
-        lodash: '_',
-      },
     },
     {
       file: pkg.module,
       name: 'votes',
       format: 'es',
       sourcemap: true,
-      globals: {
-        lodash: '_',
-      },
     },
   ],
-  // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
-  external: ['lodash'],
+  external: Object.keys(pkg.dependencies),
   watch: {
     include: 'src/**',
   },

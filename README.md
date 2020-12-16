@@ -49,6 +49,12 @@ See
 [Comparison of electoral systems (Wikipedia)](https://en.wikipedia.org/wiki/Comparison_of_electoral_systems)
 for more information.
 
+**⚠️Maximal lotteries & Randomized Condorcet⚠️** (Errors included): 
+Returns probabilities for each candidate that should be used for a lottery
+between the Candidates. If a candidate is the Condorcet winner, its
+probability will be 1. Despite being non-deterministic,
+those methods are the most fair.
+
 **Ranked pairs**: Using the duel results as edges, build an acyclic graph
 starting by the strongest score differences. The roots of the graph are the
 winners.
