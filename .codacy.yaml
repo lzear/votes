@@ -1,3 +1,4 @@
 exclude_paths:
   - '**/*.test.ts'
+  - 'src/test/'
   - 'tools/gh-pages-publish.ts'
