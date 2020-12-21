@@ -1,62 +1,27 @@
 // From chadhutchins:
 // https://gist.github.com/chadhutchins/1440602
 
-export class Vertex {
-  index: number
-  lowlink: number
-  connections: Vertex[]
-  name: number | string
-  constructor(name: number | string) {
-    this.connections = []
-    this.name = name
-
-    // used in tarjan algorithm
-    // went ahead and explicity initalized them
-    this.index = -1
-    this.lowlink = -1
-  }
-
-  equals(vertex: Vertex): boolean {
-    // equality check based on vertex name
-    return this.name == vertex.name
-  }
-
-  connect(vertex: Vertex): void {
-    this.connections.push(vertex)
-  }
-}
-
-class VertexStack {
-  vertices: Vertex[]
-
-  constructor() {
-    this.vertices = []
-  }
-
-  contains(vertex: Vertex) {
-    for (const i in this.vertices)
-      if (this.vertices[i].equals(vertex)) return true
-    return false
-  }
-}
+import { Vertex } from './Vertex'
+import { VertexStack } from './VertexStack'
 
 export class Tarjan {
-  index: number
-  stack: VertexStack
-  graph: Vertex[]
+  private index: number
+  private stack: VertexStack
+  private readonly graph: Vertex[]
   // scc: Vertex[][]
+
   constructor(graph: Vertex[]) {
     this.index = 0
     this.stack = new VertexStack()
     this.graph = graph
     // this.scc = []
   }
-  run(): void {
+  public run(): void {
     for (const i in this.graph)
       if (this.graph[i].index < 0) this.strongconnect(this.graph[i])
     // return this.scc
   }
-  private strongconnect(vertex: Vertex) {
+  private strongconnect(vertex: Vertex): void {
     // Set the depth index for v to the smallest unused index
     vertex.index = this.index
     vertex.lowlink = this.index

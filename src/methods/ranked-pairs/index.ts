@@ -8,7 +8,8 @@ import {
   SystemUsingMatrix,
   VotingSystem,
 } from '../../types'
-import { Tarjan, Vertex } from './tarjan'
+import { Tarjan } from './Tarjan'
+import { Vertex } from './Vertex'
 
 type Edge = { from: number; to: number; value: number }
 
