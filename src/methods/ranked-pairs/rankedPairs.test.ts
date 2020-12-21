@@ -62,4 +62,42 @@ describe('ranked pairs', () => {
       e: 3,
     })
   })
+  it('completes computation in decent time', () => {
+    expect(
+      rankedPairs.computeFromMatrix({
+        array: [
+          [0, 1, -1, -1, -1, -1, 1, -1, 1],
+          [-1, 0, -1, 1, -1, -1, -1, 1, -1],
+          [1, 1, 0, 1, -1, 0, 1, -1, 0],
+          [1, -1, -1, 0, -1, -1, 0, -1, 0],
+          [1, 1, 1, 1, 0, -1, 1, -1, 1],
+          [1, 1, 0, 1, 1, 0, 0, -1, 1],
+          [-1, 1, -1, 0, -1, 0, 0, -1, -1],
+          [1, -1, 1, 1, 1, 1, 1, 0, 1],
+          [-1, 1, 0, 0, -1, -1, 1, -1, 0],
+        ],
+        candidates: [
+          'bwLvxwn4',
+          'Bi8rD2kq',
+          'XuHBc1ME',
+          'xhAvdxz2',
+          'MBDuJLcU',
+          '4lNHn78L',
+          'hNtQKVPG',
+          'KXxHiFYK',
+          '2PWfQstO',
+        ],
+      }),
+    ).toEqual({
+      '2PWfQstO': 3,
+      '4lNHn78L': 4,
+      Bi8rD2kq: 1,
+      KXxHiFYK: 4,
+      MBDuJLcU: 4,
+      XuHBc1ME: 4,
+      bwLvxwn4: 4,
+      hNtQKVPG: 2,
+      xhAvdxz2: 4,
+    })
+  })
 })
