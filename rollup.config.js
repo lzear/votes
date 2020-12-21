@@ -17,8 +17,9 @@ export default {
       name: 'votes',
       format: 'umd',
       sourcemap: true,
-      globals: {
-        lodash: '_',
+      globals: (a) => {
+        const split = a.split('/')
+        return split[split.length - 1]
       },
     },
     {
@@ -26,15 +27,21 @@ export default {
       name: 'votes',
       format: 'es',
       sourcemap: true,
-      globals: {
-        lodash: '_',
-      },
     },
   ],
-  // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
-  external: ['lodash'],
+  external: (id) => Object.keys(pkg.dependencies).some((d) => id.startsWith(d)),
   watch: {
     include: 'src/**',
   },
-  plugins: [json(), typescript(), commonjs(), resolve(), sourceMaps(), sizes()],
+  plugins: [
+    json(),
+    typescript(),
+    commonjs(),
+    resolve({
+      jsnext: true,
+      skip: Object.keys(pkg.dependencies),
+    }),
+    sourceMaps(),
+    sizes(),
+  ],
 }

@@ -13,16 +13,15 @@ export enum VotingSystem {
   FirstPastThePost = 'FIRST_PAST_THE_POST',
   Kemeny = 'KEMENY',
   InstantRunoff = 'INSTANT_RUNOFF',
+  MaximalLotteries = 'MAXIMAL_LOTTERIES',
   Minimax = 'MINIMAX',
+  RandomizedCondorcet = 'RANDOMIZED_CONDORCET',
   RankedPairs = 'RANKED_PAIRS',
   Schulze = 'SCHULZE',
   TwoRoundRunoff = 'TWO_ROUND_RUNOFF',
 }
 
-export type Matrix = {
-  candidates: string[]
-  array: number[][]
-}
+export type Matrix = { candidates: string[]; array: number[][] }
 
 export type SystemUsingRankings = {
   type: VotingSystem

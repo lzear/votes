@@ -1,4 +1,4 @@
-import fromPairs from 'lodash/fromPairs'
+import zipObject from 'lodash/zipObject'
 import range from 'lodash/range'
 import {
   SystemUsingMatrix,
@@ -56,19 +56,23 @@ const nextPermutation = (arr: number[]) => {
 export const kemeny: SystemUsingMatrix = {
   type: VotingSystem.Kemeny,
   computeFromMatrix(matrix: Matrix): ScoreObject {
-    let bestP = range(matrix.candidates.length)
-    let bestScore = rankingPenalty(bestP, matrix.array)
-    let p: number[] | false = bestP
+    let bestPermutations: number[][] = []
+    let bestScore = Infinity
+    let p: number[] | false = range(matrix.candidates.length)
     while (p) {
       const s = rankingPenalty(p, matrix.array)
-      if (s < bestScore) {
+      if (s === bestScore) bestPermutations.push(p)
+      else if (s < bestScore) {
         bestScore = s
-        bestP = p
+        bestPermutations = [p]
       }
       p = nextPermutation(p)
     }
-    return fromPairs(
-      bestP.map((cIdx, index) => [matrix.candidates[cIdx], index]),
+    const sumIdx = matrix.candidates.map((c, cIdx) =>
+      bestPermutations
+        .map((perm) => perm.indexOf(cIdx))
+        .reduce((a, v) => a + v, 0),
     )
+    return zipObject(matrix.candidates, sumIdx)
   },
 }

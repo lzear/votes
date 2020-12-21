@@ -1,26 +1,14 @@
-import zipObject from 'lodash/zipObject'
 import {
   SystemUsingRankings,
   ScoreObject,
   VotingSystem,
   Ballot,
 } from '../../types'
+import { iterateFirstChoices } from '../first-past-the-post'
 
 export const approbation: SystemUsingRankings = {
   type: VotingSystem.Approbation,
   computeFromBallots(ballots: Ballot[], candidates: string[]): ScoreObject {
-    const result: ScoreObject = zipObject(
-      candidates,
-      new Array(candidates.length).fill(0),
-    )
-    ballots.forEach((ballot) => {
-      if (ballot.ranking.length) {
-        const votes = ballot.ranking[0].filter((c) => candidates.includes(c))
-        votes.forEach((v) => {
-          result[v] += ballot.weight
-        })
-      }
-    })
-    return result
+    return iterateFirstChoices(ballots, candidates, () => 1)
   },
 }
