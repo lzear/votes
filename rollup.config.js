@@ -17,6 +17,10 @@ export default {
       name: 'votes',
       format: 'umd',
       sourcemap: true,
+      globals: (a) => {
+        const split = a.split('/')
+        return split[split.length - 1]
+      },
     },
     {
       file: pkg.module,
@@ -25,9 +29,19 @@ export default {
       sourcemap: true,
     },
   ],
-  external: Object.keys(pkg.dependencies),
+  external: (id) => Object.keys(pkg.dependencies).some((d) => id.startsWith(d)),
   watch: {
     include: 'src/**',
   },
-  plugins: [json(), typescript(), commonjs(), resolve(), sourceMaps(), sizes()],
+  plugins: [
+    json(),
+    typescript(),
+    commonjs(),
+    resolve({
+      jsnext: true,
+      skip: Object.keys(pkg.dependencies),
+    }),
+    sourceMaps(),
+    sizes(),
+  ],
 }
