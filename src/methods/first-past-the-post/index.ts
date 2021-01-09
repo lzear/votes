@@ -5,6 +5,7 @@ import {
   Ballot,
 } from '../../types'
 import { scoresZero } from '../../utils/scoresZero'
+import { normalizeBallots } from '../../utils'
 
 export const iterateFirstChoices = (
   ballots: Ballot[],
@@ -12,7 +13,7 @@ export const iterateFirstChoices = (
   compute: (rank: string[]) => number,
 ): ScoreObject => {
   const result: ScoreObject = scoresZero(candidates)
-  ballots.forEach((ballot) => {
+  normalizeBallots(ballots, candidates).forEach((ballot) => {
     if (ballot.ranking.length) {
       const votes = ballot.ranking[0].filter((c) => candidates.includes(c))
       votes.forEach(

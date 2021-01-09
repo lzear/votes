@@ -9,6 +9,7 @@ export type ScoreObject = { [candidate: string]: number }
 export enum VotingSystem {
   Approbation = 'APPROBATION',
   Borda = 'BORDA',
+  Coombs = 'COOMBS',
   Copeland = 'COPELAND',
   FirstPastThePost = 'FIRST_PAST_THE_POST',
   Kemeny = 'KEMENY',

@@ -40,6 +40,7 @@ describe('Test all methods', () => {
     expect(allResults).toStrictEqual({
       APPROBATION: ['a'],
       BORDA: ['a'],
+      COOMBS: ['a'],
       FIRST_PAST_THE_POST: ['a'],
       INSTANT_RUNOFF: ['a'],
       TWO_ROUND_RUNOFF: ['a'],
@@ -73,7 +74,7 @@ describe('Test all methods', () => {
     Object.values(allResults).forEach((v) => expect(v).toStrictEqual(['a']))
   })
   it('votes with approbation', () => {
-    expect(approbation.computeFromBallots(balinski, abcde)).toMatchObject({
+    expect(approbation.computeFromBallots(balinski, abcde)).toStrictEqual({
       a: 33,
       b: 16,
       c: 11,
@@ -82,7 +83,7 @@ describe('Test all methods', () => {
     })
   })
   it('votes with borda', () => {
-    expect(borda.computeFromBallots(balinski, abcde)).toMatchObject({
+    expect(borda.computeFromBallots(balinski, abcde)).toStrictEqual({
       a: 135,
       b: 247,
       c: 244,
@@ -91,7 +92,7 @@ describe('Test all methods', () => {
     })
   })
   it('votes with FPTP', () => {
-    expect(firstPastThePost.computeFromBallots(balinski, abcde)).toMatchObject({
+    expect(firstPastThePost.computeFromBallots(balinski, abcde)).toStrictEqual({
       a: 33,
       b: 16,
       c: 11,
@@ -100,7 +101,7 @@ describe('Test all methods', () => {
     })
   })
   it('votes with instant runoff', () => {
-    expect(instantRunoff.computeFromBallots(balinski, abcde)).toMatchObject({
+    expect(instantRunoff.computeFromBallots(balinski, abcde)).toStrictEqual({
       a: 33,
       b: 16,
       c: 11,
@@ -109,7 +110,7 @@ describe('Test all methods', () => {
     })
   })
   it('votes with two-round runoff', () => {
-    expect(twoRoundRunoff.computeFromBallots(balinski, abcde)).toMatchObject({
+    expect(twoRoundRunoff.computeFromBallots(balinski, abcde)).toStrictEqual({
       a: 36,
       b: 16,
       c: 11,
@@ -120,7 +121,7 @@ describe('Test all methods', () => {
   it('votes with copeland', () => {
     expect(
       copeland.computeFromMatrix(matrixFromBallots(balinski, abcde)),
-    ).toMatchObject({
+    ).toStrictEqual({
       a: -4,
       b: 1.76,
       c: 3.84,
@@ -131,7 +132,7 @@ describe('Test all methods', () => {
   it('votes with kemeny', () => {
     expect(
       kemeny.computeFromMatrix(matrixFromBallots(balinski, abcde)),
-    ).toMatchObject({
+    ).toStrictEqual({
       a: 0,
       b: 3,
       c: 4,
@@ -142,7 +143,7 @@ describe('Test all methods', () => {
   it('votes with schulze', () => {
     expect(
       schulze.computeFromMatrix(matrixFromBallots(sW, abcde)),
-    ).toMatchObject({
+    ).toStrictEqual({
       a: 3,
       b: 1,
       c: 2,
@@ -153,7 +154,7 @@ describe('Test all methods', () => {
   it('votes with minimax', () => {
     expect(
       minimax.computeFromMatrix(matrixFromBallots(sW, abcde)),
-    ).toMatchObject({
+    ).toStrictEqual({
       a: -5,
       b: -13,
       c: -11,
@@ -165,7 +166,7 @@ describe('Test all methods', () => {
   it('votes with maximal lotteries', () => {
     expect(
       maximalLotteries.computeFromMatrix(matrixFromBallots(sW, abcde)),
-    ).toMatchObject({
+    ).toStrictEqual({
       a: 0.6428571428571428,
       b: 0,
       c: 0,
@@ -176,7 +177,7 @@ describe('Test all methods', () => {
   it('votes with ranked pairs', () => {
     expect(
       rankedPairs.computeFromMatrix(matrixFromBallots(sW, abcde)),
-    ).toMatchObject({
+    ).toStrictEqual({
       a: 5,
       b: 2,
       c: 4,

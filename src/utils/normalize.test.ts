@@ -18,7 +18,7 @@ it('groups ballots', () => {
       { weight: 4, ranking: [['d', 'b'], ['c']] },
       { weight: 5, ranking: [['a', 'b'], ['c']] },
     ]),
-  ).toMatchObject([
+  ).toStrictEqual([
     { weight: 8, ranking: [['a', 'b'], ['c']] },
     { weight: 4, ranking: [['d', 'b'], ['c']] },
   ])
@@ -31,13 +31,13 @@ it('throw on duplicated candidates', () => {
 })
 
 it('removes duplicated candidates', () => {
-  expect(removeDuplicatedCandidates([['a', 'b'], ['a']])).toMatchObject([
+  expect(removeDuplicatedCandidates([['a', 'b'], ['a']])).toStrictEqual([
     ['a', 'b'],
   ])
 })
 
 it('normalizes rankinput', () => {
-  expect(normalizeRankinput([['a', 'b'], 'c', 'd', ['e']])).toMatchObject([
+  expect(normalizeRankinput([['a', 'b'], 'c', 'd', ['e']])).toStrictEqual([
     ['a', 'b'],
     ['c'],
     ['d'],
@@ -52,7 +52,7 @@ it('gets candidates from ballots', () => {
       { weight: 4, ranking: [['d', 'b'], ['c']] },
       { weight: 5, ranking: [['a', 'b'], ['c']] },
     ]),
-  ).toMatchObject(['a', 'b', 'c', 'd'])
+  ).toStrictEqual(['a', 'b', 'c', 'd'])
 })
 
 it('normalizes ballots', () => {
@@ -62,7 +62,7 @@ it('normalizes ballots', () => {
       { weight: 4, ranking: [['d', 'b'], [], ['c']] },
       { weight: 5, ranking: [['a', 'b'], ['c']] },
     ]),
-  ).toMatchObject([
+  ).toStrictEqual([
     { weight: 3, ranking: [['a', 'b'], ['c']] },
     { weight: 4, ranking: [['d', 'b'], ['c']] },
     { weight: 5, ranking: [['a', 'b'], ['c']] },
@@ -76,7 +76,7 @@ it('normalizes ballots', () => {
       ],
       ['a', 'b', 'c'],
     ),
-  ).toMatchObject([
+  ).toStrictEqual([
     { weight: 3, ranking: [['a', 'b'], ['c']] },
     { weight: 4, ranking: [['b'], ['c']] },
     { weight: 5, ranking: [['a', 'b'], ['c']] },

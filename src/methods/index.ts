@@ -1,6 +1,7 @@
 import { VotingSystem } from '../types'
 import { approbation } from './approbation'
 import { borda } from './borda'
+import { coombs } from './coombs'
 import { copeland } from './copeland'
 import { firstPastThePost } from './first-past-the-post'
 import { instantRunoff } from './instant-runoff'
@@ -15,6 +16,7 @@ import { twoRoundRunoff } from './two-round-runoff'
 export const methods = {
   [VotingSystem.Approbation]: approbation,
   [VotingSystem.Borda]: borda,
+  [VotingSystem.Coombs]: coombs,
   [VotingSystem.Copeland]: copeland,
   [VotingSystem.FirstPastThePost]: firstPastThePost,
   [VotingSystem.InstantRunoff]: instantRunoff,
