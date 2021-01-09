@@ -16,9 +16,6 @@
     "url": "https://github.com/lzear/votes.git"
   },
   "license": "MIT",
-  "engines": {
-    "node": ">=6.0.0"
-  },
   "scripts": {
     "eslint": "eslint --ext .js --ext .ts .",
     "fix:prettier": "prettier --write \"**/*.*\"",

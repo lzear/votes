@@ -2,7 +2,7 @@ import { makeAntisymetric, matrixFromBallots } from '.'
 import { abcde, balinski } from '../test/testUtils'
 
 it('makes antisymetric', () => {
-  expect(makeAntisymetric(matrixFromBallots(balinski, abcde))).toMatchObject({
+  expect(makeAntisymetric(matrixFromBallots(balinski, abcde))).toStrictEqual({
     array: [
       [0, -34, -34, -34, -28],
       [34, 0, -2, 58, 4],
