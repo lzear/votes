@@ -16,7 +16,7 @@ export const coombs: SystemUsingRankings = {
       ranking: [...ballot.ranking].reverse(),
       weight: ballot.weight,
     }))
-    let remainingCandidates = [...candidates]
+    let remainingCandidates = candidates
     let points = 0
     while (remainingCandidates.length > 0) {
       const fptpScore = firstPastThePost.computeFromBallots(

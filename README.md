@@ -54,7 +54,7 @@ for more information.
 **⚠️Maximal lotteries & Randomized Condorcet⚠️** (Errors included): Returns
 probabilities for each candidate that should be used for a lottery between the
 Candidates. If a candidate is the Condorcet winner, its probability will be 1.
-Despite being non-deterministic, those methods are the most fair.
+Despite being non-deterministic, those methods are the fairest.
 
 **Ranked pairs**: Using the duel results as edges, build an acyclic graph
 starting by the strongest score differences. The roots of the graph are the
@@ -79,8 +79,14 @@ candidates.
 **Approval voting**: Each voter can select (“approve”) any number of candidates.
 The winner is the most-approved candidate.
 
-**Borda's count**: For each voter, every candidate is given a number of points
+**Borda count**: For each voter, every candidate is given a number of points
 which equals the number of candidates ranked lower in the voter's preference.
+
+**Nanson method**: Iterative Borda count in which, each round, candidates scoring
+the average score or less are eliminated.
+
+**Baldwin method**: Iterative Borda count in which, each round, candidates scoring
+the lowest score are eliminated.
 
 **Instant-runoff**: Considering only the top choice of each voter, the candidate
 with the fewest votes is eliminated. The election repeats until there is a

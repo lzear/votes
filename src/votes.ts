@@ -1,4 +1,21 @@
-import { methods } from './methods'
+import {
+  approbation,
+  baldwin,
+  borda,
+  coombs,
+  copeland,
+  firstPastThePost,
+  instantRunoff,
+  kemeny,
+  maximalLotteries,
+  minimax,
+  nanson,
+  rankedPairs,
+  randomizedCondorcet,
+  schulze,
+  twoRoundRunoff,
+  methods,
+} from './methods'
 import {
   System,
   VotingSystem,
@@ -11,13 +28,32 @@ import {
 import * as utils from './utils'
 
 export {
-  methods,
+  // enum
   VotingSystem,
+  // All methods:
+  methods,
+  approbation,
+  baldwin,
+  borda,
+  coombs,
+  copeland,
+  firstPastThePost,
+  instantRunoff,
+  kemeny,
+  maximalLotteries,
+  minimax,
+  nanson,
+  rankedPairs,
+  randomizedCondorcet,
+  schulze,
+  twoRoundRunoff,
+  // utils
+  utils,
+  // types
   System,
   SystemUsingRankings,
   SystemUsingMatrix,
   Matrix,
   ScoreObject,
   Ballot,
-  utils,
 }

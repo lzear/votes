@@ -8,6 +8,7 @@ export type ScoreObject = { [candidate: string]: number }
 
 export enum VotingSystem {
   Approbation = 'APPROBATION',
+  Baldwin = 'BALDWIN',
   Borda = 'BORDA',
   Coombs = 'COOMBS',
   Copeland = 'COPELAND',
@@ -16,6 +17,7 @@ export enum VotingSystem {
   InstantRunoff = 'INSTANT_RUNOFF',
   MaximalLotteries = 'MAXIMAL_LOTTERIES',
   Minimax = 'MINIMAX',
+  NANSON = 'NANSON',
   RandomizedCondorcet = 'RANDOMIZED_CONDORCET',
   RankedPairs = 'RANKED_PAIRS',
   Schulze = 'SCHULZE',
