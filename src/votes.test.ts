@@ -1,17 +1,23 @@
 import { methods, SystemUsingMatrix, SystemUsingRankings, utils } from './votes'
 import { VotingSystem } from './types'
 import { matrixFromBallots } from './utils'
-import { approbation } from './methods/approbation'
-import { borda } from './methods/borda'
-import { copeland } from './methods/copeland'
-import { firstPastThePost } from './methods/first-past-the-post'
-import { instantRunoff } from './methods/instant-runoff'
-import { kemeny } from './methods/kemeny'
-import { maximalLotteries } from './methods/maximal-lotteries'
-import { minimax } from './methods/minimax'
-import { rankedPairs } from './methods/ranked-pairs'
-import { schulze } from './methods/schulze'
-import { twoRoundRunoff } from './methods/two-round-runoff'
+import {
+  approbation,
+  baldwin,
+  borda,
+  coombs,
+  copeland,
+  firstPastThePost,
+  instantRunoff,
+  kemeny,
+  maximalLotteries,
+  minimax,
+  nanson,
+  randomizedCondorcet,
+  rankedPairs,
+  schulze,
+  twoRoundRunoff,
+} from './votes'
 import { abcde, balinski, dummyProfile, sW } from './test/testUtils'
 
 describe('Test all methods', () => {
@@ -39,10 +45,12 @@ describe('Test all methods', () => {
     }, {})
     expect(allResults).toStrictEqual({
       APPROBATION: ['a'],
+      BALDWIN: ['a'],
       BORDA: ['a'],
       COOMBS: ['a'],
       FIRST_PAST_THE_POST: ['a'],
       INSTANT_RUNOFF: ['a'],
+      NANSON: ['a'],
       TWO_ROUND_RUNOFF: ['a'],
     })
     Object.values(allResults).forEach((v) => expect(v).toStrictEqual(['a']))
@@ -82,6 +90,15 @@ describe('Test all methods', () => {
       e: 22,
     })
   })
+  it('votes with baldwin', () => {
+    expect(baldwin.computeFromBallots(balinski, abcde)).toStrictEqual({
+      a: 0,
+      b: 3,
+      c: 4,
+      d: 2,
+      e: 1,
+    })
+  })
   it('votes with borda', () => {
     expect(borda.computeFromBallots(balinski, abcde)).toStrictEqual({
       a: 135,
@@ -89,6 +106,15 @@ describe('Test all methods', () => {
       c: 244,
       d: 192,
       e: 182,
+    })
+  })
+  it('votes with coombs', () => {
+    expect(coombs.computeFromBallots(balinski, abcde)).toStrictEqual({
+      a: 0,
+      b: 3,
+      c: 4,
+      d: 2,
+      e: 1,
     })
   })
   it('votes with FPTP', () => {
@@ -107,6 +133,15 @@ describe('Test all methods', () => {
       c: 11,
       d: 67,
       e: 30,
+    })
+  })
+  it('votes with instant nanson', () => {
+    expect(nanson.computeFromBallots(balinski, abcde)).toStrictEqual({
+      a: 136,
+      b: 243,
+      c: 244,
+      d: 193,
+      e: 183,
     })
   })
   it('votes with two-round runoff', () => {
@@ -138,6 +173,17 @@ describe('Test all methods', () => {
       c: 4,
       d: 2,
       e: 1,
+    })
+  })
+  it('votes with randomizedCondorcet', () => {
+    expect(
+      randomizedCondorcet.computeFromMatrix(matrixFromBallots(sW, abcde)),
+    ).toStrictEqual({
+      a: 0.3333333333333333,
+      b: 0,
+      c: 0.3333333333333333,
+      d: 0,
+      e: 0.3333333333333333,
     })
   })
   it('votes with schulze', () => {
