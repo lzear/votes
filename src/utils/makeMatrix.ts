@@ -1,6 +1,6 @@
-import difference from 'lodash/difference'
-import range from 'lodash/range'
-import times from 'lodash/times'
+import difference from 'lodash-es/difference'
+import range from 'lodash-es/range'
+import times from 'lodash-es/times'
 import { Matrix, Ballot } from '../types'
 
 export const matrixFromBallots = (

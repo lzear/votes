@@ -1,9 +1,9 @@
-import difference from 'lodash/difference'
-import every from 'lodash/every'
-import flatten from 'lodash/flatten'
-import intersection from 'lodash/intersection'
-import isEqual from 'lodash/isEqual'
-import uniq from 'lodash/uniq'
+import difference from 'lodash-es/difference'
+import every from 'lodash-es/every'
+import flatten from 'lodash-es/flatten'
+import intersection from 'lodash-es/intersection'
+import isEqual from 'lodash-es/isEqual'
+import uniq from 'lodash-es/uniq'
 
 import { Ballot } from '../types'
 

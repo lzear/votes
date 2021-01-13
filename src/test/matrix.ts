@@ -1,4 +1,4 @@
-import range from 'lodash/range'
+import range from 'lodash-es/range'
 
 export const product = (a: number[][], b: number[][]): number[][] => {
   const dimA = [a.length, a[0].length]
