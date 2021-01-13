@@ -26,27 +26,9 @@ export const methods = {
   [VotingSystem.Kemeny]: kemeny,
   [VotingSystem.MaximalLotteries]: maximalLotteries,
   [VotingSystem.Minimax]: minimax,
-  [VotingSystem.NANSON]: nanson,
+  [VotingSystem.Nanson]: nanson,
   [VotingSystem.RankedPairs]: rankedPairs,
   [VotingSystem.RandomizedCondorcet]: randomizedCondorcet,
   [VotingSystem.Schulze]: schulze,
   [VotingSystem.TwoRoundRunoff]: twoRoundRunoff,
-}
-
-export {
-  approbation,
-  baldwin,
-  borda,
-  coombs,
-  copeland,
-  firstPastThePost,
-  instantRunoff,
-  kemeny,
-  maximalLotteries,
-  minimax,
-  nanson,
-  rankedPairs,
-  randomizedCondorcet,
-  schulze,
-  twoRoundRunoff,
 }

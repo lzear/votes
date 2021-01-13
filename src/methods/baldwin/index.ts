@@ -6,7 +6,7 @@ import {
   Ballot,
 } from '../../types'
 import { borda } from '../borda'
-import { scoresToRanking } from '../../utils'
+import { scoresToRanking } from '../../utils/scores'
 
 export const baldwin: SystemUsingRankings = {
   type: VotingSystem.Baldwin,

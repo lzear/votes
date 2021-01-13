@@ -5,7 +5,7 @@ import {
   Ballot,
 } from '../../types'
 import { firstPastThePost } from '../first-past-the-post'
-import { normalizeBallots } from '../../utils'
+import { normalizeBallots } from '../../utils/normalize'
 
 export const instantRunoff: SystemUsingRankings = {
   type: VotingSystem.InstantRunoff,

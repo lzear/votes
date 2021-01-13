@@ -6,7 +6,7 @@ import {
   Ballot,
 } from '../../types'
 import { firstPastThePost } from '../first-past-the-post'
-import { scoresToRanking } from '../../utils'
+import { scoresToRanking } from '../../utils/scores'
 
 export const coombs: SystemUsingRankings = {
   type: VotingSystem.Coombs,

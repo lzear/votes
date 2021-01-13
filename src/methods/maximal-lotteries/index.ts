@@ -6,7 +6,7 @@ import {
   Matrix,
   ScoreObject,
 } from '../../types'
-import { makeAntisymetric } from '../../utils'
+import { makeAntisymetric } from '../../utils/makeMatrix'
 import { findCondorcet } from '../../utils/condorcet'
 
 export const computeLottery = (

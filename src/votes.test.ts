@@ -1,7 +1,5 @@
-import { methods, SystemUsingMatrix, SystemUsingRankings, utils } from './votes'
-import { VotingSystem } from './types'
-import { matrixFromBallots } from './utils'
 import {
+  methods,
   approbation,
   baldwin,
   borda,
@@ -17,8 +15,12 @@ import {
   rankedPairs,
   schulze,
   twoRoundRunoff,
+  VotingSystem,
+  SystemUsingMatrix,
+  SystemUsingRankings,
 } from './votes'
 import { abcde, balinski, dummyProfile, sW } from './test/testUtils'
+import { matrixFromBallots } from './utils'
 
 describe('Test all methods', () => {
   it('works if true is truthy', () => {
@@ -62,7 +64,7 @@ describe('Test all methods', () => {
     const allResults = m.reduce((acc, methodKey) => {
       const method = methods[methodKey] as SystemUsingMatrix
       const score = method.computeFromMatrix(
-        utils.matrixFromBallots(dummyProfile, abcde),
+        matrixFromBallots(dummyProfile, abcde),
       )
       const maxScore = Math.max(...Object.values(score))
       return {

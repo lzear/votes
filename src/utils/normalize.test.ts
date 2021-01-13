@@ -5,11 +5,11 @@ import {
   normalizeBallot,
   normalizeBallots,
   normalizeRanking,
-  normalizeRankinput,
+  normalizeRankInput,
   removeDuplicatedCandidates,
   removeInvalidCandidates,
   scoresToRanking,
-} from '.'
+} from '../utils'
 
 it('groups ballots', () => {
   expect(
@@ -37,7 +37,7 @@ it('removes duplicated candidates', () => {
 })
 
 it('normalizes rankinput', () => {
-  expect(normalizeRankinput([['a', 'b'], 'c', 'd', ['e']])).toStrictEqual([
+  expect(normalizeRankInput([['a', 'b'], 'c', 'd', ['e']])).toStrictEqual([
     ['a', 'b'],
     ['c'],
     ['d'],

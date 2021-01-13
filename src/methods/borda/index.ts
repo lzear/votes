@@ -5,7 +5,7 @@ import {
   Ballot,
 } from '../../types'
 import { scoresZero } from '../../utils/scoresZero'
-import { normalizeBallots } from '../../utils'
+import { normalizeBallots } from '../../utils/normalize'
 
 export const borda: SystemUsingRankings = {
   type: VotingSystem.Borda,
