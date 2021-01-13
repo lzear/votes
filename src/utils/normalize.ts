@@ -10,7 +10,7 @@ import { Ballot } from '../types'
 export const isBallotEqual = (a: string[][], b: string[][]): boolean =>
   every(a, (rank, k) => isEqual([...rank].sort(), [...b[k]].sort()))
 
-export const normalizeRankinput = (
+export const normalizeRankInput = (
   rankinput: (string | string[])[],
 ): string[][] =>
   rankinput.map((rank) => (typeof rank === 'string' ? [rank] : rank))

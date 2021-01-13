@@ -9,7 +9,7 @@ import {
 import { borda } from '../borda'
 
 export const nanson: SystemUsingRankings = {
-  type: VotingSystem.NANSON,
+  type: VotingSystem.Nanson,
   computeFromBallots(ballots: Ballot[], candidates: string[]): ScoreObject {
     const score: ScoreObject = {}
     let remainingCandidates = candidates

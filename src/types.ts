@@ -17,7 +17,7 @@ export enum VotingSystem {
   InstantRunoff = 'INSTANT_RUNOFF',
   MaximalLotteries = 'MAXIMAL_LOTTERIES',
   Minimax = 'MINIMAX',
-  NANSON = 'NANSON',
+  Nanson = 'NANSON',
   RandomizedCondorcet = 'RANDOMIZED_CONDORCET',
   RankedPairs = 'RANKED_PAIRS',
   Schulze = 'SCHULZE',
