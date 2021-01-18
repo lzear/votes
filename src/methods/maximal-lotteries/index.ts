@@ -1,4 +1,4 @@
-import zipObject from 'lodash/zipObject'
+import { zipObject } from 'lodash-es'
 import { solve } from '../../simplex'
 import {
   SystemUsingMatrix,

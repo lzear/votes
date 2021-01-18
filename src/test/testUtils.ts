@@ -1,7 +1,4 @@
-import fill from 'lodash/fill'
-import random from 'lodash/random'
-import range from 'lodash/range'
-import shuffle from 'lodash/shuffle'
+import { fill, random, range, shuffle } from 'lodash-es'
 import { Ballot } from '../types'
 import { toWeightedBallots } from '../utils'
 

@@ -1,5 +1,4 @@
-import sum from 'lodash/sum'
-import difference from 'lodash/difference'
+import { sum, difference } from 'lodash-es'
 import {
   SystemUsingRankings,
   ScoreObject,
