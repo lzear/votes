@@ -1,5 +1,4 @@
-import zipObject from 'lodash-es/zipObject'
-import range from 'lodash-es/range'
+import { range, zipObject } from 'lodash-es'
 import {
   SystemUsingMatrix,
   VotingSystem,

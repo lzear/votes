@@ -82,11 +82,11 @@ The winner is the most-approved candidate.
 **Borda count**: For each voter, every candidate is given a number of points
 which equals the number of candidates ranked lower in the voter's preference.
 
-**Nanson method**: Iterative Borda count in which, each round, candidates scoring
-the average score or less are eliminated.
+**Nanson method**: Iterative Borda count in which, each round, candidates
+scoring the average score or less are eliminated.
 
-**Baldwin method**: Iterative Borda count in which, each round, candidates scoring
-the lowest score are eliminated.
+**Baldwin method**: Iterative Borda count in which, each round, candidates
+scoring the lowest score are eliminated.
 
 **Instant-runoff**: Considering only the top choice of each voter, the candidate
 with the fewest votes is eliminated. The election repeats until there is a
