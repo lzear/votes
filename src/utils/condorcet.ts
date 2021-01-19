@@ -1,4 +1,4 @@
-import { difference } from 'lodash-es'
+import difference from 'lodash/difference'
 import { Matrix } from '../types'
 
 export const findCondorcet = ({ candidates, array }: Matrix): Matrix => {

@@ -1,4 +1,7 @@
-import { groupBy, range, uniq, zipObject } from 'lodash-es'
+import groupBy from 'lodash/groupBy'
+import range from 'lodash/range'
+import uniq from 'lodash/uniq'
+import zipObject from 'lodash/zipObject'
 import {
   Matrix,
   ScoreObject,

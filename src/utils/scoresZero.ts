@@ -1,4 +1,4 @@
-import { zipObject } from 'lodash-es'
+import zipObject from 'lodash/zipObject'
 import { ScoreObject } from '../types'
 
 export const scoresZero = (candidates: string[]): ScoreObject =>

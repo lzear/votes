@@ -1,4 +1,6 @@
-import { groupBy, sortBy, toPairs } from 'lodash-es'
+import groupBy from 'lodash/groupBy'
+import sortBy from 'lodash/sortBy'
+import toPairs from 'lodash/toPairs'
 
 export const scoresToRanking = (scores: {
   [candidate: string]: number

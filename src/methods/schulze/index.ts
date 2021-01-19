@@ -1,5 +1,5 @@
 /* eslint-disable no-plusplus */
-import { range } from 'lodash-es'
+import range from 'lodash/range'
 import {
   SystemUsingMatrix,
   VotingSystem,
