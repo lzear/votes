@@ -4,7 +4,7 @@ import {
   VotingSystem,
   Ballot,
 } from '../../types'
-import { normalizeBallots } from '../../utils'
+import { normalizeBallots } from '../../utils/normalize'
 import { firstPastThePost } from '../first-past-the-post'
 
 export const twoRoundRunoff: SystemUsingRankings = {

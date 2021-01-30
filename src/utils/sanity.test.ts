@@ -4,11 +4,31 @@ import { scoresFromBallots, scoresToRanking } from '.'
 
 describe('sanity check', () => {
   it.each(Object.values(VotingSystem) as VotingSystem[])(
-    'empty list %p',
+    'empty list and empty candidates %p',
+    (system) => {
+      expect(scoresToRanking(scoresFromBallots([], [], system))).toStrictEqual(
+        [],
+      )
+    },
+  )
+  it.each(Object.values(VotingSystem) as VotingSystem[])(
+    'empty ballot list %p',
     (system) => {
       expect(
         scoresToRanking(scoresFromBallots([], ['a', 'b', 'c'], system))[0],
-      ).toMatchObject(['a', 'b', 'c'])
+      ).toStrictEqual(['a', 'b', 'c'])
+    },
+  )
+  it.each(Object.values(VotingSystem) as VotingSystem[])(
+    'empty candidates list %p',
+    (system) => {
+      expect(
+        scoresFromBallots(
+          [{ ranking: [['a'], ['b'], ['c']], weight: 1 }],
+          [],
+          system,
+        ),
+      ).toStrictEqual({})
     },
   )
   it.each(Object.values(VotingSystem) as VotingSystem[])(
@@ -22,7 +42,7 @@ describe('sanity check', () => {
             system,
           ),
         )[0],
-      ).toMatchObject(['a'])
+      ).toStrictEqual(['a'])
     },
   )
 
@@ -37,7 +57,7 @@ describe('sanity check', () => {
             system,
           ),
         )[0],
-      ).toMatchObject(['a', 'd'])
+      ).toStrictEqual(['a', 'd'])
     },
   )
 
@@ -56,7 +76,7 @@ describe('sanity check', () => {
             system,
           ),
         )[0],
-      ).toMatchObject(['a', 'b', 'c'])
+      ).toStrictEqual(['a', 'b', 'c'])
     },
   )
   it.each(Object.values(VotingSystem) as VotingSystem[])(
@@ -64,7 +84,7 @@ describe('sanity check', () => {
     (system) => {
       expect(
         scoresToRanking(scoresFromBallots(dummyProfile, abcde, system))[0],
-      ).toMatchObject(['a'])
+      ).toStrictEqual(['a'])
     },
   )
   it.each(Object.values(VotingSystem) as VotingSystem[])(
@@ -72,7 +92,7 @@ describe('sanity check', () => {
     (system) => {
       expect(
         scoresToRanking(scoresFromBallots(dummyProfile10, abcde, system))[0],
-      ).toMatchObject(['a'])
+      ).toStrictEqual(['a'])
     },
   )
 })

@@ -4,7 +4,7 @@ import {
   Matrix,
   ScoreObject,
 } from '../../types'
-import { makeAntisymetric } from '../../utils'
+import { makeAntisymetric } from '../../utils/makeMatrix'
 import { computeLottery } from '../maximal-lotteries'
 
 export const randomizedCondorcet: SystemUsingMatrix = {

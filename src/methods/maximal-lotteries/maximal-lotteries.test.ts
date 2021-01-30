@@ -1,5 +1,5 @@
 import { performPivots, simplexTableau } from '../../simplex'
-import { matrixString } from '../../simplex/utils'
+import { matrixString } from '../../test/testUtils'
 import { maximalLotteries } from './index'
 
 const example1 = [

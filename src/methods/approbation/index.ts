@@ -4,7 +4,7 @@ import {
   VotingSystem,
   Ballot,
 } from '../../types'
-import { iterateFirstChoices } from '../first-past-the-post'
+import { iterateFirstChoices } from '../first-past-the-post/iterateFirstChoices'
 
 export const approbation: SystemUsingRankings = {
   type: VotingSystem.Approbation,

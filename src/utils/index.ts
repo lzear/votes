@@ -1,17 +1,18 @@
 import {
-  normalizeRanking,
+  candidatesFromBallots,
+  checkDuplicatedCandidate,
+  groupBallots,
   normalizeBallot,
   normalizeBallots,
-  groupBallots,
-  candidatesFromBallots,
-  normalizeRankinput,
-  toWeightedBallots,
-  removeInvalidCandidates,
+  normalizeRankInput,
+  normalizeRanking,
   removeDuplicatedCandidates,
-  checkDuplicatedCandidate,
+  removeInvalidCandidates,
+  toWeightedBallots,
 } from './normalize'
 import { makeAntisymetric, matrixFromBallots } from './makeMatrix'
-import { scoresFromBallots, scoresToRanking } from './scores'
+import { scoresToRanking } from './scores'
+import { scoresFromBallots } from './scoresFromBallots'
 
 export {
   normalizeRanking,
@@ -19,7 +20,7 @@ export {
   normalizeBallots,
   groupBallots,
   candidatesFromBallots,
-  normalizeRankinput,
+  normalizeRankInput,
   toWeightedBallots,
   removeInvalidCandidates,
   removeDuplicatedCandidates,

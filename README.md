@@ -2,6 +2,7 @@
 
 [![version](https://img.shields.io/npm/v/votes)](https://www.npmjs.com/package/votes)
 ![bundle size](https://img.shields.io/bundlephobia/min/votes)
+[![Known Vulnerabilities](https://snyk.io/test/github/lzear/votes/badge.svg?targetFile=package.json)](https://snyk.io/test/github/lzear/votes?targetFile=package.json)
 ![downloads](https://img.shields.io/npm/dm/votes)
 ![Semantic release](https://github.com/lzear/votes/workflows/Semantic%20release/badge.svg)
 [![Build Status](https://travis-ci.com/lzear/votes.svg?branch=master)](https://travis-ci.com/lzear/votes)
@@ -9,6 +10,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/08af655918d741d1bffca7ec12ba72be)](https://app.codacy.com/gh/lzear/votes?utm_source=github.com&utm_medium=referral&utm_content=lzear/votes&utm_campaign=Badge_Grade_Settings)
 [![CodeClimate Coverage](https://api.codeclimate.com/v1/badges/0a98aa30f16e04bc3eac/test_coverage)](https://codeclimate.com/github/lzear/votes/test_coverage)
 [![CodeClimate Maintainability](https://api.codeclimate.com/v1/badges/0a98aa30f16e04bc3eac/maintainability)](https://codeclimate.com/github/lzear/votes/maintainability)
+[![CodeFactor](https://www.codefactor.io/repository/github/lzear/votes/badge)](https://www.codefactor.io/repository/github/lzear/votes)
 ![codecov](https://codecov.io/gh/lzear/votes/branch/master/graph/badge.svg?token=Fd9Jk4FeBY)
 ![last commit](https://img.shields.io/github/last-commit/lzear/votes)
 ![language](https://img.shields.io/github/languages/top/lzear/votes)
@@ -49,11 +51,10 @@ See
 [Comparison of electoral systems (Wikipedia)](https://en.wikipedia.org/wiki/Comparison_of_electoral_systems)
 for more information.
 
-**⚠️Maximal lotteries & Randomized Condorcet⚠️** (Errors included): 
-Returns probabilities for each candidate that should be used for a lottery
-between the Candidates. If a candidate is the Condorcet winner, its
-probability will be 1. Despite being non-deterministic,
-those methods are the most fair.
+**⚠️Maximal lotteries & Randomized Condorcet⚠️** (Errors included): Returns
+probabilities for each candidate that should be used for a lottery between the
+Candidates. If a candidate is the Condorcet winner, its probability will be 1.
+Despite being non-deterministic, those methods are the fairest.
 
 **Ranked pairs**: Using the duel results as edges, build an acyclic graph
 starting by the strongest score differences. The roots of the graph are the
@@ -78,15 +79,25 @@ candidates.
 **Approval voting**: Each voter can select (“approve”) any number of candidates.
 The winner is the most-approved candidate.
 
-**Borda's count**: For each voter, every candidate is given a number of points
+**Borda count**: For each voter, every candidate is given a number of points
 which equals the number of candidates ranked lower in the voter's preference.
 
-**Instant runoff**: Considering only the top choice of each voter, the candidate
+**Nanson method**: Iterative Borda count in which, each round, candidates
+scoring the average score or less are eliminated.
+
+**Baldwin method**: Iterative Borda count in which, each round, candidates
+scoring the lowest score are eliminated.
+
+**Instant-runoff**: Considering only the top choice of each voter, the candidate
 with the fewest votes is eliminated. The election repeats until there is a
 winner. This voting system is very similar to single transferable vote method.
 
-**Two-round system**: If no candidate receives 50% of the votes in the first
-round, then a second round of voting is held with only the top two candidates.
+**Coombs' method**: Each round, the candidate with the most last rank is
+eliminated. The election repeats until there is a winner.
+
+**Contingent vote** (immediate **Two-round system**): If no candidate receives
+50% of the votes in the first round, then a second round of voting is held with
+only the top two candidates.
 
 **Plurality**: Simple voting method where only the preferred candidate of each
 voter gets 1 point. AKA first-past-the-post.

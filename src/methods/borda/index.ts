@@ -5,12 +5,13 @@ import {
   Ballot,
 } from '../../types'
 import { scoresZero } from '../../utils/scoresZero'
+import { normalizeBallots } from '../../utils/normalize'
 
 export const borda: SystemUsingRankings = {
   type: VotingSystem.Borda,
   computeFromBallots(ballots: Ballot[], candidates: string[]): ScoreObject {
     const result: ScoreObject = scoresZero(candidates)
-    ballots.forEach((ballot) => {
+    normalizeBallots(ballots, candidates).forEach((ballot) => {
       let voteValue = candidates.length - 1
       ballot.ranking.forEach((candidatesAtRank) => {
         const value = voteValue - (candidatesAtRank.length - 1) / 2

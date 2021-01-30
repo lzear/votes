@@ -1,6 +1,6 @@
 import { performPivots, simplexTableau } from '../../simplex'
-import { matrixString } from '../../simplex/utils'
-import { randomizedCondorcet } from './index'
+import { matrixString } from '../../test/testUtils'
+import { randomizedCondorcet } from '.'
 
 const example1 = [
   [0, -2, 8],
