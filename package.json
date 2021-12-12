@@ -4,6 +4,8 @@
   "description": "Implementation of some [electoral systems](https://en.wikipedia.org/wiki/Electoral_system)",
   "keywords": [],
   "sideEffects": false,
+  "main": "dist/votes.umd.js",
+  "module": "dist/votes.es5.js",
   "types": "dist/votes.d.ts",
   "files": [
     "dist",
@@ -15,20 +17,12 @@
     "url": "https://github.com/lzear/votes.git"
   },
   "license": "MIT",
-  "source": "src/votes.ts",
-  "exports": {
-    "require": "./dist/votes.cjs",
-    "default": "./dist/votes.modern.js"
-  },
-  "type": "module",
-  "module": "dist/votes.js",
-  "main": "dist/votes.cjs",
-  "unpkg": "./dist/votes.umd.js",
   "scripts": {
     "eslint": "eslint --ext .js --ext .ts .",
     "fix:prettier": "prettier --write \"**/*.*\"",
-    "build": "microbundle",
-    "build:watch": "microbundle watch",
+    "prebuild": "rimraf dist",
+    "build": "rollup -c rollup.config.js && npx typedoc src/votes.ts",
+    "build:watch": "tsc --module commonjs && rollup -c rollup.config.js -w",
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watch",
     "test:prod": "yarn run eslint && yarn run test -- --no-cache",
@@ -39,13 +33,14 @@
     "travis-deploy-once": "travis-deploy-once",
     "updatedeps": "npx npm-check-updates -u"
   },
-  "dependencies": {
-    "lodash": "^4.17.21"
-  },
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.0.6",
     "@semantic-release/changelog": "^6.0.1",
+    "@types/bluebird": "^3.5.36",
     "@types/jest": "^27.0.3",
     "@types/lodash": "^4.14.178",
     "@types/node": "^16.11.12",
@@ -59,17 +54,24 @@
     "husky": "^7.0.4",
     "jest": "^27.4.4",
     "lint-staged": "^12.1.2",
-    "microbundle": "^0.14.2",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
+    "rollup": "^2.61.1",
+    "rollup-plugin-sizes": "^1.0.4",
+    "rollup-plugin-sourcemaps": "^0.6.3",
+    "rollup-plugin-typescript2": "^0.31.1",
     "semantic-release": "^18.0.1",
     "shelljs": "^0.8.4",
     "travis-deploy-once": "^5.0.11",
     "ts-jest": "^27.1.1",
     "ts-node": "^10.4.0",
+    "ts-toolbelt": "^9.6.0",
     "tslib": "^2.3.1",
     "typedoc": "^0.22.10",
     "typescript": "4.5.3"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
   },
   "bugs": {
     "url": "https://github.com/lzear/votes/issues"
