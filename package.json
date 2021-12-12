@@ -45,6 +45,7 @@
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
+    "@semantic-release/changelog": "^6.0.1",
     "@types/jest": "^27.0.3",
     "@types/lodash": "^4.14.178",
     "@types/node": "^16.11.12",
@@ -89,8 +90,7 @@
   },
   "lint-staged": {
     "{src,test}/**/*.ts": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   },
   "config": {
