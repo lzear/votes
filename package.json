@@ -18,10 +18,11 @@
   "scripts": {
     "eslint": "eslint --ext .js --ext .ts .",
     "fix:prettier": "prettier --write \"**/*.*\"",
+    "test": "yarn workspace votes test",
+    "test-prod": "yarn run eslint && yarn workspaces run test-prod",
     "commit": "git-cz",
     "precommit": "lint-staged",
-    "test:prod": "yarn run eslint && yarn workspaces run test:prod",
-    "test": "yarn workspace votes test"
+    "publish": "yarn workspaces build && changeset publish"
   },
   "resolutions": {
     "eslint": "7.32.0"

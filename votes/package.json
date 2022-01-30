@@ -23,11 +23,11 @@
   },
   "license": "MIT",
   "scripts": {
-    "prebuild": "rimraf dist",
     "test": "node --experimental-vm-modules node_modules/.bin/jest --coverage --runInBand --detectOpenHandles --forceExit",
-    "test:prod": "yarn run test && yarn run build",
-    "deploy-docs": "ts-node tools/gh-pages-publish",
-    "build": "preconstruct build && npx typedoc src/index.ts"
+    "test-prod": "yarn run test && yarn run build",
+    "prebuild": "rimraf dist",
+    "build": "preconstruct build && npx typedoc src/index.ts",
+    "publish-docs": "ts-node tools/gh-pages-publish"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.16.7",
