@@ -6,12 +6,15 @@ jobs:
   release:
     name: Test coverage
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./votes
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - uses: actions/setup-node@v2-beta
         with:
-          node-version: '12'
+          node-version: '16'
       - run: yarn install
       - run: yarn test
       - run:
