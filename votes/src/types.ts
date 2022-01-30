@@ -15,6 +15,7 @@ export enum VotingSystem {
   AbsoluteMajority = 'ABSOLUTE_MAJORITY',
   Baldwin = 'BALDWIN',
   Borda = 'BORDA',
+  BottomTwoRunoff = 'BOTTOM_TWO_RUNOFF',
   Coombs = 'COOMBS',
   Copeland = 'COPELAND',
   FirstPastThePost = 'FIRST_PAST_THE_POST',

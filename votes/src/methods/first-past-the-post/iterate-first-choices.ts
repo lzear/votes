@@ -5,14 +5,23 @@ import { scoresZero } from '../../utils/scores-zero'
 export const iterateFirstChoices = (
   ballots: Ballot[],
   candidates: string[],
-  computeBallotScore: (rank: string[]) => number,
+  computeBallotScore: (rank: string[], rankIdx: number) => number,
+): ScoreObject => iterateNthChoices(ballots, candidates, computeBallotScore, 0)
+
+export const iterateNthChoices = (
+  ballots: Ballot[],
+  candidates: string[],
+  computeBallotScore: (rank: string[], rankIdx: number) => number,
+  rankIdx: number,
 ): ScoreObject => {
   const result: ScoreObject = scoresZero(candidates)
   for (const ballot of normalizeBallots(ballots, candidates))
-    if (ballot.ranking.length > 0) {
-      const votes = ballot.ranking[0].filter((c) => candidates.includes(c))
+    if (ballot.ranking.length > rankIdx) {
+      const votes = ballot.ranking[rankIdx].filter((c) =>
+        candidates.includes(c),
+      )
       for (const candidate of votes)
-        result[candidate] += computeBallotScore(votes) * ballot.weight
+        result[candidate] += computeBallotScore(votes, rankIdx) * ballot.weight
     }
   return result
 }

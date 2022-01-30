@@ -3,6 +3,7 @@ import { AbsoluteMajority } from './absolute-majority'
 import { Approbation } from './approbation'
 import { Baldwin } from './baldwin'
 import { Borda } from './borda'
+import { BottomTwoRunoff } from './bottom-two-runoff'
 import { Coombs } from './coombs'
 import { Copeland } from './copeland'
 import { FirstPastThePost } from './first-past-the-post'
@@ -21,6 +22,7 @@ import { TwoRoundRunoff } from './two-round-runoff'
 export const methods = {
   [VotingSystem.AbsoluteMajority]: AbsoluteMajority,
   [VotingSystem.Approbation]: Approbation,
+  [VotingSystem.BottomTwoRunoff]: BottomTwoRunoff,
   [VotingSystem.Baldwin]: Baldwin,
   [VotingSystem.Borda]: Borda,
   [VotingSystem.Coombs]: Coombs,

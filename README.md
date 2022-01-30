@@ -111,6 +111,9 @@ voters.
 
 **Random dictator**: Selects a random ballot that decides the ranking.
 
+**Bottom-two-runoff**: take the two options with the fewest first preference
+votes. The pairwise loser out of those two options is eliminated. Repeat.
+
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome!<br /> Feel free to check
