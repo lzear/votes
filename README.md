@@ -4,7 +4,6 @@
 ![bundle size](https://img.shields.io/bundlephobia/min/votes)
 [![Known Vulnerabilities](https://snyk.io/test/github/lzear/votes/badge.svg?targetFile=package.json)](https://snyk.io/test/github/lzear/votes?targetFile=package.json)
 ![downloads](https://img.shields.io/npm/dm/votes)
-![Semantic release](https://github.com/lzear/votes/workflows/Semantic%20release/badge.svg)
 [![Build Status](https://travis-ci.com/lzear/votes.svg?branch=master)](https://travis-ci.com/lzear/votes)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/d2378c63d95f41efb79072176f015976)](https://www.codacy.com/gh/lzear/votes/dashboard?utm_source=github.com&utm_medium=referral&utm_content=lzear/votes&utm_campaign=Badge_Coverage)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/08af655918d741d1bffca7ec12ba72be)](https://app.codacy.com/gh/lzear/votes?utm_source=github.com&utm_medium=referral&utm_content=lzear/votes&utm_campaign=Badge_Grade_Settings)
@@ -28,20 +27,21 @@ yarn add votes
 ## 🗳️ Use
 
 ```typescript
-import { utils as voteUtils, VotingSystem } from 'votes'
+import { Borda } from 'votes'
 
-const scores = scoresFromBallots(
-  [
+const borda = new Borda({
+  candidates: ['Lion', 'Bear', 'Sheep'],
+  ballots: [
     { ranking: [['Lion'], ['Bear'], ['Sheep']], weight: 4 },
     { ranking: [['Sheep'], ['Bear'], ['Lion']], weight: 3 },
     { ranking: [['Bear', 'Sheep'], ['Lion']], weight: 2 },
   ],
-  ['Lion', 'Bear', 'Sheep'],
-  VotingSystem.Schulze,
-)
-// -> { Lion: 0, Bear: 2, Sheep: 1 }
+})
 
-const ranking = scoresToRanking({ Bear: 2, Lion: 0, Sheep: 1 })
+const scores = borda.scores()
+// -> { Bear: 10, Lion: 8, Sheep: 9}
+
+const ranking = borda.ranking()
 // -> [ [ 'Bear' ], [ 'Sheep' ], [ 'Lion' ] ]
 ```
 
@@ -51,10 +51,12 @@ See
 [Comparison of electoral systems (Wikipedia)](https://en.wikipedia.org/wiki/Comparison_of_electoral_systems)
 for more information.
 
-**⚠️Maximal lotteries & Randomized Condorcet⚠️** (Errors included): Returns
-probabilities for each candidate that should be used for a lottery between the
-Candidates. If a candidate is the Condorcet winner, its probability will be 1.
-Despite being non-deterministic, those methods are the fairest.
+**⚠️Maximal lotteries & Randomized Condorcet⚠️** (Contain big implementation
+errors!): Returns probabilities for each candidate that should be used for a
+lottery between the Candidates. If a candidate is the Condorcet winner, its
+probability will be 1. Despite being non-deterministic, those methods are the
+fairest. Currently, these methods give incorrect results in many cases because
+of mistakes in the codes!
 
 **Ranked pairs**: Using the duel results as edges, build an acyclic graph
 starting by the strongest score differences. The roots of the graph are the
@@ -95,12 +97,19 @@ winner. This voting system is very similar to single transferable vote method.
 **Coombs' method**: Each round, the candidate with the most last rank is
 eliminated. The election repeats until there is a winner.
 
-**Contingent vote** (immediate **Two-round system**): If no candidate receives
-50% of the votes in the first round, then a second round of voting is held with
-only the top two candidates.
+**Contingent vote** (immediate Two-round system): If no candidate receives 50%
+of the votes in the first round, then a second round of voting is held with only
+the top two candidates.
 
 **Plurality**: Simple voting method where only the preferred candidate of each
 voter gets 1 point. AKA first-past-the-post.
+
+**Absolute majority**: Checks if a candidate is ranked first by more than 50% of
+voters.
+
+**Random candidate**: Selects a random ranking, regardless of ballots.
+
+**Random dictator**: Selects a random ballot that decides the ranking.
 
 ## 🤝 Contributing
 

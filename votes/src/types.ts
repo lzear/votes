@@ -12,6 +12,7 @@ export type ScoreObject = Record<string, number>
 
 export enum VotingSystem {
   Approbation = 'APPROBATION',
+  AbsoluteMajority = 'ABSOLUTE_MAJORITY',
   Baldwin = 'BALDWIN',
   Borda = 'BORDA',
   Coombs = 'COOMBS',
@@ -23,6 +24,8 @@ export enum VotingSystem {
   Minimax = 'MINIMAX',
   Nanson = 'NANSON',
   RandomizedCondorcet = 'RANDOMIZED_CONDORCET',
+  RandomCandidates = 'RANDOM_CANDIDATES',
+  RandomDictator = 'RANDOM_DICTATOR',
   RankedPairs = 'RANKED_PAIRS',
   Schulze = 'SCHULZE',
   TwoRoundRunoff = 'TWO_ROUND_RUNOFF',
