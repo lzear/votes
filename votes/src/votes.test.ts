@@ -1,90 +1,28 @@
 import {
-  methods,
-  approbation,
-  baldwin,
-  borda,
-  coombs,
-  copeland,
-  firstPastThePost,
-  instantRunoff,
-  kemeny,
-  maximalLotteries,
-  minimax,
-  nanson,
-  randomizedCondorcet,
-  rankedPairs,
-  schulze,
-  twoRoundRunoff,
-  VotingSystem,
-  SystemUsingMatrix,
-  SystemUsingRankings,
-} from './votes'
-import { abcde, balinski, dummyProfile, sW } from './test/testUtils'
+  Approbation,
+  Baldwin,
+  Borda,
+  Coombs,
+  Copeland,
+  FirstPastThePost,
+  InstantRunoff,
+  Kemeny,
+  MaximalLotteries,
+  Minimax,
+  Nanson,
+  RandomizedCondorcet,
+  RankedPairs,
+  Schulze,
+  TwoRoundRunoff,
+} from './index'
+import { abcde, balinski, sW } from './test/test-utils'
 import { matrixFromBallots } from './utils'
 
 describe('Test all methods', () => {
-  it('works if true is truthy', () => {
-    expect(true).toBeTruthy()
-  })
-  it('matches type', () => {
-    const types: VotingSystem[] = Object.values(VotingSystem)
-    types.forEach((type) => {
-      expect(methods[type].type).toEqual(type)
-    })
-  })
-  it('gets the winner from a single profile', () => {
-    const m = Object.values(VotingSystem).filter(
-      (k) => 'computeFromBallots' in methods[k as VotingSystem],
-    ) as VotingSystem[]
-    const allResults = m.reduce((acc, methodKey) => {
-      const method = methods[methodKey] as SystemUsingRankings
-      const score = method.computeFromBallots(dummyProfile, abcde)
-      const maxScore = Math.max(...Object.values(score))
-      return {
-        ...acc,
-        [methodKey]: Object.keys(score).filter((k) => score[k] === maxScore),
-      }
-    }, {})
-    expect(allResults).toStrictEqual({
-      APPROBATION: ['a'],
-      BALDWIN: ['a'],
-      BORDA: ['a'],
-      COOMBS: ['a'],
-      FIRST_PAST_THE_POST: ['a'],
-      INSTANT_RUNOFF: ['a'],
-      NANSON: ['a'],
-      TWO_ROUND_RUNOFF: ['a'],
-    })
-    Object.values(allResults).forEach((v) => expect(v).toStrictEqual(['a']))
-  })
-  it('gets the matrix winner from a single profile', () => {
-    const m = Object.values(VotingSystem).filter(
-      (k) => 'computeFromMatrix' in methods[k as VotingSystem],
-    ) as VotingSystem[]
-    const allResults = m.reduce((acc, methodKey) => {
-      const method = methods[methodKey] as SystemUsingMatrix
-      const score = method.computeFromMatrix(
-        matrixFromBallots(dummyProfile, abcde),
-      )
-      const maxScore = Math.max(...Object.values(score))
-      return {
-        ...acc,
-        [methodKey]: Object.keys(score).filter((k) => score[k] === maxScore),
-      }
-    }, {})
-    expect(allResults).toStrictEqual({
-      COPELAND: ['a'],
-      KEMENY: ['a'],
-      MAXIMAL_LOTTERIES: ['a'],
-      MINIMAX: ['a'],
-      RANDOMIZED_CONDORCET: ['a'],
-      RANKED_PAIRS: ['a'],
-      SCHULZE: ['a'],
-    })
-    Object.values(allResults).forEach((v) => expect(v).toStrictEqual(['a']))
-  })
   it('votes with approbation', () => {
-    expect(approbation.computeFromBallots(balinski, abcde)).toStrictEqual({
+    expect(
+      new Approbation({ candidates: abcde, ballots: balinski }).scores(),
+    ).toStrictEqual({
       a: 33,
       b: 16,
       c: 11,
@@ -93,16 +31,14 @@ describe('Test all methods', () => {
     })
   })
   it('votes with baldwin', () => {
-    expect(baldwin.computeFromBallots(balinski, abcde)).toStrictEqual({
-      a: 0,
-      b: 3,
-      c: 4,
-      d: 2,
-      e: 1,
-    })
+    expect(
+      new Baldwin({ ballots: balinski, candidates: abcde }).ranking(),
+    ).toStrictEqual([['c'], ['b'], ['d'], ['e'], ['a']])
   })
   it('votes with borda', () => {
-    expect(borda.computeFromBallots(balinski, abcde)).toStrictEqual({
+    expect(
+      new Borda({ candidates: abcde, ballots: balinski }).scores(),
+    ).toStrictEqual({
       a: 135,
       b: 247,
       c: 244,
@@ -111,16 +47,14 @@ describe('Test all methods', () => {
     })
   })
   it('votes with coombs', () => {
-    expect(coombs.computeFromBallots(balinski, abcde)).toStrictEqual({
-      a: 0,
-      b: 3,
-      c: 4,
-      d: 2,
-      e: 1,
-    })
+    expect(
+      new Coombs({ candidates: abcde, ballots: balinski }).ranking(),
+    ).toStrictEqual([['c'], ['b'], ['d'], ['e'], ['a']])
   })
   it('votes with FPTP', () => {
-    expect(firstPastThePost.computeFromBallots(balinski, abcde)).toStrictEqual({
+    expect(
+      new FirstPastThePost({ candidates: abcde, ballots: balinski }).scores(),
+    ).toStrictEqual({
       a: 33,
       b: 16,
       c: 11,
@@ -129,46 +63,34 @@ describe('Test all methods', () => {
     })
   })
   it('votes with instant runoff', () => {
-    expect(instantRunoff.computeFromBallots(balinski, abcde)).toStrictEqual({
-      a: 33,
-      b: 16,
-      c: 11,
-      d: 67,
-      e: 30,
-    })
+    expect(
+      new InstantRunoff({ candidates: abcde, ballots: balinski }).ranking(),
+    ).toStrictEqual([['d'], ['a'], ['e'], ['b'], ['c']])
   })
   it('votes with instant nanson', () => {
-    expect(nanson.computeFromBallots(balinski, abcde)).toStrictEqual({
-      a: 136,
-      b: 243,
-      c: 244,
-      d: 193,
-      e: 183,
-    })
+    expect(
+      new Nanson({ candidates: abcde, ballots: balinski }).ranking(),
+    ).toStrictEqual([['c'], ['b'], ['a', 'd', 'e']])
   })
   it('votes with two-round runoff', () => {
-    expect(twoRoundRunoff.computeFromBallots(balinski, abcde)).toStrictEqual({
-      a: 36,
-      b: 16,
-      c: 11,
-      d: 18,
-      e: 64,
-    })
+    expect(
+      new TwoRoundRunoff({ candidates: abcde, ballots: balinski }).ranking(),
+    ).toStrictEqual([['e'], ['a'], ['b', 'c', 'd']])
   })
   it('votes with copeland', () => {
     expect(
-      copeland.computeFromMatrix(matrixFromBallots(balinski, abcde)),
+      new Copeland(matrixFromBallots(balinski, abcde)).scores(),
     ).toStrictEqual({
-      a: -4,
-      b: 1.76,
-      c: 3.84,
-      d: -0.24,
-      e: -2.16,
+      a: 0,
+      b: 3,
+      c: 4,
+      d: 2,
+      e: 1,
     })
   })
   it('votes with kemeny', () => {
     expect(
-      kemeny.computeFromMatrix(matrixFromBallots(balinski, abcde)),
+      new Kemeny(matrixFromBallots(balinski, abcde)).scores(),
     ).toStrictEqual({
       a: 0,
       b: 3,
@@ -179,19 +101,17 @@ describe('Test all methods', () => {
   })
   it('votes with randomizedCondorcet', () => {
     expect(
-      randomizedCondorcet.computeFromMatrix(matrixFromBallots(sW, abcde)),
+      new RandomizedCondorcet(matrixFromBallots(sW, abcde)).scores(),
     ).toStrictEqual({
-      a: 0.3333333333333333,
+      a: 0.333_333_333_333_333_3,
       b: 0,
-      c: 0.3333333333333333,
+      c: 0.333_333_333_333_333_3,
       d: 0,
-      e: 0.3333333333333333,
+      e: 0.333_333_333_333_333_3,
     })
   })
   it('votes with schulze', () => {
-    expect(
-      schulze.computeFromMatrix(matrixFromBallots(sW, abcde)),
-    ).toStrictEqual({
+    expect(new Schulze(matrixFromBallots(sW, abcde)).scores()).toStrictEqual({
       a: 3,
       b: 1,
       c: 2,
@@ -200,9 +120,7 @@ describe('Test all methods', () => {
     })
   })
   it('votes with minimax', () => {
-    expect(
-      minimax.computeFromMatrix(matrixFromBallots(sW, abcde)),
-    ).toStrictEqual({
+    expect(new Minimax(matrixFromBallots(sW, abcde)).scores()).toStrictEqual({
       a: -5,
       b: -13,
       c: -11,
@@ -213,18 +131,18 @@ describe('Test all methods', () => {
 
   it('votes with maximal lotteries', () => {
     expect(
-      maximalLotteries.computeFromMatrix(matrixFromBallots(sW, abcde)),
+      new MaximalLotteries(matrixFromBallots(sW, abcde)).scores(),
     ).toStrictEqual({
-      a: 0.6428571428571428,
+      a: 0.642_857_142_857_142_8,
       b: 0,
       c: 0,
       d: 0,
-      e: 0.3571428571428572,
+      e: 0.357_142_857_142_857_2,
     })
   })
   it('votes with ranked pairs', () => {
     expect(
-      rankedPairs.computeFromMatrix(matrixFromBallots(sW, abcde)),
+      new RankedPairs(matrixFromBallots(sW, abcde)).scores(),
     ).toStrictEqual({
       a: 5,
       b: 2,
