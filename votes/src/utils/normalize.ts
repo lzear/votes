@@ -7,8 +7,11 @@ import uniq from 'lodash/uniq'
 
 import { Ballot } from '../types'
 
-export const isBallotEqual = (a: string[][], b: string[][]): boolean =>
-  every(a, (rank, k) => isEqual([...rank].sort(), [...b[k]].sort()))
+export const isBallotEqual = (a: string[][], b: string[][]): boolean => {
+  if (a.length !== b.length) return false
+  if (a.length === 0) return true
+  return every(a, (rank, k) => isEqual([...rank].sort(), [...b[k]].sort()))
+}
 
 export const normalizeRankInput = (
   rankinput: (string | string[])[],
@@ -32,6 +35,7 @@ export const groupBallots = <B extends Ballot>(ballots: B[]): B[] =>
       )
     }, [] as B[])
     .filter((b) => b.weight !== 0)
+    .sort((a, b) => b.weight - a.weight)
 
 export const toWeightedBallots = (ballots: string[][][]): Ballot[] =>
   ballots.reduce((w, ballot) => {
@@ -52,8 +56,8 @@ export const toWeightedBallots = (ballots: string[][][]): Ballot[] =>
 export const checkDuplicatedCandidate = (ranking: string[][]): void => {
   ranking.reduce((acc, rank) => {
     const inter = intersection(acc, rank)
-    if (inter.length) {
-      throw Error(`Some candidates are present multiple times: ${inter}`)
+    if (inter.length > 0) {
+      throw new Error(`Some candidates are present multiple times: ${inter}`)
     }
     return [...acc, ...rank]
   }, [])
@@ -64,11 +68,14 @@ export const removeDuplicatedCandidates = (ranking: string[][]): string[][] =>
     (acc, cur) => {
       const unique = difference(uniq(cur), acc.usedCandidates)
       return {
-        ranking: unique.length ? [...acc.ranking, unique] : acc.ranking,
+        ranking: unique.length > 0 ? [...acc.ranking, unique] : acc.ranking,
         usedCandidates: [...acc.usedCandidates, ...unique],
       }
     },
-    { ranking: [] as string[][], usedCandidates: [] as string[] },
+    {
+      ranking: [] as string[][],
+      usedCandidates: [] as string[],
+    },
   ).ranking
 
 export const removeInvalidCandidates = (
@@ -106,3 +113,6 @@ export const normalizeBallots = <B extends Ballot>(
   const c = candidates || candidatesFromBallots(ballots)
   return ballots.map((ballot) => normalizeBallot(ballot, c))
 }
+
+export const totalBallotsWeight = (ballots: Ballot[]): number =>
+  ballots.reduce((acc, ballot) => acc + ballot.weight, 0)

@@ -1,98 +1,208 @@
-import { VotingSystem } from '../votes'
-import { abcde, dummyProfile, dummyProfile10 } from '../test/testUtils'
-import { scoresFromBallots, scoresToRanking } from '.'
+import { Ballot, methods, VotingSystem } from '..'
+import { abcde, dummyProfile, dummyProfile10 } from '../test/test-utils'
+import { matrixFromBallots } from './make-matrix'
+
+// type Rrand = VotingSystem.RandomCandidates | VotingSystem.RandomDictator
+// type Deter = Exclude<VotingSystem, Rrand>
+
+const isRandom = (system: VotingSystem) =>
+  [
+    VotingSystem.RandomCandidates,
+    VotingSystem.RandomDictator,
+    VotingSystem.RandomizedCondorcet,
+    VotingSystem.MaximalLotteries,
+  ].includes(system)
+
+// const isDeter = (system: VotingSystem): system is Deter => !isRandom(system)
+
+const isRandomCandidate = (
+  system: VotingSystem,
+): system is VotingSystem.RandomCandidates =>
+  VotingSystem.RandomCandidates === system
 
 describe('sanity check', () => {
-  it.each(Object.values(VotingSystem) as VotingSystem[])(
+  it.each(Object.values(VotingSystem))(
     'empty list and empty candidates %p',
     (system) => {
-      expect(scoresToRanking(scoresFromBallots([], [], system))).toStrictEqual(
-        [],
-      )
+      if (system in methods) {
+        const election = new methods[system]({
+          array: [],
+          ballots: [],
+          candidates: [],
+        })
+        expect(election.ranking()).toStrictEqual([])
+        if ('scores' in election) expect(election.scores()).toStrictEqual({})
+      }
     },
   )
-  it.each(Object.values(VotingSystem) as VotingSystem[])(
-    'empty ballot list %p',
+  it.each(Object.values(VotingSystem))(
+    'empty ballot list %p (ranking)',
     (system) => {
-      expect(
-        scoresToRanking(scoresFromBallots([], ['a', 'b', 'c'], system))[0],
-      ).toStrictEqual(['a', 'b', 'c'])
+      if (isRandom(system)) return
+
+      const candidates = ['a', 'b', 'c']
+      const ballots: Ballot[] = []
+      const matrix = matrixFromBallots(ballots, candidates)
+      const election = new methods[system]({
+        ballots,
+        ...matrix,
+      })
+      expect(election.ranking()).toStrictEqual([['a', 'b', 'c']])
     },
   )
-  it.each(Object.values(VotingSystem) as VotingSystem[])(
-    'empty candidates list %p',
+  it.each(Object.values(VotingSystem))(
+    'empty ballot list %p (scores)',
     (system) => {
-      expect(
-        scoresFromBallots(
-          [{ ranking: [['a'], ['b'], ['c']], weight: 1 }],
-          [],
-          system,
-        ),
-      ).toStrictEqual({})
+      const candidates = ['a', 'b', 'c']
+      const ballots: Ballot[] = []
+      const matrix = matrixFromBallots(ballots, candidates)
+      const election = new methods[system]({
+        ballots,
+        ...matrix,
+      })
+      if ('scores' in election) {
+        expect(election.scores().a).toStrictEqual(election.scores().b)
+        expect(election.scores().a).toStrictEqual(election.scores().c)
+      }
     },
   )
-  it.each(Object.values(VotingSystem) as VotingSystem[])(
+  it.each(Object.values(VotingSystem))(
+    'empty candidates list %p (ranking)',
+    (system) => {
+      if (isRandomCandidate(system)) return
+
+      const election = new methods[system]({
+        array: [],
+        ballots: [{ ranking: [['a'], ['b'], ['c']], weight: 1 }],
+        candidates: [],
+      })
+      expect(election.ranking()).toStrictEqual([])
+    },
+  )
+  it.each(Object.values(VotingSystem))(
+    'empty candidates list %p (scores)',
+    (system) => {
+      const election = new methods[system]({
+        array: [],
+        ballots: [{ ranking: [['a'], ['b'], ['c']], weight: 1 }],
+        candidates: [],
+      })
+      if ('scores' in election) expect(election.scores()).toStrictEqual({})
+    },
+  )
+  it.each(Object.values(VotingSystem))(
     'gets the winner from 1 ballot %p',
     (system) => {
-      expect(
-        scoresToRanking(
-          scoresFromBallots(
-            [{ ranking: [['a'], ['b'], ['c']], weight: 1 }],
-            ['a', 'b', 'c'],
-            system,
-          ),
-        )[0],
-      ).toStrictEqual(['a'])
+      if (isRandomCandidate(system)) return
+
+      const ballots = [{ ranking: [['a'], ['b'], ['c']], weight: 1 }]
+      const candidates = ['a', 'b', 'c']
+
+      const matrix = matrixFromBallots(ballots, candidates)
+      const election = new methods[system]({
+        ballots,
+        ...matrix,
+      })
+      expect(election.ranking()[0]).toStrictEqual(['a'])
     },
   )
-
-  it.each(Object.values(VotingSystem) as VotingSystem[])(
+  it.each(Object.values(VotingSystem))(
     'gets the 2 winners from 1 ballot %p',
     (system) => {
-      expect(
-        scoresToRanking(
-          scoresFromBallots(
-            [{ ranking: [['a', 'd'], ['b'], ['c']], weight: 1 }],
-            ['a', 'b', 'c', 'd'],
-            system,
-          ),
-        )[0],
-      ).toStrictEqual(['a', 'd'])
-    },
-  )
+      if (isRandom(system)) return
 
-  it.each(Object.values(VotingSystem) as VotingSystem[])(
-    'gets the condorcet cycle %p',
-    (system) => {
-      expect(
-        scoresToRanking(
-          scoresFromBallots(
-            [
-              { ranking: [['a'], ['b'], ['c']], weight: 1 },
-              { ranking: [['b'], ['c'], ['a']], weight: 1 },
-              { ranking: [['c'], ['a'], ['b']], weight: 1 },
-            ],
-            ['a', 'b', 'c'],
-            system,
-          ),
-        )[0],
-      ).toStrictEqual(['a', 'b', 'c'])
+      const ballots = [{ ranking: [['a', 'd'], ['b'], ['c']], weight: 1 }]
+      const candidates = ['a', 'b', 'c', 'd']
+
+      const matrix = matrixFromBallots(ballots, candidates)
+      const election = new methods[system]({
+        ballots,
+        ...matrix,
+      })
+      if (system === VotingSystem.AbsoluteMajority)
+        expect(election.ranking()[0]).toStrictEqual(['a', 'b', 'c', 'd'])
+      else expect(election.ranking()[0]).toStrictEqual(['a', 'd'])
     },
   )
-  it.each(Object.values(VotingSystem) as VotingSystem[])(
-    'dummyProfile %p',
+  it.each(Object.values(VotingSystem))(
+    'gets the condorcet cycle %p (ranking)',
     (system) => {
-      expect(
-        scoresToRanking(scoresFromBallots(dummyProfile, abcde, system))[0],
-      ).toStrictEqual(['a'])
+      // Exclude randomized
+      if (isRandom(system)) return
+
+      const candidates = ['a', 'b', 'c']
+      const ballots = [
+        { ranking: [['a'], ['b'], ['c']], weight: 1 },
+        { ranking: [['b'], ['c'], ['a']], weight: 1 },
+        { ranking: [['c'], ['a'], ['b']], weight: 1 },
+      ]
+
+      const matrix = matrixFromBallots(ballots, candidates)
+      const election = new methods[system]({
+        ballots,
+        ...matrix,
+      })
+
+      expect(election.ranking()[0]).toStrictEqual(['a', 'b', 'c'])
     },
   )
-  it.each(Object.values(VotingSystem) as VotingSystem[])(
-    'dummyProfile10 %p',
+  it.each(Object.values(VotingSystem))(
+    'gets the condorcet cycle %p (scores)',
     (system) => {
-      expect(
-        scoresToRanking(scoresFromBallots(dummyProfile10, abcde, system))[0],
-      ).toStrictEqual(['a'])
+      const candidates = ['a', 'b', 'c']
+      const ballots = [
+        { ranking: [['a'], ['b'], ['c']], weight: 1 },
+        { ranking: [['b'], ['c'], ['a']], weight: 1 },
+        { ranking: [['c'], ['a'], ['b']], weight: 1 },
+      ]
+
+      const matrix = matrixFromBallots(ballots, candidates)
+      const election = new methods[system]({
+        ballots,
+        ...matrix,
+      })
+
+      if ('scores' in election) {
+        expect(election.scores().a).toStrictEqual(election.scores().b)
+        expect(election.scores().a).toStrictEqual(election.scores().c)
+      }
     },
   )
+  it.each(Object.values(VotingSystem))('dummyProfile %p', (system) => {
+    if (isRandom(system)) return
+
+    const candidates = abcde
+    const ballots = dummyProfile
+    const matrix = matrixFromBallots(ballots, candidates)
+    const election = new methods[system]({
+      ballots,
+      ...matrix,
+    })
+    expect(election.ranking()[0]).toStrictEqual(['a'])
+  })
+
+  it.each(Object.values(VotingSystem))('dummyProfile10 %p', (system) => {
+    if (isRandom(system)) return
+
+    const candidates = abcde
+    const ballots = dummyProfile10
+    const matrix = matrixFromBallots(ballots, candidates)
+    const election = new methods[system]({
+      ballots,
+      ...matrix,
+    })
+    expect(election.ranking()[0]).toStrictEqual(['a'])
+  })
+  it.each(Object.values(VotingSystem))('gets matrix %p', (system) => {
+    if (isRandomCandidate(system)) return
+
+    const candidates = abcde
+    const ballots = dummyProfile10
+    const matrix = matrixFromBallots(ballots, candidates)
+    const election = new methods[system]({
+      ballots,
+      ...matrix,
+    })
+    expect(election.matrix).toStrictEqual(matrix)
+  })
 })

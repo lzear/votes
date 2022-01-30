@@ -1,8 +1,8 @@
 export const simplexTableau = (A: number[][]): number[][] => {
   const n = A.length
-  const extraZeros = Array(n).fill(0)
+  const extraZeros = new Array(n).fill(0)
 
-  const obj: number[] = [0, ...Array(n).fill(-1), 1, ...extraZeros, 0, 1]
+  const obj: number[] = [0, ...new Array(n).fill(-1), 1, ...extraZeros, 0, 1]
   const AnZeros: number[][] = A.map((a, k) => [
     0,
     ...a.map((v) => v),
@@ -14,7 +14,7 @@ export const simplexTableau = (A: number[][]): number[][] => {
 
   // set the boundary as x1 + x2 + ... + x(n-1) + 2 * xn < 1
   // cannot use the same function as the score function because
-  const sum1: number[] = [1, ...Array(n).fill(1), 0, ...extraZeros, 1, 0]
+  const sum1: number[] = [1, ...new Array(n).fill(1), 0, ...extraZeros, 1, 0]
 
   return [obj, ...AnZeros, sum1]
 }
@@ -37,7 +37,7 @@ export const findPivotRow = (
   col: number,
   usedRows: number[],
 ): number | null => {
-  let minRatio = Infinity
+  let minRatio = Number.POSITIVE_INFINITY
   let minIndex = null
   for (let row = 1; row < T.length; row++) {
     if (T[row][col] !== 0 && !usedRows.includes(row)) {
@@ -72,7 +72,7 @@ export const performPivots = (
   let col = findPivotColumn(pivotedTable)
   while (col !== null) {
     const row = findPivotRow(pivotedTable, col, usedRows)
-    if (!row) throw Error('no row no pivot')
+    if (!row) throw new Error('no row no pivot')
     usedRows.push(row)
     pivotedTable = pivot(pivotedTable, col, row)
     col = findPivotColumn(pivotedTable)
@@ -81,15 +81,13 @@ export const performPivots = (
 }
 
 const vectorFromPivotedTableau = (pivotedTableau: number[][], size: number) =>
-  Array(size)
-    .fill(null)
-    .map((v, k) => {
-      if (pivotedTableau[0][k + 1] === 0) {
-        const row = pivotedTableau.findIndex((r) => r[k + 1] === 1)
-        if (row > -1) return pivotedTableau[row][0]
-      }
-      return 0
-    })
+  new Array(size).fill(null).map((v, k) => {
+    if (pivotedTableau[0][k + 1] === 0) {
+      const row = pivotedTableau.findIndex((r) => r[k + 1] === 1)
+      if (row > -1) return pivotedTableau[row][0]
+    }
+    return 0
+  })
 
 export const solve = (antisymetricMatrix: number[][]): number[] => {
   const tableau = simplexTableau(antisymetricMatrix)

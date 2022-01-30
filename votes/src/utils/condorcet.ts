@@ -8,11 +8,11 @@ export const findCondorcet = ({ candidates, array }: Matrix): Matrix => {
   const dominatingList = candidates.map((c, k) => {
     let dominating = [k]
     let toCheck = [k]
-    while (toCheck.length) {
+    while (toCheck.length > 0) {
       const check = toCheck.pop() as number
       const toAdd = difference(dominatingDirectList[check], dominating)
-      dominating = dominating.concat(toAdd)
-      toCheck = toCheck.concat(toAdd)
+      dominating = [...dominating, ...toAdd]
+      toCheck = [...toCheck, ...toAdd]
     }
     return dominating.length === candidates.length
   })
