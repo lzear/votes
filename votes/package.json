@@ -39,6 +39,7 @@
     "@typescript-eslint/parser": "^5.10.1",
     "dotenv": "^14.3.2",
     "jest": "^27.4.7",
+    "microbundle": "^0.14.2",
     "rimraf": "^3.0.2",
     "shelljs": "^0.8.5",
     "travis-deploy-once": "^5.0.11",
