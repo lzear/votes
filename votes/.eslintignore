@@ -16,4 +16,4 @@ docs
 **/*.rej
 *.rej
 
-votes/tools/gh-pages-publish.ts
+tools/gh-pages-publish.ts
