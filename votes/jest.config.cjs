@@ -1,7 +1,13 @@
 module.exports = {
-  transform: {
-    '.(ts|tsx)': 'ts-jest',
+  preset: 'ts-jest',
+
+  extensionsToTreatAsEsm: ['.ts'],
+  globals: {
+    'ts-jest': {
+      useESM: true,
+    },
   },
+  transform: {},
   testEnvironment: 'node',
   testRegex: '(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$',
   moduleFileExtensions: ['ts', 'tsx', 'js'],
@@ -21,5 +27,5 @@ module.exports = {
   },
   collectCoverageFrom: ['src/**/*.{js,ts}'],
   coverageReporters: ['text', 'text-summary', 'html', 'lcov'],
-  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
+  testPathIgnorePatterns: ['/node_modules/', '/dist/', '/docs/'],
 }
