@@ -1,14 +1,13 @@
-import {
-  SystemUsingRankings,
-  ScoreObject,
-  VotingSystem,
-  Ballot,
-} from '../../types'
-import { iterateFirstChoices } from './iterateFirstChoices'
+import { Ballot, ScoreObject } from '../../types'
+import { iterateFirstChoices } from './iterate-first-choices'
+import { BallotScoreMethod } from '../../classes/ballot-score-method'
 
-export const firstPastThePost: SystemUsingRankings = {
-  type: VotingSystem.FirstPastThePost,
-  computeFromBallots(ballots: Ballot[], candidates: string[]): ScoreObject {
-    return iterateFirstChoices(ballots, candidates, (rank) => 1 / rank.length)
-  },
+const computeScores = (candidates: string[], ballots: Ballot[]) => {
+  return iterateFirstChoices(ballots, candidates, (rank) => 1 / rank.length)
+}
+
+export class FirstPastThePost extends BallotScoreMethod {
+  public scores(): ScoreObject {
+    return computeScores(this.candidates, this.ballots)
+  }
 }

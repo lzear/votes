@@ -1,17 +1,15 @@
 import zipObject from 'lodash/zipObject'
 import { solve } from '../../simplex'
-import {
-  SystemUsingMatrix,
-  VotingSystem,
-  Matrix,
-  ScoreObject,
-} from '../../types'
-import { makeAntisymetric } from '../../utils/makeMatrix'
+import { Matrix, ScoreObject } from '../../types'
 import { findCondorcet } from '../../utils/condorcet'
+import { makeAntisymetric } from '../../utils'
+import { scoresZero } from '../../utils/scores-zero'
+import { RandomMatrixMethod } from '../../classes/random-matrix-method'
 
 export const computeLottery = (
-  matrix: Matrix,
+  _matrix: Matrix,
 ): { [candidate: string]: number } => {
+  const matrix = makeAntisymetric(_matrix)
   const condorset = findCondorcet(matrix)
 
   const subVector = solve(condorset.array).map((v) => Math.max(0, v))
@@ -22,17 +20,14 @@ export const computeLottery = (
   const normalizedVector = subVector.map((v) => v / sum)
   //  ----------  End  ----------
 
-  return matrix.candidates
-    .filter((candidate) => !condorset.candidates.includes(candidate))
-    .reduce(
-      (acc, cur) => ({ [cur]: 0, ...acc }),
-      zipObject(condorset.candidates, normalizedVector),
-    )
+  return {
+    ...scoresZero(matrix.candidates),
+    ...zipObject(condorset.candidates, normalizedVector),
+  }
 }
 
-export const maximalLotteries: SystemUsingMatrix = {
-  type: VotingSystem.MaximalLotteries,
-  computeFromMatrix(matrix: Matrix): ScoreObject {
-    return computeLottery(makeAntisymetric(matrix))
-  },
+export class MaximalLotteries extends RandomMatrixMethod {
+  public scores(): ScoreObject {
+    return computeLottery(this.matrix)
+  }
 }

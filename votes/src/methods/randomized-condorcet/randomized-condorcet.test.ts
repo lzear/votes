@@ -1,6 +1,6 @@
 import { performPivots, simplexTableau } from '../../simplex'
-import { matrixString } from '../../test/testUtils'
-import { randomizedCondorcet } from '.'
+import { matrixString } from '../../test/test-utils'
+import { RandomizedCondorcet } from '.'
 
 const example1 = [
   [0, -2, 8],
@@ -29,39 +29,39 @@ const candidates = ['a', 'b', 'c', 'd', 'e']
 describe('randomized condorcet', () => {
   it('works with "simple" example', () => {
     expect(
-      randomizedCondorcet.computeFromMatrix({
+      new RandomizedCondorcet({
         array: example1,
         candidates: ['a', 'b', 'c'],
-      }),
+      }).scores(),
     ).toEqual({
-      a: 0.3333333333333333,
-      b: 0.3333333333333333,
-      c: 0.3333333333333333,
+      a: 0.333_333_333_333_333_3,
+      b: 0.333_333_333_333_333_3,
+      c: 0.333_333_333_333_333_3,
     })
   })
   it('works with "complexer" example', () => {
     expect(
-      randomizedCondorcet.computeFromMatrix({ array: example2, candidates }),
+      new RandomizedCondorcet({ array: example2, candidates }).scores(),
     ).toEqual({
       a: 0,
-      b: 0.3333333333333333,
-      c: 0.3333333333333333,
-      d: 0.3333333333333333,
+      b: 0.333_333_333_333_333_3,
+      c: 0.333_333_333_333_333_3,
+      d: 0.333_333_333_333_333_3,
       e: 0,
     })
   })
   it('works with "example3" example', () => {
     expect(
-      randomizedCondorcet.computeFromMatrix({
+      new RandomizedCondorcet({
         array: example3,
         candidates: ['a', 'b', 'c', 'd', 'e'],
-      }),
+      }).scores(),
     ).toEqual({
-      a: 0.3333333333333333,
+      a: 0.333_333_333_333_333_3,
       b: 0,
-      c: 0.3333333333333333,
+      c: 0.333_333_333_333_333_3,
       d: 0,
-      e: 0.3333333333333333,
+      e: 0.333_333_333_333_333_3,
     })
   })
 })

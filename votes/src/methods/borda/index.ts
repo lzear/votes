@@ -1,26 +1,29 @@
-import {
-  SystemUsingRankings,
-  ScoreObject,
-  VotingSystem,
-  Ballot,
-} from '../../types'
-import { scoresZero } from '../../utils/scoresZero'
-import { normalizeBallots } from '../../utils/normalize'
+import { Ballot, ScoreObject } from '../../types'
+import { scoresZero } from '../../utils/scores-zero'
+import { normalizeBallots } from '../../utils'
+import { BallotScoreMethod } from '../../classes/ballot-score-method'
 
-export const borda: SystemUsingRankings = {
-  type: VotingSystem.Borda,
-  computeFromBallots(ballots: Ballot[], candidates: string[]): ScoreObject {
-    const result: ScoreObject = scoresZero(candidates)
-    normalizeBallots(ballots, candidates).forEach((ballot) => {
-      let voteValue = candidates.length - 1
-      ballot.ranking.forEach((candidatesAtRank) => {
-        const value = voteValue - (candidatesAtRank.length - 1) / 2
-        candidatesAtRank.forEach((candidate) => {
-          result[candidate] += value * ballot.weight
-        })
-        voteValue -= candidatesAtRank.length
-      })
-    })
-    return result
-  },
+const computeScores = (
+  candidates: string[],
+  _ballots: Ballot[],
+): ScoreObject => {
+  const scores = scoresZero(candidates)
+  const ballots = normalizeBallots(_ballots, candidates)
+  for (const ballot of normalizeBallots(ballots, candidates)) {
+    let voteValue = candidates.length - 1
+    for (const candidatesAtRank of ballot.ranking) {
+      const value = voteValue - (candidatesAtRank.length - 1) / 2
+      for (const candidate of candidatesAtRank) {
+        scores[candidate] += value * ballot.weight
+      }
+      voteValue -= candidatesAtRank.length
+    }
+  }
+  return scores
+}
+
+export class Borda extends BallotScoreMethod {
+  public scores(): ScoreObject {
+    return computeScores(this.candidates, this.ballots)
+  }
 }

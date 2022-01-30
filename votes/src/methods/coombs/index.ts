@@ -1,33 +1,63 @@
-import difference from 'lodash/difference'
-import {
-  SystemUsingRankings,
-  ScoreObject,
-  VotingSystem,
-  Ballot,
-} from '../../types'
-import { firstPastThePost } from '../first-past-the-post'
-import { scoresToRanking } from '../../utils/scores'
+import { Ballot, ScoreObject } from '../../types'
+import { FirstPastThePost } from '../first-past-the-post'
+import { normalizeBallots } from '../../utils'
+import _ from 'lodash'
+import { RoundBallotMethod } from '../../classes/round-ballot-method'
+import { AbsoluteMajority } from '../absolute-majority'
+import { scoresZero } from '../../utils/scores-zero'
 
-export const coombs: SystemUsingRankings = {
-  type: VotingSystem.Coombs,
-  computeFromBallots(ballots: Ballot[], candidates: string[]): ScoreObject {
-    const score: ScoreObject = {}
-    const reversedBallots = ballots.map((ballot) => ({
-      ranking: [...ballot.ranking].reverse(),
-      weight: ballot.weight,
-    }))
-    let remainingCandidates = candidates
-    let points = 0
-    while (remainingCandidates.length > 0) {
-      const fptpScore = firstPastThePost.computeFromBallots(
-        reversedBallots,
-        remainingCandidates,
-      )
-      const ranking = scoresToRanking(fptpScore)
-      for (const winner of ranking[0]) score[winner] = points
-      remainingCandidates = difference(remainingCandidates, ranking[0])
-      points++
+const reverseBallots = (ballots: Ballot[]) =>
+  ballots.map((ballot) => ({
+    ...ballot,
+    ranking: [...ballot.ranking].reverse(),
+  }))
+
+const round = (
+  candidates: string[],
+  _ballots: Ballot[],
+): {
+  qualified: string[]
+  eliminated: string[]
+  scores: ScoreObject
+} => {
+  if (candidates.length < 2)
+    return {
+      eliminated: candidates,
+      qualified: [],
+      scores: scoresZero(candidates),
     }
-    return score
-  },
+
+  const ballots = normalizeBallots(_ballots, candidates)
+
+  const absoluteMajority = new AbsoluteMajority({ candidates, ballots })
+
+  if (absoluteMajority.ranking()[0].length === 1) {
+    const qualified = absoluteMajority.ranking()[0]
+    return {
+      eliminated: _.difference(candidates, qualified),
+      qualified,
+      scores: absoluteMajority.scores(),
+    }
+  }
+
+  const reversedFptp = new FirstPastThePost({
+    ballots: reverseBallots(ballots),
+    candidates,
+  })
+  const eliminated = reversedFptp.ranking()[0]
+  return {
+    eliminated,
+    qualified: _.difference(candidates, eliminated),
+    scores: _.mapValues(reversedFptp.scores(), (s) => -s),
+  }
+}
+
+export class Coombs extends RoundBallotMethod {
+  protected round(candidates: string[]): {
+    eliminated: string[]
+    qualified: string[]
+    scores: ScoreObject
+  } {
+    return round(candidates, this.ballots)
+  }
 }

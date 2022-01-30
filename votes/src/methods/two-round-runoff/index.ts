@@ -1,27 +1,43 @@
-import {
-  SystemUsingRankings,
-  ScoreObject,
-  VotingSystem,
-  Ballot,
-} from '../../types'
-import { normalizeBallots } from '../../utils/normalize'
-import { firstPastThePost } from '../first-past-the-post'
+import { ScoreObject } from '../../types'
+import _ from 'lodash'
+import { FirstPastThePost } from '../first-past-the-post'
+import { RoundBallotMethod } from '../../classes/round-ballot-method'
 
-export const twoRoundRunoff: SystemUsingRankings = {
-  type: VotingSystem.TwoRoundRunoff,
-  computeFromBallots(ballots: Ballot[], candidates: string[]): ScoreObject {
-    const round1: ScoreObject = firstPastThePost.computeFromBallots(
-      ballots,
+export class TwoRoundRunoff extends RoundBallotMethod {
+  protected round(
+    candidates: string[],
+    idx: number,
+  ): {
+    eliminated: string[]
+    qualified: string[]
+    scores: ScoreObject
+  } {
+    const scores: ScoreObject = new FirstPastThePost({
+      ballots: this.ballots,
       candidates,
-    )
-    if (candidates.length < 3) return round1
-    const scores = Object.values(round1).sort((a, b) => b - a)
-    const candidates2 = candidates.filter((c) => round1[c] >= scores[1])
-    const ballots2 = normalizeBallots(ballots, candidates2)
-    const round2 = firstPastThePost.computeFromBallots(ballots2, candidates2)
-    return {
-      ...round1,
-      ...round2,
+    }).scores()
+    const scoreValues = Object.values(scores).sort((a, b) => b - a)
+
+    if (idx === 0) {
+      const qualified = candidates.filter((c) => scores[c] >= scoreValues[1])
+      return {
+        eliminated: _.difference(candidates, qualified),
+        qualified,
+        scores,
+      }
     }
-  },
+    if (idx === 1) {
+      const qualified = candidates.filter((c) => scores[c] >= scoreValues[0])
+      return {
+        eliminated: _.difference(candidates, qualified),
+        qualified,
+        scores,
+      }
+    }
+    return {
+      eliminated: candidates,
+      qualified: [],
+      scores,
+    }
+  }
 }

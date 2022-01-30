@@ -18,7 +18,7 @@ export class Vertex {
 
   public equals(vertex: Vertex): boolean {
     // equality check based on vertex name
-    return this.name == vertex.name
+    return this.name === vertex.name
   }
 
   public connect(vertex: Vertex): void {

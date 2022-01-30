@@ -1,34 +1,34 @@
 import { VotingSystem } from '../types'
-import { approbation } from './approbation'
-import { baldwin } from './baldwin'
-import { borda } from './borda'
-import { coombs } from './coombs'
-import { copeland } from './copeland'
-import { firstPastThePost } from './first-past-the-post'
-import { instantRunoff } from './instant-runoff'
-import { kemeny } from './kemeny'
-import { maximalLotteries } from './maximal-lotteries'
-import { minimax } from './minimax'
-import { nanson } from './nanson'
-import { rankedPairs } from './ranked-pairs'
-import { randomizedCondorcet } from './randomized-condorcet'
-import { schulze } from './schulze'
-import { twoRoundRunoff } from './two-round-runoff'
+import { Approbation } from './approbation'
+import { Baldwin } from './baldwin'
+import { Borda } from './borda'
+import { Coombs } from './coombs'
+import { Copeland } from './copeland'
+import { FirstPastThePost } from './first-past-the-post'
+import { InstantRunoff } from './instant-runoff'
+import { Kemeny } from './kemeny'
+import { MaximalLotteries } from './maximal-lotteries'
+import { Minimax } from './minimax'
+import { Nanson } from './nanson'
+import { RandomizedCondorcet } from './randomized-condorcet'
+import { RankedPairs } from './ranked-pairs'
+import { Schulze } from './schulze'
+import { TwoRoundRunoff } from './two-round-runoff'
 
 export const methods = {
-  [VotingSystem.Approbation]: approbation,
-  [VotingSystem.Baldwin]: baldwin,
-  [VotingSystem.Borda]: borda,
-  [VotingSystem.Coombs]: coombs,
-  [VotingSystem.Copeland]: copeland,
-  [VotingSystem.FirstPastThePost]: firstPastThePost,
-  [VotingSystem.InstantRunoff]: instantRunoff,
-  [VotingSystem.Kemeny]: kemeny,
-  [VotingSystem.MaximalLotteries]: maximalLotteries,
-  [VotingSystem.Minimax]: minimax,
-  [VotingSystem.Nanson]: nanson,
-  [VotingSystem.RankedPairs]: rankedPairs,
-  [VotingSystem.RandomizedCondorcet]: randomizedCondorcet,
-  [VotingSystem.Schulze]: schulze,
-  [VotingSystem.TwoRoundRunoff]: twoRoundRunoff,
-}
+  [VotingSystem.Approbation]: Approbation,
+  [VotingSystem.Baldwin]: Baldwin,
+  [VotingSystem.Borda]: Borda,
+  [VotingSystem.Coombs]: Coombs,
+  [VotingSystem.Copeland]: Copeland,
+  [VotingSystem.FirstPastThePost]: FirstPastThePost,
+  [VotingSystem.InstantRunoff]: InstantRunoff,
+  [VotingSystem.Kemeny]: Kemeny,
+  [VotingSystem.MaximalLotteries]: MaximalLotteries,
+  [VotingSystem.Minimax]: Minimax,
+  [VotingSystem.Nanson]: Nanson,
+  [VotingSystem.RankedPairs]: RankedPairs,
+  [VotingSystem.RandomizedCondorcet]: RandomizedCondorcet,
+  [VotingSystem.Schulze]: Schulze,
+  [VotingSystem.TwoRoundRunoff]: TwoRoundRunoff,
+} as const

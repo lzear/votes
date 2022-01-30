@@ -1,4 +1,4 @@
-import { rankedPairs } from './index'
+import { RankedPairs } from './index'
 
 const example1 = [
   [0, -2, 8],
@@ -27,10 +27,10 @@ const candidates = ['a', 'b', 'c', 'd', 'e']
 describe('ranked pairs', () => {
   it('works with "simple" example', () => {
     expect(
-      rankedPairs.computeFromMatrix({
+      new RankedPairs({
         array: example1,
         candidates: ['a', 'b', 'c'],
-      }),
+      }).scores(),
     ).toEqual({
       a: 3,
       b: 1,
@@ -38,9 +38,7 @@ describe('ranked pairs', () => {
     })
   })
   it('works with "complexer" example', () => {
-    expect(
-      rankedPairs.computeFromMatrix({ array: example2, candidates }),
-    ).toEqual({
+    expect(new RankedPairs({ array: example2, candidates }).scores()).toEqual({
       a: 1,
       b: 5,
       c: 3,
@@ -50,10 +48,10 @@ describe('ranked pairs', () => {
   })
   it('works with "example3" example', () => {
     expect(
-      rankedPairs.computeFromMatrix({
+      new RankedPairs({
         array: example3,
         candidates: ['a', 'b', 'c', 'd', 'e'],
-      }),
+      }).scores(),
     ).toEqual({
       a: 5,
       b: 2,
@@ -64,7 +62,7 @@ describe('ranked pairs', () => {
   })
   it('completes computation in decent time', () => {
     expect(
-      rankedPairs.computeFromMatrix({
+      new RankedPairs({
         array: [
           [0, 1, -1, -1, -1, -1, 1, -1, 1],
           [-1, 0, -1, 1, -1, -1, -1, 1, -1],
@@ -82,15 +80,15 @@ describe('ranked pairs', () => {
           'XuHBc1ME',
           'xhAvdxz2',
           'MBDuJLcU',
-          '4lNHn78L',
+          'aBlNHn78L',
           'hNtQKVPG',
           'KXxHiFYK',
-          '2PWfQstO',
+          'aAWfQstO',
         ],
-      }),
+      }).scores(),
     ).toEqual({
-      '2PWfQstO': 3,
-      '4lNHn78L': 4,
+      aAWfQstO: 3,
+      aBlNHn78L: 4,
       Bi8rD2kq: 1,
       KXxHiFYK: 4,
       MBDuJLcU: 4,

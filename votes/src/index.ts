@@ -1,26 +1,22 @@
-export {
-  System,
-  VotingSystem,
-  SystemUsingRankings,
-  SystemUsingMatrix,
-  Matrix,
-  ScoreObject,
-  Ballot,
-} from './types'
-export { approbation } from './methods/approbation'
-export { baldwin } from './methods/baldwin'
-export { borda } from './methods/borda'
-export { coombs } from './methods/coombs'
-export { copeland } from './methods/copeland'
-export { firstPastThePost } from './methods/first-past-the-post'
-export { instantRunoff } from './methods/instant-runoff'
-export { kemeny } from './methods/kemeny'
-export { maximalLotteries } from './methods/maximal-lotteries'
-export { minimax } from './methods/minimax'
-export { nanson } from './methods/nanson'
-export { rankedPairs } from './methods/ranked-pairs'
-export { randomizedCondorcet } from './methods/randomized-condorcet'
-export { schulze } from './methods/schulze'
-export { twoRoundRunoff } from './methods/two-round-runoff'
+export type { Matrix, ScoreObject, Ballot } from './types'
+export type { Round } from './classes/round-ballot-method'
+
+export { VotingSystem } from './types'
+export { Approbation } from './methods/approbation'
+export { Baldwin } from './methods/baldwin'
+export { Borda } from './methods/borda'
+export { Coombs } from './methods/coombs'
+export { Copeland } from './methods/copeland'
+export { FirstPastThePost } from './methods/first-past-the-post'
+export { InstantRunoff } from './methods/instant-runoff'
+export { Kemeny } from './methods/kemeny'
+export { MaximalLotteries } from './methods/maximal-lotteries'
+export { Minimax } from './methods/minimax'
+export { Nanson } from './methods/nanson'
+export { RankedPairs } from './methods/ranked-pairs'
+export { RandomizedCondorcet } from './methods/randomized-condorcet'
+export { Schulze } from './methods/schulze'
+export { TwoRoundRunoff } from './methods/two-round-runoff'
 export { methods } from './methods'
+
 export * as utils from './utils'

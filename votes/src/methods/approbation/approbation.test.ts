@@ -1,7 +1,10 @@
-import { approbation } from '.'
+import { Approbation } from '.'
 
 it('skips empty votes', () => {
-  expect(
-    approbation.computeFromBallots([{ weight: 1, ranking: [] }], ['a']),
-  ).toStrictEqual({ a: 0 })
+  const a = new Approbation({
+    candidates: ['a'],
+    ballots: [{ weight: 1, ranking: [] }],
+  })
+  expect(a.ranking()).toStrictEqual([['a']])
+  expect(a.scores()).toStrictEqual({ a: 0 })
 })

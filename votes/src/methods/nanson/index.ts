@@ -1,33 +1,32 @@
-import difference from 'lodash/difference'
 import sum from 'lodash/sum'
-import {
-  SystemUsingRankings,
-  ScoreObject,
-  VotingSystem,
-  Ballot,
-} from '../../types'
-import { borda } from '../borda'
+import { Ballot, ScoreObject } from '../../types'
+import _ from 'lodash'
+import { RoundBallotMethod } from '../../classes/round-ballot-method'
+import { Borda } from '../borda'
 
-export const nanson: SystemUsingRankings = {
-  type: VotingSystem.Nanson,
-  computeFromBallots(ballots: Ballot[], candidates: string[]): ScoreObject {
-    const score: ScoreObject = {}
-    let remainingCandidates = candidates
-    let points = 0
-    while (remainingCandidates.length > 0) {
-      const bordaScores = borda.computeFromBallots(ballots, remainingCandidates)
-      const scores = Object.values(bordaScores)
-      const avg = sum(scores) / scores.length
-      const losers = remainingCandidates.filter((c) => bordaScores[c] <= avg)
-      let maxPoints = points + 1
-      for (const loser of losers) {
-        const p = points + bordaScores[loser] + 1
-        score[loser] = p
-        if (p > maxPoints) maxPoints = p
-      }
-      remainingCandidates = difference(remainingCandidates, losers)
-      points = maxPoints
-    }
-    return score
-  },
+const round = (
+  candidates: string[],
+  ballots: Ballot[],
+): {
+  qualified: string[]
+  eliminated: string[]
+  scores: ScoreObject
+} => {
+  const borda = new Borda({ candidates, ballots })
+  const bordaScores = borda.scores()
+  const scores = Object.values(bordaScores)
+  const avg = sum(scores) / scores.length
+  const eliminated = candidates.filter((c) => bordaScores[c] <= avg)
+  const qualified = _.difference(candidates, eliminated)
+  return { eliminated, qualified, scores: bordaScores }
+}
+
+export class Nanson extends RoundBallotMethod {
+  protected round(candidates: string[]): {
+    qualified: string[]
+    eliminated: string[]
+    scores: ScoreObject
+  } {
+    return round(candidates, this.ballots)
+  }
 }

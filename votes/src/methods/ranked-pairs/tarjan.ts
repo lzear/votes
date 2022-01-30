@@ -1,25 +1,25 @@
 // From chadhutchins:
 // https://gist.github.com/chadhutchins/1440602
 
-import { Vertex } from './Vertex'
-import { VertexStack } from './VertexStack'
+import { Vertex } from './vertex'
+import { VertexStack } from './vertex-stack'
 
 export class Tarjan {
   private index: number
   private stack: VertexStack
   private readonly graph: Vertex[]
-  // scc: Vertex[][]
+  private readonly scc: Vertex[][]
 
   constructor(graph: Vertex[]) {
     this.index = 0
     this.stack = new VertexStack()
     this.graph = graph
-    // this.scc = []
+    this.scc = []
   }
-  public run(): void {
+  public run(): Vertex[][] {
     for (const i in this.graph)
       if (this.graph[i].index < 0) this.strongconnect(this.graph[i])
-    // return this.scc
+    return this.scc
   }
   private strongconnect(vertex: Vertex): void {
     // Set the depth index for v to the smallest unused index
@@ -30,9 +30,9 @@ export class Tarjan {
 
     // Consider successors of v
     // aka... consider each vertex in vertex.connections
-    for (const i in vertex.connections) {
+    for (const connection of vertex.connections) {
       const v = vertex
-      const w = vertex.connections[i]
+      const w = connection
       if (w.index < 0) {
         // Successor w has not yet been visited; recurse on it
         this.strongconnect(w)
@@ -44,7 +44,7 @@ export class Tarjan {
     }
 
     // If v is a root node, pop the stack and generate an SCC
-    if (vertex.lowlink == vertex.index) {
+    if (vertex.lowlink === vertex.index) {
       // start a new strongly connected component
       const vertices: Vertex[] = []
       let w = null
@@ -52,11 +52,11 @@ export class Tarjan {
         do {
           w = this.stack.vertices.pop()
           // add w to current strongly connected component
-          w && vertices.push(w)
+          if (w) vertices.push(w)
         } while (w && !vertex.equals(w))
       // output the current strongly connected component
       // ... i'm going to push the results to a member scc array variable
-      // if (vertices.length > 0) this.scc.push(vertices)
+      if (vertices.length > 0) this.scc.push(vertices)
     }
   }
 }

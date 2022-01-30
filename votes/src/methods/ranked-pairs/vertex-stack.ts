@@ -1,7 +1,7 @@
 // From chadhutchins:
 // https://gist.github.com/chadhutchins/1440602
 
-import { Vertex } from './Vertex'
+import { Vertex } from './vertex'
 
 export class VertexStack {
   public vertices: Vertex[]

@@ -1,7 +1,12 @@
-import { firstPastThePost } from '.'
+import { FirstPastThePost } from '.'
 
 it('skips empty votes', () => {
   expect(
-    firstPastThePost.computeFromBallots([{ weight: 1, ranking: [] }], ['a']),
-  ).toStrictEqual({ a: 0 })
+    new FirstPastThePost({
+      candidates: ['a'],
+      ballots: [{ weight: 1, ranking: [] }],
+    }).scores(),
+  ).toStrictEqual({
+    a: 0,
+  })
 })

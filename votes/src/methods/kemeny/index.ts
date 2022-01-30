@@ -1,11 +1,7 @@
 import zipObject from 'lodash/zipObject'
 import range from 'lodash/range'
-import {
-  SystemUsingMatrix,
-  VotingSystem,
-  Matrix,
-  ScoreObject,
-} from '../../types'
+import { Matrix, ScoreObject } from '../../types'
+import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 
 const rankingPenalty = (ranking: number[], matrix: number[][]) => {
   let p = 0
@@ -53,26 +49,29 @@ const nextPermutation = (arr: number[]) => {
   return array
 }
 
-export const kemeny: SystemUsingMatrix = {
-  type: VotingSystem.Kemeny,
-  computeFromMatrix(matrix: Matrix): ScoreObject {
-    let bestPermutations: number[][] = []
-    let bestScore = Infinity
-    let p: number[] | false = range(matrix.candidates.length)
-    while (p) {
-      const s = rankingPenalty(p, matrix.array)
-      if (s === bestScore) bestPermutations.push(p)
-      else if (s < bestScore) {
-        bestScore = s
-        bestPermutations = [p]
-      }
-      p = nextPermutation(p)
+const computeScores = (matrix: Matrix): ScoreObject => {
+  let bestPermutations: number[][] = []
+  let bestScore = Infinity
+  let p: number[] | false = range(matrix.candidates.length)
+  while (p) {
+    const s = rankingPenalty(p, matrix.array)
+    if (s === bestScore) bestPermutations.push(p)
+    else if (s < bestScore) {
+      bestScore = s
+      bestPermutations = [p]
     }
-    const sumIdx = matrix.candidates.map((c, cIdx) =>
-      bestPermutations
-        .map((perm) => perm.indexOf(cIdx))
-        .reduce((a, v) => a + v, 0),
-    )
-    return zipObject(matrix.candidates, sumIdx)
-  },
+    p = nextPermutation(p)
+  }
+  const sumIdx = matrix.candidates.map((c, cIdx) =>
+    bestPermutations
+      .map((perm) => perm.indexOf(cIdx))
+      .reduce((a, v) => a + v, 0),
+  )
+  return zipObject(matrix.candidates, sumIdx)
+}
+
+export class Kemeny extends MatrixScoreMethod {
+  public scores(): ScoreObject {
+    return computeScores(this.matrix)
+  }
 }
