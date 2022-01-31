@@ -2,6 +2,7 @@ import { ScoreObject } from '../../types'
 import _ from 'lodash'
 import { FirstPastThePost } from '../first-past-the-post'
 import { RoundBallotMethod } from '../../classes/round-ballot-method'
+import { AbsoluteMajority } from '../absolute-majority'
 
 export class TwoRoundRunoff extends RoundBallotMethod {
   protected round(
@@ -12,6 +13,22 @@ export class TwoRoundRunoff extends RoundBallotMethod {
     qualified: string[]
     scores: ScoreObject
   } {
+    const absoluteMajority = new AbsoluteMajority({
+      ballots: this.ballots,
+      candidates,
+    })
+
+    if (absoluteMajority.ranking().length > 1) {
+      const qualified = absoluteMajority.ranking().at(0)
+      if (!qualified)
+        throw new Error('Unexpected error in absolute majority computation')
+
+      return {
+        eliminated: _.difference(candidates, qualified),
+        qualified,
+        scores: absoluteMajority.scores(),
+      }
+    }
     const scores: ScoreObject = new FirstPastThePost({
       ballots: this.ballots,
       candidates,
