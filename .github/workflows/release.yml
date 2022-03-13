@@ -5,25 +5,27 @@ on:
     branches:
       - master
 
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./votes
     steps:
-      - name: Checkout Repo
+      - name: Checkout
         uses: actions/checkout@v2
         with:
           # This makes Actions fetch all Git history so that Changesets can generate changelogs with the correct commits
           fetch-depth: 0
 
       - name: Setup Node.js 12.x
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v2-beta
         with:
-          node-version: 12.x
-
-      - name: Install Dependencies
-        run: yarn
-
+          node-version: '16'
+      - run: yarn install
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
