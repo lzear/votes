@@ -14,13 +14,13 @@ export const Displayer: React.FC<{
   ballots: StoreBallots[]
   containerWidth: number
   candidates: string[]
-  round: Round
+  round?: Round
 }> = ({ ballots, round }) => {
   const candidatesById = useCandidatesById()
   return (
     <div>
       <BordaTreeMapInner
-        candidates={round.candidates.map((c) => candidatesById[c])}
+        candidates={round?.candidates.map((c) => candidatesById[c]) || []}
         ballots={ballots}
       />
     </div>

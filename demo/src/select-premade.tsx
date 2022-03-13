@@ -35,13 +35,13 @@ export const SelectPremade: React.FC = () => {
         voting systems.
       </label>
       <br />
-      <Select
+      <Select<string>
         id="presets"
         size="small"
         style={{ minWidth: 250 }}
         placeholder="Preset"
-        onSelect={(v) => {
-          if (typeof v === 'string' && v in premades) {
+        onSelect={(v: string) => {
+          if (v in premades) {
             const vv = premades[v]
             if (vv) {
               setPremade(vv)

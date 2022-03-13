@@ -26,7 +26,7 @@ export const DisplayBallots: React.FC<{
   ballots: StoreBallots[]
   containerWidth: number
   candidates: string[]
-  round: Round
+  round?: Round
 }> = ({ ballots, containerWidth, round }) => {
   const colors = useCandidatesColors()
 

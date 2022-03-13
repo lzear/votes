@@ -170,7 +170,7 @@ export const VizRoundsBallots: React.FC<{
     ballots: StoreBallots[]
     containerWidth: number
     candidates: string[]
-    round: Round
+    round?: Round
   }>
 }> = ({ rounds, displayer }) => {
   const Displayer = displayer

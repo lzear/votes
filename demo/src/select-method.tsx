@@ -16,15 +16,11 @@ export const SelectMethod: React.FC = () => {
   return (
     <div className="container">
       <Typography.Title level={4}>Voting system</Typography.Title>
-      <Select<string>
+      <Select<DemoSystems>
         size="large"
         style={{ minWidth: 250 }}
         placeholder="Select a voting system"
-        onSelect={(v) => {
-          console.log('%c v', 'background: #222; color: #bada55', v)
-
-          // console.log('%c isVotingSystem(v)', 'background: #222; color: #bada55', isVotingSystem(v))
-
+        onSelect={(v: DemoSystems) => {
           setMethod(v)
         }}
         getPopupContainer={(triggerNode) => triggerNode.parentElement}

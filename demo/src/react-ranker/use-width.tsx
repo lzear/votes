@@ -44,10 +44,10 @@ export default function useWidth(ref: RefObject<HTMLDivElement>) {
   return ComponentSize
 }
 
-export const WithWidth = <T,>(
-  Comp: React.ComponentType<T & { width: number }>,
+export const WithWidth = <T extends { width: number }>(
+  Comp: React.ComponentType<T>,
 ) =>
-  function Render(props: T): React.ReactElement {
+  function Render(props: Omit<T, 'width'>): React.ReactElement {
     const ref = useRef<HTMLDivElement>(null)
     const [componentSize, setComponentSize] = useState<number | null>(null)
     const seet = useCallback(() => {
@@ -80,7 +80,11 @@ export const WithWidth = <T,>(
 
     return (
       <div ref={ref}>
-        {componentSize && <Comp {...props} width={componentSize} />}
+        {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          componentSize && <Comp {...props} width={componentSize} />
+        }
       </div>
     )
   }
