@@ -23,7 +23,7 @@
     "test-prod": "yarn run eslint && yarn workspaces run test-prod",
     "commit": "git-cz",
     "precommit": "lint-staged",
-    "publish": "yarn workspaces build && changeset publish"
+    "publish": "yarn workspaces run build && changesets publish"
   },
   "resolutions": {
     "eslint": "7.32.0"

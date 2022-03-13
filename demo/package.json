@@ -55,5 +55,11 @@
     "@types/d3-hierarchy": "^3.0.2",
     "@types/d3-scale": "^4.0.2",
     "@types/d3-selection": "^3.0.2"
+  },
+  "nextBundleAnalysis": {
+    "budget": 358400,
+    "budgetPercentIncreaseRed": 20,
+    "minimumChangeThreshold": 0,
+    "showDetails": true
   }
 }
