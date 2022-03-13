@@ -9,6 +9,7 @@ import { Copeland } from './copeland'
 import { FirstPastThePost } from './first-past-the-post'
 import { InstantRunoff } from './instant-runoff'
 import { Kemeny } from './kemeny'
+import { MajorityJudgment } from './majority-judgment'
 import { MaximalLotteries } from './maximal-lotteries'
 import { Minimax } from './minimax'
 import { Nanson } from './nanson'
@@ -22,21 +23,22 @@ import { TwoRoundRunoff } from './two-round-runoff'
 export const methods = {
   [VotingSystem.AbsoluteMajority]: AbsoluteMajority,
   [VotingSystem.Approbation]: Approbation,
-  [VotingSystem.BottomTwoRunoff]: BottomTwoRunoff,
   [VotingSystem.Baldwin]: Baldwin,
   [VotingSystem.Borda]: Borda,
+  [VotingSystem.BottomTwoRunoff]: BottomTwoRunoff,
   [VotingSystem.Coombs]: Coombs,
   [VotingSystem.Copeland]: Copeland,
   [VotingSystem.FirstPastThePost]: FirstPastThePost,
   [VotingSystem.InstantRunoff]: InstantRunoff,
   [VotingSystem.Kemeny]: Kemeny,
+  [VotingSystem.MajorityJudgment]: MajorityJudgment,
   [VotingSystem.MaximalLotteries]: MaximalLotteries,
   [VotingSystem.Minimax]: Minimax,
   [VotingSystem.Nanson]: Nanson,
-  [VotingSystem.RankedPairs]: RankedPairs,
   [VotingSystem.RandomCandidates]: RandomCandidates,
   [VotingSystem.RandomDictator]: RandomDictator,
   [VotingSystem.RandomizedCondorcet]: RandomizedCondorcet,
+  [VotingSystem.RankedPairs]: RankedPairs,
   [VotingSystem.Schulze]: Schulze,
   [VotingSystem.TwoRoundRunoff]: TwoRoundRunoff,
 } as const

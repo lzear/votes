@@ -2,6 +2,7 @@ export type { Matrix, ScoreObject, Ballot } from './types'
 export type { Round } from './classes/round-ballot-method'
 
 export { VotingSystem } from './types'
+
 export { Approbation } from './methods/approbation'
 export { AbsoluteMajority } from './methods/absolute-majority'
 export { Baldwin } from './methods/baldwin'
@@ -12,6 +13,7 @@ export { Copeland } from './methods/copeland'
 export { FirstPastThePost } from './methods/first-past-the-post'
 export { InstantRunoff } from './methods/instant-runoff'
 export { Kemeny } from './methods/kemeny'
+export { MajorityJudgment } from './methods/majority-judgment'
 export { MaximalLotteries } from './methods/maximal-lotteries'
 export { Minimax } from './methods/minimax'
 export { Nanson } from './methods/nanson'
@@ -21,6 +23,7 @@ export { RandomDictator } from './methods/random-dictator'
 export { RandomizedCondorcet } from './methods/randomized-condorcet'
 export { Schulze } from './methods/schulze'
 export { TwoRoundRunoff } from './methods/two-round-runoff'
+
 export { methods } from './methods'
 
 export * as utils from './utils'
