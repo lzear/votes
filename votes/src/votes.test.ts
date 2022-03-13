@@ -14,7 +14,7 @@ import {
   RankedPairs,
   Schulze,
   TwoRoundRunoff,
-} from './index'
+} from '.'
 import { abcde, balinski, sW } from './test/test-utils'
 import { matrixFromBallots } from './utils'
 
@@ -39,11 +39,11 @@ describe('Test all methods', () => {
     expect(
       new Borda({ candidates: abcde, ballots: balinski }).scores(),
     ).toStrictEqual({
-      a: 135,
-      b: 247,
-      c: 244,
-      d: 192,
-      e: 182,
+      a: 235,
+      b: 347,
+      c: 344,
+      d: 292,
+      e: 282,
     })
   })
   it('votes with coombs', () => {

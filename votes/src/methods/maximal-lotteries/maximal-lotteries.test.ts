@@ -1,6 +1,6 @@
 import { performPivots, simplexTableau } from '../../simplex'
 import { matrixString } from '../../test/test-utils'
-import { MaximalLotteries } from './index'
+import { MaximalLotteries } from '.'
 
 const example1 = [
   [0, -2, 8],

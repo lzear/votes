@@ -1,4 +1,4 @@
-import { solve } from './index'
+import { solve } from '.'
 import { productVectM } from '../test/matrix'
 
 it('solves 2', () => {

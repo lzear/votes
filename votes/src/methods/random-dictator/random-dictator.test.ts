@@ -1,5 +1,5 @@
 import { Ballot } from '../../types'
-import { RandomDictator } from './index'
+import { RandomDictator } from '.'
 import { rngGenerator } from '../../test/rng-generator'
 import { toWeightedBallots } from '../../utils'
 

@@ -2,9 +2,6 @@ import { Ballot, methods, VotingSystem } from '..'
 import { abcde, dummyProfile, dummyProfile10 } from '../test/test-utils'
 import { matrixFromBallots } from './make-matrix'
 
-// type Rrand = VotingSystem.RandomCandidates | VotingSystem.RandomDictator
-// type Deter = Exclude<VotingSystem, Rrand>
-
 const isRandom = (system: VotingSystem) =>
   [
     VotingSystem.RandomCandidates,
@@ -12,8 +9,6 @@ const isRandom = (system: VotingSystem) =>
     VotingSystem.RandomizedCondorcet,
     VotingSystem.MaximalLotteries,
   ].includes(system)
-
-// const isDeter = (system: VotingSystem): system is Deter => !isRandom(system)
 
 const isRandomCandidate = (
   system: VotingSystem,

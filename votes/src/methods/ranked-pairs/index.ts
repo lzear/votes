@@ -1,30 +1,11 @@
 import groupBy from 'lodash/groupBy'
 import range from 'lodash/range'
-import uniq from 'lodash/uniq'
 import zipObject from 'lodash/zipObject'
 import { Matrix, ScoreObject } from '../../types'
-import { Tarjan } from './tarjan'
-import { Vertex } from './vertex'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
+import { generateAcyclicGraph } from './generate-acyclic-graph'
 
 type Edge = { from: number; to: number; value: number }
-
-const generateAcyclicGraph = (graph: Edge[], edgesToAdd: Edge[]): Edge[] => {
-  const allEdges = [...graph, ...edgesToAdd]
-  const vDict = {} as { [i: number]: Vertex }
-  for (const c of uniq(allEdges.flatMap((e) => [e.from, e.to])))
-    vDict[c] = new Vertex(c)
-
-  for (const e of allEdges) vDict[e.from].connect(vDict[e.to])
-  const tarjan = new Tarjan(Object.values(vDict))
-  tarjan.run()
-  return [
-    ...graph,
-    ...edgesToAdd.filter(
-      (edge) => vDict[edge.from].lowlink !== vDict[edge.to].lowlink,
-    ),
-  ]
-}
 
 const computeFromMatrix = (matrix: Matrix): ScoreObject => {
   const allEdges: Edge[] = matrix.array.flatMap(

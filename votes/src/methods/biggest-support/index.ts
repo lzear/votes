@@ -1,23 +1,17 @@
 import _ from 'lodash'
 import { Ballot } from '../../types'
 import { BallotMethod } from '../../classes/ballot-method'
-import { iterateNthChoices } from '../first-past-the-post/iterate-first-choices'
+import { iterateFirstChoices } from '../first-past-the-post/iterate-first-choices'
 
-const deTie = (
-  ranking: string[][],
-  ballots: Ballot[],
-  rankIdx: number,
-): string[][] =>
+const deTie = (ranking: string[][], ballots: Ballot[]): string[][] =>
   ranking.flatMap((rank) => {
-    const scores = iterateNthChoices(
-      ballots,
-      rank,
-      (rank) => 1 / rank.length,
-      rankIdx,
-    )
-    const groups = _.groupBy(rank, (c) => scores[c])
-    return Object.values(scores)
-      .sort((a, b) => b - a)
+    if (rank.length < 2) return [rank]
+
+    const scores = iterateFirstChoices(ballots, rank, (r) => 1 / r.length)
+    const pickedScores = _.pick(scores, rank)
+    const groups = _.groupBy(rank, (c) => pickedScores[c])
+    return Object.keys(groups)
+      .sort((a, b) => Number(b) - Number(a))
       .map((score) => groups[score])
   })
 
@@ -30,7 +24,7 @@ export class BiggestSupport extends BallotMethod {
 
     let rankIdx = 0
     while (isTied(ranking) && rankIdx < this.candidates.length) {
-      ranking = deTie(ranking, this.ballots, rankIdx)
+      ranking = deTie(ranking, this.ballots)
 
       rankIdx++
     }

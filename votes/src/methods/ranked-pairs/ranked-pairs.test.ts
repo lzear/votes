@@ -1,4 +1,4 @@
-import { RankedPairs } from './index'
+import { RankedPairs } from '.'
 
 const example1 = [
   [0, -2, 8],

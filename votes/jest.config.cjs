@@ -7,7 +7,9 @@ module.exports = {
       useESM: true,
     },
   },
-  transform: {},
+  transform: {
+    '^.+\\.tsx?$': 'babel-jest',
+  },
   testEnvironment: 'node',
   testRegex: '(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$',
   moduleFileExtensions: ['ts', 'tsx', 'js'],

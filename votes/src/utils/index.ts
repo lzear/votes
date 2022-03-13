@@ -12,3 +12,4 @@ export {
 } from './normalize'
 export { makeAntisymetric, matrixFromBallots } from './make-matrix'
 export { scoresToRanking } from './scores'
+export { generateAcyclicGraph } from '../methods/ranked-pairs/generate-acyclic-graph'

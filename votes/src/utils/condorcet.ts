@@ -1,4 +1,4 @@
-import difference from 'lodash/difference'
+import _ from 'lodash'
 import { Matrix } from '../types'
 
 export const findCondorcet = ({ candidates, array }: Matrix): Matrix => {
@@ -10,7 +10,7 @@ export const findCondorcet = ({ candidates, array }: Matrix): Matrix => {
     let toCheck = [k]
     while (toCheck.length > 0) {
       const check = toCheck.pop() as number
-      const toAdd = difference(dominatingDirectList[check], dominating)
+      const toAdd = _.difference(dominatingDirectList[check], dominating)
       dominating = [...dominating, ...toAdd]
       toCheck = [...toCheck, ...toAdd]
     }

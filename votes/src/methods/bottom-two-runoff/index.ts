@@ -1,16 +1,15 @@
 import _ from 'lodash'
-import { ScoreObject, Ballot } from '../../types'
+import { Ballot, ScoreObject } from '../../types'
 import { scoresAny } from '../../utils/scores-zero'
 import { RoundBallotMethod } from '../../classes/round-ballot-method'
 import { Copeland } from '../copeland'
-import { matrixFromBallots } from '../../utils'
+import { matrixFromBallots, normalizeBallots } from '../../utils'
 import { BiggestSupport } from '../biggest-support'
 
 export class BottomTwoRunoff extends RoundBallotMethod {
   private copeland: Copeland
   constructor(i: { ballots: Ballot[]; candidates: string[] }) {
     super(i)
-
     this.copeland = new Copeland(matrixFromBallots(i.ballots, i.candidates))
   }
 
@@ -20,7 +19,7 @@ export class BottomTwoRunoff extends RoundBallotMethod {
     scores: ScoreObject
   } {
     const biggestSupport = new BiggestSupport({
-      ballots: this.ballots,
+      ballots: normalizeBallots(this.ballots, candidates),
       candidates,
     }).ranking()
 
@@ -35,7 +34,8 @@ export class BottomTwoRunoff extends RoundBallotMethod {
 
     const eliminated = this.copeland.tieBreak([bottom]).at(-1)
 
-    if (!eliminated) throw new Error('Unexpected round result!')
+    if (!eliminated || eliminated.length === 0)
+      throw new Error('Unexpected round result!')
 
     return {
       eliminated,
