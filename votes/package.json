@@ -28,6 +28,7 @@
     "prebuild": "rimraf dist",
     "build": "preconstruct build && yarn typedoc",
     "publish-docs": "ts-node tools/gh-pages-publish",
+    "publish": "cp ../README.md . && yarn run build && changeset publish",
     "typedoc": "npx typedoc src/index.ts --tsconfig tsconfig.typedoc.json"
   },
   "devDependencies": {
