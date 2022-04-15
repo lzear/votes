@@ -13,11 +13,15 @@ export class TwoRoundRunoff extends RoundBallotMethod {
     qualified: string[]
     scores: ScoreObject
   } {
+    const scores: ScoreObject = new FirstPastThePost({
+      ballots: this.ballots,
+      candidates,
+    }).scores()
+
     const absoluteMajority = new AbsoluteMajority({
       ballots: this.ballots,
       candidates,
     })
-
     if (absoluteMajority.ranking().length > 1) {
       const qualified = absoluteMajority.ranking().at(0)
       if (!qualified)
@@ -26,13 +30,9 @@ export class TwoRoundRunoff extends RoundBallotMethod {
       return {
         eliminated: _.difference(candidates, qualified),
         qualified,
-        scores: absoluteMajority.scores(),
+        scores,
       }
     }
-    const scores: ScoreObject = new FirstPastThePost({
-      ballots: this.ballots,
-      candidates,
-    }).scores()
     const scoreValues = Object.values(scores).sort((a, b) => b - a)
 
     if (idx === 0) {
