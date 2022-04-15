@@ -3,7 +3,6 @@ import React from 'react'
 export const SvgBallots: React.FC<{
   height: number
   containerWidth: number
-
   marginTop?: number
   marginBottom?: number
   marginLeft?: number
@@ -11,6 +10,7 @@ export const SvgBallots: React.FC<{
   overflowSides?: number
   overflowTop?: number
   overflowBottom?: number
+  children: React.ReactNode
 }> = ({
   children,
   containerWidth = 0,
@@ -33,7 +33,6 @@ export const SvgBallots: React.FC<{
       <style jsx>{`
         .svgContainer {
           transition: height 2s;
-          overflow: hidden;
           overflow: visible;
         }
         svg {

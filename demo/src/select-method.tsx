@@ -9,8 +9,6 @@ const options = Object.values(DemoSystems).filter(
   (v) => votingTypeData[v]?.name && methods[v]?.data,
 )
 
-console.log('%c options', 'background: #222; color: #bada55', options)
-
 export const SelectMethod: React.FC = () => {
   const setMethod = useStore(selectSetMethod)
   return (
@@ -24,14 +22,10 @@ export const SelectMethod: React.FC = () => {
           setMethod(v)
         }}
         getPopupContainer={(triggerNode) => triggerNode.parentElement}
-        options={options.map((value) => {
-          console.log('%c value', 'background: #222; color: #bada55', value)
-
-          return {
-            value,
-            label: votingTypeData[value].name,
-          }
-        })}
+        options={options.map((value) => ({
+          value,
+          label: votingTypeData[value].name,
+        }))}
       />
       <style jsx>{`
         .container {

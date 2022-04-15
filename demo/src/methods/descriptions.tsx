@@ -48,9 +48,7 @@ export const criteria: Record<
       <>
         If one candidate wins all duels against others, then that candidate must
         win the election.{' '}
-        <Wiki href="https://en.wikipedia.org/wiki/Condorcet_criterion">
-          {W}
-        </Wiki>
+        <Wiki href="https://en.wikipedia.org/wiki/Condorcet_criterion" />
       </>
     ),
   },
@@ -60,7 +58,7 @@ export const criteria: Record<
       <>
         If one candidate is ranked first by more than 50% of voters, then that
         candidate must win.{' '}
-        <Wiki href="https://en.wikipedia.org/wiki/Majority_criterion">{W}</Wiki>
+        <Wiki href="https://en.wikipedia.org/wiki/Majority_criterion" />
       </>
     ),
   },
@@ -73,9 +71,7 @@ export const criteria: Record<
         election result should not place this candidate lower than before. In
         other words, an individual should not be able to hurt an option by
         ranking it higher.{' '}
-        <Wiki href="https://en.wikipedia.org/wiki/Monotonicity_criterion">
-          {W}
-        </Wiki>
+        <Wiki href="https://en.wikipedia.org/wiki/Monotonicity_criterion" />
       </>
     ),
   },
@@ -85,7 +81,7 @@ export const criteria: Record<
       <>
         If every voter prefers alternative X over alternative Y, then the system
         prefers X over Y.{' '}
-        <Wiki href="https://en.wikipedia.org/wiki/Pareto_efficiency">{W}</Wiki>
+        <Wiki href="https://en.wikipedia.org/wiki/Pareto_efficiency" />
       </>
     ),
   },
@@ -96,9 +92,7 @@ export const criteria: Record<
       <>
         Assuming voter preferences regarding other candidates are unchanged, the
         winner never changes if a non-winning candidate is added or removed.{' '}
-        <Wiki href="https://en.wikipedia.org/wiki/Independence_of_irrelevant_alternatives">
-          {W}
-        </Wiki>
+        <Wiki href="https://en.wikipedia.org/wiki/Independence_of_irrelevant_alternatives" />
       </>
     ),
   },
@@ -110,9 +104,7 @@ export const criteria: Record<
         Assuming voter preferences regarding other candidates are unchanged,
         removing the candidate at the first place or the last place should not
         change the order of the remaining candidates.{' '}
-        <Wiki href="https://en.wikipedia.org/wiki/Independence_of_irrelevant_alternatives#Local_independence">
-          {W}
-        </Wiki>
+        <Wiki href="https://en.wikipedia.org/wiki/Independence_of_irrelevant_alternatives#Local_independence" />
       </>
     ),
   },
@@ -122,7 +114,7 @@ export const criteria: Record<
       <>
         The result of the voting cannot be determined by the preference of one
         voter without taking the other votes into account.{' '}
-        <Wiki href="https://en.wikipedia.org/wiki/Non-dictatorship">{W}</Wiki>
+        <Wiki href="https://en.wikipedia.org/wiki/Non-dictatorship" />
       </>
     ),
   },
@@ -131,9 +123,7 @@ export const criteria: Record<
     description: (
       <>
         Lying about preferences never leads to a preferred outcome{' '}
-        <Wiki href="https://en.wikipedia.org/wiki/Comparison_of_electoral_systems#Strategy_criteria">
-          {W}
-        </Wiki>
+        <Wiki href="https://en.wikipedia.org/wiki/Comparison_of_electoral_systems#Strategy_criteria" />
       </>
     ),
   },
@@ -218,7 +208,7 @@ export const votingTypeData = {
         the most indecisive (closest to 50/50) duels until there is an
         undefeated candidate, the winner. This popular voting system is used by
         several organizations (Ubuntu, Debian, Wikimedia...).{' '}
-        <Wiki href="https://en.wikipedia.org/wiki/Schulze_method">{W}</Wiki>
+        <Wiki href="https://en.wikipedia.org/wiki/Schulze_method" />
       </>
     ),
     criteria: {
@@ -240,9 +230,7 @@ export const votingTypeData = {
         minimize dissatisfaction of the voters. Also known as Kemeny rule,
         VoteFair popularity ranking, the maximum likelihood method, and the
         median relation.{' '}
-        <Wiki href="https://en.wikipedia.org/wiki/Kemeny%E2%80%93Young_method">
-          {W}
-        </Wiki>
+        <Wiki href="https://en.wikipedia.org/wiki/Kemeny%E2%80%93Young_method" />
       </>
     ),
     criteria: {
@@ -261,9 +249,7 @@ export const votingTypeData = {
     description: (
       <>
         Ranking the candidates by smallest pairwise defeat.{' '}
-        <Wiki href="https://en.wikipedia.org/wiki/Minimax_Condorcet_method">
-          {W}
-        </Wiki>
+        <Wiki href="https://en.wikipedia.org/wiki/Minimax_Condorcet_method" />
       </>
     ),
     criteria: {
@@ -282,9 +268,7 @@ export const votingTypeData = {
     description: (
       <>
         Rank candidates by number of duels won against other candidates.{' '}
-        <Wiki href="https://en.wikipedia.org/wiki/Copeland%27s_method">
-          {W}
-        </Wiki>
+        <Wiki href="https://en.wikipedia.org/wiki/Copeland%27s_method" />
       </>
     ),
     criteria: {
@@ -304,9 +288,7 @@ export const votingTypeData = {
       <>
         Take the two options with the fewest first preference votes. The
         pairwise loser out of those two options is eliminated. Repeat.{' '}
-        <Wiki href="https://electowiki.org/wiki/Bottom-Two-Runoff_IRV">
-          {W}
-        </Wiki>
+        <Wiki href="https://electowiki.org/wiki/Bottom-Two-Runoff_IRV" />
       </>
     ),
     criteria: {
@@ -326,7 +308,7 @@ export const votingTypeData = {
       <>
         Each voter can select (&ldquo;approve&rdquo;) any number of candidates.
         The winner is the most-approved candidate.{' '}
-        <Wiki href="https://en.wikipedia.org/wiki/Approval_voting">{W}</Wiki>
+        <Wiki href="https://en.wikipedia.org/wiki/Approval_voting" />
       </>
     ),
     criteria: {
@@ -346,7 +328,7 @@ export const votingTypeData = {
       <>
         For each voter, every candidate is given a number of points which equals
         the number of candidates ranked lower in the voter&apos;s preference.{' '}
-        <Wiki href="https://en.wikipedia.org/wiki/Borda_count">{W}</Wiki>
+        <Wiki href="https://en.wikipedia.org/wiki/Borda_count" />
       </>
     ),
     criteria: {
@@ -365,9 +347,7 @@ export const votingTypeData = {
     description: (
       <>
         Iteratively eliminate candidates with the worst Borda score.{' '}
-        <Wiki href="https://en.wikipedia.org/wiki/Nanson%27s_method#Baldwin_method">
-          {W}
-        </Wiki>
+        <Wiki href="https://en.wikipedia.org/wiki/Nanson%27s_method#Baldwin_method" />
       </>
     ),
     criteria: {
@@ -386,7 +366,7 @@ export const votingTypeData = {
     description: (
       <>
         Iteratively eliminate candidates with the below-average Borda score.{' '}
-        <Wiki href="https://en.wikipedia.org/wiki/Nanson%27s_method">{W}</Wiki>
+        <Wiki href="https://en.wikipedia.org/wiki/Nanson%27s_method" />
       </>
     ),
     criteria: {
@@ -408,9 +388,7 @@ export const votingTypeData = {
         fewest votes is eliminated. The election repeats until there is a
         winner. This voting system is very similar to single transferable vote
         method.{' '}
-        <Wiki href="https://en.wikipedia.org/wiki/Instant-runoff_voting">
-          {W}
-        </Wiki>
+        <Wiki href="https://en.wikipedia.org/wiki/Instant-runoff_voting" />
       </>
     ),
     criteria: {
@@ -430,7 +408,7 @@ export const votingTypeData = {
       <>
         Similarly to the instant-runoff. Each round, the most disliked candidate
         is eliminated{' '}
-        <Wiki href="https://en.wikipedia.org/wiki/Coombs%27_method">{W}</Wiki>
+        <Wiki href="https://en.wikipedia.org/wiki/Coombs%27_method" />
       </>
     ),
     criteria: {
@@ -450,7 +428,7 @@ export const votingTypeData = {
       <>
         If no candidate receives 50% of the votes in the first round, then a
         second round of voting is held with only the top two candidates.{' '}
-        <Wiki href="https://en.wikipedia.org/wiki/Two-round_system">{W}</Wiki>
+        <Wiki href="https://en.wikipedia.org/wiki/Two-round_system" />
       </>
     ),
     criteria: {
@@ -470,7 +448,7 @@ export const votingTypeData = {
       <>
         Simple voting method where only the preferred candidate of each voter
         gets 1 point. AKA first-past-the-post.{' '}
-        <Wiki href="https://en.wikipedia.org/wiki/Plurality_voting">{W}</Wiki>
+        <Wiki href="https://en.wikipedia.org/wiki/Plurality_voting" />
       </>
     ),
     criteria: {

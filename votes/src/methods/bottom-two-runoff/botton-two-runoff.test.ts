@@ -1,6 +1,6 @@
 import { BottomTwoRunoff } from '.'
 
-describe(BottomTwoRunoff, function () {
+describe(BottomTwoRunoff, () => {
   it('works with standard example', () => {
     const input = {
       ballots: [

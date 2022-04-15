@@ -1,13 +1,11 @@
-import React, { useLayoutEffect, useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { useStore } from '../../store'
 import {
   selectMatrix,
-  selectWidth,
   useCandidatesById,
   useCandidatesString,
 } from '../../store/selectors'
 import { ScoresSummary } from '../viz/scores-summary'
-import { ForceGraph } from '../../force-graph'
 import { RankedPairs, utils } from 'votes'
 import _ from 'lodash'
 import { Tag } from 'antd'
@@ -32,15 +30,15 @@ export const VizRankedPairs: React.FC = () => {
   const matrix = useStore(selectMatrix)
   const candidatesById = useCandidatesById()
   const candidatesStrings = useCandidatesString()
-  const width = useStore(selectWidth)
+  // const width = useStore(selectWidth)
 
   const rp = new RankedPairs(matrix)
 
-  const [divWidth, setDivWidth] = useState<null | number>(null)
+  // const [divWidth, setDivWidth] = useState<null | number>(null)
   const ref = useRef<HTMLDivElement>(null)
-  useLayoutEffect(() => {
-    if (ref.current) setDivWidth(ref.current.offsetWidth)
-  }, [width])
+  // useLayoutEffect(() => {
+  //   if (ref.current) setDivWidth(ref.current.offsetWidth)
+  // }, [width])
 
   const allEdges: Edge[] = matrix.array.flatMap(
     (row, from) =>
@@ -68,13 +66,11 @@ export const VizRankedPairs: React.FC = () => {
     })),
   )
 
-  const ag = acyclicGraph.map((c) => ({
-    ...c,
-    from: candidatesStrings[c.from],
-    to: candidatesStrings[c.to],
-  }))
-  console.log('%c ag', 'background: #222; color: #bada55', ag)
-
+  // const ag = acyclicGraph.map((c) => ({
+  //   ...c,
+  //   from: candidatesStrings[c.from],
+  //   to: candidatesStrings[c.to],
+  // }))
   return (
     <div className="container" ref={ref}>
       <ScoresSummary scores={rp.scores()} candidatesById={candidatesById} />
@@ -90,7 +86,7 @@ export const VizRankedPairs: React.FC = () => {
           </Tag>
         )),
       )}
-      {divWidth && candidatesStrings.length > 2 && <ForceGraph />}
+      {/*{divWidth && candidatesStrings.length > 2 && <ForceGraph />}*/}
 
       <style jsx>{`
         .li {

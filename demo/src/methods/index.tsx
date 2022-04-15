@@ -1,16 +1,15 @@
+import { VotingSystem } from 'votes'
+import { DemoSystems } from '../store'
+import { MethodElements } from './types'
 import { baldwin } from './baldwin'
 import { borda } from './borda'
-import { instantRunoff } from './instant-runoff'
-import { fptp } from './fptp'
-import { twoRoundsRunoff } from './two-rounds'
-import { copeland } from './copeland'
-import { VotingSystem } from 'votes'
-import { MethodElements } from './types'
-import { DemoSystems } from '../store'
-import { nanson } from './nanson'
+import { bottomTwo } from './bottom-two'
 import { coombs } from './coombs'
-import { bottomTwo } from './bottomTwo'
-import { rankedPairs } from './ranked-pairs'
+import { copeland } from './copeland'
+import { fptp } from './fptp'
+import { instantRunoff } from './instant-runoff'
+import { nanson } from './nanson'
+import { twoRoundsRunoff } from './two-rounds'
 
 export const methods: { [k in DemoSystems]: MethodElements } = {
   [VotingSystem.Baldwin]: baldwin,
@@ -18,9 +17,8 @@ export const methods: { [k in DemoSystems]: MethodElements } = {
   [VotingSystem.BottomTwoRunoff]: bottomTwo,
   [VotingSystem.Coombs]: coombs,
   [VotingSystem.Copeland]: copeland,
-  [VotingSystem.InstantRunoff]: instantRunoff,
-  [VotingSystem.TwoRoundRunoff]: twoRoundsRunoff,
   [VotingSystem.FirstPastThePost]: fptp,
+  [VotingSystem.InstantRunoff]: instantRunoff,
   [VotingSystem.Nanson]: nanson,
-  [VotingSystem.RankedPairs]: rankedPairs,
+  [VotingSystem.TwoRoundRunoff]: twoRoundsRunoff,
 }

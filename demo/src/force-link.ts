@@ -1,6 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-
-import { SimulationLinkDatum, SimulationNodeDatum } from 'd3-force'
+import { Force, SimulationLinkDatum, SimulationNodeDatum } from 'd3-force'
 
 function constant(x) {
   return function () {
@@ -25,7 +25,7 @@ function find(nodeById, nodeId) {
 export function forceLink<
   NodeDatum extends SimulationNodeDatum,
   LinkDatum extends SimulationLinkDatum<NodeDatum> & { weight: number },
->(links: LinkDatum[] | null) {
+>(links: LinkDatum[] | null): Force {
   let id = index,
     strength = defaultStrength,
     strengths
@@ -42,7 +42,7 @@ export function forceLink<
     return 1 / Math.min(count[link.source.index], count[link.target.index])
   }
 
-  function force(alpha: number) {
+  function force(alpha: number): void {
     for (let k = 0, n = links.length; k < iterations; ++k) {
       let link, source, target, x, y, l, b
       for (let i = 0; i < n; ++i) {
@@ -72,11 +72,11 @@ export function forceLink<
   function initialize() {
     if (!nodes) return
 
-    let i,
-      n = nodes.length,
-      m = links.length,
-      nodeById = new Map(nodes.map((d, i) => [id(d, i, nodes), d])),
-      link
+    let i
+    const n = nodes.length
+    const m = links.length
+    const nodeById = new Map(nodes.map((d, i) => [id(d, i, nodes), d]))
+    let link
 
     for (i = 0, count = new Array(n); i < m; ++i) {
       ;(link = links[i]), (link.index = i)

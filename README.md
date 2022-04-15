@@ -126,4 +126,5 @@ The repository is split in 2 projects:
 
 - **/votes** contains the source of the NPM package
   [votes](https://www.npmjs.com/package/votes)
+
 - **/demo** contains the source of the sandbox website

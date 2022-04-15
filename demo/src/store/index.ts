@@ -34,7 +34,7 @@ export enum DemoSystems {
   // RandomizedCondorcet = 'RANDOMIZED_CONDORCET',
   // RandomCandidates = 'RANDOM_CANDIDATES',
   // RandomDictator = 'RANDOM_DICTATOR',
-  RankedPairs = 'RANKED_PAIRS',
+  // RankedPairs = 'RANKED_PAIRS',
   // Schulze = 'SCHULZE',
   TwoRoundRunoff = 'TWO_ROUND_RUNOFF',
 }

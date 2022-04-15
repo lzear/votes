@@ -48,6 +48,7 @@
     "react-spring": "^9.4.4",
     "react-with-gesture": "^4.0.8",
     "typescript": "4.6.3",
+    "votes": "2.0.0",
     "zustand": "^3.7.2"
   },
   "devDependencies": {

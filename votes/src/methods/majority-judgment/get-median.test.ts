@@ -1,6 +1,6 @@
 import { getMedian } from '.'
 
-describe(getMedian, function () {
+describe(getMedian, () => {
   it('returns 0 for 0 filled array', () => {
     expect(getMedian([])).toBe(-1)
     expect(getMedian([0])).toBe(-1)

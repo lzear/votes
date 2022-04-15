@@ -338,12 +338,6 @@ export const BordaTreeMapInner: React.FC<{
       const ballot = ballots.find((b) => b.id === ballotId)
       const box = bboxes.find((b) => b.id === target.id)
       const bb = target.getBoundingClientRect()
-      console.log(
-        '%c a.hovering',
-        'background: #222; color: #bada55',
-        a.hovering,
-      )
-
       if (!a.hovering) api.start({ opacity: 0 })
       else if (ref.current && ballot && box) {
         const boundingRect = ref.current?.getBoundingClientRect()

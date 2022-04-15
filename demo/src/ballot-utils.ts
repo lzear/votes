@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import type { Ballot } from 'votes'
-import { totalWeight } from './generate-ballots'
+import { totalWeight, WithWeights } from './generate-ballots'
 
 export const serializeRank = (rank: string[]): string =>
   JSON.stringify(rank.sort((a, b) => a.localeCompare(b)))
@@ -24,13 +24,15 @@ export const mergeBallots = <B extends Ballot>(
 
   return Object.values(grouped).map((ballotsInGroup, idx) => ({
     ...ballotsInGroup[0],
-    weight: totalWeight(ballotsInGroup),
     idx,
+    weight: totalWeight(ballotsInGroup),
   }))
 }
 
-export const normalizeWeights100 = <B extends Ballot>(ballots: B[]): B[] => {
-  const oldBallots = [...ballots]
+export const normalizeWeights100 = <B extends Ballot & WithWeights>(
+  ballots: B[],
+): B[] => {
+  const oldBallots: B[] = [...ballots]
   const newBallots = []
 
   let totOld = totalWeight(oldBallots)

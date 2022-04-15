@@ -11,6 +11,5 @@ module.exports = {
   },
   rules: {
     'jsx-quotes': 2,
-    'react/jsx-curly-brace-presence': [2, 'never'],
   },
 }

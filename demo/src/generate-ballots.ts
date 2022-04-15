@@ -61,7 +61,7 @@ export const updateCandidateList = (
   return list
 }
 
-type WithWeights = { weight: number }
+export type WithWeights = { weight: number }
 export const totalWeight = (ballots: WithWeights[]): number =>
   ballots.reduce((acc, ballot) => acc + ballot.weight, 0)
 

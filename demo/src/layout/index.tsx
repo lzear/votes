@@ -5,7 +5,9 @@ import React from 'react'
 
 const { Header, Content } = Layout
 
-export const MyLayout: React.FC = ({ children }) => {
+export const MyLayout: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   return (
     <Layout id="layout">
       {/*<div id="scroll" className="scroll">*/}

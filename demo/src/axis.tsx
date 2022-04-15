@@ -92,9 +92,9 @@ export const AxisRank: React.FC<{
 const e10 = Math.sqrt(50),
   e5 = Math.sqrt(10),
   e2 = Math.sqrt(2)
-function tickIncrement(start: number, stop: number, count: number) {
+function tickIncrement(start: number, stop: number, count: number): number {
   const step = (stop - start) / Math.max(0, count),
-    power = Math.floor(Math.log(step) / Math.LN10),
+    power = Math.floor(Math.log10(step)),
     error = step / Math.pow(10, power)
   return power >= 0
     ? (error >= e10 ? 10 : error >= e5 ? 5 : error >= e2 ? 2 : 1) *

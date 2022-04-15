@@ -1,6 +1,6 @@
 import { BiggestSupport } from '.'
 
-describe(BiggestSupport, function () {
+describe(BiggestSupport, () => {
   it('works with standard example', () => {
     const bs = new BiggestSupport({
       ballots: [

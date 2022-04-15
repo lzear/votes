@@ -3,4 +3,4 @@
  */
 import { Force } from 'd3-force'
 
-export const forceLink: Force<any, any>
+export const forceLink: Force<unknown, unknown>
