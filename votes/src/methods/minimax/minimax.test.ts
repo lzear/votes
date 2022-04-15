@@ -1,36 +1,37 @@
-import { Borda } from '.'
+import { Minimax } from '.'
 import { abcde, balinski } from '../../test/test-utils'
+import { matrixFromBallots } from '../../utils'
 
-describe(Borda, () => {
+describe(Minimax, () => {
   it('scores', () => {
-    const election = new Borda({ candidates: abcde, ballots: balinski })
+    const election = new Minimax(matrixFromBallots(balinski, abcde))
     expect(election.scores()).toStrictEqual({
-      a: 235,
-      b: 347,
-      c: 344,
-      d: 292,
-      e: 282,
+      a: -34,
+      b: -2,
+      c: -0,
+      d: -58,
+      e: -40,
     })
   })
 
   it('ranks', () => {
-    const election = new Borda({ candidates: abcde, ballots: balinski })
+    const election = new Minimax(matrixFromBallots(balinski, abcde))
     expect(election.ranking()).toStrictEqual([
-      ['b'],
       ['c'],
-      ['d'],
-      ['e'],
+      ['b'],
       ['a'],
+      ['e'],
+      ['d'],
     ])
   })
 
   it('has candidates', () => {
-    const election = new Borda({ candidates: abcde, ballots: balinski })
+    const election = new Minimax(matrixFromBallots(balinski, abcde))
     expect(election.candidates).toStrictEqual(abcde)
   })
 
   it('makes matrix', () => {
-    const election = new Borda({ candidates: abcde, ballots: balinski })
+    const election = new Minimax(matrixFromBallots(balinski, abcde))
     expect(election.matrix).toStrictEqual({
       array: [
         [0, 33, 33, 33, 36],
