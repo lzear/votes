@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "yarn workspace votes preconstruct dev && next dev",
-    "build": "next build",
+    "build": "yarn workspace votes build && yarn workspace votes link && yarn link votes && next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -28,6 +28,7 @@
     "@types/react": "18.0.5",
     "@use-gesture/react": "^10.2.11",
     "antd": "^4.19.5",
+    "babel-preset-next": "^1.4.0",
     "d3": "^7.4.4",
     "d3-dispatch": "^3.0.1",
     "d3-force": "^3.0.0",
