@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['next/babel', 'next/core-web-vitals'],
+  extends: ['next/core-web-vitals'],
   parserOptions: {
     ecmaVersion: 2022
   },
