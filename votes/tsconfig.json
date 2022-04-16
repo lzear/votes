@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "module": "es6",
+    "strict": true,
+    "declaration": true,
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true,
+
+    "lib": ["es2020"],
+    "removeComments": true,
+    "target": "ESNext",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "downlevelIteration": true,
+    "sourceMap": true,
+    "alwaysStrict": true,
+    "allowUnreachableCode": false,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true
+  },
+  "types": ["node"],
+  "exclude": ["**/*.test.ts", "src/test"],
+  "include": ["src"]
+}

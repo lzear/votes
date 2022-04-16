@@ -15,3 +15,5 @@ docs
 
 **/*.rej
 *.rej
+
+demo/.next

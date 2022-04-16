@@ -6,26 +6,27 @@ jobs:
   release:
     name: Test coverage
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./votes
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - uses: actions/setup-node@v2-beta
         with:
-          node-version: '12'
+          node-version: '16'
       - run: yarn install
       - run: yarn test
-      - run:
-          curl -L
-          https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
-          > ./cc-test-reporter
+      - run: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
+          ./cc-test-reporter format-coverage -t lcov -o coverage/codeclimate.json coverage/lcov.info
+          ./cc-test-reporter upload-coverage
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       - run: ./tools/codacy-cov.sh
         env:
           CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
       - run: ./tools/codecov.sh
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      - uses: paambaati/codeclimate-action@v2.7.4
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        with:
-          coverageCommand: yarn test

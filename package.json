@@ -1,16 +1,15 @@
 {
-  "name": "votes",
-  "version": "",
-  "description": "Implementation of some [electoral systems](https://en.wikipedia.org/wiki/Electoral_system)",
-  "keywords": [],
+  "name": "votes--root",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "d3-force",
+      "demo",
+      "votes"
+    ]
+  },
   "sideEffects": false,
-  "main": "dist/votes.umd.js",
-  "module": "dist/votes.es5.js",
-  "types": "dist/votes.d.ts",
-  "files": [
-    "dist",
-    "src"
-  ],
   "author": "lzear",
   "repository": {
     "type": "git",
@@ -20,23 +19,50 @@
   "scripts": {
     "eslint": "eslint --ext .js --ext .ts .",
     "fix:prettier": "prettier --write \"**/*.*\"",
-    "prebuild": "rimraf dist",
-    "build": "rollup -c rollup.config.js && npx typedoc src/votes.ts",
-    "build:watch": "tsc --module commonjs && rollup -c rollup.config.js -w",
-    "test": "jest --coverage",
-    "test:watch": "jest --coverage --watch",
-    "test:prod": "yarn run eslint && yarn run test -- --no-cache",
-    "deploy-docs": "ts-node tools/gh-pages-publish",
+    "test": "yarn workspace votes test",
+    "test-prod": "yarn run eslint && yarn workspaces run test-prod",
     "commit": "git-cz",
-    "semantic-release": "semantic-release",
     "precommit": "lint-staged",
-    "travis-deploy-once": "travis-deploy-once",
-    "updatedeps": "npx npm-check-updates -u"
+    "publish": "yarn workspaces run build && changesets publish"
   },
+  "dependencies": {
+    "@babel/core": "^7.17.9",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-typescript": "^7.16.7",
+    "@changesets/changelog-github": "^0.4.4",
+    "@changesets/cli": "^2.22.0",
+    "@commitlint/cli": "^16.2.3",
+    "@commitlint/config-conventional": "^16.2.1",
+    "@preconstruct/cli": "^2.1.5",
+    "@preconstruct/hook": "^0.4.0",
+    "@types/node": "^17.0.24",
+    "@typescript-eslint/eslint-plugin": "^5.19.0",
+    "@typescript-eslint/parser": "^5.19.0",
+    "commitizen": "^4.2.4",
+    "dotenv": "^16.0.0",
+    "eslint": "^8.13.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-unicorn": "^42.0.0",
+    "eslint-scope": "^7.1.1",
+    "eslint-visitor-keys": "^3.3.0",
+    "husky": "^7.0.4",
+    "is-boolean-object": "^1.1.2",
+    "lint-staged": "^12.3.7",
+    "prettier": "^2.6.2",
+    "typescript": "4.6.3"
+  },
+  "bugs": {
+    "url": "https://github.com/lzear/votes/issues"
+  },
+  "homepage": "https://github.com/lzear/votes",
   "lint-staged": {
     "{src,test}/**/*.ts": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   },
   "config": {
@@ -49,57 +75,12 @@
       "@commitlint/config-conventional"
     ]
   },
-  "devDependencies": {
-    "@commitlint/cli": "^12.1.4",
-    "@rollup/plugin-commonjs": "^19.0.0",
-    "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^13.0.0",
-    "@types/jest": "^26.0.23",
-    "@types/lodash": "^4.14.170",
-    "@types/node": "^15.12.2",
-    "@typescript-eslint/eslint-plugin": "^4.26.1",
-    "@typescript-eslint/parser": "^4.26.1",
-    "commitizen": "^4.2.4",
-    "dotenv": "^10.0.0",
-    "eslint": "^7.28.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "husky": "^6.0.0",
-    "jest": "^27.0.4",
-    "lint-staged": "^11.0.0",
-    "prettier": "^2.3.1",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.51.1",
-    "rollup-plugin-sizes": "^1.0.4",
-    "rollup-plugin-sourcemaps": "^0.6.3",
-    "rollup-plugin-typescript2": "^0.30.0",
-    "semantic-release": "^17.4.3",
-    "shelljs": "^0.8.4",
-    "travis-deploy-once": "^5.0.11",
-    "ts-jest": "^27.0.3",
-    "ts-node": "^10.0.0",
-    "tslib": "^2.2.0",
-    "typedoc": "^0.20.36",
-    "typescript": "4.2.4"
-  },
-  "dependencies": {
-    "lodash": "^4.17.21"
-  },
-  "bugs": {
-    "url": "https://github.com/lzear/votes/issues"
-  },
-  "homepage": "https://github.com/lzear/votes",
-  "directories": {
-    "doc": "docs",
-    "test": "test"
-  },
-  "release": {
-    "branches": [
-      "master",
-      {
-        "name": "next",
-        "channel": "next"
-      }
+  "preconstruct": {
+    "packages": [
+      "votes"
     ]
+  },
+  "volta": {
+    "node": "17.9.0"
   }
 }

@@ -15,3 +15,5 @@ docs
 
 **/*.rej
 *.rej
+
+votes/tools/gh-pages-publish.ts

@@ -1,0 +1,3 @@
+[submodule "d3-force"]
+	path = d3-force
+	url = https://github.com/lzear/d3-force.git
