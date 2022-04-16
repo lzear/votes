@@ -1,4 +1,4 @@
-import { Minimax } from '.'
+import { Minimax, MinimaxVariant } from '.'
 import { abcde, balinski } from '../../test/test-utils'
 import { matrixFromBallots } from '../../utils'
 
@@ -14,9 +14,81 @@ describe(Minimax, () => {
     })
   })
 
+  it('scores with variants', () => {
+    const election1 = new Minimax({
+      ...matrixFromBallots(balinski, abcde),
+      variant: MinimaxVariant.WinningVotes,
+    })
+    expect(election1.scores()).toStrictEqual({
+      a: -67,
+      b: -51,
+      c: -0,
+      d: -79,
+      e: -70,
+    })
+    const election2 = new Minimax({
+      ...matrixFromBallots(balinski, abcde),
+      variant: MinimaxVariant.Margins,
+    })
+    expect(election2.scores()).toStrictEqual({
+      a: -34,
+      b: -2,
+      c: -0,
+      d: -58,
+      e: -40,
+    })
+    const election3 = new Minimax({
+      ...matrixFromBallots(balinski, abcde),
+      variant: MinimaxVariant.PairwiseOpposition,
+    })
+    expect(election3.scores()).toStrictEqual({
+      a: -67,
+      b: -51,
+      c: -49,
+      d: -79,
+      e: -70,
+    })
+  })
+
   it('ranks', () => {
     const election = new Minimax(matrixFromBallots(balinski, abcde))
     expect(election.ranking()).toStrictEqual([
+      ['c'],
+      ['b'],
+      ['a'],
+      ['e'],
+      ['d'],
+    ])
+  })
+
+  it('ranks the same for all variants with Balinski', () => {
+    const election1 = new Minimax({
+      ...matrixFromBallots(balinski, abcde),
+      variant: MinimaxVariant.WinningVotes,
+    })
+    expect(election1.ranking()).toStrictEqual([
+      ['c'],
+      ['b'],
+      ['a'],
+      ['e'],
+      ['d'],
+    ])
+    const election2 = new Minimax({
+      ...matrixFromBallots(balinski, abcde),
+      variant: MinimaxVariant.Margins,
+    })
+    expect(election2.ranking()).toStrictEqual([
+      ['c'],
+      ['b'],
+      ['a'],
+      ['e'],
+      ['d'],
+    ])
+    const election3 = new Minimax({
+      ...matrixFromBallots(balinski, abcde),
+      variant: MinimaxVariant.PairwiseOpposition,
+    })
+    expect(election3.ranking()).toStrictEqual([
       ['c'],
       ['b'],
       ['a'],
