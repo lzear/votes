@@ -22,8 +22,7 @@
     "test": "yarn workspace votes test",
     "test-prod": "yarn run eslint && yarn workspaces run test-prod",
     "commit": "git-cz",
-    "precommit": "lint-staged",
-    "publish": "yarn workspaces run build && changesets publish"
+    "precommit": "lint-staged"
   },
   "dependencies": {
     "@babel/core": "^7.17.9",

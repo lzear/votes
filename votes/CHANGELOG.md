@@ -1,6 +1,13 @@
 # votes
 
-## 2.0.0
+## 2.0.3
+
+### Patch Changes
+
+- Add the
+  [variants for Minimax Condorcet](https://en.wikipedia.org/wiki/Minimax_Condorcet_method#Variants_of_the_pairwise_score)
+
+## 2.0.2
 
 ### Major Changes
 
@@ -63,7 +70,7 @@
   ## Added systems
 
   - **Random candidate**: Selects a random ranking, regardless of ballots.
-  
+
   - **Random dictator**: Selects a random ballot that decides the ranking.
 
   - **Bottom-two-runoff**: take the two options with the fewest first preference
