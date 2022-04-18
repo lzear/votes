@@ -3,7 +3,7 @@ import { Ballot, ScoreObject } from '../../types'
 import { BallotMethod } from '../../classes/ballot-method'
 import { scoresToRanking } from '../../utils'
 
-type Judgements = {
+export type Judgements = {
   [candidate: string]: [number, number, number, number, number, number]
 }
 

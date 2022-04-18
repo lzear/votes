@@ -1,4 +1,4 @@
-import { Minimax, MinimaxVariant } from '.'
+import { Minimax } from '.'
 import { abcde, balinski } from '../../test/test-utils'
 import { matrixFromBallots } from '../../utils'
 
@@ -17,7 +17,7 @@ describe(Minimax, () => {
   it('scores with variants', () => {
     const election1 = new Minimax({
       ...matrixFromBallots(balinski, abcde),
-      variant: MinimaxVariant.WinningVotes,
+      variant: Minimax.Variants.WinningVotes,
     })
     expect(election1.scores()).toStrictEqual({
       a: -67,
@@ -28,7 +28,7 @@ describe(Minimax, () => {
     })
     const election2 = new Minimax({
       ...matrixFromBallots(balinski, abcde),
-      variant: MinimaxVariant.Margins,
+      variant: Minimax.Variants.Margins,
     })
     expect(election2.scores()).toStrictEqual({
       a: -34,
@@ -39,7 +39,7 @@ describe(Minimax, () => {
     })
     const election3 = new Minimax({
       ...matrixFromBallots(balinski, abcde),
-      variant: MinimaxVariant.PairwiseOpposition,
+      variant: Minimax.Variants.PairwiseOpposition,
     })
     expect(election3.scores()).toStrictEqual({
       a: -67,
@@ -64,7 +64,7 @@ describe(Minimax, () => {
   it('ranks the same for all variants with Balinski', () => {
     const election1 = new Minimax({
       ...matrixFromBallots(balinski, abcde),
-      variant: MinimaxVariant.WinningVotes,
+      variant: Minimax.Variants.WinningVotes,
     })
     expect(election1.ranking()).toStrictEqual([
       ['c'],
@@ -75,7 +75,7 @@ describe(Minimax, () => {
     ])
     const election2 = new Minimax({
       ...matrixFromBallots(balinski, abcde),
-      variant: MinimaxVariant.Margins,
+      variant: Minimax.Variants.Margins,
     })
     expect(election2.ranking()).toStrictEqual([
       ['c'],
@@ -86,7 +86,7 @@ describe(Minimax, () => {
     ])
     const election3 = new Minimax({
       ...matrixFromBallots(balinski, abcde),
-      variant: MinimaxVariant.PairwiseOpposition,
+      variant: Minimax.Variants.PairwiseOpposition,
     })
     expect(election3.ranking()).toStrictEqual([
       ['c'],
