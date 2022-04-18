@@ -13,6 +13,7 @@
 ![codecov](https://codecov.io/gh/lzear/votes/branch/master/graph/badge.svg?token=Fd9Jk4FeBY)
 ![last commit](https://img.shields.io/github/last-commit/lzear/votes)
 ![language](https://img.shields.io/github/languages/top/lzear/votes)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Frank-votes.vercel.app%2F)](https://rank-votes.vercel.app/)
 [![license](https://img.shields.io/github/license/lzear/votes)](https://github.com/lzear/votes/blob/master/LICENSE)
 
 ## 🧑‍💻 Install
@@ -42,12 +43,21 @@ const ranking = borda.ranking()
 // -> [ [ 'Bear' ], [ 'Sheep' ], [ 'Lion' ] ]
 ```
 
-## 📊 Voting systems
+## 📚 Documentation
 
-For more information, read
-[Comparison of electoral systems (Wikipedia)](https://en.wikipedia.org/wiki/Comparison_of_electoral_systems)
-, or the blog post
-[🗳 Ranked voting systems](https://www.elzear.de/posts/2021-01-10-polls).
+- 🧪 Demo/Playground: [rank-votes.vercel.app](https://rank-votes.vercel.app/)
+  _(work in progress!)_
+
+- 🧑‍🏫 Blog post on my website:
+  [🗳 Ranked voting systems](https://www.elzear.de/posts/2021-01-10-polls)
+
+- 💩 Library documentation
+  [lzear.github.io/votes](https://lzear.github.io/votes/)
+
+- 🤓 Good Wikipedia article:
+  [Comparison of electoral systems](https://en.wikipedia.org/wiki/Comparison_of_electoral_systems)
+
+## 📊 Voting systems
 
 **Absolute majority**: Checks if a candidate is ranked first by more than 50% of
 voters.

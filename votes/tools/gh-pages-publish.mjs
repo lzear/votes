@@ -1,14 +1,18 @@
 /* tslint:disable */
 
-const { cd, exec, echo, touch } = require('shelljs')
-const { readFileSync } = require('fs')
-const url = require('url')
-const dotenv = require('dotenv')
+import shelljs from "shelljs";
 
+import { readFileSync } from "fs";
+
+import url from "url";
+import dotenv from "dotenv";
+
+const { cd, echo, exec, touch } = shelljs
 dotenv.config()
 
 let repoUrl
-const pkg = JSON.parse(readFileSync('package.json') as any)
+const pkg = JSON.parse(readFileSync('package.json'))
+
 if (typeof pkg.repository === 'object') {
   if (!pkg.repository.hasOwnProperty('url')) {
     throw new Error('URL does not exist in repository section')
