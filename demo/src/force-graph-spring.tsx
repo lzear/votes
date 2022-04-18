@@ -12,7 +12,7 @@ import { a, useSprings } from '@react-spring/web'
 import { curvedPath } from './curved-path'
 import { randomString } from './random-string'
 import { useStore } from './store'
-import { selectMatrix } from './store/selectors'
+import { selectSkewMatrix } from './store/selectors'
 
 const width = 600
 const height = 600
@@ -39,7 +39,7 @@ type Link = {
 }
 
 export const ForceGraph: React.FC = () => {
-  const matrix = useStore(selectMatrix)
+  const matrix = useStore(selectSkewMatrix)
   const [divId] = useState(randomString())
   const links = matrix.array
     .flatMap(

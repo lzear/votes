@@ -29,7 +29,7 @@ export enum DemoSystems {
   // Kemeny = 'KEMENY',
   InstantRunoff = 'INSTANT_RUNOFF',
   // MaximalLotteries = 'MAXIMAL_LOTTERIES',
-  // Minimax = 'MINIMAX',
+  Minimax = 'MINIMAX',
   Nanson = 'NANSON',
   // RandomizedCondorcet = 'RANDOMIZED_CONDORCET',
   // RandomCandidates = 'RANDOM_CANDIDATES',

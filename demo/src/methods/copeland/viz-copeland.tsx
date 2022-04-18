@@ -1,11 +1,11 @@
 import React, { useRef } from 'react'
 import { useStore } from '../../store'
-import { selectMatrix, useCandidatesById } from '../../store/selectors'
+import { selectSkewMatrix, useCandidatesById } from '../../store/selectors'
 import { ScoresSummary } from '../viz/scores-summary'
 import { Copeland } from 'votes'
 
 export const VizCopeland: React.FC = () => {
-  const matrix = useStore(selectMatrix)
+  const matrix = useStore(selectSkewMatrix)
   const candidatesById = useCandidatesById()
   // const candidatesStrings = useCandidatesString()
   // const width = useStore(selectWidth)

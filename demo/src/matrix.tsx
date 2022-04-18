@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { trafficColor } from './traffic-color'
 import { useStore } from './store'
 import {
@@ -6,19 +6,39 @@ import {
   selectSetHighlightCandidates,
   useCandidatesById,
 } from './store/selectors'
-import { Typography } from 'antd'
+import { Checkbox, Typography } from 'antd'
 import { CandiTag } from './candidates'
 import shallow from 'zustand/shallow'
+import { utils } from 'votes'
 
 export const MatrixComp: React.FC = () => {
-  const matrix = useStore(selectMatrix, shallow)
+  const [skew, setSkew] = useState(false)
+  const _matrix = useStore(selectMatrix, shallow)
+  const matrix = skew ? utils.makeAntisymetric(_matrix) : _matrix
   const setHighlighted = useStore(selectSetHighlightCandidates, shallow)
   const candidatesById = useCandidatesById()
   const maxScore =
     matrix.array.reduce((acc, row) => Math.max(acc, ...row), 0) || 1
+
+  const minScore =
+    matrix.array.reduce(
+      (acc, row, rowIdx) =>
+        Math.min(acc, ...row.filter((_v, colIdx) => colIdx !== rowIdx)),
+      Infinity,
+    ) || 0
+
+  const score = (v: number) => (v - minScore) / (maxScore - minScore)
+
   return (
     <div className="container">
       <Typography.Title level={5}>Matrix of duels</Typography.Title>
+      <Checkbox
+        value={skew}
+        name={'Ske'}
+        onChange={(v) => setSkew(v.target.checked)}
+      >
+        Normalize to skew matrix
+      </Checkbox>
       <div className="scroll">
         <table>
           <thead>
@@ -49,13 +69,13 @@ export const MatrixComp: React.FC = () => {
                         style={{
                           // color: '#000',
                           background: trafficColor(
-                            matrix.array[k1][k2] / maxScore / 2 + 0.5,
+                            score(matrix.array[k1][k2]),
                             // 30 + (30 * Math.abs(matrix.array[k1][k2])) / maxScore,
                             // 95 - (30 * Math.abs(matrix.array[k1][k2])) / maxScore,
                             45 +
-                              (10 * Math.abs(matrix.array[k1][k2])) / maxScore,
+                              20 * Math.abs(score(matrix.array[k1][k2]) - 0.5),
                             55 -
-                              (10 * Math.abs(matrix.array[k1][k2])) / maxScore,
+                              20 * Math.abs(score(matrix.array[k1][k2]) - 0.5),
                           ),
                         }}
                         onFocus={() => setHighlighted([c1, c2])}

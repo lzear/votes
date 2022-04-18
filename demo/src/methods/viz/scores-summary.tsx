@@ -22,7 +22,6 @@ export const ScoresSummary: React.FC<{
         Scores
       </Typography.Title>
       <QuickScores candidatesById={candidatesById} scoreObject={scores} />
-
       <style jsx>{`
         .block {
           margin-bottom: 20px;

@@ -31,6 +31,9 @@ const computeScores = (
 
 export class Minimax extends MatrixScoreMethod {
   public minimaxVariant: MinimaxVariant
+
+  public static Variants = MinimaxVariant
+
   constructor(i: Matrix & { variant?: MinimaxVariant }) {
     super(i)
     this.minimaxVariant = i.variant || MinimaxVariant.Margins

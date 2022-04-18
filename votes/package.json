@@ -27,7 +27,7 @@
     "test-prod": "yarn run test && yarn run build",
     "prebuild": "rimraf dist",
     "build": "preconstruct build && yarn typedoc",
-    "publish-docs": "ts-node tools/gh-pages-publish",
+    "publish-docs": "node tools/gh-pages-publish.mjs",
     "release": "cp ../README.md . && yarn run build && changeset publish",
     "typedoc": "npx typedoc src/index.ts --tsconfig tsconfig.typedoc.json"
   },
@@ -37,6 +37,7 @@
     "@types/lodash": "^4.14.181",
     "@types/lodash-es": "^4.17.6",
     "@types/node": "^17.0.24",
+    "@types/shelljs": "^0.8.11",
     "@typescript-eslint/eslint-plugin": "^5.19.0",
     "@typescript-eslint/parser": "^5.19.0",
     "dotenv": "^16.0.0",

@@ -8,6 +8,7 @@ import { coombs } from './coombs'
 import { copeland } from './copeland'
 import { fptp } from './fptp'
 import { instantRunoff } from './instant-runoff'
+import { minimax } from './minimax'
 import { nanson } from './nanson'
 import { twoRoundsRunoff } from './two-rounds'
 
@@ -19,6 +20,7 @@ export const methods: { [k in DemoSystems]: MethodElements } = {
   [VotingSystem.Copeland]: copeland,
   [VotingSystem.FirstPastThePost]: fptp,
   [VotingSystem.InstantRunoff]: instantRunoff,
+  [VotingSystem.Minimax]: minimax,
   [VotingSystem.Nanson]: nanson,
   [VotingSystem.TwoRoundRunoff]: twoRoundsRunoff,
 }
