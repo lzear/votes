@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import { useStore } from '../../store'
 import {
-  selectMatrix,
+  selectSkewMatrix,
   useCandidatesById,
   useCandidatesString,
 } from '../../store/selectors'
@@ -27,7 +27,7 @@ const colorClass = (ok: boolean | null) => {
 }
 
 export const VizRankedPairs: React.FC = () => {
-  const matrix = useStore(selectMatrix)
+  const matrix = useStore(selectSkewMatrix)
   const candidatesById = useCandidatesById()
   const candidatesStrings = useCandidatesString()
   // const width = useStore(selectWidth)

@@ -69,6 +69,9 @@ export const selectSelectedBallot = (store: Store) =>
   null
 
 export const selectMatrix = ({ ballots, candidates }: Store) =>
+  matrixFromBallots(ballots, candidates)
+
+export const selectSkewMatrix = ({ ballots, candidates }: Store) =>
   makeAntisymetric(matrixFromBallots(ballots, candidates))
 
 export const selectCandidatesColors = ({ candidates }: Store) => {
