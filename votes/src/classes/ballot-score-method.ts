@@ -7,6 +7,7 @@ export abstract class BallotScoreMethod
   extends ScoreMethod
   implements Scorer, Matrixer
 {
+  public static readonly needsBallot = true
   protected readonly ballots: Ballot[]
   private _matrix?: Matrix
 

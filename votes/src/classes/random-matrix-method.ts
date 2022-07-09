@@ -37,6 +37,8 @@ export abstract class RandomMatrixMethod
   extends RandomMethod
   implements Scorer, Matrixer
 {
+  public static readonly needsMatrix = true
+
   private readonly _matrix: Matrix
 
   constructor(i: Matrix & { rng?: () => number }) {

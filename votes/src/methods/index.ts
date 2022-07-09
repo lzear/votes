@@ -42,3 +42,5 @@ export const methods = {
   [VotingSystem.Schulze]: Schulze,
   [VotingSystem.TwoRoundRunoff]: TwoRoundRunoff,
 } as const
+
+export type Methods = typeof methods[keyof typeof methods]

@@ -6,6 +6,10 @@ export interface Ranker {
 }
 
 export abstract class Method implements Ranker {
+  public static readonly needsMatrix: boolean = false
+  public static readonly needsBallot: boolean = false
+  public static readonly isRandom: boolean = false
+
   constructor(readonly candidates: string[]) {}
 
   public abstract ranking(): string[][]

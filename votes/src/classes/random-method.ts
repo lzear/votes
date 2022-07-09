@@ -3,6 +3,8 @@ import { ScoreObject } from '../types'
 import { Method } from './method'
 
 export abstract class RandomMethod extends Method implements Scorer {
+  public static readonly isRandom = true
+
   protected readonly rng: () => number
 
   constructor(i: { candidates: string[]; rng?: () => number }) {

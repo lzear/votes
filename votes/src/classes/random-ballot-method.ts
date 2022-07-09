@@ -6,6 +6,8 @@ export abstract class RandomBallotMethod
   extends BallotMethod
   implements Ranker
 {
+  public static readonly isRandom = true
+
   protected readonly rng: () => number
 
   protected constructor(i: {

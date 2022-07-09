@@ -9,6 +9,7 @@ export abstract class MatrixScoreMethod
   extends ScoreMethod
   implements Scorer, Matrixer
 {
+  public static readonly needsMatrix = true
   private readonly _matrix: Matrix
 
   constructor(i: Matrix) {
