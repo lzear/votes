@@ -66,5 +66,8 @@
   "directories": {
     "doc": "docs",
     "test": "test"
+  },
+  "volta": {
+    "node": "16.16.0"
   }
 }
