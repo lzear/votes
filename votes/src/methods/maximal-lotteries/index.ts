@@ -1,6 +1,6 @@
 import zipObject from 'lodash/zipObject'
 import { solve } from '../../simplex'
-import { Matrix, ScoreObject } from '../../types'
+import type { Matrix, ScoreObject } from '../../types'
 import { findCondorcet } from '../../utils/condorcet'
 import { makeAntisymetric } from '../../utils'
 import { scoresZero } from '../../utils/scores-zero'

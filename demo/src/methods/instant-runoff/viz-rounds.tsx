@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Ballot, Round, utils } from 'votes'
+import type { Ballot, Round } from 'votes'
+import { utils } from 'votes'
 import numeral from 'numeral'
 import { Candidate } from '../../generate-ballots'
 import {

@@ -1,5 +1,5 @@
-import { Scorer } from './score-method'
-import { ScoreObject } from '../types'
+import type { Scorer } from './score-method'
+import type { ScoreObject } from '../types'
 import { Method } from './method'
 
 export abstract class RandomMethod extends Method implements Scorer {

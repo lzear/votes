@@ -1,4 +1,4 @@
-import { Ballot } from '../../types'
+import type { Ballot } from '../../types'
 import { totalBallotsWeight } from '../../utils/normalize'
 import { RandomBallotMethod } from '../../classes/random-ballot-method'
 

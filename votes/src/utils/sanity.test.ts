@@ -1,4 +1,4 @@
-import { Ballot, methods, VotingSystem } from '..'
+import { Approbation, type Ballot, methods, VotingSystem } from '..'
 import { abcde, dummyProfile, dummyProfile10 } from '../test/test-utils'
 import { matrixFromBallots } from './make-matrix'
 import { isRandomSystem } from './categories'
@@ -13,7 +13,8 @@ describe('sanity check', () => {
     'empty list and empty candidates %p',
     (system) => {
       if (system in methods) {
-        const election = new methods[system]({
+        const Method = methods[system]
+        const election = new Method({
           array: [],
           ballots: [],
           candidates: [],

@@ -1,4 +1,4 @@
-import { Ballot, ScoreObject } from '../../types'
+import type { Ballot, ScoreObject } from '../../types'
 import { iterateFirstChoices } from './iterate-first-choices'
 import { BallotScoreMethod } from '../../classes/ballot-score-method'
 

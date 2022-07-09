@@ -10,7 +10,7 @@ import {
   syncBallotCandidates,
   updateCandidateList,
 } from '../generate-ballots'
-import { Ballot } from 'votes'
+import type { Ballot } from 'votes'
 import { randomString } from '../random-string'
 import {
   mergeBallots as mergeBallotsUtil,

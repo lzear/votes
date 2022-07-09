@@ -1,5 +1,5 @@
 import range from 'lodash/range'
-import { Matrix, ScoreObject } from '../../types'
+import type { Matrix, ScoreObject } from '../../types'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 
 const computeFromMatrix = (matrix: Matrix): ScoreObject => {

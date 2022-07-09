@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { Ballot, ScoreObject } from '../../types'
+import type { Ballot, ScoreObject } from '../../types'
 import { BallotMethod } from '../../classes/ballot-method'
 import { scoresToRanking } from '../../utils'
 

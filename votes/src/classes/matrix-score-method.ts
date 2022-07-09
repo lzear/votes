@@ -1,4 +1,4 @@
-import { Matrix } from '../types'
+import type { Matrix } from '../types'
 import { ScoreMethod, Scorer } from './score-method'
 
 export interface Matrixer {

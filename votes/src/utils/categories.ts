@@ -1,5 +1,5 @@
-import { VotingSystem } from '../types'
-import { Methods, methods } from '../methods'
+import type { VotingSystem } from '../types'
+import { type Methods, methods } from '../methods'
 
 type MethodsContaining<
   StaticProp extends 'isRandom' | 'needsBallot' | 'needsMatrix',

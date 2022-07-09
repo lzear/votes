@@ -1,6 +1,6 @@
-import { Ballot, Matrix } from '../types'
+import type { Ballot, Matrix } from '../types'
 import { Method, Ranker } from './method'
-import { matrixFromBallots } from '../utils'
+import { matrixFromBallots } from '../utils/make-matrix'
 
 export abstract class BallotMethod extends Method implements Ranker {
   public static readonly needsBallot = true

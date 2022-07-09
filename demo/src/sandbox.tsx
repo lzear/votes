@@ -11,8 +11,8 @@ import { MatrixComp } from './matrix'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   findIconDefinition,
-  IconDefinition,
-  IconLookup,
+  type IconDefinition,
+  type IconLookup,
   library,
 } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'

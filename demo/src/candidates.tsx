@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Input, Tag, TagProps, Typography } from 'antd'
+import { Button, Input, Tag, type TagProps, Typography } from 'antd'
 import { useStore } from './store'
 import {
   selectAddCandidate,

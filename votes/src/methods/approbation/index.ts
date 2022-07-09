@@ -1,5 +1,5 @@
 import { iterateFirstChoices } from '../first-past-the-post/iterate-first-choices'
-import { ScoreObject } from '../../types'
+import type { ScoreObject } from '../../types'
 import { BallotScoreMethod } from '../../classes/ballot-score-method'
 
 export class Approbation extends BallotScoreMethod {

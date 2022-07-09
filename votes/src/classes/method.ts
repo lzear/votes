@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { scoresToRanking } from '../utils'
+import { scoresToRanking } from '../utils/scores'
 
 export interface Ranker {
   ranking(): string[][]

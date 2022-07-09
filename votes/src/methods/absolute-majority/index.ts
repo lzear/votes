@@ -1,4 +1,4 @@
-import { ScoreObject } from '../../types'
+import type { ScoreObject } from '../../types'
 import { BallotScoreMethod } from '../../classes/ballot-score-method'
 import { totalBallotsWeight } from '../../utils/normalize'
 import { scoresZero } from '../../utils/scores-zero'

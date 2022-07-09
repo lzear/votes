@@ -1,5 +1,5 @@
 import sum from 'lodash/sum'
-import { Ballot, ScoreObject } from '../../types'
+import type { Ballot, ScoreObject } from '../../types'
 import _ from 'lodash'
 import { RoundBallotMethod } from '../../classes/round-ballot-method'
 import { Borda } from '../borda'

@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { Matrix } from '../types'
+import type { Matrix } from '../types'
 
 export const findCondorcet = ({ candidates, array }: Matrix): Matrix => {
   const dominatingDirectList = candidates.map((c, k) =>

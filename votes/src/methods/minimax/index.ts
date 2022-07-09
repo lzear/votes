@@ -1,4 +1,4 @@
-import { Matrix, ScoreObject } from '../../types'
+import type { Matrix, ScoreObject } from '../../types'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 
 export enum MinimaxVariant {

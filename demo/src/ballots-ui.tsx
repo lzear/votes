@@ -1,4 +1,4 @@
-import { Ballot, Round } from 'votes'
+import type { Ballot, Round } from 'votes'
 import { totalWeight } from './generate-ballots'
 import { BallotWithId } from './ballot-with-id'
 import { Scale } from './scale'

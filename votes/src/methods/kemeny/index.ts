@@ -1,6 +1,6 @@
 import zipObject from 'lodash/zipObject'
 import range from 'lodash/range'
-import { Matrix, ScoreObject } from '../../types'
+import type { Matrix, ScoreObject } from '../../types'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 
 const rankingPenalty = (ranking: number[], matrix: number[][]) => {

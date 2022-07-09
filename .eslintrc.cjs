@@ -10,12 +10,20 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:import/recommended',
     'plugin:unicorn/recommended',
     // 'plugin:import/recommended',
     // 'plugin:import/typescript',
     'prettier',
   ],
   parser: '@typescript-eslint/parser',
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx']
+      }
+    },
+  },
   parserOptions: {
     ecmaVersion: 2022,
     sourceType: 'module',

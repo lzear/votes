@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { Force, SimulationLinkDatum, SimulationNodeDatum } from 'd3-force'
+import type { Force, SimulationLinkDatum, SimulationNodeDatum } from 'd3-force'
 
 function constant(x) {
   return function () {
