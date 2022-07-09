@@ -1,5 +1,11 @@
 # votes
 
+## 2.0.4
+
+### Patch Changes
+
+- 9c462a6: Add utils to categorise methods (random, needs ballots, needs matrix)
+
 ## 2.0.3
 
 ### Patch Changes
@@ -21,38 +27,38 @@
   **Old:**
 
   ```typescript
-  import { utils as voteUtils, VotingSystem } from 'votes'
+  import { utils as voteUtils, VotingSystem } from "votes";
 
   const scores = scoresFromBallots(
     [
-      { ranking: [['Lion'], ['Bear'], ['Sheep']], weight: 4 },
-      { ranking: [['Sheep'], ['Bear'], ['Lion']], weight: 3 },
-      { ranking: [['Bear', 'Sheep'], ['Lion']], weight: 2 },
+      { ranking: [["Lion"], ["Bear"], ["Sheep"]], weight: 4 },
+      { ranking: [["Sheep"], ["Bear"], ["Lion"]], weight: 3 },
+      { ranking: [["Bear", "Sheep"], ["Lion"]], weight: 2 }
     ],
-    ['Lion', 'Bear', 'Sheep'],
-    VotingSystem.Schulze,
-  )
+    ["Lion", "Bear", "Sheep"],
+    VotingSystem.Schulze
+  );
   // -> { Lion: 0, Bear: 2, Sheep: 1 }
-  const ranking = scoresToRanking({ Bear: 2, Lion: 0, Sheep: 1 })
+  const ranking = scoresToRanking({ Bear: 2, Lion: 0, Sheep: 1 });
   // -> [ [ 'Bear' ], [ 'Sheep' ], [ 'Lion' ] ]
   ```
 
   **New:**
 
   ```typescript
-  import { Borda } from 'votes'
+  import { Borda } from "votes";
 
   const borda = new Borda({
-    candidates: ['Lion', 'Bear', 'Sheep'],
+    candidates: ["Lion", "Bear", "Sheep"],
     ballots: [
-      { ranking: [['Lion'], ['Bear'], ['Sheep']], weight: 4 },
-      { ranking: [['Sheep'], ['Bear'], ['Lion']], weight: 3 },
-      { ranking: [['Bear', 'Sheep'], ['Lion']], weight: 2 },
-    ],
-  })
-  const scores = borda.scores()
+      { ranking: [["Lion"], ["Bear"], ["Sheep"]], weight: 4 },
+      { ranking: [["Sheep"], ["Bear"], ["Lion"]], weight: 3 },
+      { ranking: [["Bear", "Sheep"], ["Lion"]], weight: 2 }
+    ]
+  });
+  const scores = borda.scores();
   // -> { Bear: 10, Lion: 8, Sheep: 9}
-  const ranking = borda.ranking()
+  const ranking = borda.ranking();
   // -> [ [ 'Bear' ], [ 'Sheep' ], [ 'Lion' ] ]
   ```
 
