@@ -1,6 +1,6 @@
 {
   "name": "demo",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "dev": "yarn workspace votes preconstruct dev && next dev",
@@ -50,7 +50,7 @@
     "react-spring": "^9.4.5",
     "react-with-gesture": "^4.0.8",
     "typescript": "4.7.4",
-    "votes": "2.0.3",
+    "votes": "2.0.4",
     "zustand": "^3.7.2"
   },
   "devDependencies": {
