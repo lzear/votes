@@ -37,5 +37,10 @@ module.exports = {
       files: ['*.ts'],
       rules: { '@typescript-eslint/explicit-module-boundary-types': 2 },
     },
+    {
+      // enable the rule specifically for TypeScript files
+      files: ['*.test.ts'],
+      rules: { '@typescript-eslint/ban-ts-comment': 0 },
+    },
   ],
 }
