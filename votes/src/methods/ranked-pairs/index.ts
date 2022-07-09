@@ -1,7 +1,7 @@
 import groupBy from 'lodash/groupBy'
 import range from 'lodash/range'
 import zipObject from 'lodash/zipObject'
-import { Matrix, ScoreObject } from '../../types'
+import type { Matrix, ScoreObject } from '../../types'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import { generateAcyclicGraph } from './generate-acyclic-graph'
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Typography } from 'antd'
-import { ScoreObject } from 'votes'
+import type { ScoreObject } from 'votes'
 import { CandiTagList } from '../../candidates'
 import { Candidate } from '../../generate-ballots'
 import { QuickScores } from './quick-scores'

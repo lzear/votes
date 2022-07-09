@@ -1,8 +1,3 @@
-export type { Matrix, ScoreObject, Ballot } from './types'
-export type { Round } from './classes/round-ballot-method'
-
-export { VotingSystem } from './types'
-
 export { Approbation } from './methods/approbation'
 export { AbsoluteMajority } from './methods/absolute-majority'
 export { Baldwin } from './methods/baldwin'
@@ -24,6 +19,29 @@ export { RandomizedCondorcet } from './methods/randomized-condorcet'
 export { Schulze } from './methods/schulze'
 export { TwoRoundRunoff } from './methods/two-round-runoff'
 
-export { methods } from './methods'
+export type { Matrix, ScoreObject, Ballot } from './types'
+export type { Round } from './classes/round-ballot-method'
+
+export { VotingSystem } from './types'
+
+export { methods, type Methods } from './methods'
 
 export * as utils from './utils'
+
+export type {
+  MatrixMethods,
+  RandomMethods,
+  RandomSystem,
+  BallotMethods,
+  MatrixSystem,
+  BallotSystem,
+} from './utils/categories'
+
+export {
+  isBallotMethod,
+  isMatrixMethod,
+  isRandomMethod,
+  isRandomSystem,
+  isBallotSystem,
+  isMatrixSystem,
+} from './utils/categories'

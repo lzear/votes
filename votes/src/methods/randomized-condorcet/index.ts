@@ -1,4 +1,4 @@
-import { Matrix, ScoreObject } from '../../types'
+import type { Matrix, ScoreObject } from '../../types'
 import { makeAntisymetric } from '../../utils'
 import { computeLottery } from '../maximal-lotteries'
 import { RandomMatrixMethod } from '../../classes/random-matrix-method'

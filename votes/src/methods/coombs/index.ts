@@ -1,4 +1,4 @@
-import { Ballot, ScoreObject } from '../../types'
+import type { Ballot, ScoreObject } from '../../types'
 import { FirstPastThePost } from '../first-past-the-post'
 import { normalizeBallots } from '../../utils'
 import _ from 'lodash'

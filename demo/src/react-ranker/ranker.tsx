@@ -18,6 +18,7 @@ import {
   OPTION_GUTTER,
   OPTION_HEIGHT,
 } from './constants'
+import type { ReactDOMAttributes } from '@use-gesture/react/dist/declarations/src/types'
 
 type Candidate = { id: string; name: string; color: string }
 
@@ -114,7 +115,7 @@ const Ranker: React.FC<Props> = ({
     onDropi: (element: Candidate, newRank: number) => void,
     size: number,
   ]
-  const bind: (...args: Args) => unknown = useDrag(
+  const bind: (...args: Args) => ReactDOMAttributes = useDrag(
     ({ args, down, movement: [, y] }) => {
       const [originalIndex, onDropi, size] = args as Args
       const candidate: Candidate | undefined = candidates[originalIndex]

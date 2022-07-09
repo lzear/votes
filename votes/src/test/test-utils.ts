@@ -1,5 +1,5 @@
 import fill from 'lodash/fill'
-import { Ballot } from '../types'
+import type { Ballot } from '../types'
 import { toWeightedBallots } from '../utils'
 
 export const abcde = ['a', 'b', 'c', 'd', 'e']

@@ -2,7 +2,7 @@ import {
   forceCenter,
   forceManyBody,
   forceSimulation,
-  Simulation,
+  type Simulation,
 } from 'd3-force'
 import React, { useEffect, useRef, useState } from 'react'
 import { dispatch } from 'd3-dispatch'

@@ -1,9 +1,10 @@
 import _ from 'lodash'
-import { Ballot, ScoreObject } from '../../types'
+import type { Ballot, ScoreObject } from '../../types'
 import { scoresAny } from '../../utils/scores-zero'
 import { RoundBallotMethod } from '../../classes/round-ballot-method'
 import { Copeland } from '../copeland'
-import { matrixFromBallots, normalizeBallots } from '../../utils'
+import { matrixFromBallots } from '../../utils/make-matrix'
+import { normalizeBallots } from '../../utils/normalize'
 import { BiggestSupport } from '../biggest-support'
 
 export class BottomTwoRunoff extends RoundBallotMethod {

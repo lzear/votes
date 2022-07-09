@@ -1,5 +1,5 @@
 import { a, TransitionFn, useTransition } from '@react-spring/web'
-import { ReactDOMAttributes } from '@use-gesture/react'
+import { useHover } from '@use-gesture/react'
 import _ from 'lodash'
 import { BoxMeta, BoxPosition, WithColor } from './ballots-ui'
 
@@ -68,7 +68,7 @@ export const renderBoxes = (
       },
     TrState
   >,
-  bind: (...args: unknown[]) => ReactDOMAttributes = () => ({}),
+  bind: ReturnType<typeof useHover> = () => ({}),
 ) => {
   return transitions((d, box) => {
     const { x, y, height, width, fill, opacity, filter } = d

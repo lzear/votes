@@ -1,7 +1,7 @@
-import { Scorer } from './score-method'
-import { Matrix, ScoreObject } from '../types'
+import type { Scorer } from './score-method'
+import type { Matrix, ScoreObject } from '../types'
 import { RandomMethod } from './random-method'
-import { Matrixer } from './matrix-score-method'
+import type { Matrixer } from './matrix-score-method'
 import _ from 'lodash'
 import { shuffleArray } from '../utils/shuffle-array'
 
@@ -37,6 +37,8 @@ export abstract class RandomMatrixMethod
   extends RandomMethod
   implements Scorer, Matrixer
 {
+  public static readonly needsMatrix = true
+
   private readonly _matrix: Matrix
 
   constructor(i: Matrix & { rng?: () => number }) {

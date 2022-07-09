@@ -10,12 +10,20 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:import/recommended',
     'plugin:unicorn/recommended',
     // 'plugin:import/recommended',
     // 'plugin:import/typescript',
     'prettier',
   ],
   parser: '@typescript-eslint/parser',
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx']
+      }
+    },
+  },
   parserOptions: {
     ecmaVersion: 2022,
     sourceType: 'module',
@@ -36,6 +44,11 @@ module.exports = {
       // enable the rule specifically for TypeScript files
       files: ['*.ts'],
       rules: { '@typescript-eslint/explicit-module-boundary-types': 2 },
+    },
+    {
+      // enable the rule specifically for TypeScript files
+      files: ['*.test.ts'],
+      rules: { '@typescript-eslint/ban-ts-comment': 0 },
     },
   ],
 }

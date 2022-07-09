@@ -1,4 +1,4 @@
-import { Matrix } from '../types'
+import type { Matrix } from '../types'
 import { ScoreMethod, Scorer } from './score-method'
 
 export interface Matrixer {
@@ -9,6 +9,7 @@ export abstract class MatrixScoreMethod
   extends ScoreMethod
   implements Scorer, Matrixer
 {
+  public static readonly needsMatrix = true
   private readonly _matrix: Matrix
 
   constructor(i: Matrix) {

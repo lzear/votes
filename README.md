@@ -51,7 +51,7 @@ const ranking = borda.ranking()
 - 🧑‍🏫 Blog post on my website:
   [🗳 Ranked voting systems](https://www.elzear.de/posts/2021-01-10-polls)
 
-- 💩 Library documentation
+- 💩 Library documentation:
   [lzear.github.io/votes](https://lzear.github.io/votes/)
 
 - 🤓 Good Wikipedia article:
@@ -137,4 +137,4 @@ The repository is split in 2 projects:
 - **/votes** contains the source of the NPM package
   [votes](https://www.npmjs.com/package/votes)
 
-- **/demo** contains the source of the sandbox website
+- **/demo** contains the source of the demo website

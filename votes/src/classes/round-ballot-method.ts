@@ -1,6 +1,6 @@
-import { ScoreObject } from '../types'
+import type { ScoreObject } from '../types'
 import { BallotMethod } from './ballot-method'
-import { Ranker } from './method'
+import type { Ranker } from './method'
 
 export type Round = {
   finished?: boolean

@@ -1,4 +1,4 @@
-import { Ballot } from '../../types'
+import type { Ballot } from '../../types'
 import { RandomDictator } from '.'
 import { rngGenerator } from '../../test/rng-generator'
 import { toWeightedBallots } from '../../utils'

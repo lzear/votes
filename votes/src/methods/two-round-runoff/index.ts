@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { ScoreObject } from '../../types'
+import type { ScoreObject } from '../../types'
 import { FirstPastThePost } from '../first-past-the-post'
 import { RoundBallotMethod } from '../../classes/round-ballot-method'
 import { AbsoluteMajority } from '../absolute-majority'

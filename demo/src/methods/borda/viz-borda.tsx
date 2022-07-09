@@ -357,7 +357,7 @@ export const BordaTreeMapInner: React.FC<{
         }
       }
     },
-    { hover: { enabled: true } },
+    { enabled: true },
   )
   return (
     <>

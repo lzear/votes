@@ -1,6 +1,6 @@
 import { shuffleArray } from '../../utils/shuffle-array'
 import { RandomMethod } from '../../classes/random-method'
-import { ScoreObject } from '../../types'
+import type { ScoreObject } from '../../types'
 import zipObject from 'lodash/zipObject'
 
 export class RandomCandidates extends RandomMethod {

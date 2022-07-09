@@ -1,14 +1,7 @@
-import { Ballot, methods, VotingSystem } from '..'
+import { Approbation, type Ballot, methods, VotingSystem } from '..'
 import { abcde, dummyProfile, dummyProfile10 } from '../test/test-utils'
 import { matrixFromBallots } from './make-matrix'
-
-const isRandom = (system: VotingSystem) =>
-  [
-    VotingSystem.RandomCandidates,
-    VotingSystem.RandomDictator,
-    VotingSystem.RandomizedCondorcet,
-    VotingSystem.MaximalLotteries,
-  ].includes(system)
+import { isRandomSystem } from './categories'
 
 const isRandomCandidate = (
   system: VotingSystem,
@@ -20,7 +13,8 @@ describe('sanity check', () => {
     'empty list and empty candidates %p',
     (system) => {
       if (system in methods) {
-        const election = new methods[system]({
+        const Method = methods[system]
+        const election = new Method({
           array: [],
           ballots: [],
           candidates: [],
@@ -33,7 +27,7 @@ describe('sanity check', () => {
   it.each(Object.values(VotingSystem))(
     'empty ballot list %p (ranking)',
     (system) => {
-      if (isRandom(system)) return
+      if (isRandomSystem(system)) return
 
       const candidates = ['a', 'b', 'c']
       const ballots: Ballot[] = []
@@ -104,7 +98,7 @@ describe('sanity check', () => {
   it.each(Object.values(VotingSystem))(
     'gets the 2 winners from 1 ballot %p',
     (system) => {
-      if (isRandom(system)) return
+      if (isRandomSystem(system)) return
 
       const ballots = [{ ranking: [['a', 'd'], ['b'], ['c']], weight: 1 }]
       const candidates = ['a', 'b', 'c', 'd']
@@ -123,7 +117,7 @@ describe('sanity check', () => {
     'gets the condorcet cycle %p (ranking)',
     (system) => {
       // Exclude randomized
-      if (isRandom(system)) return
+      if (isRandomSystem(system)) return
 
       const candidates = ['a', 'b', 'c']
       const ballots = [
@@ -164,7 +158,7 @@ describe('sanity check', () => {
     },
   )
   it.each(Object.values(VotingSystem))('dummyProfile %p', (system) => {
-    if (isRandom(system)) return
+    if (isRandomSystem(system)) return
 
     const candidates = abcde
     const ballots = dummyProfile
@@ -177,7 +171,7 @@ describe('sanity check', () => {
   })
 
   it.each(Object.values(VotingSystem))('dummyProfile10 %p', (system) => {
-    if (isRandom(system)) return
+    if (isRandomSystem(system)) return
 
     const candidates = abcde
     const ballots = dummyProfile10

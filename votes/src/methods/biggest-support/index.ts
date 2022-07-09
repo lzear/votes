@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { Ballot } from '../../types'
+import type { Ballot } from '../../types'
 import { BallotMethod } from '../../classes/ballot-method'
 import { iterateFirstChoices } from '../first-past-the-post/iterate-first-choices'
 

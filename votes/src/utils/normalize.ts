@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-import { Ballot } from '../types'
+import type { Ballot } from '../types'
 
 export const isBallotEqual = (a: string[][], b: string[][]): boolean => {
   if (a.length !== b.length) return false

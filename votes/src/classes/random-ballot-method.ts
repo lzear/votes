@@ -1,11 +1,13 @@
-import { Ranker } from './method'
-import { Ballot } from '../types'
+import type { Ranker } from './method'
+import type { Ballot } from '../types'
 import { BallotMethod } from './ballot-method'
 
 export abstract class RandomBallotMethod
   extends BallotMethod
   implements Ranker
 {
+  public static readonly isRandom = true
+
   protected readonly rng: () => number
 
   protected constructor(i: {
