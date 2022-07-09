@@ -24,6 +24,6 @@ export { RandomizedCondorcet } from './methods/randomized-condorcet'
 export { Schulze } from './methods/schulze'
 export { TwoRoundRunoff } from './methods/two-round-runoff'
 
-export { methods } from './methods'
+export { methods, type Methods } from './methods'
 
 export * as utils from './utils'

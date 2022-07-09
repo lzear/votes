@@ -1,5 +1,5 @@
 import { a, TransitionFn, useTransition } from '@react-spring/web'
-import { ReactDOMAttributes } from '@use-gesture/react'
+import { ReactDOMAttributes } from '@use-gesture/react/dist/declarations/src/types'
 import _ from 'lodash'
 import { BoxMeta, BoxPosition, WithColor } from './ballots-ui'
 
@@ -68,7 +68,7 @@ export const renderBoxes = (
       },
     TrState
   >,
-  bind: (...args: unknown[]) => ReactDOMAttributes = () => ({}),
+  bind: (...args: any[]) => ReactDOMAttributes = () => ({}),
 ) => {
   return transitions((d, box) => {
     const { x, y, height, width, fill, opacity, filter } = d
