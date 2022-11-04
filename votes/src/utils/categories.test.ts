@@ -42,7 +42,7 @@ describe('systems categoris', () => {
     const ballotSystems = systems.filter((system) => isMatrixSystem(system))
 
     expect(randomSystems).toMatchInlineSnapshot(`
-      Array [
+      [
         "MAXIMAL_LOTTERIES",
         "RANDOMIZED_CONDORCET",
         "RANDOM_CANDIDATES",
@@ -50,7 +50,7 @@ describe('systems categoris', () => {
       ]
     `)
     expect(matrixSystems).toMatchInlineSnapshot(`
-      Array [
+      [
         "APPROBATION",
         "ABSOLUTE_MAJORITY",
         "BALDWIN",
@@ -66,7 +66,7 @@ describe('systems categoris', () => {
       ]
     `)
     expect(ballotSystems).toMatchInlineSnapshot(`
-      Array [
+      [
         "COPELAND",
         "KEMENY",
         "MAXIMAL_LOTTERIES",

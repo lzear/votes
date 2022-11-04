@@ -33,7 +33,7 @@ export const MatrixComp: React.FC = () => {
     <div className="container">
       <Typography.Title level={5}>Matrix of duels</Typography.Title>
       <Checkbox
-        value={skew}
+        checked={skew}
         name={'Ske'}
         onChange={(v) => setSkew(v.target.checked)}
       >

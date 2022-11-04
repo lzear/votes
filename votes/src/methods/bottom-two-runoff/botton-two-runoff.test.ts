@@ -20,87 +20,10 @@ describe(BottomTwoRunoff, () => {
       candidates: ['😡', '🤡', '🤥', '🔏', '🎽'],
     }
     const bo = new BottomTwoRunoff(input)
-    expect(bo.computeRounds()).toMatchInlineSnapshot(
+    expect(bo.computeRounds()).toMatchInlineSnapshot(`
       [
         {
-          candidates: ['😡', '🤡', '🤥', '🔏', '🎽'],
-          finished: false,
-          idx: 0,
-          roundResult: {
-            eliminated: ['🔏'],
-            qualified: ['😡', '🤡', '🤥', '🎽'],
-            scores: {
-              '🎽': 2,
-              '🔏': 0,
-              '😡': 2,
-              '🤡': 2,
-              '🤥': 1,
-            },
-          },
-        },
-
-        {
-          candidates: ['😡', '🤡', '🤥', '🎽'],
-          finished: false,
-          idx: 1,
-          roundResult: {
-            eliminated: ['🤥'],
-            qualified: ['😡', '🤡', '🎽'],
-            scores: {
-              '🎽': 2,
-              '😡': 2,
-              '🤡': 1,
-              '🤥': 0,
-            },
-          },
-        },
-
-        {
-          candidates: ['😡', '🤡', '🎽'],
-          finished: false,
-          idx: 2,
-          roundResult: {
-            eliminated: ['🤡'],
-            qualified: ['😡', '🎽'],
-            scores: {
-              '🎽': 1,
-              '😡': 2,
-              '🤡': 0,
-            },
-          },
-        },
-
-        {
-          candidates: ['😡', '🎽'],
-          finished: false,
-          idx: 3,
-          roundResult: {
-            eliminated: ['🎽'],
-            qualified: ['😡'],
-            scores: {
-              '🎽': 0,
-              '😡': 1,
-            },
-          },
-        },
-
-        {
-          candidates: ['😡'],
-          finished: true,
-          idx: 4,
-          roundResult: {
-            eliminated: ['😡'],
-            qualified: [],
-            scores: {
-              '😡': 0,
-            },
-          },
-        },
-      ],
-      `
-      Array [
-        Object {
-          "candidates": Array [
+          "candidates": [
             "😡",
             "🤡",
             "🤥",
@@ -109,17 +32,17 @@ describe(BottomTwoRunoff, () => {
           ],
           "finished": false,
           "idx": 0,
-          "roundResult": Object {
-            "eliminated": Array [
+          "roundResult": {
+            "eliminated": [
               "🔏",
             ],
-            "qualified": Array [
+            "qualified": [
               "😡",
               "🤡",
               "🤥",
               "🎽",
             ],
-            "scores": Object {
+            "scores": {
               "🎽": 2,
               "🔏": 0,
               "😡": 2,
@@ -128,8 +51,8 @@ describe(BottomTwoRunoff, () => {
             },
           },
         },
-        Object {
-          "candidates": Array [
+        {
+          "candidates": [
             "😡",
             "🤡",
             "🤥",
@@ -137,16 +60,16 @@ describe(BottomTwoRunoff, () => {
           ],
           "finished": false,
           "idx": 1,
-          "roundResult": Object {
-            "eliminated": Array [
+          "roundResult": {
+            "eliminated": [
               "🤥",
             ],
-            "qualified": Array [
+            "qualified": [
               "😡",
               "🤡",
               "🎽",
             ],
-            "scores": Object {
+            "scores": {
               "🎽": 2,
               "😡": 2,
               "🤡": 1,
@@ -154,67 +77,66 @@ describe(BottomTwoRunoff, () => {
             },
           },
         },
-        Object {
-          "candidates": Array [
+        {
+          "candidates": [
             "😡",
             "🤡",
             "🎽",
           ],
           "finished": false,
           "idx": 2,
-          "roundResult": Object {
-            "eliminated": Array [
+          "roundResult": {
+            "eliminated": [
               "🤡",
             ],
-            "qualified": Array [
+            "qualified": [
               "😡",
               "🎽",
             ],
-            "scores": Object {
+            "scores": {
               "🎽": 1,
               "😡": 2,
               "🤡": 0,
             },
           },
         },
-        Object {
-          "candidates": Array [
+        {
+          "candidates": [
             "😡",
             "🎽",
           ],
           "finished": false,
           "idx": 3,
-          "roundResult": Object {
-            "eliminated": Array [
+          "roundResult": {
+            "eliminated": [
               "🎽",
             ],
-            "qualified": Array [
+            "qualified": [
               "😡",
             ],
-            "scores": Object {
+            "scores": {
               "🎽": 0,
               "😡": 1,
             },
           },
         },
-        Object {
-          "candidates": Array [
+        {
+          "candidates": [
             "😡",
           ],
           "finished": true,
           "idx": 4,
-          "roundResult": Object {
-            "eliminated": Array [
+          "roundResult": {
+            "eliminated": [
               "😡",
             ],
-            "qualified": Array [],
-            "scores": Object {
+            "qualified": [],
+            "scores": {
               "😡": 0,
             },
           },
         },
       ]
-    `,
-    )
+    `)
   })
 })

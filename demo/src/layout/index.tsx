@@ -14,9 +14,7 @@ export const MyLayout: React.FC<{ children: React.ReactNode }> = ({
       <Header id="header">
         <h1>
           <Link href="/">
-            <a>
-              <span className="white">Ranked votes</span>
-            </a>
+            <span className="white">Ranked votes</span>
           </Link>
         </h1>
 

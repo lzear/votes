@@ -1,8 +1,5 @@
-import create, { GetState, SetState } from 'zustand'
-import {
-  StoreApiWithSubscribeWithSelector,
-  subscribeWithSelector,
-} from 'zustand/middleware'
+import create from 'zustand'
+import { subscribeWithSelector } from 'zustand/middleware'
 import { StoreBallots } from '../ballot-with-id'
 import {
   initBallots,
@@ -84,12 +81,7 @@ const initedC = [
 
 const initDrawRate = 0
 
-export const useStore = create<
-  Store,
-  SetState<Store>,
-  GetState<Store>,
-  StoreApiWithSubscribeWithSelector<Store>
->(
+export const useStore = create<Store>()(
   subscribeWithSelector((set): Store => {
     const updateCandidateCount = (desiredLength: number) =>
       set(({ ballots, candidates, drawRate }) => {
