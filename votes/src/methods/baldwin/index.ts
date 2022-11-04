@@ -3,6 +3,7 @@ import _ from 'lodash'
 import type { Ballot, ScoreObject } from '../../types'
 import { Borda } from '../borda'
 import { RoundBallotMethod } from '../../classes/round-ballot-method'
+import { arrayAt } from '../../utils/array-at'
 
 const round = (
   candidates: string[],
@@ -16,7 +17,7 @@ const round = (
 
   const ranking = borda.ranking()
 
-  const eliminated = ranking.at(-1) || []
+  const eliminated = arrayAt(ranking, -1) || []
   const qualified = _.difference(candidates, eliminated)
 
   return { eliminated, qualified, scores: borda.scores() }
