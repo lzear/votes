@@ -94,8 +94,8 @@ describe(MajorityJudgment, () => {
       ],
     })
     expect(a.ranking()).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           "a",
           "b",
           "c",
@@ -104,8 +104,8 @@ describe(MajorityJudgment, () => {
       ]
     `)
     expect(a.judgements()).toMatchInlineSnapshot(`
-      Object {
-        "a": Array [
+      {
+        "a": [
           1,
           0,
           0,
@@ -113,7 +113,7 @@ describe(MajorityJudgment, () => {
           0,
           1,
         ],
-        "b": Array [
+        "b": [
           1,
           0,
           0,
@@ -121,7 +121,7 @@ describe(MajorityJudgment, () => {
           0,
           1,
         ],
-        "c": Array [
+        "c": [
           0,
           0,
           1,
@@ -129,7 +129,7 @@ describe(MajorityJudgment, () => {
           0,
           0,
         ],
-        "d": Array [
+        "d": [
           0,
           0,
           1,
@@ -150,7 +150,7 @@ describe(MajorityJudgment, () => {
       ],
     })
     expect(a.medians()).toMatchInlineSnapshot(`
-      Object {
+      {
         "a": 2,
         "b": 2.5,
         "c": 2,
@@ -158,20 +158,20 @@ describe(MajorityJudgment, () => {
       }
     `)
     expect(a.ranking()).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           "a",
           "c",
         ],
-        Array [
+        [
           "b",
           "d",
         ],
       ]
     `)
     expect(a.judgements()).toMatchInlineSnapshot(`
-      Object {
-        "a": Array [
+      {
+        "a": [
           1,
           0,
           0,
@@ -179,7 +179,7 @@ describe(MajorityJudgment, () => {
           1,
           0,
         ],
-        "b": Array [
+        "b": [
           1,
           0,
           0,
@@ -187,7 +187,7 @@ describe(MajorityJudgment, () => {
           0,
           1,
         ],
-        "c": Array [
+        "c": [
           0,
           1,
           0,
@@ -195,7 +195,7 @@ describe(MajorityJudgment, () => {
           0,
           0,
         ],
-        "d": Array [
+        "d": [
           0,
           0,
           1,

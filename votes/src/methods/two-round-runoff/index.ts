@@ -23,7 +23,7 @@ export class TwoRoundRunoff extends RoundBallotMethod {
       candidates,
     })
     if (absoluteMajority.ranking().length > 1) {
-      const qualified = absoluteMajority.ranking().at(0)
+      const qualified = absoluteMajority.ranking()[0]
       if (!qualified)
         throw new Error('Unexpected error in absolute majority computation')
 

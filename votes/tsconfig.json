@@ -8,7 +8,7 @@
 
     "lib": ["es2020"],
     "removeComments": true,
-    "target": "ESNext",
+    "target": "es5",
     "esModuleInterop": true,
     "moduleResolution": "node",
     "downlevelIteration": true,
