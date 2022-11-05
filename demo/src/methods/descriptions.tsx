@@ -263,6 +263,22 @@ export const votingTypeData = {
       [Criteria.StrategyProof]: false,
     },
   },
+  [VotingSystem.MinimaxTD]: {
+    name: 'Minimax-TD',
+    description: (
+      <>Ranking the candidates of the Smith set by smallest pairwise defeat.</>
+    ),
+    criteria: {
+      [Criteria.NonDictatorship]: null,
+      [Criteria.IIA]: null,
+      [Criteria.LIIA]: null,
+      [Criteria.Monotonic]: null,
+      [Criteria.Pareto]: null,
+      [Criteria.Majority]: null,
+      [Criteria.Condorcet]: null,
+      [Criteria.StrategyProof]: null,
+    },
+  },
   [VotingSystem.Copeland]: {
     name: "Copeland's method",
     description: (

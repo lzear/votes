@@ -108,6 +108,9 @@ ranked first.
 **Minimax Condorcet method**: Ranking the candidates by smallest pairwise
 defeat.
 
+**Minimax-TD**: Compute the [Smith set](https://en.wikipedia.org/wiki/Smith_set)
+. Then compute the Minimax ranking on that set. TD stands for Tideman-Darlington.
+
 **Nanson method**: Iterative Borda count in which, each round, candidates
 scoring the average score or less are eliminated.
 

@@ -12,6 +12,7 @@ import { Kemeny } from './kemeny'
 import { MajorityJudgment } from './majority-judgment'
 import { MaximalLotteries } from './maximal-lotteries'
 import { Minimax } from './minimax'
+import { MinimaxTD } from './minimax-td'
 import { Nanson } from './nanson'
 import { RandomCandidates } from './random-candidates'
 import { RandomDictator } from './random-dictator'
@@ -34,6 +35,7 @@ export const methods = {
   [VotingSystem.MajorityJudgment]: MajorityJudgment,
   [VotingSystem.MaximalLotteries]: MaximalLotteries,
   [VotingSystem.Minimax]: Minimax,
+  [VotingSystem.MinimaxTD]: MinimaxTD,
   [VotingSystem.Nanson]: Nanson,
   [VotingSystem.RandomCandidates]: RandomCandidates,
   [VotingSystem.RandomDictator]: RandomDictator,

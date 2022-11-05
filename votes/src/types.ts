@@ -24,6 +24,7 @@ export enum VotingSystem {
   MajorityJudgment = 'MAJORITY_JUDGEMENT',
   MaximalLotteries = 'MAXIMAL_LOTTERIES',
   Minimax = 'MINIMAX',
+  MinimaxTD = 'MINIMAX_TD',
   Nanson = 'NANSON',
   RandomizedCondorcet = 'RANDOMIZED_CONDORCET',
   RandomCandidates = 'RANDOM_CANDIDATES',
