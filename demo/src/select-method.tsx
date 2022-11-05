@@ -1,7 +1,7 @@
 import React from 'react'
 import { DemoSystems, useStore } from './store'
 import { selectMethod, selectSetMethod } from './store/selectors'
-import { Select, Typography } from 'antd'
+import { Select, Text } from '@chakra-ui/react'
 import { votingTypeData } from './methods/descriptions'
 import { methods } from './methods'
 
@@ -14,7 +14,7 @@ export const SelectMethod: React.FC = () => {
   const method = useStore(selectMethod)
   return (
     <div className="container">
-      <Typography.Title level={4}>Voting system</Typography.Title>
+      <Text level={4}>Voting system</Text>
       <Select<DemoSystems>
         size="large"
         style={{ minWidth: 250 }}

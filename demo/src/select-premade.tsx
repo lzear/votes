@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useStore } from './store'
 import { selectSetPremade } from './store/selectors'
-import { Select } from 'antd'
+import { Select } from '@chakra-ui/react'
 import { balinski } from './premade/balinski'
 import type { Ballot } from 'votes'
 import { condorcetMess } from './premade/condorcet-mess'

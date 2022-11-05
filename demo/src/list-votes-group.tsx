@@ -4,7 +4,7 @@ import {
   MinusOutlined,
   PlusOutlined,
 } from '@ant-design/icons'
-import { Button } from 'antd'
+import { Button } from '@chakra-ui/react'
 import _ from 'lodash'
 import React from 'react'
 import { useStore } from './store'

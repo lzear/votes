@@ -8,7 +8,7 @@ import {
 import { ScoresSummary } from '../viz/scores-summary'
 import { RankedPairs, utils } from 'votes'
 import _ from 'lodash'
-import { Tag } from 'antd'
+import { Tag } from '@chakra-ui/react'
 import { trafficColor } from '../../traffic-color'
 
 type Edge = { from: number; to: number; value: number }

@@ -6,7 +6,7 @@ import { AxisCandidatesBot } from '../../axis'
 import { useStore } from '../../store'
 import { selectWidth, useCandidatesString } from '../../store/selectors'
 import _ from 'lodash'
-import { Checkbox } from 'antd'
+import { Checkbox } from '@chakra-ui/react'
 
 const HEIGHT = 100
 

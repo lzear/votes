@@ -5,7 +5,7 @@ import {
   selectNormalizeWeights100,
 } from './store/selectors'
 import { totalWeight } from './generate-ballots'
-import { Button, Typography } from 'antd'
+import { Button, Text } from '@chakra-ui/react'
 import {
   ArrowRightOutlined,
   DeleteOutlined,
@@ -22,7 +22,7 @@ export const BallotsComp = () => {
   const normalizeWeights100 = useStore(selectNormalizeWeights100)
   return (
     <div className="container">
-      <Typography.Title level={4}>{totalW} voters</Typography.Title>
+      <Text level={4}>{totalW} voters</Text>
 
       <p>
         Preferences can be edited by clicking the buttons <EditOutlined />

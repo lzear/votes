@@ -6,7 +6,7 @@ import {
   selectSetHighlightCandidates,
   useCandidatesById,
 } from './store/selectors'
-import { Checkbox, Typography } from 'antd'
+import { Checkbox, Text } from '@chakra-ui/react'
 import { CandiTag } from './candidates'
 import shallow from 'zustand/shallow'
 import { utils } from 'votes'
@@ -31,7 +31,7 @@ export const MatrixComp: React.FC = () => {
 
   return (
     <div className="container">
-      <Typography.Title level={5}>Matrix of duels</Typography.Title>
+      <Text level={5}>Matrix of duels</Text>
       <Checkbox
         checked={skew}
         name={'Ske'}

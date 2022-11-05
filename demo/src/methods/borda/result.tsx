@@ -8,7 +8,7 @@ import { useStore } from '../../store'
 import { ScoresSummary } from '../viz/scores-summary'
 import { Borda } from 'votes'
 import { BordaTreeMap } from './viz-borda'
-import { Typography } from 'antd'
+import { Text } from '@chakra-ui/react'
 
 export const VizBorda: React.FC = () => {
   const ballots = useStore(selectBallots)
@@ -22,7 +22,7 @@ export const VizBorda: React.FC = () => {
     <>
       <ScoresSummary scores={bordiScores} candidatesById={candidatesById} />
 
-      <Typography.Title level={4}>Visualization</Typography.Title>
+      <Text>Visualization</Text>
       <BordaTreeMap />
     </>
   )

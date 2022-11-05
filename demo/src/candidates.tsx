@@ -1,5 +1,15 @@
 import React, { useState } from 'react'
-import { Button, Input, Tag, type TagProps, Typography } from 'antd'
+import {
+  Button,
+  Input,
+  Tag,
+  type TagProps,
+  Text,
+  TagLabel,
+  TagCloseButton,
+  TagLeftIcon,
+} from '@chakra-ui/react'
+import { PlusSquareIcon } from '@chakra-ui/icons'
 import { useStore } from './store'
 import {
   selectAddCandidate,
@@ -7,7 +17,6 @@ import {
   selectUpdateCandidateCount,
   useCandidates,
 } from './store/selectors'
-import { PlusOutlined } from '@ant-design/icons'
 import { Candidate } from './generate-ballots'
 
 export const Candidates: React.FC = () => {
@@ -28,9 +37,7 @@ export const Candidates: React.FC = () => {
   }
   return (
     <div className="container">
-      <Typography.Title level={4}>
-        {candidates.length} candidates
-      </Typography.Title>
+      <Text level={4}>{candidates.length} candidates</Text>
       <div className="tags">
         {candidates.map((c) => (
           <CandiTag
@@ -65,7 +72,7 @@ export const Candidates: React.FC = () => {
             disabled={disabled}
             // type="text"
             type="primary"
-            icon={<PlusOutlined />}
+            icon={<PlusSquareIcon />}
             size="small"
             onClick={submit}
             style={{ height: 20 }}
@@ -74,7 +81,7 @@ export const Candidates: React.FC = () => {
         <span>or</span>
         <Tag
           tabIndex={0}
-          style={{
+          sx={{
             cursor: 'pointer',
             float: 'right',
           }}
@@ -84,7 +91,8 @@ export const Candidates: React.FC = () => {
             if (e.key === 'Enter') updateCandidateCount(candidates.length + 1)
           }}
         >
-          <PlusOutlined /> Add random emoji
+          <TagLeftIcon as={PlusSquareIcon}></TagLeftIcon>
+          Add random emoji
         </Tag>
       </div>
       <style jsx>{`
@@ -128,12 +136,11 @@ export const CandiTag: React.FC<
 > = ({ candidate, onClose, ...rest }) => (
   <Tag
     closable={!!onClose}
-    onClose={onClose ? () => onClose(candidate) : undefined}
-    color={candidate.color}
-    style={{ margin: 0 }}
+    sx={{ margin: 0, background: candidate.color }}
     {...rest}
   >
-    {candidate.id}
+    <TagLabel>{candidate.id}</TagLabel>
+    {onClose && <TagCloseButton onClick={() => onClose(candidate)} />}
   </Tag>
 )
 

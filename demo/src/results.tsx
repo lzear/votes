@@ -2,7 +2,7 @@ import React from 'react'
 import { useStore } from './store'
 import { selectMethod } from './store/selectors'
 import { methods } from './methods'
-import { Typography } from 'antd'
+import { Text } from '@chakra-ui/react'
 
 export const Results: React.FC = () => {
   const method = useStore(selectMethod)
@@ -10,7 +10,7 @@ export const Results: React.FC = () => {
   const MethodObj = methods[method]
   return (
     <div className="container">
-      <Typography.Title level={3}>{MethodObj.data.name}</Typography.Title>
+      <Text level={3}>{MethodObj.data.name}</Text>
       <div className="block">{MethodObj.data.description}</div>
       <MethodObj.Visualisation />
       <style jsx>{`
