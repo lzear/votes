@@ -19,6 +19,7 @@ import { RandomDictator } from './random-dictator'
 import { RandomizedCondorcet } from './randomized-condorcet'
 import { RankedPairs } from './ranked-pairs'
 import { Schulze } from './schulze'
+import { Smith } from './smith'
 import { TwoRoundRunoff } from './two-round-runoff'
 
 export const methods = {
@@ -42,6 +43,7 @@ export const methods = {
   [VotingSystem.RandomizedCondorcet]: RandomizedCondorcet,
   [VotingSystem.RankedPairs]: RankedPairs,
   [VotingSystem.Schulze]: Schulze,
+  [VotingSystem.Smith]: Smith,
   [VotingSystem.TwoRoundRunoff]: TwoRoundRunoff,
 } as const
 

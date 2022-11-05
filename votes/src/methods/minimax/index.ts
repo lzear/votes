@@ -17,15 +17,20 @@ const scoreXY = {
 const computeScores = (
   matrix: Matrix,
   variant: MinimaxVariant,
+  excludeTies: boolean,
 ): ScoreObject => {
   const s: ScoreObject = {}
   for (const [c1Index, candidate] of matrix.candidates.entries()) {
     s[candidate] = -Math.max(
-      ...matrix.array[c1Index]
-        .map((v, c2Index) =>
-          scoreXY[variant](matrix.array[c2Index][c1Index], v),
-        )
-        .filter((_, c2Index) => c2Index !== c1Index),
+      ...(matrix.array[c1Index]
+        .map((yOverX, c2Index) => {
+          const xOverY = matrix.array[c2Index][c1Index]
+          return xOverY === yOverX && excludeTies
+            ? null
+            : scoreXY[variant](xOverY, yOverX)
+        })
+        .filter((_, c2Index) => c2Index !== c1Index)
+        .filter((v) => v !== null) as number[]),
     )
   }
   return s
@@ -33,15 +38,17 @@ const computeScores = (
 
 export class Minimax extends MatrixScoreMethod {
   public minimaxVariant: MinimaxVariant
+  public excludeTies: boolean
 
   public static Variants = MinimaxVariant
 
-  constructor(i: Matrix & { variant?: MinimaxVariant }) {
+  constructor(i: Matrix & { variant?: MinimaxVariant; excludeTies?: boolean }) {
     super(i)
     this.minimaxVariant = i.variant || MinimaxVariant.Margins
+    this.excludeTies = i.excludeTies || false
   }
 
   public scores(): ScoreObject {
-    return computeScores(this.matrix, this.minimaxVariant)
+    return computeScores(this.matrix, this.minimaxVariant, this.excludeTies)
   }
 }

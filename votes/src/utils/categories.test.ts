@@ -75,6 +75,7 @@ describe('systems categoris', () => {
         "RANDOMIZED_CONDORCET",
         "RANKED_PAIRS",
         "SCHULZE",
+        "SMITH",
       ]
     `)
   })

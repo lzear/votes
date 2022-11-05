@@ -18,6 +18,7 @@ export { RandomCandidates } from './methods/random-candidates'
 export { RandomDictator } from './methods/random-dictator'
 export { RandomizedCondorcet } from './methods/randomized-condorcet'
 export { Schulze } from './methods/schulze'
+export { Smith } from './methods/smith'
 export { TwoRoundRunoff } from './methods/two-round-runoff'
 
 export type { Matrix, ScoreObject, Ballot } from './types'

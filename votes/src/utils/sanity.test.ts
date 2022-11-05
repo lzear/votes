@@ -1,4 +1,4 @@
-import { Approbation, type Ballot, methods, VotingSystem } from '..'
+import { type Ballot, methods, VotingSystem } from '..'
 import { abcde, dummyProfile, dummyProfile10 } from '../test/test-utils'
 import { matrixFromBallots } from './make-matrix'
 import { isRandomSystem } from './categories'

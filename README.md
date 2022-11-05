@@ -109,7 +109,8 @@ ranked first.
 defeat.
 
 **Minimax-TD**: Compute the [Smith set](https://en.wikipedia.org/wiki/Smith_set)
-. Then compute the Minimax ranking on that set. TD stands for Tideman-Darlington.
+. Then compute the Minimax ranking on that set. TD stands for
+Tideman-Darlington.
 
 **Nanson method**: Iterative Borda count in which, each round, candidates
 scoring the average score or less are eliminated.
@@ -129,6 +130,10 @@ winners.
 Then remove the most indecisive (closest to 50/50) duels until there is an
 undefeated candidate, the winner. This popular voting system is used by several
 organizations (Ubuntu, Debian, Wikimedia...).
+
+**Smith's method**: All members of the top cycle (a.k.a. Smith set): _"the
+smallest non-empty set of candidates in a particular election such that each
+member defeats every candidate outside the set in a pairwise election"_
 
 ## 🤝 Contributing
 

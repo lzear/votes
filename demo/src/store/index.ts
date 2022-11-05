@@ -34,6 +34,7 @@ export enum DemoSystems {
   // RandomDictator = 'RANDOM_DICTATOR',
   // RankedPairs = 'RANKED_PAIRS',
   // Schulze = 'SCHULZE',
+  Smith = 'SMITH',
   TwoRoundRunoff = 'TWO_ROUND_RUNOFF',
 }
 

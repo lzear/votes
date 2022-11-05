@@ -1,5 +1,4 @@
 import type { Matrix, ScoreObject } from '../../types'
-import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import { Minimax, MinimaxVariant } from '../minimax'
 import { findSmithSet } from '../../utils/condorcet'
 import { scoresAny } from '../../utils/scores-zero'
@@ -8,8 +7,9 @@ import _ from 'lodash'
 const computeScores = (
   matrix: Matrix,
   variant: MinimaxVariant,
+  excludeTies: boolean,
 ): ScoreObject => {
-  const minimax = new Minimax({ ...matrix, variant })
+  const minimax = new Minimax({ ...matrix, variant, excludeTies })
   const smithSet = findSmithSet(matrix)
   const minimaxScores = minimax.scores()
   const smithSetScores = _.pick(minimaxScores, smithSet.candidates)
@@ -21,17 +21,8 @@ const computeScores = (
   }
 }
 
-export class MinimaxTD extends MatrixScoreMethod {
-  public minimaxVariant: MinimaxVariant
-
-  public static Variants = MinimaxVariant
-
-  constructor(i: Matrix & { variant?: MinimaxVariant }) {
-    super(i)
-    this.minimaxVariant = i.variant || MinimaxVariant.Margins
-  }
-
+export class MinimaxTD extends Minimax {
   public scores(): ScoreObject {
-    return computeScores(this.matrix, this.minimaxVariant)
+    return computeScores(this.matrix, this.minimaxVariant, this.excludeTies)
   }
 }
