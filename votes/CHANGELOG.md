@@ -1,5 +1,11 @@
 # votes
 
+## 2.0.6
+
+### Patch Changes
+
+- c30f99b: Add Minimax-TD
+
 ## 2.0.5
 
 ### Patch Changes
