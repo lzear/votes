@@ -1,9 +1,11 @@
 import _ from 'lodash'
 import type { Matrix } from '../types'
+import { makeAntisymetric } from './make-matrix'
 
-export const findCondorcet = ({ candidates, array }: Matrix): Matrix => {
-  const dominatingDirectList = candidates.map((c, k) =>
-    array[k].map((v, k2) => k2).filter((k2) => array[k][k2] >= 0),
+export const findSmithSet = (_matrix: Matrix): Matrix => {
+  const { candidates, array } = makeAntisymetric(_matrix)
+  const dominatingDirectList = candidates.map((_c, k) =>
+    array[k].map((_v, k2) => k2).filter((k2) => array[k][k2] >= 0),
   )
   const dominatingList = candidates.map((c, k) => {
     let dominating = [k]
@@ -24,3 +26,7 @@ export const findCondorcet = ({ candidates, array }: Matrix): Matrix => {
     candidates: candidates.filter((c, k) => dominatingList[k]),
   }
 }
+
+// We renamed findCondorcet -> findSmithSet
+// Keeping the old name exported, so we don't introduce breaking changes
+export const findCondorcet = findSmithSet

@@ -8,7 +8,7 @@ describe(Minimax, () => {
     expect(election.scores()).toStrictEqual({
       a: -34,
       b: -2,
-      c: -0,
+      c: 2,
       d: -58,
       e: -40,
     })
@@ -33,7 +33,7 @@ describe(Minimax, () => {
     expect(election2.scores()).toStrictEqual({
       a: -34,
       b: -2,
-      c: -0,
+      c: 2,
       d: -58,
       e: -40,
     })

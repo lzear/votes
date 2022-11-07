@@ -1,7 +1,7 @@
 import zipObject from 'lodash/zipObject'
 import { solve } from '../../simplex'
 import type { Matrix, ScoreObject } from '../../types'
-import { findCondorcet } from '../../utils/condorcet'
+import { findSmithSet } from '../../utils/condorcet'
 import { makeAntisymetric } from '../../utils'
 import { scoresZero } from '../../utils/scores-zero'
 import { RandomMatrixMethod } from '../../classes/random-matrix-method'
@@ -10,7 +10,7 @@ export const computeLottery = (
   _matrix: Matrix,
 ): { [candidate: string]: number } => {
   const matrix = makeAntisymetric(_matrix)
-  const condorset = findCondorcet(matrix)
+  const condorset = findSmithSet(matrix)
 
   const subVector = solve(condorset.array).map((v) => Math.max(0, v))
 

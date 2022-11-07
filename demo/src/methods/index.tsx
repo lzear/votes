@@ -9,8 +9,10 @@ import { copeland } from './copeland'
 import { fptp } from './fptp'
 import { instantRunoff } from './instant-runoff'
 import { minimax } from './minimax'
+import { minimaxTD } from './minimax-td'
 import { nanson } from './nanson'
 import { twoRoundsRunoff } from './two-rounds'
+import { smith } from './smith'
 
 export const methods: { [k in DemoSystems]: MethodElements } = {
   [VotingSystem.Baldwin]: baldwin,
@@ -21,6 +23,8 @@ export const methods: { [k in DemoSystems]: MethodElements } = {
   [VotingSystem.FirstPastThePost]: fptp,
   [VotingSystem.InstantRunoff]: instantRunoff,
   [VotingSystem.Minimax]: minimax,
+  [VotingSystem.MinimaxTD]: minimaxTD,
   [VotingSystem.Nanson]: nanson,
+  [VotingSystem.Smith]: smith,
   [VotingSystem.TwoRoundRunoff]: twoRoundsRunoff,
 }

@@ -8,22 +8,29 @@ export enum MinimaxVariant {
 }
 
 const scoreXY = {
+  [MinimaxVariant.Margins]: (xOverY: number, yOverX: number) => xOverY - yOverX, // default
+  [MinimaxVariant.PairwiseOpposition]: (xOverY: number) => xOverY,
   [MinimaxVariant.WinningVotes]: (xOverY: number, yOverX: number) =>
     xOverY > yOverX ? xOverY : 0,
-  [MinimaxVariant.Margins]: (xOverY: number, yOverX: number) => xOverY - yOverX,
-  [MinimaxVariant.PairwiseOpposition]: (xOverY: number) => xOverY,
 }
 
 const computeScores = (
   matrix: Matrix,
   variant: MinimaxVariant,
+  excludeTies: boolean,
 ): ScoreObject => {
   const s: ScoreObject = {}
-  for (const [k, c] of matrix.candidates.entries()) {
-    s[c] = -Math.max(
-      ...matrix.array[k].map((v, k2) =>
-        scoreXY[variant](matrix.array[k2][k], v),
-      ),
+  for (const [c1Index, candidate] of matrix.candidates.entries()) {
+    s[candidate] = -Math.max(
+      ...(matrix.array[c1Index]
+        .map((yOverX, c2Index) => {
+          const xOverY = matrix.array[c2Index][c1Index]
+          return xOverY === yOverX && excludeTies
+            ? null
+            : scoreXY[variant](xOverY, yOverX)
+        })
+        .filter((_, c2Index) => c2Index !== c1Index)
+        .filter((v) => v !== null) as number[]),
     )
   }
   return s
@@ -31,15 +38,17 @@ const computeScores = (
 
 export class Minimax extends MatrixScoreMethod {
   public minimaxVariant: MinimaxVariant
+  public excludeTies: boolean
 
   public static Variants = MinimaxVariant
 
-  constructor(i: Matrix & { variant?: MinimaxVariant }) {
+  constructor(i: Matrix & { variant?: MinimaxVariant; excludeTies?: boolean }) {
     super(i)
     this.minimaxVariant = i.variant || MinimaxVariant.Margins
+    this.excludeTies = i.excludeTies || false
   }
 
   public scores(): ScoreObject {
-    return computeScores(this.matrix, this.minimaxVariant)
+    return computeScores(this.matrix, this.minimaxVariant, this.excludeTies)
   }
 }

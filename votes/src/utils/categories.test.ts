@@ -71,9 +71,11 @@ describe('systems categoris', () => {
         "KEMENY",
         "MAXIMAL_LOTTERIES",
         "MINIMAX",
+        "MINIMAX_TD",
         "RANDOMIZED_CONDORCET",
         "RANKED_PAIRS",
         "SCHULZE",
+        "SMITH",
       ]
     `)
   })
