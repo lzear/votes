@@ -82,5 +82,10 @@
   },
   "volta": {
     "node": "16.16.0"
+  },
+  "nextBundleAnalysis": {
+    "budget": null,
+    "budgetPercentIncreaseRed": 20,
+    "showDetails": true
   }
 }
