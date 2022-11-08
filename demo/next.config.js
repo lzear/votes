@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires,unicorn/prefer-module */
+// eslint-disable-next-line tsdoc/syntax
 /** @type {import('next').NextConfig} */
 
 const withPlugins = require('next-compose-plugins')

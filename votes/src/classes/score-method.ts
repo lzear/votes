@@ -6,6 +6,9 @@ export interface Scorer extends Ranker {
   scores(): ScoreObject
 }
 
+/**
+ * Voting method for which the ballots are not necessary: the matrix of duels in enough.
+ */
 export abstract class ScoreMethod extends Method implements Scorer {
   public abstract scores(): ScoreObject
 

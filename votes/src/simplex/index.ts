@@ -89,6 +89,11 @@ const vectorFromPivotedTableau = (pivotedTableau: number[][], size: number) =>
     return 0
   })
 
+/**
+ * * @alpha This voting system is not working correctly!
+ * * @experimental This voting system is not working correctly!
+ * * @deprecated This voting system is not working correctly!
+ */
 export const solve = (antisymetricMatrix: number[][]): number[] => {
   const tableau = simplexTableau(antisymetricMatrix)
   const usedRows = [] as number[]

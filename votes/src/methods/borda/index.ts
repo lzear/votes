@@ -22,6 +22,11 @@ const computeScores = (
   return scores
 }
 
+/**
+ * For each voter, every candidate is given a number of points which equals the number of candidates ranked lower in the voter's preference.
+ *
+ * #### Wikipedia: [Borda count](https://en.wikipedia.org/wiki/Borda_count)
+ */
 export class Borda extends BallotScoreMethod {
   public scores(): ScoreObject {
     return computeScores(this.candidates, this.ballots)

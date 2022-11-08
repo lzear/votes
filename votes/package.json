@@ -27,7 +27,7 @@
     "test-prod": "yarn run test && yarn run build",
     "prebuild": "rimraf dist",
     "build": "preconstruct build && yarn typedoc",
-    "publish-docs": "node tools/gh-pages-publish.mjs",
+    "publish-docs": "cp ../README.md . && node tools/gh-pages-publish.mjs",
     "release": "cp ../README.md . && yarn run build",
     "typedoc": "npx typedoc src/index.ts --tsconfig tsconfig.typedoc.json"
   },

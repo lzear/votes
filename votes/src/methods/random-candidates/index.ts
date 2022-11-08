@@ -3,6 +3,9 @@ import { RandomMethod } from '../../classes/random-method'
 import type { ScoreObject } from '../../types'
 import zipObject from 'lodash/zipObject'
 
+/**
+ * Pick a candidate at random, regardless of the ballots
+ */
 export class RandomCandidates extends RandomMethod {
   public ranking(): string[][] {
     return shuffleArray(this.candidates, this.rng).map((c) => [c])

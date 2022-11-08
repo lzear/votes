@@ -36,6 +36,9 @@ const computeScores = (
   return s
 }
 
+/**
+ * #### Wikipedia: [Minimax Condorcet method](https://en.wikipedia.org/wiki/Minimax_Condorcet_method)
+ */
 export class Minimax extends MatrixScoreMethod {
   public minimaxVariant: MinimaxVariant
   public excludeTies: boolean

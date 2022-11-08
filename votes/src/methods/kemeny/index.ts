@@ -70,6 +70,9 @@ const computeScores = (matrix: Matrix): ScoreObject => {
   return zipObject(matrix.candidates, sumIdx)
 }
 
+/**
+ * #### Wikipedia: [Kemeny–Young method](https://en.wikipedia.org/wiki/Kemeny%E2%80%93Young_method)
+ */
 export class Kemeny extends MatrixScoreMethod {
   public scores(): ScoreObject {
     return computeScores(this.matrix)

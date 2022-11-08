@@ -8,6 +8,7 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:import/recommended',
@@ -20,7 +21,7 @@ module.exports = {
   settings: {
     'import/resolver': {
       node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx']
+        extensions: ['.js', '.jsx', '.ts', '.tsx', '.cjs']
       }
     },
   },
@@ -28,8 +29,14 @@ module.exports = {
     ecmaVersion: 2022,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint', 'unicorn', 'prettier'],
+  plugins: [
+    '@typescript-eslint',
+    'eslint-plugin-tsdoc',
+    'unicorn',
+    'prettier',
+  ],
   rules: {
+    'tsdoc/syntax': 1,
     'unicorn/prevent-abbreviations': 0,
     'unicorn/prefer-object-from-entries': 0,
     'unicorn/no-array-reduce': 0,

@@ -2,17 +2,34 @@ import _ from 'lodash'
 
 import type { Ballot } from '../types'
 
+/**
+ * Returns true if the 2 ballots are equivalent. The order of the candidates inside a rank is irrelevant. Reflexive check.
+ *
+ * @param a - first ballot
+ * @param b - second ballot
+ */
 export const isBallotEqual = (a: string[][], b: string[][]): boolean => {
   if (a.length !== b.length) return false
   if (a.length === 0) return true
   return _.every(a, (rank, k) => _.isEqual([...rank].sort(), [...b[k]].sort()))
 }
 
+/**
+ * Convert `(string | string[])[]` to `string[][]`.
+ * Elements of the input that are strings are converted to singletons.
+ *
+ * @param rankInput - Input rank
+ */
 export const normalizeRankInput = (
-  rankinput: (string | string[])[],
+  rankInput: (string | string[])[],
 ): string[][] =>
-  rankinput.map((rank) => (typeof rank === 'string' ? [rank] : rank))
+  rankInput.map((rank) => (typeof rank === 'string' ? [rank] : rank))
 
+/**
+ * Group ballots by merging equivalent ballots (see {@link isBallotEqual}).
+ *
+ * @param ballots - ballots to group
+ */
 export const groupBallots = <B extends Ballot>(ballots: B[]): B[] =>
   ballots
     .reduce((acc, ballot) => {
@@ -58,6 +75,11 @@ export const checkDuplicatedCandidate = (ranking: string[][]): void => {
   }, [])
 }
 
+/**
+ * Remove candidates that are duplicated inside a ranking. Prevents cheating!
+ *
+ * @param ranking - input ranking
+ */
 export const removeDuplicatedCandidates = (ranking: string[][]): string[][] =>
   ranking.reduce(
     (acc, cur) => {
@@ -73,6 +95,12 @@ export const removeDuplicatedCandidates = (ranking: string[][]): string[][] =>
     },
   ).ranking
 
+/**
+ * Remove candidates in `ranking` that don't exist in `candidates`. Prevents cheating!
+ *
+ * @param ranking - ranking to check
+ * @param candidates - official candidates
+ */
 export const removeInvalidCandidates = (
   ranking: string[][],
   candidates: string[],
@@ -81,12 +109,24 @@ export const removeInvalidCandidates = (
     .map((names) => names.filter((name) => candidates.includes(name)))
     .filter((rank) => rank.length)
 
+/**
+ * Prevents cheating!
+ *
+ * @param ranking - ranking to normalize
+ * @param candidates - official candidates
+ */
 export const normalizeRanking = (
   ranking: string[][],
   candidates: string[],
 ): string[][] =>
   removeDuplicatedCandidates(removeInvalidCandidates(ranking, candidates))
 
+/**
+ * Prevents cheating!
+ *
+ * @param ballot - ballot to normalize
+ * @param candidates - official candidates
+ */
 export const normalizeBallot = <B extends Ballot>(
   ballot: B,
   candidates: string[],
@@ -95,6 +135,11 @@ export const normalizeBallot = <B extends Ballot>(
   ranking: normalizeRanking(ballot.ranking, candidates),
 })
 
+/**
+ * Gather all the candidates present in `ballots`
+ *
+ * @param ballots - ranking to normalize
+ */
 export const candidatesFromBallots = (ballots: Ballot[]): string[] =>
   ballots.reduce(
     (acc, curr) => _.uniq([...acc, ...curr.ranking.flat()]),

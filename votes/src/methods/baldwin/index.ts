@@ -23,6 +23,9 @@ const round = (
   return { eliminated, qualified, scores: borda.scores() }
 }
 
+/**
+ * Iterative {@link Borda | Borda count} in which, each round, candidates scoring the lowest score are eliminated.
+ */
 export class Baldwin extends RoundBallotMethod {
   protected round(candidates: string[]): {
     qualified: string[]

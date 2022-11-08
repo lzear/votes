@@ -4,6 +4,9 @@ import { FirstPastThePost } from '../first-past-the-post'
 import { RoundBallotMethod } from '../../classes/round-ballot-method'
 import { AbsoluteMajority } from '../absolute-majority'
 
+/**
+ * #### Wikipedia: [Two-round system](https://en.wikipedia.org/wiki/Two-round_system)
+ */
 export class TwoRoundRunoff extends RoundBallotMethod {
   protected round(
     candidates: string[],

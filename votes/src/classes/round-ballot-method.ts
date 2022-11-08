@@ -14,6 +14,9 @@ export type Round = {
   }
 }
 
+/**
+ * Voting system in which candidates are iteratively eliminated.
+ */
 export abstract class RoundBallotMethod extends BallotMethod implements Ranker {
   protected rounds: Round[] = []
 
