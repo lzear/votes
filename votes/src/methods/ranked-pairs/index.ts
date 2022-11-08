@@ -57,6 +57,9 @@ const computeFromMatrix = (matrix: Matrix): ScoreObject => {
   )
 }
 
+/**
+ * #### Wikipedia: [Ranked pairs](https://en.wikipedia.org/wiki/Ranked_pairs)
+ */
 export class RankedPairs extends MatrixScoreMethod {
   public scores(): ScoreObject {
     return computeFromMatrix(this.matrix)

@@ -2,6 +2,9 @@ import type { Scorer } from './score-method'
 import type { ScoreObject } from '../types'
 import { Method } from './method'
 
+/**
+ * Voting method that involves some randomness in the computation in the winners.
+ */
 export abstract class RandomMethod extends Method implements Scorer {
   public static readonly isRandom = true
 

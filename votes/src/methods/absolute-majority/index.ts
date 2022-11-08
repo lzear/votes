@@ -4,6 +4,9 @@ import { totalBallotsWeight } from '../../utils/normalize'
 import { scoresZero } from '../../utils/scores-zero'
 import { FirstPastThePost } from '../first-past-the-post'
 
+/**
+ * #### Wikipedia: [Majority](https://en.wikipedia.org/wiki/Majority)
+ */
 export class AbsoluteMajority extends BallotScoreMethod {
   public scores(): ScoreObject {
     const totalWeight = totalBallotsWeight(this.ballots)

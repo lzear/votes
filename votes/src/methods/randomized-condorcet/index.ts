@@ -3,6 +3,11 @@ import { makeAntisymetric } from '../../utils'
 import { computeLottery } from '../maximal-lotteries'
 import { RandomMatrixMethod } from '../../classes/random-matrix-method'
 
+/**
+ * * @alpha This voting system is not working correctly!
+ * * @experimental This voting system is not working correctly!
+ * * @deprecated This voting system is not working correctly!
+ */
 const computeScores = (matrix: Matrix): ScoreObject => {
   const antisymetric = makeAntisymetric(matrix)
   const antisymetricUnit = {
@@ -12,7 +17,17 @@ const computeScores = (matrix: Matrix): ScoreObject => {
   return computeLottery(antisymetricUnit)
 }
 
+/**
+ * * @alpha This voting system is not working correctly!
+ * * @experimental This voting system is not working correctly!
+ * * @deprecated This voting system is not working correctly!
+ */
 export class RandomizedCondorcet extends RandomMatrixMethod {
+  /**
+   * * @alpha This voting system is not working correctly!
+   * * @experimental This voting system is not working correctly!
+   * * @deprecated This voting system is not working correctly!
+   */
   public scores(): ScoreObject {
     return computeScores(this.matrix)
   }

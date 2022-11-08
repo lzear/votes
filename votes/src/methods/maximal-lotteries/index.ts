@@ -6,6 +6,11 @@ import { makeAntisymetric } from '../../utils'
 import { scoresZero } from '../../utils/scores-zero'
 import { RandomMatrixMethod } from '../../classes/random-matrix-method'
 
+/**
+ * * @alpha This voting system is not working correctly!
+ * * @experimental This voting system is not working correctly!
+ * * @deprecated This voting system is not working correctly!
+ */
 export const computeLottery = (
   _matrix: Matrix,
 ): { [candidate: string]: number } => {
@@ -26,7 +31,17 @@ export const computeLottery = (
   }
 }
 
+/**
+ * * @alpha This voting system is not working correctly!
+ * * @experimental This voting system is not working correctly!
+ * * @deprecated This voting system is not working correctly!
+ */
 export class MaximalLotteries extends RandomMatrixMethod {
+  /**
+   * * @alpha This voting system is not working correctly!
+   * * @experimental This voting system is not working correctly!
+   * * @deprecated This voting system is not working correctly!
+   */
   public scores(): ScoreObject {
     return computeLottery(this.matrix)
   }

@@ -27,6 +27,9 @@ const computeFromMatrix = (matrix: Matrix): ScoreObject => {
   return s
 }
 
+/**
+ * #### Wikipedia: [Schulze method](https://en.wikipedia.org/wiki/Schulze_method)
+ */
 export class Schulze extends MatrixScoreMethod {
   public scores(): ScoreObject {
     return computeFromMatrix(this.matrix)

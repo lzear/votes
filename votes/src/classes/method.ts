@@ -12,8 +12,19 @@ export abstract class Method implements Ranker {
 
   constructor(readonly candidates: string[]) {}
 
+  /**
+   * Result of the vote. The first item lists the winners of the vote.
+   *
+   * For example this ranking means that `Bear` wins, `Sheep` is second and `Lion` third
+   * `[ [ 'Bear' ], [ 'Sheep' ], [ 'Lion' ] ]`
+   */
   public abstract ranking(): string[][]
 
+  /**
+   * Split tied candidates in a ranking.
+   *
+   * @param rankingToTieBreak - a ranking in which ties will be attempted to be broken by the current voting system
+   */
   public tieBreak(rankingToTieBreak: string[][]): string[][] {
     const ranking = this.ranking()
 

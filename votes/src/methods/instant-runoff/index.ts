@@ -28,6 +28,9 @@ const round = (
   }
 }
 
+/**
+ * #### Wikipedia: [Instant-runoff voting](https://en.wikipedia.org/wiki/Instant-runoff_voting)
+ */
 export class InstantRunoff extends RoundBallotMethod {
   protected round(candidates: string[]): {
     qualified: string[]

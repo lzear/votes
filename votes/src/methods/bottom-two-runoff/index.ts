@@ -8,6 +8,9 @@ import { normalizeBallots } from '../../utils/normalize'
 import { BiggestSupport } from '../biggest-support'
 import { arrayAt } from '../../utils/array-at'
 
+/**
+ * #### Electowiki: [Bottom-Two-Runoff IRV](https://electowiki.org/wiki/Bottom-Two-Runoff_IRV)
+ */
 export class BottomTwoRunoff extends RoundBallotMethod {
   private copeland: Copeland
   constructor(i: { ballots: Ballot[]; candidates: string[] }) {

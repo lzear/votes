@@ -52,6 +52,9 @@ const round = (
   }
 }
 
+/**
+ * #### Wikipedia: [Coombs' method](https://en.wikipedia.org/wiki/Coombs%27_method)
+ */
 export class Coombs extends RoundBallotMethod {
   protected round(candidates: string[]): {
     eliminated: string[]

@@ -21,6 +21,9 @@ const round = (
   return { eliminated, qualified, scores: bordaScores }
 }
 
+/**
+ * #### Wikipedia: [Nanson's method](https://en.wikipedia.org/wiki/Nanson%27s_method)
+ */
 export class Nanson extends RoundBallotMethod {
   protected round(candidates: string[]): {
     qualified: string[]

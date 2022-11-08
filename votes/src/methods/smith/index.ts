@@ -13,6 +13,9 @@ const computeScores = (matrix: Matrix): ScoreObject => {
   }
 }
 
+/**
+ * #### Wikipedia: [Smith's method](https://en.wikipedia.org/wiki/Smith_set#Smith's_method)
+ */
 export class Smith extends MatrixScoreMethod {
   public scores(): ScoreObject {
     return computeScores(this.matrix)
