@@ -8,7 +8,6 @@
 ![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/votes)
 [![license](https://img.shields.io/github/license/lzear/votes)](https://github.com/lzear/votes/blob/master/LICENSE)
 [![Build Status](https://travis-ci.com/lzear/votes.svg?branch=master)](https://travis-ci.com/lzear/votes)
-[![Known Vulnerabilities](https://snyk.io/test/github/lzear/votes/badge.svg?targetFile=package.json)](https://snyk.io/test/github/lzear/votes?targetFile=package.json)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/d2378c63d95f41efb79072176f015976)](https://www.codacy.com/gh/lzear/votes/dashboard?utm_source=github.com&utm_medium=referral&utm_content=lzear/votes&utm_campaign=Badge_Coverage)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/08af655918d741d1bffca7ec12ba72be)](https://app.codacy.com/gh/lzear/votes?utm_source=github.com&utm_medium=referral&utm_content=lzear/votes&utm_campaign=Badge_Grade_Settings)
 [![CodeClimate Coverage](https://api.codeclimate.com/v1/badges/0a98aa30f16e04bc3eac/test_coverage)](https://codeclimate.com/github/lzear/votes/test_coverage)
