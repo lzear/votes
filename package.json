@@ -42,6 +42,7 @@
     "commitizen": "^4.2.5",
     "dotenv": "^16.0.3",
     "eslint": "^8.27.0",
+    "eslint-config-next": "^13.1.6",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
