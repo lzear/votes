@@ -18,6 +18,7 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint .",
+    "build": "yarn workspace votes build",
     "fix:prettier": "prettier --write \"**/*.*\"",
     "test": "yarn workspace votes test",
     "test-prod": "yarn run eslint && yarn workspaces run test-prod",
