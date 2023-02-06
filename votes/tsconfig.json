@@ -1,14 +1,12 @@
 {
+  "extends": "tsconfig/base.json",
   "compilerOptions": {
-    "module": "es6",
     "strict": true,
     "declaration": true,
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
-
-    "lib": ["es2020"],
+    "skipLibCheck": true,
     "removeComments": true,
-    "target": "es5",
     "esModuleInterop": true,
     "moduleResolution": "node",
     "downlevelIteration": true,
@@ -19,7 +17,12 @@
     "strictNullChecks": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
-    "importsNotUsedAsValues": "error"
+    "outDir": "dist",
+    "importsNotUsedAsValues": "error",
+
+    "lib": ["ES2015"],
+    "module": "ESNext",
+    "target": "es6"
   },
   "types": ["node"],
   "exclude": ["**/*.test.ts", "src/test"],

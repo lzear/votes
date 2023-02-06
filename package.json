@@ -6,7 +6,8 @@
     "packages": [
       "d3-force",
       "demo",
-      "votes"
+      "votes",
+      "tsconfig"
     ]
   },
   "sideEffects": false,
@@ -17,8 +18,12 @@
   },
   "license": "MIT",
   "scripts": {
-    "lint": "eslint .",
-    "build": "yarn workspace votes build",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "npkill": "npx npkill",
+    "ncu": "npx npm-check-updates -u -ws",
+    "lint": "eslint . && yarn turbo run lint",
     "fix:prettier": "prettier --write \"**/*.*\"",
     "test": "yarn workspace votes test",
     "test-prod": "yarn run eslint && yarn workspaces run test-prod",
@@ -34,8 +39,6 @@
     "@changesets/cli": "^2.25.2",
     "@commitlint/cli": "^17.2.0",
     "@commitlint/config-conventional": "^17.2.0",
-    "@preconstruct/cli": "^2.2.2",
-    "@preconstruct/hook": "^0.4.0",
     "@types/node": "^18.11.9",
     "@typescript-eslint/eslint-plugin": "^5.42.1",
     "@typescript-eslint/parser": "^5.42.1",
@@ -78,11 +81,6 @@
       "@commitlint/config-conventional"
     ]
   },
-  "preconstruct": {
-    "packages": [
-      "votes"
-    ]
-  },
   "volta": {
     "node": "16.16.0"
   },
@@ -90,5 +88,8 @@
     "budget": null,
     "budgetPercentIncreaseRed": 20,
     "showDetails": true
+  },
+  "devDependencies": {
+    "turbo": "^1.7.4"
   }
 }

@@ -7,7 +7,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 const withLess = require('next-with-less')
-const withPreconstruct = require('@preconstruct/next')
 const { getThemeVariables } = require('antd/dist/theme')
 
 // const dark = getThemeVariables({
@@ -17,7 +16,6 @@ const { getThemeVariables } = require('antd/dist/theme')
 
 module.exports = withPlugins(
   [
-    [withPreconstruct],
     [withBundleAnalyzer],
     [
       withLess,
