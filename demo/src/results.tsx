@@ -2,7 +2,7 @@ import React from 'react'
 import { useStore } from './store'
 import { selectMethod } from './store/selectors'
 import { methods } from './methods'
-import { H3 } from './layout/headings';
+import { H3 } from './layout/headings'
 
 export const Results: React.FC = () => {
   const method = useStore(selectMethod)

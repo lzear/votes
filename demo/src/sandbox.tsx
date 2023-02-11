@@ -10,7 +10,7 @@ import { MatrixComp } from './matrix'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 import { BallotsComp } from './ballots'
-import { H3 } from './layout/headings';
+import { H3 } from './layout/headings'
 
 export const Sandbox: React.FC = () => {
   return (

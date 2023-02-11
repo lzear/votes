@@ -18,9 +18,7 @@ export const ScoresSummary: React.FC<{
       <div className="block">
         <CandiTagList candidates={winners.map((c) => candidatesById[c])} />
       </div>
-      <H5 style={{ marginBottom: 0 }}>
-        Scores
-      </H5>
+      <H5 style={{ marginBottom: 0 }}>Scores</H5>
       <QuickScores candidatesById={candidatesById} scoreObject={scores} />
       <style jsx>{`
         .block {
