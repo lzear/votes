@@ -1,7 +1,5 @@
 // https://stackoverflow.com/questions/521295/seeding-the-random-number-generator-in-javascript
 
-/* tslint:disable:no-bitwise */
-
 const xmur3 = (str: string): (() => number) => {
   let h = 1_779_033_703 ^ str.length
   for (let i = 0; i < str.length; i++) {
@@ -18,7 +16,6 @@ const xmur3 = (str: string): (() => number) => {
 }
 
 const mulberry32 = (a: number) => () => {
-  // tslint:disable-next-line
   let t = (a += 0x6d_2b_79_f5)
   t = Math.imul(t ^ (t >>> 15), t | 1)
   t ^= t + Math.imul(t ^ (t >>> 7), t | 61)
