@@ -30,7 +30,7 @@
     "test-prod": "yarn run eslint && yarn workspaces run test-prod",
     "commit": "git-cz",
     "precommit": "lint-staged",
-    "release": "yarn workspace votes release && changeset publish && yarn workspace votes publish-docs"
+    "release": "yarn workspace votes release && changeset publish"
   },
   "dependencies": {
     "@babel/core": "^7.20.2",
