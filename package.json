@@ -18,6 +18,7 @@
   },
   "license": "MIT",
   "scripts": {
+    "changeset": "changeset",
     "build": "turbo run build",
     "dev": "turbo run dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
