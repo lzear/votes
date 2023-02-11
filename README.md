@@ -1,11 +1,11 @@
 # votes
 
-[![version](https://img.shields.io/npm/v/votes)](https://www.npmjs.com/package/votes)
+![version](https://img.shields.io/npm/v/votes)
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/votes)
 ![language](https://img.shields.io/github/languages/top/lzear/votes)
 ![downloads](https://img.shields.io/npm/dm/votes)
 ![last commit](https://img.shields.io/github/last-commit/lzear/votes)
-![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/votes)
+[![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/votes)](https://libraries.io/npm/votes)
 [![license](https://img.shields.io/github/license/lzear/votes)](https://github.com/lzear/votes/blob/master/LICENSE)
 [![Build Status](https://travis-ci.com/lzear/votes.svg?branch=master)](https://travis-ci.com/lzear/votes)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/d2378c63d95f41efb79072176f015976)](https://www.codacy.com/gh/lzear/votes/dashboard?utm_source=github.com&utm_medium=referral&utm_content=lzear/votes&utm_campaign=Badge_Coverage)
