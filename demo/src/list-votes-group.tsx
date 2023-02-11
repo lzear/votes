@@ -56,28 +56,24 @@ export const ListVotesGroup: React.FC = () => {
                 {numberToLetters(b.idx)}
                 <br />
                 <Button
-                  type="text"
-                  icon={<MinusOutlined />}
+                  rightIcon={<MinusOutlined />}
                   size="small"
                   onClick={() => changeBallotWeight(-1)(b.id)}
                 />
                 {b.weight}
                 <Button
-                  type="text"
-                  icon={<PlusOutlined />}
+                  rightIcon={<PlusOutlined />}
                   size="small"
                   onClick={() => changeBallotWeight(1)(b.id)}
                 />
                 <br />
                 <Button
-                  type="text"
-                  icon={<DeleteOutlined />}
+                  rightIcon={<DeleteOutlined />}
                   size="small"
                   onClick={() => changeBallotWeight(-b.weight)(b.id)}
                 />
                 <Button
-                  type="text"
-                  icon={<EditOutlined />}
+                  rightIcon={<EditOutlined />}
                   size="small"
                   onClick={() =>
                     selectBallot(selectedBallot?.id === b.id ? null : b.id)

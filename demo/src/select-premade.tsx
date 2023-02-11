@@ -35,12 +35,13 @@ export const SelectPremade: React.FC = () => {
         voting systems.
       </label>
       <br />
-      <Select<string>
+      <Select
         id="presets"
         size="small"
         style={{ minWidth: 250 }}
         placeholder="Preset"
-        onSelect={(v: string) => {
+        onChange={(e) => {
+          const v = e.target.value
           if (v in premades) {
             const vv = premades[v]
             if (vv) {
@@ -49,12 +50,14 @@ export const SelectPremade: React.FC = () => {
             }
           }
         }}
-        getPopupContainer={(triggerNode) => triggerNode.parentElement}
-        options={Object.keys(premades).map((value) => ({
-          label: premades[value].name,
-          value,
-        }))}
-      />
+        // getPopupContainer={(triggerNode) => triggerNode.parentElement}
+      >
+        {Object.keys(premades).map((value) => (
+          <option key={value} value={value}>
+            {premades[value].name}
+          </option>
+        ))}
+      </Select>
       {selected && (
         <div className="descr">
           <strong>{premades[selected].name}</strong>

@@ -6,10 +6,11 @@ import {
   selectSetHighlightCandidates,
   useCandidatesById,
 } from './store/selectors'
-import { Checkbox, Text } from '@chakra-ui/react'
+import { Checkbox } from '@chakra-ui/react'
 import { CandiTag } from './candidates'
-import shallow from 'zustand/shallow'
+import { shallow } from 'zustand/shallow'
 import { utils } from 'votes'
+import { H5 } from './layout/headings'
 
 export const MatrixComp: React.FC = () => {
   const [skew, setSkew] = useState(false)
@@ -31,7 +32,7 @@ export const MatrixComp: React.FC = () => {
 
   return (
     <div className="container">
-      <Text level={5}>Matrix of duels</Text>
+      <H5>Matrix of duels</H5>
       <Checkbox
         checked={skew}
         name={'Ske'}

@@ -5,7 +5,7 @@ import {
   selectNormalizeWeights100,
 } from './store/selectors'
 import { totalWeight } from './generate-ballots'
-import { Button, Text } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react'
 import {
   ArrowRightOutlined,
   DeleteOutlined,
@@ -13,6 +13,7 @@ import {
   MinusOutlined,
   PlusOutlined,
 } from '@ant-design/icons'
+import { H4 } from './layout/headings'
 
 export const BallotsComp = () => {
   const groupedBallots = useStore(selectBallots)
@@ -22,7 +23,7 @@ export const BallotsComp = () => {
   const normalizeWeights100 = useStore(selectNormalizeWeights100)
   return (
     <div className="container">
-      <Text level={4}>{totalW} voters</Text>
+      <H4>{totalW} voters</H4>
 
       <p>
         Preferences can be edited by clicking the buttons <EditOutlined />
@@ -39,7 +40,7 @@ export const BallotsComp = () => {
           +1 random vote
         </Button>
         <Button
-          icon={<ArrowRightOutlined />}
+          rightIcon={<ArrowRightOutlined />}
           size="small"
           onClick={normalizeWeights100}
         >

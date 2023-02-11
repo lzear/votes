@@ -1,6 +1,5 @@
 import React from 'react'
 import { ListVotesGroup } from './list-votes-group'
-import { Text } from '@chakra-ui/react'
 import { Candidates } from './candidates'
 import { SelectPremade } from './select-premade'
 import { WidthSetter } from './width-setter'
@@ -11,11 +10,12 @@ import { MatrixComp } from './matrix'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 import { BallotsComp } from './ballots'
+import { H3 } from './layout/headings';
 
 export const Sandbox: React.FC = () => {
   return (
     <div className="container">
-      <Text>A sandbox for ranked voting systems</Text>
+      <H3>A sandbox for ranked voting systems</H3>
       <p>
         This website showcases some ranked voting systems. Simulate an election
         by adding candidates, and voter preferences. Read more on{' '}
