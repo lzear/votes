@@ -1,5 +1,11 @@
 # votes
 
+## 2.1.0
+
+### Minor Changes
+
+- b71fa6f: Reduce bundle size by using tsup
+
 ## 2.0.6
 
 ### Patch Changes
