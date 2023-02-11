@@ -6,7 +6,8 @@
     "packages": [
       "d3-force",
       "demo",
-      "votes"
+      "votes",
+      "tsconfig"
     ]
   },
   "sideEffects": false,
@@ -17,10 +18,15 @@
   },
   "license": "MIT",
   "scripts": {
-    "lint": "eslint .",
-    "build": "yarn workspace votes build",
+    "changeset": "changeset",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "dev": "turbo run dev",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "npkill": "npx npkill",
+    "ncu": "npx npm-check-updates -u -ws",
+    "lint": "eslint . && yarn turbo run lint",
     "fix:prettier": "prettier --write \"**/*.*\"",
-    "test": "yarn workspace votes test",
     "test-prod": "yarn run eslint && yarn workspaces run test-prod",
     "commit": "git-cz",
     "precommit": "lint-staged",
@@ -34,8 +40,6 @@
     "@changesets/cli": "^2.25.2",
     "@commitlint/cli": "^17.2.0",
     "@commitlint/config-conventional": "^17.2.0",
-    "@preconstruct/cli": "^2.2.2",
-    "@preconstruct/hook": "^0.4.0",
     "@types/node": "^18.11.9",
     "@typescript-eslint/eslint-plugin": "^5.42.1",
     "@typescript-eslint/parser": "^5.42.1",
@@ -57,6 +61,7 @@
     "is-boolean-object": "^1.1.2",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
+    "turbo": "^1.7.4",
     "typescript": "4.8.4"
   },
   "bugs": {
@@ -78,13 +83,8 @@
       "@commitlint/config-conventional"
     ]
   },
-  "preconstruct": {
-    "packages": [
-      "votes"
-    ]
-  },
   "volta": {
-    "node": "16.16.0"
+    "node": "18.14.0"
   },
   "nextBundleAnalysis": {
     "budget": null,

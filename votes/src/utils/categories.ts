@@ -14,7 +14,7 @@ type SystemsBeing<
   MethodType extends Methods,
   System,
 > = System extends VotingSystem
-  ? typeof methods[System] extends MethodType
+  ? (typeof methods)[System] extends MethodType
     ? System
     : never
   : never

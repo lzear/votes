@@ -3,21 +3,20 @@
   "version": "0.0.4",
   "private": true,
   "scripts": {
-    "dev": "yarn workspace votes preconstruct dev && next dev",
-    "build": "yarn workspace votes build && yarn workspace votes link && yarn link votes && next build",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
-    "@ant-design/icons": "^4.7.0",
-    "@fortawesome/fontawesome-free": "^6.2.1",
-    "@fortawesome/fontawesome-svg-core": "^6.2.1",
-    "@fortawesome/free-regular-svg-icons": "^6.2.1",
-    "@fortawesome/free-solid-svg-icons": "^6.2.1",
+    "@ant-design/icons": "^5.0.1",
+    "@fortawesome/fontawesome-free": "^6.3.0",
+    "@fortawesome/fontawesome-svg-core": "^6.3.0",
+    "@fortawesome/free-regular-svg-icons": "^6.3.0",
+    "@fortawesome/free-solid-svg-icons": "^6.3.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@next/bundle-analyzer": "^13.1.6",
     "@next/eslint-plugin-next": "^13.1.6",
-    "@preconstruct/next": "^4.0.0",
     "@react-spring/web": "^9.6.1",
     "@types/d3": "^7.4.0",
     "@types/d3-dispatch": "^3.0.2",
@@ -26,9 +25,9 @@
     "@types/d3-scale": "^4.0.3",
     "@types/d3-selection": "^3.0.4",
     "@types/d3-timer": "^3.0.0",
-    "@types/node": "18.11.19",
+    "@types/node": "18.13.0",
     "@types/numeral": "^2.0.2",
-    "@types/react": "18.0.27",
+    "@types/react": "18.0.28",
     "@use-gesture/react": "^10.2.24",
     "antd": "^4.24.1",
     "babel-preset-next": "^1.4.0",
@@ -45,23 +44,25 @@
     "less-loader": "^11.1.0",
     "next": "13.1.6",
     "next-compose-plugins": "^2.2.1",
-    "next-plausible": "^3.7.1",
+    "next-plausible": "^3.7.2",
     "next-with-less": "^2.0.5",
     "numeral": "^2.0.6",
     "react": "^18",
     "react-dom": "^18",
     "react-spring": "^9.6.1",
     "react-with-gesture": "^4.0.8",
+    "tsconfig": "*",
     "typescript": "4.9.5",
-    "votes": "2.0.6",
-    "zustand": "^4.3.2"
+    "votes": "*",
+    "zustand": "^4.3.3"
   },
+  "devDependencies": {},
   "nextBundleAnalysis": {
     "budget": 358400,
     "budgetPercentIncreaseRed": 20,
     "showDetails": true
   },
   "volta": {
-    "node": "16.16.0"
+    "extends": "../package.json"
   }
 }

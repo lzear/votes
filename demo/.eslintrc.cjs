@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['next/core-web-vitals'],
+  extends: ['next', 'next/core-web-vitals'],
   parserOptions: {
     ecmaVersion: 2022
   },

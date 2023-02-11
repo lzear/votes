@@ -1,5 +1,5 @@
 import { MethodElements } from '../types'
-import VizInstantRunoff from './viz-instant-runoff'
+import { VizInstantRunoff } from './viz-instant-runoff'
 import { VotingSystem } from 'votes/src'
 import { votingTypeData } from '../descriptions'
 

@@ -7,7 +7,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 const withLess = require('next-with-less')
-const withPreconstruct = require('@preconstruct/next')
 const { getThemeVariables } = require('antd/dist/theme')
 
 // const dark = getThemeVariables({
@@ -17,7 +16,6 @@ const { getThemeVariables } = require('antd/dist/theme')
 
 module.exports = withPlugins(
   [
-    [withPreconstruct],
     [withBundleAnalyzer],
     [
       withLess,
@@ -70,10 +68,6 @@ module.exports = withPlugins(
   {
     reactStrictMode: true,
     pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
-    images: {
-      formats: ['image/avif', 'image/webp'],
-      domains: ['i.scdn.co'],
-    },
     webpack5: true,
 
     swcMinify: true,
@@ -82,15 +76,6 @@ module.exports = withPlugins(
       // serverComponents: true,
       // esmExternals: true,
       externalDir: true,
-    },
-
-    webpack(config) {
-      config.module.rules.push({
-        test: /\.svg$/,
-        use: ['@svgr/webpack'],
-      })
-
-      return config
     },
   },
 )
