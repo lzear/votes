@@ -15,5 +15,3 @@ docs
 
 **/*.rej
 *.rej
-
-tools/gh-pages-publish.ts
