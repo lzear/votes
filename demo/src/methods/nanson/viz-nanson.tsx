@@ -6,7 +6,7 @@ import {
 } from '../../store/selectors'
 import { useStore } from '../../store'
 import { StoreBallots } from '../../ballot-with-id'
-import VizRoundsBallots from '../instant-runoff/viz-rounds'
+import { VizRoundsBallots } from '../instant-runoff/viz-rounds'
 import { Baldwin, Round } from 'votes/src'
 import { BordaTreeMapInner } from '../borda/viz-borda'
 

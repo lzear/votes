@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react'
+import { InstantRunoff } from 'votes'
 import { selectBallots, useCandidatesString } from '../../store/selectors'
 import { useStore } from '../../store'
-import VizRoundsBallots from './viz-rounds'
-import { InstantRunoff } from 'votes'
+import { VizRoundsBallots } from './viz-rounds'
 import { DisplayBallots } from '../../display-ballots'
 
 export const VizInstantRunoff: React.FC = () => {

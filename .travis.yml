@@ -8,7 +8,7 @@ node_js:
   - '18'
 before_script: cd votes
 script:
-  - npm run test-prod && npm run build
+  - yarn run lint && yarn run test && yarn run build
 after_success:
   - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
     npm run travis-deploy-once "npm run publish-docs"; fi

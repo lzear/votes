@@ -23,7 +23,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "lint": "eslint . --ext js,ts,tsx,jsx,md",
+    "lint": "eslint . --ext js,ts,tsx,jsx",
     "test": "node --experimental-vm-modules node_modules/.bin/jest --coverage --runInBand --detectOpenHandles --forceExit",
     "test-prod": "yarn run test && yarn run build",
     "prebuild": "rimraf dist",

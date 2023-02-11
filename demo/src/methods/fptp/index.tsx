@@ -1,5 +1,5 @@
 import { MethodElements } from '../types'
-import VizFptp from './viz-fptp'
+import { VizFptp } from './viz-fptp'
 import { VotingSystem } from 'votes/src'
 import { votingTypeData } from '../descriptions'
 
