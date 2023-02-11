@@ -9,19 +9,8 @@ import { SelectMethod } from './select-method'
 import { Results } from './results'
 import { MatrixComp } from './matrix'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  findIconDefinition,
-  type IconDefinition,
-  type IconLookup,
-  library,
-} from '@fortawesome/fontawesome-svg-core'
-import { fas } from '@fortawesome/free-solid-svg-icons'
+import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 import { BallotsComp } from './ballots'
-
-library.add(fas)
-
-const coffeeLookup: IconLookup = { prefix: 'fas', iconName: 'external-link' }
-const coffeeIconDefinition: IconDefinition = findIconDefinition(coffeeLookup)
 
 export const Sandbox: React.FC = () => {
   return (
@@ -31,7 +20,7 @@ export const Sandbox: React.FC = () => {
         This website showcases some ranked voting systems. Simulate an election
         by adding candidates, and voter preferences. Read more on{' '}
         <a href="https://www.elzear.de/posts/2021-01-10-polls">
-          <FontAwesomeIcon icon={coffeeIconDefinition} /> elzear.de
+          <FontAwesomeIcon icon={faArrowUpRightFromSquare} /> elzear.de
         </a>
         , where polls can also be shared.
       </p>
