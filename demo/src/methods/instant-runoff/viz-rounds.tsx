@@ -10,11 +10,12 @@ import {
 } from '../../store/selectors'
 import { useStore } from '../../store'
 import { CandiTagList } from '../../candidates'
-import { Button, Typography } from 'antd'
+import { Button } from '@chakra-ui/react'
 import { BallotWithId, StoreBallots } from '../../ballot-with-id'
 import _ from 'lodash'
 import { QuickScores } from '../viz/quick-scores'
 import { useElementWidth } from '../../width-setter'
+import { H4, H5 } from '../../layout/headings'
 
 type RR<B extends Ballot> = Round & {
   eliminated: string[]
@@ -58,16 +59,14 @@ export const RoundsSummary: React.FC<{
     .at(-1)?.roundResult.eliminated
   return (
     <>
-      <Typography.Title level={4}>Summary</Typography.Title>
-      <Typography.Title level={5}>
-        Winner{winners && winners.length > 1 && 's'}
-      </Typography.Title>
+      <H4>Summary</H4>
+      <H5>Winner{winners && winners.length > 1 && 's'}</H5>
       <div className="block">
         {winners && (
           <CandiTagList candidates={winners.map((c) => candidatesById[c])} />
         )}
       </div>
-      <Typography.Title level={5}>Iterations</Typography.Title>
+      <H5>Iterations</H5>
       {[...rounds].reverse().map((round, reverseRoundIdx) => {
         const roundIdx = rounds.length - reverseRoundIdx - 1
         if (roundIdx === rounds.length - 1) return null
@@ -105,7 +104,7 @@ export const RoundDescription: React.FC<{
     : roundR.roundResult.qualified
   return (
     <div className="container">
-      <Typography.Title level={4}>Round #{roundIdx + 1}</Typography.Title>
+      <H4>Round #{roundIdx + 1}</H4>
       {roundIdx > 0 && (
         <div>
           Eliminated in previous rounds:{' '}

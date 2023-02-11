@@ -7,7 +7,7 @@ import {
   selectWidth,
   useCandidates,
 } from './store/selectors'
-import { Button } from 'antd'
+import { Button } from '@chakra-ui/react'
 import { WithWidth } from './react-ranker/use-width'
 import Ranker from './react-ranker/ranker'
 
