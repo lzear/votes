@@ -242,7 +242,7 @@ const Ranker: React.FC<Props> = ({
         bHeight={B_HEIGHT}
         bGutter={B_GUTTER}
         count={maxRank}
-        hovered={nextB !== null ? nextB * 2 + 1 : null}
+        hovered={nextB === null ? null : nextB * 2 + 1}
       />
       <style jsx global>{`
         .car {
@@ -271,7 +271,7 @@ const Ranker: React.FC<Props> = ({
           padding-left: 8px;
           text-transform: uppercase;
           letter-spacing: -0.0142857em;
-          cursor: -webkit-grab;
+          cursor: grab;
           user-select: none;
         }
       `}</style>

@@ -9,8 +9,7 @@ const { groupBallots } = utils
 const mergeDraw = <T>(initial: T[][], toAdd: T) => {
   const idx = Math.floor(Math.random() * initial.length)
 
-  if (initial[idx]?.length) initial[idx] = [...initial[idx], toAdd]
-  else initial[idx] = [toAdd]
+  initial[idx] = initial[idx]?.length ? [...initial[idx], toAdd] : [toAdd]
 
   return initial
 }

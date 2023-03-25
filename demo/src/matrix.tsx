@@ -8,7 +8,7 @@ import {
 } from './store/selectors'
 import { Checkbox, Typography } from 'antd'
 import { CandiTag } from './candidates'
-import shallow from 'zustand/shallow'
+import { shallow } from 'zustand/shallow'
 import { utils } from 'votes'
 
 export const MatrixComp: React.FC = () => {

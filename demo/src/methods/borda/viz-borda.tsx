@@ -6,7 +6,7 @@ import { Button } from 'antd'
 import * as d3 from 'd3'
 import { hierarchy, treemap } from 'd3-hierarchy'
 import { scaleBand } from 'd3-scale'
-import shallow from 'zustand/shallow'
+import { shallow } from 'zustand/shallow'
 import {
   selectBallots,
   selectWidth,
