@@ -1,5 +1,11 @@
 # votes
 
+## 2.1.1
+
+### Patch Changes
+
+- 674d485: Add IIFE bundle
+
 ## 2.1.0
 
 ### Minor Changes
