@@ -18,7 +18,6 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "outDir": "dist",
-    "importsNotUsedAsValues": "error",
 
     "lib": ["ES2015"],
     "module": "ESNext",
