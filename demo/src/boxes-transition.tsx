@@ -1,4 +1,5 @@
-import { a, TransitionFn, useTransition } from '@react-spring/web'
+import { a, useTransition } from '@react-spring/web'
+import type { TransitionFn } from '@react-spring/core'
 import { useHover } from '@use-gesture/react'
 import _ from 'lodash'
 import { BoxMeta, BoxPosition, WithColor } from './ballots-ui'
@@ -15,11 +16,8 @@ type TrState = {
 
 export const useBoxesTransition = (
   boxes: (BoxMeta & BoxPosition & WithColor & { opacity?: number })[],
-): TransitionFn<
-  BoxMeta & BoxPosition & WithColor & { opacity?: number },
-  TrState
-> => {
-  return useTransition<
+) =>
+  useTransition<
     BoxMeta & BoxPosition & WithColor & { opacity?: number },
     TrState
   >(boxes, {
@@ -54,7 +52,6 @@ export const useBoxesTransition = (
     // Using an array created by lodash.map
     keys: _.map(boxes, 'key'),
   })
-}
 
 export const renderBoxes = (
   transitions: TransitionFn<

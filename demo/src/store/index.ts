@@ -111,9 +111,9 @@ export const useStore = create<Store>()(
       set(({ ballots }) => ({
         ballots: ballots
           .map((ballot) =>
-            ballot.id !== id
-              ? ballot
-              : { ...ballot, weight: ballot.weight + diff },
+            ballot.id === id
+              ? { ...ballot, weight: ballot.weight + diff }
+              : ballot,
           )
           .filter((ballot) => ballot.weight > 0)
           .map((b, idx) => ({ ...b, idx })),
@@ -123,7 +123,7 @@ export const useStore = create<Store>()(
       set(({ ballots }) => ({
         ballots: mergeBallotsUtil(
           ballots.map((ballot) =>
-            ballot.id !== id ? ballot : { ...ballot, ranking },
+            ballot.id === id ? { ...ballot, ranking } : ballot,
           ),
         ),
       }))
