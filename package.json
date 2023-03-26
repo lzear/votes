@@ -18,7 +18,6 @@
   },
   "license": "MIT",
   "scripts": {
-    "changeset": "changeset",
     "build": "turbo run build",
     "test": "turbo run test",
     "dev": "turbo run dev",
@@ -30,6 +29,7 @@
     "test-prod": "yarn run eslint && yarn workspaces run test-prod",
     "commit": "git-cz",
     "precommit": "lint-staged",
+    "changeset:version": "yarn changeset version",
     "release": "yarn workspace votes release && changeset publish"
   },
   "dependencies": {
