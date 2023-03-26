@@ -1,17 +1,10 @@
 # votes
 
-[![version](https://img.shields.io/npm/v/votes)](https://www.npmjs.com/package/votes)
-<picture>
-  <img alt="bundlephobia bundle size" src="https://img.shields.io/bundlephobia/minzip/votes">
-</picture>
-<picture>
-  <img alt="language" src="https://img.shields.io/github/languages/top/lzear/votes">
-</picture>
-<picture>
-  <img alt="downloads" src="https://img.shields.io/npm/dm/votes"> </picture>
-<picture>
-  <img alt="last commit" src="https://img.shields.io/github/last-commit/lzear/votes">
-</picture>
+![version](https://img.shields.io/npm/v/votes)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/votes)
+![language](https://img.shields.io/github/languages/top/lzear/votes)
+![downloads](https://img.shields.io/npm/dm/votes)
+![last commit](https://img.shields.io/github/last-commit/lzear/votes)
 [![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/votes)](https://libraries.io/npm/votes)
 [![license](https://img.shields.io/github/license/lzear/votes)](https://github.com/lzear/votes/blob/master/LICENSE)
 [![Build Status](https://travis-ci.com/lzear/votes.svg?branch=master)](https://travis-ci.com/lzear/votes)
@@ -19,18 +12,12 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/08af655918d741d1bffca7ec12ba72be)](https://app.codacy.com/gh/lzear/votes?utm_source=github.com&utm_medium=referral&utm_content=lzear/votes&utm_campaign=Badge_Grade_Settings)
 [![CodeClimate Coverage](https://api.codeclimate.com/v1/badges/0a98aa30f16e04bc3eac/test_coverage)](https://codeclimate.com/github/lzear/votes/test_coverage)
 [![CodeClimate Maintainability](https://api.codeclimate.com/v1/badges/0a98aa30f16e04bc3eac/maintainability)](https://codeclimate.com/github/lzear/votes/maintainability)
-[![Code Climate technical debt](https://img.shields.io/codeclimate/tech-debt/lzear/votes)](https://codeclimate.com/github/lzear/votes)
+![Code Climate technical debt](https://img.shields.io/codeclimate/tech-debt/lzear/votes)
 [![CodeFactor](https://www.codefactor.io/repository/github/lzear/votes/badge)](https://www.codefactor.io/repository/github/lzear/votes)
-<picture>
-  <img alt="codecov" src="https://codecov.io/gh/lzear/votes/branch/master/graph/badge.svg">
-</picture>
-<picture>
-  <img alt="npms.io maintenance score" src="https://img.shields.io/npms-io/maintenance-score/votes">
-</picture>
-<picture>
-  <img alt="npms.io quality score" src="https://img.shields.io/npms-io/quality-score/votes">
-</picture>
-[![Website](https://img.shields.io/website?url=https%3A%2F%2Frank-votes.vercel.app)](https://rank-votes.vercel.app)
+![codecov](https://codecov.io/gh/lzear/votes/branch/master/graph/badge.svg?token=Fd9Jk4FeBY)
+![npms.io (final)](https://img.shields.io/npms-io/maintenance-score/votes)
+![npms.io (final)](https://img.shields.io/npms-io/quality-score/votes)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Frank-votes.vercel.app%2F)](https://rank-votes.vercel.app/)
 
 ## 🧑‍💻 Install
 
