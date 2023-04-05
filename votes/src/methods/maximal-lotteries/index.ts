@@ -1,10 +1,9 @@
 import zipObject from 'lodash/zipObject'
-import { solve } from '../../simplex'
 import type { Matrix, ScoreObject } from '../../types'
-import { findSmithSet } from '../../utils/condorcet'
-import { makeAntisymetric } from '../../utils'
+import { findSmithSet, makeAntisymetric } from '../../utils'
 import { scoresZero } from '../../utils/scores-zero'
 import { RandomMatrixMethod } from '../../classes/random-matrix-method'
+import { findNashEquilibrium } from '../../simplex/find-nash-equilibrium'
 
 /**
  * * @alpha This voting system is not working correctly!
@@ -17,17 +16,13 @@ export const computeLottery = (
   const matrix = makeAntisymetric(_matrix)
   const condorset = findSmithSet(matrix)
 
-  const subVector = solve(condorset.array).map((v) => Math.max(0, v))
-
-  // Fixups because I can't implement the simplex algorithm correctly
-  //  ---------- Begin ----------
-  const sum = subVector.reduce((acc, cur) => acc + cur, 0)
-  const normalizedVector = subVector.map((v) => v / sum)
-  //  ----------  End  ----------
+  const solution = findNashEquilibrium(condorset.array).map((v) =>
+    Math.max(0, v),
+  )
 
   return {
     ...scoresZero(matrix.candidates),
-    ...zipObject(condorset.candidates, normalizedVector),
+    ...zipObject(condorset.candidates, solution),
   }
 }
 
