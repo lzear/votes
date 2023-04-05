@@ -47,3 +47,5 @@ export {
   isBallotSystem,
   isMatrixSystem,
 } from './utils/categories'
+
+import './typings/javascript-lp-solver.d.ts'
