@@ -6748,7 +6748,7 @@ jake@^10.8.5:
     filelist "^1.0.1"
     minimatch "^3.0.4"
 
-javascript-lp-solver@0.4.16:
+javascript-lp-solver@0.4.15:
   version "0.4.15"
   resolved "https://registry.yarnpkg.com/javascript-lp-solver/-/javascript-lp-solver-0.4.15.tgz#4a10fd02ee4462496179f4852abf3a6c820e7a7f"
   integrity sha512-CuGrfNzJKE8TjDOywxxZPC9IpmFVDGOof6tL9vVO7UbXFKfnWdBMXAAF4qOOT+e4TK8cEfXaECPOdK5MuMzAXg==
