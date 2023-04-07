@@ -13,6 +13,10 @@ import { minimaxTD } from './minimax-td'
 import { nanson } from './nanson'
 import { twoRoundsRunoff } from './two-rounds'
 import { smith } from './smith'
+import { randomizedCondorcet } from './randomized-condorcet'
+import { maximalLotteries } from './maximal-lotteries'
+import { rankedPairs } from './ranked-pairs'
+import { schulze } from './schulze'
 
 export const methods: { [k in DemoSystems]: MethodElements } = {
   [VotingSystem.Baldwin]: baldwin,
@@ -27,4 +31,8 @@ export const methods: { [k in DemoSystems]: MethodElements } = {
   [VotingSystem.Nanson]: nanson,
   [VotingSystem.Smith]: smith,
   [VotingSystem.TwoRoundRunoff]: twoRoundsRunoff,
+  [VotingSystem.RandomizedCondorcet]: randomizedCondorcet,
+  [VotingSystem.MaximalLotteries]: maximalLotteries,
+  [VotingSystem.RankedPairs]: rankedPairs,
+  [VotingSystem.Schulze]: schulze,
 }
