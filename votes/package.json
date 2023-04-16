@@ -2,7 +2,7 @@
   "name": "votes",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "Implementation of some [electoral systems](https://en.wikipedia.org/wiki/Electoral_system)",
   "keywords": [
     "votes",
