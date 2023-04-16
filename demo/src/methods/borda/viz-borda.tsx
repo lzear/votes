@@ -1,12 +1,25 @@
 import React, { useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons'
 import { a, to, useSpring } from '@react-spring/web'
 import { useHover } from '@use-gesture/react'
-import _ from 'lodash'
 import { Button } from 'antd'
-import * as d3 from 'd3'
+import type * as d3 from 'd3'
 import { hierarchy, treemap } from 'd3-hierarchy'
 import { scaleBand } from 'd3-scale'
+import _ from 'lodash'
 import { shallow } from 'zustand/shallow'
+
+import { Borda } from 'votes'
+
+import { AxisBallot, AxisCandidatesBot, AxisRank, AxisRank2 } from '../../axis'
+import type { BallotWithId, StoreBallots } from '../../ballot-with-id'
+import type { BoxBase, BoxMeta, BoxPosition, WithColor } from '../../ballots-ui'
+import { idToBidNCandidate, toBoxes, withColor } from '../../ballots-ui'
+import { renderBoxes, useBoxesTransition } from '../../boxes-transition'
+import type { Candidate } from '../../generate-ballots'
+import { numberToLetters } from '../../list-votes-group'
+import { scaling } from '../../scale'
+import { useStore } from '../../store'
 import {
   selectBallots,
   selectWidth,
@@ -14,25 +27,7 @@ import {
   useCandidatesColors,
   useCandidatesString,
 } from '../../store/selectors'
-import { numberToLetters } from '../../list-votes-group'
-import { AxisBallot, AxisCandidatesBot, AxisRank, AxisRank2 } from '../../axis'
-import {
-  BoxBase,
-  BoxMeta,
-  BoxPosition,
-  idToBidNCandidate,
-  toBoxes,
-  withColor,
-  WithColor,
-} from '../../ballots-ui'
 import { SvgBallots } from '../../svg-ballots'
-import { renderBoxes, useBoxesTransition } from '../../boxes-transition'
-import { scaling } from '../../scale'
-import { useStore } from '../../store'
-import { Candidate } from '../../generate-ballots'
-import { BallotWithId, StoreBallots } from '../../ballot-with-id'
-import { Borda } from 'votes'
-import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons'
 
 export const withPrefAbove2 = <B extends BoxMeta>(
   boxes: B[],

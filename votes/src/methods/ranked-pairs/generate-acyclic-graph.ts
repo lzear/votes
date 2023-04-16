@@ -1,6 +1,7 @@
 import _ from 'lodash'
-import { Vertex } from './vertex'
+
 import { Tarjan } from './tarjan'
+import { Vertex } from './vertex'
 
 type Edge = { from: number; to: number; value: number }
 

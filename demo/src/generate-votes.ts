@@ -1,4 +1,5 @@
 import _ from 'lodash'
+
 import { emojis } from './emojis'
 
 const mergeDraw = <T>(initial: T[][], toAdd: T) => {

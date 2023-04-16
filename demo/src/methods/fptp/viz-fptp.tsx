@@ -1,6 +1,9 @@
 import React, { useLayoutEffect, useRef, useState } from 'react'
-import { useStore } from '../../store'
+
+import { FirstPastThePost } from 'votes'
+
 import { DisplayBallots } from '../../display-ballots'
+import { useStore } from '../../store'
 import {
   selectBallots,
   selectWidth,
@@ -8,7 +11,6 @@ import {
   useCandidatesString,
 } from '../../store/selectors'
 import { ScoresSummary } from '../viz/scores-summary'
-import { FirstPastThePost } from 'votes'
 
 export const VizFptp: React.FC = () => {
   const ballots = useStore(selectBallots)

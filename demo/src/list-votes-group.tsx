@@ -1,3 +1,4 @@
+import React from 'react'
 import {
   DeleteOutlined,
   EditOutlined,
@@ -6,8 +7,7 @@ import {
 } from '@ant-design/icons'
 import { Button } from 'antd'
 import _ from 'lodash'
-import React from 'react'
-import { useStore } from './store'
+
 import {
   selectBallots,
   selectChangeBallotWeight,
@@ -16,6 +16,7 @@ import {
   selectSelectedBallot,
   useCandidatesById,
 } from './store/selectors'
+import { useStore } from './store'
 
 export function numberToLetters(num: number) {
   let letters = ''

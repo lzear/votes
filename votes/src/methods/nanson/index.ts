@@ -1,7 +1,8 @@
-import sum from 'lodash/sum'
-import type { Ballot, ScoreObject } from '../../types'
 import _ from 'lodash'
+import sum from 'lodash/sum'
+
 import { RoundBallotMethod } from '../../classes/round-ballot-method'
+import type { Ballot, ScoreObject } from '../../types'
 import { Borda } from '../borda'
 
 const round = (

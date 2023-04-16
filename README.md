@@ -96,12 +96,11 @@ preference order aiming to minimize dissatisfaction of the voters. Also known as
 Kemeny rule, VoteFair popularity ranking, the maximum likelihood method, and the
 median relation.
 
-**⚠️ Maximal lotteries & Randomized Condorcet ⚠️** (Contain big implementation
-errors!): Returns probabilities for each candidate that should be used for a
-lottery between the Candidates. If a candidate is the Condorcet winner, its
-probability will be 1. Despite being non-deterministic, those methods are the
-fairest. Currently, these methods give incorrect results in many cases because
-of mistakes in the codes!
+**Maximal lotteries & Randomized Condorcet**: Returns probabilities for each
+candidate that should be used for a lottery between the Candidates. If a
+candidate is the Condorcet winner, its probability will be 1. Despite being
+non-deterministic, those methods are the fairest. Currently, these methods give
+incorrect results in many cases because of mistakes in the codes!
 
 **Majority Judgement**: (**⚠️ cardinal voting system**). Voters can rank
 candidates in an array corresponding to 6 categories ("Excellent", "Very good",

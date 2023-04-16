@@ -1,5 +1,7 @@
 import _ from 'lodash'
+
 import type { Matrix } from '../types'
+
 import { makeAntisymetric } from './make-matrix'
 
 export const findSmithSet = (_matrix: Matrix): Matrix => {

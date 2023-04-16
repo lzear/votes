@@ -1,9 +1,13 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
-import { Store, useStore } from '.'
-import { rainbow } from '../traffic-color'
-import { utils } from 'votes'
 import _ from 'lodash'
+
+import { utils } from 'votes'
+
+import { rainbow } from '../traffic-color'
+
+import type { Store } from '.'
+import { useStore } from '.'
 
 const { matrixFromBallots, makeAntisymetric } = utils
 

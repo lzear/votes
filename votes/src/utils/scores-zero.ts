@@ -1,4 +1,5 @@
 import zipObject from 'lodash/zipObject'
+
 import type { ScoreObject } from '../types'
 
 export const scoresAny = (candidates: string[], value: number): ScoreObject =>

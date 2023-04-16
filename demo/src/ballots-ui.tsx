@@ -1,7 +1,8 @@
 import type { Ballot, Round } from 'votes'
+
+import type { BallotWithId } from './ballot-with-id'
 import { totalWeight } from './generate-ballots'
-import { BallotWithId } from './ballot-with-id'
-import { Scale } from './scale'
+import type { Scale } from './scale'
 
 export type WithOffset = Ballot & {
   offset: number

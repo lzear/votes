@@ -1,8 +1,10 @@
+import _ from 'lodash'
+
 import type { Matrix, ScoreObject } from '../../types'
-import { Minimax, MinimaxVariant } from '../minimax'
 import { findSmithSet } from '../../utils/condorcet'
 import { scoresAny } from '../../utils/scores-zero'
-import _ from 'lodash'
+import type { MinimaxVariant } from '../minimax'
+import { Minimax } from '../minimax'
 
 const computeScores = (
   matrix: Matrix,

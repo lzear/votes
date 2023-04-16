@@ -1,7 +1,7 @@
-import { performPivots, simplexTableau } from '../../simplex'
-import { matrixString } from '../../test/test-utils'
-import { RandomizedCondorcet } from '.'
 import { rngGenerator } from '../../test/rng-generator'
+import { matrixString } from '../../test/test-utils'
+
+import { RandomizedCondorcet } from '.'
 
 const example1 = [
   [0, -2, 8],
@@ -91,18 +91,5 @@ describe('pivot', () => {
      0     -2      8
      2      0     -4
     -8      4      0`)
-  })
-  it('tableau', () => {
-    expect(matrixString(simplexTableau(example1))).toEqual(`
-     0     -1     -1     -1      1      0      0      0      0      1
-     0      0     -2      8      0      1      0      0      0      0
-     0      2      0     -4      0      0      1      0      0      0
-     0     -8      4      0      0      0      0      1      0      0
-     1      1      1      1      0      0      0      0      1      0`)
-  })
-  it('no row', () => {
-    expect(() => performPivots(simplexTableau(example1), [1, 2, 3, 4])).toThrow(
-      'no row no pivot',
-    )
   })
 })

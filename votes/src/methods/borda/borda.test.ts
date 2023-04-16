@@ -1,5 +1,6 @@
-import { Borda } from '.'
 import { abcde, balinski } from '../../test/test-utils'
+
+import { Borda } from '.'
 
 describe(Borda, () => {
   it('scores', () => {

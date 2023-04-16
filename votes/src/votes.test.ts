@@ -1,3 +1,5 @@
+import { abcde, balinski, sW } from './test/test-utils'
+import { matrixFromBallots } from './utils'
 import {
   Approbation,
   Baldwin,
@@ -15,8 +17,6 @@ import {
   Schulze,
   TwoRoundRunoff,
 } from '.'
-import { abcde, balinski, sW } from './test/test-utils'
-import { matrixFromBallots } from './utils'
 
 describe('Test all methods', () => {
   it('votes with approbation', () => {
@@ -133,11 +133,11 @@ describe('Test all methods', () => {
     expect(
       new MaximalLotteries(matrixFromBallots(sW, abcde)).scores(),
     ).toStrictEqual({
-      a: 0.642_857_142_857_142_8,
+      a: 0.272_727_27,
       b: 0,
-      c: 0,
+      c: 0.090_909_09,
       d: 0,
-      e: 0.357_142_857_142_857_2,
+      e: 0.636_363_64,
     })
   })
   it('votes with ranked pairs', () => {

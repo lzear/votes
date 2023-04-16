@@ -1,14 +1,17 @@
 import React, { useMemo } from 'react'
+import type { Round } from 'votes'
+
+import { Baldwin } from 'votes'
+
+import type { StoreBallots } from '../../ballot-with-id'
+import { useStore } from '../../store'
 import {
   selectBallots,
   useCandidatesById,
   useCandidatesString,
 } from '../../store/selectors'
-import { useStore } from '../../store'
-import { StoreBallots } from '../../ballot-with-id'
-import { VizRoundsBallots } from '../instant-runoff/viz-rounds'
-import { Baldwin, Round } from 'votes/src'
 import { BordaTreeMapInner } from '../borda/viz-borda'
+import { VizRoundsBallots } from '../instant-runoff/viz-rounds'
 
 export const Displayer: React.FC<{
   ballots: StoreBallots[]

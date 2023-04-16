@@ -1,7 +1,7 @@
-import type { Ballot, ScoreObject } from '../../types'
-import { FirstPastThePost } from '../first-past-the-post'
-import { normalizeBallots } from '../../utils'
 import { RoundBallotMethod } from '../../classes/round-ballot-method'
+import type { Ballot, ScoreObject } from '../../types'
+import { normalizeBallots } from '../../utils'
+import { FirstPastThePost } from '../first-past-the-post'
 
 const round = (
   candidates: string[],

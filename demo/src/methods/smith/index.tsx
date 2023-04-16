@@ -1,7 +1,9 @@
-import type { MethodElements } from '../types'
-import { VizSmith } from './viz-smith'
-import { VotingSystem } from 'votes/src'
+import { VotingSystem } from 'votes'
+
 import { votingTypeData } from '../descriptions'
+import type { MethodElements } from '../types'
+
+import { VizSmith } from './viz-smith'
 
 export const smith: MethodElements = {
   id: VotingSystem.Smith,

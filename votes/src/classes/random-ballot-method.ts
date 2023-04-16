@@ -1,6 +1,7 @@
-import type { Ranker } from './method'
 import type { Ballot } from '../types'
+
 import { BallotMethod } from './ballot-method'
+import type { Ranker } from './method'
 
 export abstract class RandomBallotMethod
   extends BallotMethod

@@ -1,14 +1,17 @@
 import React from 'react'
+import { Typography } from 'antd'
+
+import { Borda } from 'votes'
+
+import { useStore } from '../../store'
 import {
   selectBallots,
   useCandidatesById,
   useCandidatesString,
 } from '../../store/selectors'
-import { useStore } from '../../store'
 import { ScoresSummary } from '../viz/scores-summary'
-import { Borda } from 'votes'
+
 import { BordaTreeMap } from './viz-borda'
-import { Typography } from 'antd'
 
 export const VizBorda: React.FC = () => {
   const ballots = useStore(selectBallots)

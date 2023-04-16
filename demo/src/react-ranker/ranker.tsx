@@ -1,15 +1,11 @@
-import React, {
-  HTMLAttributes,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
-import { useDrag } from '@use-gesture/react'
-import { animated, to, useSprings } from 'react-spring'
-import _ from 'lodash'
+import type { HTMLAttributes } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons'
+import { animated, to, useSprings } from '@react-spring/web'
+import { useDrag } from '@use-gesture/react'
+import type { ReactDOMAttributes } from '@use-gesture/react/dist/declarations/src/types'
+import _ from 'lodash'
+
 import BucketBoxes from './bucket-boxes'
 import {
   B_GUTTER,
@@ -18,7 +14,6 @@ import {
   OPTION_GUTTER,
   OPTION_HEIGHT,
 } from './constants'
-import type { ReactDOMAttributes } from '@use-gesture/react/dist/declarations/src/types'
 
 type Candidate = { id: string; name: string; color: string }
 

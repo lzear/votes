@@ -1,7 +1,8 @@
-import { shuffleArray } from '../../utils/shuffle-array'
+import zipObject from 'lodash/zipObject'
+
 import { RandomMethod } from '../../classes/random-method'
 import type { ScoreObject } from '../../types'
-import zipObject from 'lodash/zipObject'
+import { shuffleArray } from '../../utils/shuffle-array'
 
 /**
  * Pick a candidate at random, regardless of the ballots

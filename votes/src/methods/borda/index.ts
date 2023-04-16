@@ -1,7 +1,7 @@
-import type { Ballot, ScoreObject } from '../../types'
-import { scoresZero } from '../../utils/scores-zero'
-import { normalizeBallots } from '../../utils/normalize'
 import { BallotScoreMethod } from '../../classes/ballot-score-method'
+import type { Ballot, ScoreObject } from '../../types'
+import { normalizeBallots } from '../../utils/normalize'
+import { scoresZero } from '../../utils/scores-zero'
 
 const computeScores = (
   candidates: string[],

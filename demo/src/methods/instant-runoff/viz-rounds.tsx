@@ -1,20 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react'
-import type { Ballot, Round } from 'votes'
-import { utils } from 'votes'
+import { Button, Typography } from 'antd'
+import _ from 'lodash'
 import numeral from 'numeral'
-import { Candidate } from '../../generate-ballots'
+import type { Ballot, Round } from 'votes'
+
+import { utils } from 'votes'
+
+import type { BallotWithId, StoreBallots } from '../../ballot-with-id'
+import { CandiTagList } from '../../candidates'
+import type { Candidate } from '../../generate-ballots'
+import { useStore } from '../../store'
 import {
   selectBallots,
   useCandidatesById,
   useCandidatesString,
 } from '../../store/selectors'
-import { useStore } from '../../store'
-import { CandiTagList } from '../../candidates'
-import { Button, Typography } from 'antd'
-import { BallotWithId, StoreBallots } from '../../ballot-with-id'
-import _ from 'lodash'
-import { QuickScores } from '../viz/quick-scores'
 import { useElementWidth } from '../../width-setter'
+import { QuickScores } from '../viz/quick-scores'
 
 type RR<B extends Ballot> = Round & {
   eliminated: string[]

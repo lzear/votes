@@ -1,10 +1,11 @@
-import type { Ballot, ScoreObject } from '../../types'
-import { FirstPastThePost } from '../first-past-the-post'
-import { normalizeBallots } from '../../utils'
 import _ from 'lodash'
+
 import { RoundBallotMethod } from '../../classes/round-ballot-method'
-import { AbsoluteMajority } from '../absolute-majority'
+import type { Ballot, ScoreObject } from '../../types'
+import { normalizeBallots } from '../../utils'
 import { scoresZero } from '../../utils/scores-zero'
+import { AbsoluteMajority } from '../absolute-majority'
+import { FirstPastThePost } from '../first-past-the-post'
 
 const reverseBallots = (ballots: Ballot[]) =>
   ballots.map((ballot) => ({
@@ -19,6 +20,7 @@ const round = (
   qualified: string[]
   eliminated: string[]
   scores: ScoreObject
+  absoluteMajority?: true
 } => {
   if (candidates.length < 2)
     return {
@@ -37,6 +39,7 @@ const round = (
       eliminated: _.difference(candidates, qualified),
       qualified,
       scores: absoluteMajority.scores(),
+      absoluteMajority: true,
     }
   }
 

@@ -1,18 +1,19 @@
+import type { Ballot } from 'votes'
 import create from 'zustand'
 import { subscribeWithSelector } from 'zustand/middleware'
-import { StoreBallots } from '../ballot-with-id'
+
+import {
+  mergeBallots as mergeBallotsUtil,
+  normalizeWeights100 as normalizeWeights100util,
+} from '../ballot-utils'
+import type { StoreBallots } from '../ballot-with-id'
 import {
   initBallots,
   randomBallot,
   syncBallotCandidates,
   updateCandidateList,
 } from '../generate-ballots'
-import type { Ballot } from 'votes'
 import { randomString } from '../random-string'
-import {
-  mergeBallots as mergeBallotsUtil,
-  normalizeWeights100 as normalizeWeights100util,
-} from '../ballot-utils'
 
 export enum DemoSystems {
   // Approbation = 'APPROBATION',
@@ -25,15 +26,15 @@ export enum DemoSystems {
   FirstPastThePost = 'FIRST_PAST_THE_POST',
   // Kemeny = 'KEMENY',
   InstantRunoff = 'INSTANT_RUNOFF',
-  // MaximalLotteries = 'MAXIMAL_LOTTERIES',
+  MaximalLotteries = 'MAXIMAL_LOTTERIES',
   Minimax = 'MINIMAX',
   MinimaxTD = 'MINIMAX_TD',
   Nanson = 'NANSON',
-  // RandomizedCondorcet = 'RANDOMIZED_CONDORCET',
+  RandomizedCondorcet = 'RANDOMIZED_CONDORCET',
   // RandomCandidates = 'RANDOM_CANDIDATES',
   // RandomDictator = 'RANDOM_DICTATOR',
-  // RankedPairs = 'RANKED_PAIRS',
-  // Schulze = 'SCHULZE',
+  RankedPairs = 'RANKED_PAIRS',
+  Schulze = 'SCHULZE',
   Smith = 'SMITH',
   TwoRoundRunoff = 'TWO_ROUND_RUNOFF',
 }

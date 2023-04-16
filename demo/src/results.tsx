@@ -1,8 +1,9 @@
 import React from 'react'
-import { useStore } from './store'
+import { Typography } from 'antd'
+
 import { selectMethod } from './store/selectors'
 import { methods } from './methods'
-import { Typography } from 'antd'
+import { useStore } from './store'
 
 export const Results: React.FC = () => {
   const method = useStore(selectMethod)

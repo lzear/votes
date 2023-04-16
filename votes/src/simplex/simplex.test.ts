@@ -1,12 +1,13 @@
-import { solve } from '.'
 import { productVectM } from '../test/matrix'
+
+import { findNashEquilibrium } from './find-nash-equilibrium'
 
 it('solves 2', () => {
   const input = [
     [0, 1],
     [-1, 0],
   ]
-  const s = solve(input)
+  const s = findNashEquilibrium(input)
   expect(s).toEqual([1, 0])
   expect(productVectM(s, input)).toEqual([0, 1])
 })
@@ -17,7 +18,7 @@ it('solves 3', () => {
     [-1, 0, 1],
     [1, -1, 0],
   ]
-  const s = solve(input)
+  const s = findNashEquilibrium(input)
   expect(s).toEqual([
     0.333_333_333_333_333_3, 0.333_333_333_333_333_3, 0.333_333_333_333_333_3,
   ])
@@ -31,7 +32,7 @@ it('solves 4', () => {
     [1, -1, 0, 1],
     [-1, -1, -1, 0],
   ]
-  const s = solve(input)
+  const s = findNashEquilibrium(input)
   expect(s).toEqual([
     0.333_333_333_333_333_3, 0.333_333_333_333_333_3, 0.333_333_333_333_333_3,
     0,
@@ -45,11 +46,9 @@ it('solves example1', () => {
     [2, 0, -4],
     [-8, 4, 0],
   ]
-  const s = solve(input)
-  expect(s).toEqual([
-    0.285_714_285_714_285_7, 0.571_428_571_428_571_4, 0.142_857_142_857_142_85,
-  ])
-  expect(productVectM(s, input)).toEqual([0, 0, 0])
+  const s = findNashEquilibrium(input)
+  expect(s).toEqual([0.285_714_29, 0.571_428_57, 0.142_857_14])
+  for (const v of productVectM(s, input)) expect(v).toBeCloseTo(0)
 })
 
 it('solves example2', () => {
@@ -60,15 +59,15 @@ it('solves example2', () => {
     [4, -8, 4, 0, 6],
     [4, -6, -2, -6, 0],
   ]
-  const s = solve(input)
-  expect(s).toEqual([
-    0, 0.285_714_285_714_285_7, 0.571_428_571_428_571_4,
-    0.142_857_142_857_142_85, 0,
+  const s = findNashEquilibrium(input)
+  expect(s).toEqual([0, 0.285_714_29, 0.571_428_57, 0.142_857_14, 0])
+  expect(productVectM(s, input)).toEqual([
+    4, 2.000_000_010_049_518_6e-8, -1.999_999_998_947_288_3e-8,
+    3.999_999_975_690_116e-8, 3.714_285_719_999_999_5,
   ])
-  expect(productVectM(s, input)).toEqual([4, 0, 0, 0, 3.714_285_714_285_714])
 })
 
-it.skip('solves example3', () => {
+it('solves example3', () => {
   const input = [
     [0, -5, 7, 15, -1],
     [5, 0, -13, 21, -9],
@@ -76,10 +75,15 @@ it.skip('solves example3', () => {
     [-15, -21, 11, 0, -22],
     [1, 9, -3, 22, 0],
   ]
-  const s = solve(input)
-  expect(s).toEqual([1, 0])
-  expect(productVectM(s, input)).toEqual([
-    0.692_307_692_307_692_4, -0.076_923_076_923_077_01,
-    -4.270_088_556_250_603_5e-17, 0, 0.384_615_384_615_384_75,
-  ])
+  const s = findNashEquilibrium(input)
+  expect(s).toEqual([0.272_727_27, 0, 0.090_909_09, 0, 0.636_363_64])
+  expect(productVectM(s, input)).toMatchInlineSnapshot(`
+    [
+      1.0000000050247593e-8,
+      5.5454545799999995,
+      -3.0000000039720476e-8,
+      17.09090914,
+      -5.551115123125783e-17,
+    ]
+  `)
 })

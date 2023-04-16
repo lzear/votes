@@ -1,8 +1,9 @@
-import { a, useTransition } from '@react-spring/web'
 import type { TransitionFn } from '@react-spring/core'
-import { useHover } from '@use-gesture/react'
+import { a, useTransition } from '@react-spring/web'
+import type { useHover } from '@use-gesture/react'
 import _ from 'lodash'
-import { BoxMeta, BoxPosition, WithColor } from './ballots-ui'
+
+import type { BoxMeta, BoxPosition, WithColor } from './ballots-ui'
 
 type TrState = {
   x: number
@@ -79,7 +80,7 @@ export const renderBoxes = (
         y={y}
         // transform={`translate(${offset[0]}, ${offset[1]})`}
         style={{
-          opacity: opacity, //.to({ range: [1, 0], output: [1, 0] }),
+          opacity, //.to({ range: [1, 0], output: [1, 0] }),
           x,
           filter,
           y,

@@ -1,8 +1,10 @@
 import groupBy from 'lodash/groupBy'
 import range from 'lodash/range'
 import zipObject from 'lodash/zipObject'
-import type { Matrix, ScoreObject } from '../../types'
+
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
+import type { Matrix, ScoreObject } from '../../types'
+
 import { generateAcyclicGraph } from './generate-acyclic-graph'
 
 type Edge = { from: number; to: number; value: number }

@@ -1,6 +1,7 @@
-import { makeAntisymetric, matrixFromBallots } from '.'
 import { abcde, balinski } from '../test/test-utils'
+
 import { subMatrix } from './make-matrix'
+import { makeAntisymetric, matrixFromBallots } from '.'
 
 describe('matrixes', () => {
   it('makes antisymetric', () => {

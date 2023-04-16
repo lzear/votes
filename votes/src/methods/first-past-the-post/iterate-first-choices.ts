@@ -1,6 +1,6 @@
 import type { Ballot, ScoreObject } from '../../types'
-import { scoresZero } from '../../utils/scores-zero'
 import { normalizeBallots } from '../../utils/normalize'
+import { scoresZero } from '../../utils/scores-zero'
 
 export const iterateFirstChoices = (
   ballots: Ballot[],

@@ -1,9 +1,11 @@
 import React, { useMemo } from 'react'
+
+import { Coombs } from 'votes'
+
+import { DisplayBallots } from '../../display-ballots'
 import { useStore } from '../../store'
 import { selectBallots, useCandidatesString } from '../../store/selectors'
-import { Coombs } from 'votes/src'
 import { VizRoundsBallots } from '../instant-runoff/viz-rounds'
-import { DisplayBallots } from '../../display-ballots'
 
 export const VizCoombs: React.FC = () => {
   const _ballots = useStore(selectBallots)

@@ -1,5 +1,7 @@
 import type { Matrix } from '../types'
-import { ScoreMethod, Scorer } from './score-method'
+
+import type { Scorer } from './score-method'
+import { ScoreMethod } from './score-method'
 
 export interface Matrixer {
   matrix: Matrix

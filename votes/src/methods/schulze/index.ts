@@ -1,6 +1,7 @@
 import range from 'lodash/range'
-import type { Matrix, ScoreObject } from '../../types'
+
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
+import type { Matrix, ScoreObject } from '../../types'
 
 const computeFromMatrix = (matrix: Matrix): ScoreObject => {
   const n = matrix.candidates.length
@@ -9,9 +10,8 @@ const computeFromMatrix = (matrix: Matrix): ScoreObject => {
   for (let i = 0; i < n; i++)
     for (let j = 0; j < n; j++)
       if (i !== j)
-        if (matrix.array[i][j] > matrix.array[j][i])
-          p[i][j] = matrix.array[i][j]
-        else p[i][j] = 0
+        p[i][j] =
+          matrix.array[i][j] > matrix.array[j][i] ? matrix.array[i][j] : 0
 
   for (let i = 0; i < n; i++)
     for (let j = 0; j < n; j++)

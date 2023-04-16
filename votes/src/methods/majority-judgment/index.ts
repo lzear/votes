@@ -1,6 +1,7 @@
 import _ from 'lodash'
-import type { Ballot, ScoreObject } from '../../types'
+
 import { BallotMethod } from '../../classes/ballot-method'
+import type { Ballot, ScoreObject } from '../../types'
 import { scoresToRanking } from '../../utils'
 
 export type Judgements = {
@@ -10,7 +11,7 @@ export type Judgements = {
 const makeJudgement = (candidates: string[], ballots: Ballot[]): Judgements => {
   const judgements: Judgements = _.zipObject(
     candidates,
-    [...new Array(candidates.length)].map(() => [0, 0, 0, 0, 0, 0]),
+    candidates.map(() => [0, 0, 0, 0, 0, 0]),
   )
 
   for (const ballot of ballots)

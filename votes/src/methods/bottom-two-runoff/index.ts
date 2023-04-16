@@ -1,12 +1,13 @@
 import _ from 'lodash'
-import type { Ballot, ScoreObject } from '../../types'
-import { scoresAny } from '../../utils/scores-zero'
+
 import { RoundBallotMethod } from '../../classes/round-ballot-method'
-import { Copeland } from '../copeland'
+import type { Ballot, ScoreObject } from '../../types'
+import { arrayAt } from '../../utils/array-at'
 import { matrixFromBallots } from '../../utils/make-matrix'
 import { normalizeBallots } from '../../utils/normalize'
+import { scoresAny } from '../../utils/scores-zero'
 import { BiggestSupport } from '../biggest-support'
-import { arrayAt } from '../../utils/array-at'
+import { Copeland } from '../copeland'
 
 /**
  * #### Electowiki: [Bottom-Two-Runoff IRV](https://electowiki.org/wiki/Bottom-Two-Runoff_IRV)

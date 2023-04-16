@@ -1,8 +1,9 @@
 import _ from 'lodash'
-import type { ScoreObject } from '../../types'
-import { FirstPastThePost } from '../first-past-the-post'
+
 import { RoundBallotMethod } from '../../classes/round-ballot-method'
+import type { ScoreObject } from '../../types'
 import { AbsoluteMajority } from '../absolute-majority'
+import { FirstPastThePost } from '../first-past-the-post'
 
 /**
  * #### Wikipedia: [Two-round system](https://en.wikipedia.org/wiki/Two-round_system)

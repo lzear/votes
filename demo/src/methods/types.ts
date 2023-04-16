@@ -1,6 +1,7 @@
-import React from 'react'
-import { VotingSystem } from 'votes/src'
-import { SystemCriteria } from './descriptions'
+import type React from 'react'
+import type { VotingSystem } from 'votes'
+
+import type { SystemCriteria } from './descriptions'
 
 export interface MethodElements {
   id: VotingSystem

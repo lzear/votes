@@ -1,6 +1,8 @@
 import type { ScoreObject } from '../types'
 import { scoresToRanking } from '../utils/scores'
-import { Method, Ranker } from './method'
+
+import type { Ranker } from './method'
+import { Method } from './method'
 
 export interface Scorer extends Ranker {
   scores(): ScoreObject

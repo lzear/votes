@@ -1,20 +1,14 @@
 import React, { useMemo } from 'react'
 import type { Ballot, Round } from 'votes'
+
 import { useCandidatesColors } from './store/selectors'
-import { StoreBallots } from './ballot-with-id'
-import {
-  BoxBase,
-  BoxPosition,
-  toBoxes,
-  withBallotX,
-  withColor,
-  WithColor,
-  withQualified,
-} from './ballots-ui'
-import { renderBoxes, useBoxesTransition } from './boxes-transition'
-import { SvgBallots } from './svg-ballots'
 import { AxisBallot } from './axis'
+import type { StoreBallots } from './ballot-with-id'
+import type { BoxBase, BoxPosition, WithColor } from './ballots-ui'
+import { toBoxes, withBallotX, withColor, withQualified } from './ballots-ui'
+import { renderBoxes, useBoxesTransition } from './boxes-transition'
 import { scaling } from './scale'
+import { SvgBallots } from './svg-ballots'
 
 const getHighestBallot = (ballots: Ballot[]) =>
   Math.max(...ballots.map((b) => b.ranking.length))

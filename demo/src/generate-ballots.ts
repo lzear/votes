@@ -1,8 +1,10 @@
 import _ from 'lodash'
-import { emojis } from './emojis'
+
 import { utils } from 'votes'
+
+import type { BallotWithId, StoreBallots } from './ballot-with-id'
+import { emojis } from './emojis'
 import { randomString } from './random-string'
-import { BallotWithId, StoreBallots } from './ballot-with-id'
 
 const { groupBallots } = utils
 

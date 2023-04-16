@@ -1,7 +1,8 @@
 import type { ScoreObject } from '../types'
+import { arrayAt } from '../utils/array-at'
+
 import { BallotMethod } from './ballot-method'
 import type { Ranker } from './method'
-import { arrayAt } from '../utils/array-at'
 
 export type Round = {
   finished?: boolean
