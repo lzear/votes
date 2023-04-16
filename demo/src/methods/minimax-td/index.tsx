@@ -1,6 +1,6 @@
 import type { MethodElements } from '../types'
 import { VizMinimaxTD } from './viz-minimax-td'
-import { VotingSystem } from 'votes/src'
+import { VotingSystem } from 'votes'
 import { votingTypeData } from '../descriptions'
 
 export const minimaxTD: MethodElements = {

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { selectBallots, useCandidatesString } from '../../store/selectors'
 import { useStore } from '../../store'
 import { VizRoundsBallots } from '../instant-runoff/viz-rounds'
-import { Baldwin } from 'votes/src'
+import { Baldwin } from 'votes'
 import { Displayer } from '../nanson/viz-nanson'
 
 export const VizBaldinTreemap: React.FC = () => {

@@ -20,7 +20,6 @@ const ballots: Ballot[] = [
 export const condorcetMess = {
   ballots,
   candidates,
-
   name: 'Condorcet spaghetti',
   description:
     'Computer-generated preferences, giving different results with these voting systems: Kemeny rule, Schulze method, Ranked pairs, Minimax.',

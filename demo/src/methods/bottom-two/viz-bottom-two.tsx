@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { useStore } from '../../store'
 import { selectBallots, useCandidatesString } from '../../store/selectors'
-import { BottomTwoRunoff } from 'votes/src'
+import { BottomTwoRunoff } from 'votes'
 import { VizRoundsBallots } from '../instant-runoff/viz-rounds'
 import { DisplayBallots } from '../../display-ballots'
 

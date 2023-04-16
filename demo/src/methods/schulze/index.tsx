@@ -1,6 +1,6 @@
 import { MethodElements } from '../types'
 import { VizSchulze } from './viz-schulze'
-import { VotingSystem } from 'votes/src'
+import { VotingSystem } from 'votes'
 import { votingTypeData } from '../descriptions'
 
 export const schulze: MethodElements = {

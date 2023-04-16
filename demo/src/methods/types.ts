@@ -1,5 +1,5 @@
 import React from 'react'
-import { VotingSystem } from 'votes/src'
+import { VotingSystem } from 'votes'
 import { SystemCriteria } from './descriptions'
 
 export interface MethodElements {

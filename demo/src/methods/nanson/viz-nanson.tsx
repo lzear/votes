@@ -7,7 +7,7 @@ import {
 import { useStore } from '../../store'
 import { StoreBallots } from '../../ballot-with-id'
 import { VizRoundsBallots } from '../instant-runoff/viz-rounds'
-import { Baldwin, Round } from 'votes/src'
+import { Baldwin, Round } from 'votes'
 import { BordaTreeMapInner } from '../borda/viz-borda'
 
 export const Displayer: React.FC<{

@@ -1,6 +1,6 @@
 import { MethodElements } from '../types'
 import { VizFptp } from './viz-fptp'
-import { VotingSystem } from 'votes/src'
+import { VotingSystem } from 'votes'
 import { votingTypeData } from '../descriptions'
 
 export const fptp: MethodElements = {

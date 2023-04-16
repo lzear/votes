@@ -1,6 +1,6 @@
 import { MethodElements } from '../types'
 import { VizMaximalLotteries } from './viz-maximal-lotteries'
-import { VotingSystem } from 'votes/src'
+import { VotingSystem } from 'votes'
 import { votingTypeData } from '../descriptions'
 
 export const maximalLotteries: MethodElements = {

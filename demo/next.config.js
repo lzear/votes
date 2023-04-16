@@ -14,7 +14,10 @@ const { getThemeVariables } = require('antd/dist/theme')
 //   compact: true, // Enable compact mode
 // })
 
-module.exports = withPlugins(
+/**
+ * @type {import('next').NextConfig}
+ */
+const nextConfig = withPlugins(
   [
     [withBundleAnalyzer],
     [
@@ -79,3 +82,5 @@ module.exports = withPlugins(
     },
   },
 )
+
+module.exports = nextConfig
