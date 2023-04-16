@@ -1,10 +1,12 @@
 import React, { useRef } from 'react'
+
+import { MinimaxTD } from 'votes'
+import { findSmithSet } from 'votes/src/utils'
+
+import { CandiTagList } from '../../candidates'
 import { useStore } from '../../store'
 import { selectMatrix, useCandidatesById } from '../../store/selectors'
 import { ScoresSummary } from '../viz/scores-summary'
-import { MinimaxTD } from 'votes'
-import { CandiTagList } from '../../candidates'
-import { findSmithSet } from 'votes/src/utils'
 
 export const VizMinimaxTD: React.FC = () => {
   const matrix = useStore(selectMatrix)

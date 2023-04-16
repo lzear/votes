@@ -1,5 +1,6 @@
-import { findNashEquilibrium } from './find-nash-equilibrium'
 import { productVectM } from '../test/matrix'
+
+import { findNashEquilibrium } from './find-nash-equilibrium'
 
 it('solves 2', () => {
   const input = [

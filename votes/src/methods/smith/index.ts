@@ -1,5 +1,5 @@
-import type { Matrix, ScoreObject } from '../../types'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
+import type { Matrix, ScoreObject } from '../../types'
 import { findSmithSet } from '../../utils/condorcet'
 import { scoresAny } from '../../utils/scores-zero'
 

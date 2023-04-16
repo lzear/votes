@@ -1,6 +1,7 @@
 import _ from 'lodash'
-import type { Matrix, ScoreObject } from '../../types'
+
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
+import type { Matrix, ScoreObject } from '../../types'
 
 const computeFromMatrix = (matrix: Matrix) => {
   const n = matrix.candidates.length

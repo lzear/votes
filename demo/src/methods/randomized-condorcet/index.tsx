@@ -1,7 +1,9 @@
-import { MethodElements } from '../types'
-import { VizRandomizedCondorcet } from './viz-randomized-condorcet'
 import { VotingSystem } from 'votes'
+
 import { votingTypeData } from '../descriptions'
+import type { MethodElements } from '../types'
+
+import { VizRandomizedCondorcet } from './viz-randomized-condorcet'
 
 export const randomizedCondorcet: MethodElements = {
   id: VotingSystem.RandomizedCondorcet,

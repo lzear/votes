@@ -1,5 +1,7 @@
-import { VotingSystem } from '../types'
 import { methods } from '../methods'
+import { RandomCandidates } from '../methods/random-candidates'
+import { VotingSystem } from '../types'
+
 import {
   isBallotMethod,
   isBallotSystem,
@@ -8,7 +10,6 @@ import {
   isRandomMethod,
   isRandomSystem,
 } from './categories'
-import { RandomCandidates } from '../methods/random-candidates'
 
 describe('systems categoris', () => {
   it.each(Object.values(VotingSystem))('needs ballots xor matrix', (system) => {

@@ -1,3 +1,5 @@
+import { abcde, balinski, sW } from './test/test-utils'
+import { matrixFromBallots } from './utils'
 import {
   Approbation,
   Baldwin,
@@ -15,8 +17,6 @@ import {
   Schulze,
   TwoRoundRunoff,
 } from '.'
-import { abcde, balinski, sW } from './test/test-utils'
-import { matrixFromBallots } from './utils'
 
 describe('Test all methods', () => {
   it('votes with approbation', () => {

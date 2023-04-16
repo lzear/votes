@@ -1,5 +1,5 @@
-import type { ScoreObject } from '../../types'
 import { BallotScoreMethod } from '../../classes/ballot-score-method'
+import type { ScoreObject } from '../../types'
 import { totalBallotsWeight } from '../../utils/normalize'
 import { scoresZero } from '../../utils/scores-zero'
 import { FirstPastThePost } from '../first-past-the-post'

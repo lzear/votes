@@ -1,7 +1,7 @@
+import { RandomMatrixMethod } from '../../classes/random-matrix-method'
 import type { Matrix, ScoreObject } from '../../types'
 import { makeAntisymetric } from '../../utils'
 import { computeLottery } from '../maximal-lotteries'
-import { RandomMatrixMethod } from '../../classes/random-matrix-method'
 
 const computeScores = (matrix: Matrix): ScoreObject => {
   const antisymetric = makeAntisymetric(matrix)

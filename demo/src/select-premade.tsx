@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
-import { useStore } from './store'
-import { selectSetPremade } from './store/selectors'
 import { Select } from 'antd'
-import { balinski } from './premade/balinski'
 import type { Ballot } from 'votes'
-import { condorcetMess } from './premade/condorcet-mess'
+
 import { badBorda } from './premade/bad-borda'
 import { badFptp } from './premade/bad-fptp'
 import { badTwoRounds } from './premade/bad-two-rounds'
+import { balinski } from './premade/balinski'
+import { condorcetMess } from './premade/condorcet-mess'
+import { selectSetPremade } from './store/selectors'
+import { useStore } from './store'
 
 const premades: {
   [s: string]: {

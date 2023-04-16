@@ -1,9 +1,10 @@
 import zipObject from 'lodash/zipObject'
+
+import { RandomMatrixMethod } from '../../classes/random-matrix-method'
+import { findNashEquilibrium } from '../../simplex/find-nash-equilibrium'
 import type { Matrix, ScoreObject } from '../../types'
 import { findSmithSet, makeAntisymetric } from '../../utils'
 import { scoresZero } from '../../utils/scores-zero'
-import { RandomMatrixMethod } from '../../classes/random-matrix-method'
-import { findNashEquilibrium } from '../../simplex/find-nash-equilibrium'
 
 export const computeLottery = (
   _matrix: Matrix,

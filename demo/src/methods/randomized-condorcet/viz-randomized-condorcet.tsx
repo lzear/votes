@@ -1,8 +1,10 @@
 import React, { useRef } from 'react'
+
+import { RandomizedCondorcet } from 'votes'
+
+import { CandiTagList } from '../../candidates'
 import { useStore } from '../../store'
 import { selectMatrix, useCandidatesById } from '../../store/selectors'
-import { RandomizedCondorcet } from 'votes'
-import { CandiTagList } from '../../candidates'
 import { ScoresSummary } from '../viz/scores-summary'
 
 export const VizRandomizedCondorcet: React.FC = () => {

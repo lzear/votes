@@ -1,16 +1,17 @@
 import React from 'react'
-import { ListVotesGroup } from './list-votes-group'
+import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Typography } from 'antd'
+
+import { BallotsComp } from './ballots'
 import { Candidates } from './candidates'
+import { EditBallotRank } from './edit-ballot-rank'
+import { ListVotesGroup } from './list-votes-group'
+import { MatrixComp } from './matrix'
+import { Results } from './results'
+import { SelectMethod } from './select-method'
 import { SelectPremade } from './select-premade'
 import { WidthSetter } from './width-setter'
-import { EditBallotRank } from './edit-ballot-rank'
-import { SelectMethod } from './select-method'
-import { Results } from './results'
-import { MatrixComp } from './matrix'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
-import { BallotsComp } from './ballots'
 
 export const Sandbox: React.FC = () => {
   return (

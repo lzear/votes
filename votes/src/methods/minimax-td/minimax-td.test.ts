@@ -1,7 +1,8 @@
-import { MinimaxTD } from '.'
 import { abcde, balinski } from '../../test/test-utils'
+import type { Matrix } from '../../types'
 import { findSmithSet, matrixFromBallots } from '../../utils'
-import { Matrix } from '../../types'
+
+import { MinimaxTD } from '.'
 
 describe(MinimaxTD, () => {
   it('scores', () => {

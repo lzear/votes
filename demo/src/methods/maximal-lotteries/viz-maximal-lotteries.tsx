@@ -1,8 +1,10 @@
 import React, { useRef } from 'react'
+
+import { MaximalLotteries } from 'votes'
+
+import { CandiTagList } from '../../candidates'
 import { useStore } from '../../store'
 import { selectMatrix, useCandidatesById } from '../../store/selectors'
-import { MaximalLotteries } from 'votes'
-import { CandiTagList } from '../../candidates'
 import { ScoresSummary } from '../viz/scores-summary'
 
 export const VizMaximalLotteries: React.FC = () => {

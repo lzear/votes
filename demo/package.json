@@ -49,7 +49,6 @@
     "numeral": "^2.0.6",
     "react": "^18",
     "react-dom": "^18",
-    "react-spring": "^9.7.1",
     "react-with-gesture": "^4.0.8",
     "tsconfig": "*",
     "typescript": "5.0.4",

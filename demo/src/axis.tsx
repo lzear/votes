@@ -1,6 +1,7 @@
-import _ from 'lodash'
 import React from 'react'
-import { StoreBallots } from './ballot-with-id'
+import _ from 'lodash'
+
+import type { StoreBallots } from './ballot-with-id'
 import { numberToLetters } from './list-votes-group'
 
 export const AxisBallot: React.FC<{

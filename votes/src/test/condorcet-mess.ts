@@ -1,4 +1,4 @@
-import { Ballot } from '../types'
+import type { Ballot } from '../types'
 
 const candidates = ['🐸', '🐷', '🦁', '🐻', '🐭']
 

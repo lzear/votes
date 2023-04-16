@@ -1,18 +1,19 @@
+import React, { useEffect, useRef, useState } from 'react'
+import { a, useSprings } from '@react-spring/web'
+import { dispatch } from 'd3-dispatch'
 import {
   forceCenter,
   forceManyBody,
   forceSimulation,
   type Simulation,
 } from 'd3-force'
-import React, { useEffect, useRef, useState } from 'react'
-import { dispatch } from 'd3-dispatch'
 import { interval } from 'd3-timer'
-import { forceLink } from './force-link'
-import { a, useSprings } from '@react-spring/web'
+
+import { selectSkewMatrix } from './store/selectors'
 import { curvedPath } from './curved-path'
+import { forceLink } from './force-link'
 import { randomString } from './random-string'
 import { useStore } from './store'
-import { selectSkewMatrix } from './store/selectors'
 
 const width = 600
 const height = 600

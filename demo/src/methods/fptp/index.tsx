@@ -1,7 +1,9 @@
-import { MethodElements } from '../types'
-import { VizFptp } from './viz-fptp'
 import { VotingSystem } from 'votes'
+
 import { votingTypeData } from '../descriptions'
+import type { MethodElements } from '../types'
+
+import { VizFptp } from './viz-fptp'
 
 export const fptp: MethodElements = {
   id: VotingSystem.FirstPastThePost,

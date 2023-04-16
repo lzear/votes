@@ -1,8 +1,10 @@
 import React, { useRef } from 'react'
+
+import { Schulze } from 'votes'
+
+import { CandiTagList } from '../../candidates'
 import { useStore } from '../../store'
 import { selectMatrix, useCandidatesById } from '../../store/selectors'
-import { Schulze } from 'votes'
-import { CandiTagList } from '../../candidates'
 import { ScoresSummary } from '../viz/scores-summary'
 
 export const VizSchulze: React.FC = () => {

@@ -1,6 +1,8 @@
-import { MethodElements } from '../types'
 import { VotingSystem } from 'votes'
+
 import { votingTypeData } from '../descriptions'
+import type { MethodElements } from '../types'
+
 import { VizBaldin } from './result'
 
 export const baldwin: MethodElements = {

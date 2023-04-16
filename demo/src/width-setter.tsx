@@ -1,6 +1,8 @@
-import React, { useLayoutEffect, useState } from 'react'
-import { useStore } from './store'
+import type React from 'react'
+import { useLayoutEffect, useState } from 'react'
+
 import { selectSetWidth } from './store/selectors'
+import { useStore } from './store'
 
 export const useElementWidth = (el: HTMLElement | null) => {
   const [width, setWidth] = useState<number | undefined>()

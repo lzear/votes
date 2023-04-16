@@ -1,8 +1,10 @@
 import React from 'react'
 import { Typography } from 'antd'
 import type { ScoreObject } from 'votes'
+
 import { CandiTagList } from '../../candidates'
-import { Candidate } from '../../generate-ballots'
+import type { Candidate } from '../../generate-ballots'
+
 import { QuickScores } from './quick-scores'
 
 export const ScoresSummary: React.FC<{

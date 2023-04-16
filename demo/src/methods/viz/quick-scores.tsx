@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
+import { Checkbox } from 'antd'
+import _ from 'lodash'
 import type { ScoreObject } from 'votes'
-import { Candidate } from '../../generate-ballots'
-import { scaling } from '../../scale'
+
 import { AxisCandidatesBot } from '../../axis'
+import type { Candidate } from '../../generate-ballots'
+import { scaling } from '../../scale'
 import { useStore } from '../../store'
 import { selectWidth, useCandidatesString } from '../../store/selectors'
-import _ from 'lodash'
-import { Checkbox } from 'antd'
 
 const HEIGHT = 100
 

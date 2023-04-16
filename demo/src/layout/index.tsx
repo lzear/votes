@@ -1,7 +1,7 @@
+import React from 'react'
 import { GithubOutlined } from '@ant-design/icons'
 import { Layout } from 'antd'
 import Link from 'next/link'
-import React from 'react'
 
 const { Header, Content } = Layout
 

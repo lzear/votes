@@ -1,14 +1,17 @@
 import React from 'react'
 import _ from 'lodash'
+
+import { Borda } from 'votes'
+
+import { totalWeight } from '../../generate-ballots'
+import { useStore } from '../../store'
 import {
   selectBallots,
   useCandidatesById,
   useCandidatesString,
 } from '../../store/selectors'
-import { useStore } from '../../store'
-import { totalWeight } from '../../generate-ballots'
 import { ScoresSummary } from '../viz/scores-summary'
-import { Borda } from 'votes'
+
 import { VizNansonTreemap } from './viz-nanson'
 
 export const VizNanson: React.FC = () => {

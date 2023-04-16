@@ -1,7 +1,9 @@
-import { ScoreMethod, Scorer } from './score-method'
-import { matrixFromBallots } from '../utils/make-matrix'
 import type { Ballot, Matrix } from '../types'
+import { matrixFromBallots } from '../utils/make-matrix'
+
 import type { Matrixer } from './matrix-score-method'
+import type { Scorer } from './score-method'
+import { ScoreMethod } from './score-method'
 
 export abstract class BallotScoreMethod
   extends ScoreMethod

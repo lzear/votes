@@ -1,9 +1,9 @@
 import _ from 'lodash'
 
-import type { Ballot, ScoreObject } from '../../types'
-import { Borda } from '../borda'
 import { RoundBallotMethod } from '../../classes/round-ballot-method'
+import type { Ballot, ScoreObject } from '../../types'
 import { arrayAt } from '../../utils/array-at'
+import { Borda } from '../borda'
 
 const round = (
   candidates: string[],

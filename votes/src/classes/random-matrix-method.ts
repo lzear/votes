@@ -1,9 +1,11 @@
-import type { Scorer } from './score-method'
-import type { Matrix, ScoreObject } from '../types'
-import { RandomMethod } from './random-method'
-import type { Matrixer } from './matrix-score-method'
 import _ from 'lodash'
+
+import type { Matrix, ScoreObject } from '../types'
 import { shuffleArray } from '../utils/shuffle-array'
+
+import type { Matrixer } from './matrix-score-method'
+import { RandomMethod } from './random-method'
+import type { Scorer } from './score-method'
 
 const randomRankingFromSores = (
   scoreObject: ScoreObject,

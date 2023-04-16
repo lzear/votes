@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
-import { trafficColor } from './traffic-color'
-import { useStore } from './store'
+import { Checkbox, Typography } from 'antd'
+import { shallow } from 'zustand/shallow'
+
+import { utils } from 'votes'
+
 import {
   selectMatrix,
   selectSetHighlightCandidates,
   useCandidatesById,
 } from './store/selectors'
-import { Checkbox, Typography } from 'antd'
 import { CandiTag } from './candidates'
-import { shallow } from 'zustand/shallow'
-import { utils } from 'votes'
+import { useStore } from './store'
+import { trafficColor } from './traffic-color'
 
 export const MatrixComp: React.FC = () => {
   const [skew, setSkew] = useState(false)
@@ -34,7 +36,7 @@ export const MatrixComp: React.FC = () => {
       <Typography.Title level={5}>Matrix of duels</Typography.Title>
       <Checkbox
         checked={skew}
-        name={'Ske'}
+        name="Ske"
         onChange={(v) => setSkew(v.target.checked)}
       >
         Normalize to skew matrix

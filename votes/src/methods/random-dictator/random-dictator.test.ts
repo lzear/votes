@@ -1,7 +1,8 @@
-import type { Ballot } from '../../types'
-import { RandomDictator } from '.'
 import { rngGenerator } from '../../test/rng-generator'
+import type { Ballot } from '../../types'
 import { toWeightedBallots } from '../../utils'
+
+import { RandomDictator } from '.'
 
 const expectNTimes = <T>(value: T, expected: T, times: number) => {
   for (let i = 0; i < times; i++) {

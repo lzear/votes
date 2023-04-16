@@ -1,15 +1,17 @@
 import React, { useRef } from 'react'
+import { Tag } from 'antd'
+import _ from 'lodash'
+
+import { RankedPairs, utils } from 'votes'
+
 import { useStore } from '../../store'
 import {
   selectSkewMatrix,
   useCandidatesById,
   useCandidatesString,
 } from '../../store/selectors'
-import { ScoresSummary } from '../viz/scores-summary'
-import { RankedPairs, utils } from 'votes'
-import _ from 'lodash'
-import { Tag } from 'antd'
 import { trafficColor } from '../../traffic-color'
+import { ScoresSummary } from '../viz/scores-summary'
 
 type Edge = { from: number; to: number; value: number }
 

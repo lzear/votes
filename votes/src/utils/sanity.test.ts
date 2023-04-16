@@ -1,7 +1,8 @@
-import { type Ballot, methods, VotingSystem } from '..'
 import { abcde, dummyProfile, dummyProfile10 } from '../test/test-utils'
-import { matrixFromBallots } from './make-matrix'
+import { type Ballot, methods, VotingSystem } from '..'
+
 import { isRandomSystem } from './categories'
+import { matrixFromBallots } from './make-matrix'
 
 const isRandomCandidate = (
   system: VotingSystem,

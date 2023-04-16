@@ -1,5 +1,6 @@
-import { RandomCandidates } from '.'
 import { rngGenerator } from '../../test/rng-generator'
+
+import { RandomCandidates } from '.'
 
 const vote = (candidates: string[], seed?: string) =>
   new RandomCandidates({

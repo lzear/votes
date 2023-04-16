@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
+import { PlusOutlined } from '@ant-design/icons'
 import { Button, Input, Tag, type TagProps, Typography } from 'antd'
-import { useStore } from './store'
+
 import {
   selectAddCandidate,
   selectRemoveCandidate,
   selectUpdateCandidateCount,
   useCandidates,
 } from './store/selectors'
-import { PlusOutlined } from '@ant-design/icons'
-import { Candidate } from './generate-ballots'
+import type { Candidate } from './generate-ballots'
+import { useStore } from './store'
 
 export const Candidates: React.FC = () => {
   const candidates = useCandidates()

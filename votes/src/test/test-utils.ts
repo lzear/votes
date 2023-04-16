@@ -1,4 +1,5 @@
 import fill from 'lodash/fill'
+
 import type { Ballot } from '../types'
 import { toWeightedBallots } from '../utils'
 

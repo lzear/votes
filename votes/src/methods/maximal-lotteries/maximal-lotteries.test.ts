@@ -1,4 +1,5 @@
 import { matrixString } from '../../test/test-utils'
+
 import { MaximalLotteries } from '.'
 
 const example1 = [

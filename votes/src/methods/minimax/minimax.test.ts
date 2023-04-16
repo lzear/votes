@@ -1,6 +1,7 @@
-import { Minimax } from '.'
 import { abcde, balinski } from '../../test/test-utils'
 import { matrixFromBallots } from '../../utils'
+
+import { Minimax } from '.'
 
 describe(Minimax, () => {
   it('scores', () => {

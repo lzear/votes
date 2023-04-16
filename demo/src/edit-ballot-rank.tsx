@@ -1,5 +1,8 @@
 import React from 'react'
-import { useStore } from './store'
+import { Button } from 'antd'
+
+import Ranker from './react-ranker/ranker'
+import { WithWidth } from './react-ranker/use-width'
 import {
   selectChangeBallotRanking,
   selectSelectBallot,
@@ -7,9 +10,7 @@ import {
   selectWidth,
   useCandidates,
 } from './store/selectors'
-import { Button } from 'antd'
-import { WithWidth } from './react-ranker/use-width'
-import Ranker from './react-ranker/ranker'
+import { useStore } from './store'
 
 export const RankedWithWidth = WithWidth(Ranker)
 

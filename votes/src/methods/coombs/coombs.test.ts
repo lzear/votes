@@ -1,5 +1,6 @@
-import { Coombs } from './index'
 import { condorcetMess } from '../../test/condorcet-mess'
+
+import { Coombs } from './index'
 
 describe(Coombs, () => {
   it('works with the complex test', () => {

@@ -1,4 +1,5 @@
 import { VotingSystem } from '../types'
+
 import { AbsoluteMajority } from './absolute-majority'
 import { Approbation } from './approbation'
 import { Baldwin } from './baldwin'

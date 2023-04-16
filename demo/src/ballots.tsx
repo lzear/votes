@@ -1,11 +1,3 @@
-import { useStore } from './store'
-import {
-  selectAddRandomBallot,
-  selectBallots,
-  selectNormalizeWeights100,
-} from './store/selectors'
-import { totalWeight } from './generate-ballots'
-import { Button, Typography } from 'antd'
 import {
   ArrowRightOutlined,
   DeleteOutlined,
@@ -13,6 +5,15 @@ import {
   MinusOutlined,
   PlusOutlined,
 } from '@ant-design/icons'
+import { Button, Typography } from 'antd'
+
+import {
+  selectAddRandomBallot,
+  selectBallots,
+  selectNormalizeWeights100,
+} from './store/selectors'
+import { totalWeight } from './generate-ballots'
+import { useStore } from './store'
 
 export const BallotsComp = () => {
   const groupedBallots = useStore(selectBallots)

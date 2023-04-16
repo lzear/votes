@@ -1,6 +1,8 @@
 import _ from 'lodash'
 import type { Ballot } from 'votes'
-import { totalWeight, WithWeights } from './generate-ballots'
+
+import type { WithWeights } from './generate-ballots'
+import { totalWeight } from './generate-ballots'
 
 export const serializeRank = (rank: string[]): string =>
   JSON.stringify(rank.sort((a, b) => a.localeCompare(b)))

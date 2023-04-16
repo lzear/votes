@@ -1,8 +1,10 @@
 import React, { useRef } from 'react'
+
+import { Minimax } from 'votes'
+
 import { useStore } from '../../store'
 import { selectMatrix, useCandidatesById } from '../../store/selectors'
 import { ScoresSummary } from '../viz/scores-summary'
-import { Minimax } from 'votes'
 
 export const VizMinimax: React.FC = () => {
   const matrix = useStore(selectMatrix)

@@ -1,7 +1,8 @@
-import zipObject from 'lodash/zipObject'
 import range from 'lodash/range'
-import type { Matrix, ScoreObject } from '../../types'
+import zipObject from 'lodash/zipObject'
+
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
+import type { Matrix, ScoreObject } from '../../types'
 
 const rankingPenalty = (ranking: number[], matrix: number[][]) => {
   let p = 0

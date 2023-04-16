@@ -1,5 +1,6 @@
 import React from 'react'
 import { GithubOutlined } from '@ant-design/icons'
+
 import { VotingSystem } from 'votes'
 
 export const W: React.ReactNode = (

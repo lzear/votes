@@ -1,9 +1,10 @@
 import React from 'react'
-import { DemoSystems, useStore } from './store'
-import { selectMethod, selectSetMethod } from './store/selectors'
 import { Select, Typography } from 'antd'
+
 import { votingTypeData } from './methods/descriptions'
+import { selectMethod, selectSetMethod } from './store/selectors'
 import { methods } from './methods'
+import { DemoSystems, useStore } from './store'
 
 const options = Object.values(DemoSystems).filter(
   (v) => votingTypeData[v]?.name && methods[v]?.data,

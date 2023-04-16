@@ -10,6 +10,7 @@ import {
   removeInvalidCandidates,
   scoresToRanking,
 } from '../utils'
+
 import { isBallotEqual } from './normalize'
 
 describe('normalize', () => {
