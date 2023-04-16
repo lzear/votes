@@ -19,6 +19,7 @@ const round = (
   qualified: string[]
   eliminated: string[]
   scores: ScoreObject
+  absoluteMajority?: true
 } => {
   if (candidates.length < 2)
     return {
@@ -37,6 +38,7 @@ const round = (
       eliminated: _.difference(candidates, qualified),
       qualified,
       scores: absoluteMajority.scores(),
+      absoluteMajority: true,
     }
   }
 
