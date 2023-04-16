@@ -18,6 +18,7 @@
     "@next/bundle-analyzer": "^13.3.0",
     "@next/eslint-plugin-next": "^13.3.0",
     "@react-spring/web": "^9.7.2",
+    "@sentry/nextjs": "^7.48.0",
     "@types/d3": "^7.4.0",
     "@types/d3-dispatch": "^3.0.2",
     "@types/d3-force": "^3.0.4",

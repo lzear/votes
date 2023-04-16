@@ -1,5 +1,5 @@
 import type { Ballot } from 'votes'
-import create from 'zustand'
+import { create } from 'zustand'
 import { subscribeWithSelector } from 'zustand/middleware'
 
 import {
