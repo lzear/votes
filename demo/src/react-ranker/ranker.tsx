@@ -157,9 +157,8 @@ const Ranker: React.FC<Props> = ({
 
   const aloneFirst = prefs[0]?.length === 1 ? prefs[0][0] : null
   const aloneLast =
-    prefs[prefs.length - 1]?.length === 1 &&
-    prefs.flat().length === candidates.length
-      ? prefs[prefs.length - 1][0]
+    prefs.at(-1)?.length === 1 && prefs.flat().length === candidates.length
+      ? prefs.at(-1)?.[0]
       : null
   return (
     <div
