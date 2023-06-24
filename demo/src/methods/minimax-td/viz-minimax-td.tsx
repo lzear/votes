@@ -1,7 +1,6 @@
 import React, { useRef } from 'react'
 
-import { MinimaxTD } from 'votes'
-import { findSmithSet } from 'votes/src/utils'
+import { MinimaxTD, utils as voteUtils } from 'votes'
 
 import { CandiTagList } from '../../candidates'
 import { useStore } from '../../store'
@@ -12,7 +11,7 @@ export const VizMinimaxTD: React.FC = () => {
   const matrix = useStore(selectMatrix)
   const candidatesById = useCandidatesById()
   const minimax = new MinimaxTD(matrix)
-  const smith = findSmithSet(matrix)
+  const smith = voteUtils.findSmithSet(matrix)
   const ref = useRef<HTMLDivElement>(null)
   return (
     <div className="container" ref={ref}>
