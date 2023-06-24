@@ -1,5 +1,12 @@
 # votes
 
+## 2.2.1
+
+### Patch Changes
+
+- 6012713: Add exports to package.json Fixing
+  https://github.com/lzear/votes/issues/107
+
 ## 2.2.0
 
 ### Minor Changes
