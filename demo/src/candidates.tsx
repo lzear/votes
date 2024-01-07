@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { PlusOutlined } from '@ant-design/icons'
 import { Button, Input, Tag, type TagProps, Typography } from 'antd'
+import { Plus } from 'lucide-react'
 
 import {
   selectAddCandidate,
@@ -66,7 +66,7 @@ export const Candidates: React.FC = () => {
             disabled={disabled}
             // type="text"
             type="primary"
-            icon={<PlusOutlined />}
+            icon={<Plus />}
             size="small"
             onClick={submit}
             style={{ height: 20 }}
@@ -85,7 +85,7 @@ export const Candidates: React.FC = () => {
             if (e.key === 'Enter') updateCandidateCount(candidates.length + 1)
           }}
         >
-          <PlusOutlined /> Add random emoji
+          <Plus /> Add random emoji
         </Tag>
       </div>
       <style jsx>{`

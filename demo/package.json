@@ -43,6 +43,8 @@
     "hsluv": "^1.0.1",
     "less": "^4.2.0",
     "less-loader": "^11.1.4",
+    "lucide": "^0.307.0",
+    "lucide-react": "^0.307.0",
     "next": "14.0.4",
     "next-compose-plugins": "^2.2.1",
     "next-plausible": "^3.12.0",

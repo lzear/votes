@@ -1,5 +1,4 @@
 import React, { useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons'
 import { a, to, useSpring } from '@react-spring/web'
 import { useHover } from '@use-gesture/react'
 import { Button } from 'antd'
@@ -7,6 +6,7 @@ import type * as d3 from 'd3'
 import { hierarchy, treemap } from 'd3-hierarchy'
 import { scaleBand } from 'd3-scale'
 import _ from 'lodash-es'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { shallow } from 'zustand/shallow'
 
 import { Borda } from 'votes'
@@ -474,7 +474,7 @@ export const BordaTreeMapInner: React.FC<{
             style={{ flex: '0 0 auto' }}
             onClick={() => setStep((s) => s - 1)}
           >
-            <ArrowLeftOutlined /> {BUTTONS[steps[step - 1]]}
+            <ArrowLeft /> {BUTTONS[steps[step - 1]]}
           </Button>
         )}
         {step !== Step.TREEMAP && (
@@ -485,7 +485,7 @@ export const BordaTreeMapInner: React.FC<{
             }}
             onClick={() => setStep((s) => s + 1)}
           >
-            {BUTTONS[steps[step + 1]]} <ArrowRightOutlined />
+            {BUTTONS[steps[step + 1]]} <ArrowRight />
           </Button>
         )}
       </div>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { GithubOutlined } from '@ant-design/icons'
+import { Github as Gh } from 'lucide-react'
 
 import { VotingSystem } from 'votes'
 
@@ -19,7 +19,7 @@ export const W: React.ReactNode = (
 const Wiki: React.FC<{ href: string }> = ({ href }) => <a href={href}>{W}</a>
 const Github: React.FC<{ href: string }> = ({ href }) => (
   <a href={href}>
-    <GithubOutlined />
+    <Gh />
   </a>
 )
 

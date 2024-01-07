@@ -1,12 +1,7 @@
 import React from 'react'
-import {
-  DeleteOutlined,
-  EditOutlined,
-  MinusOutlined,
-  PlusOutlined,
-} from '@ant-design/icons'
 import { Button } from 'antd'
 import _ from 'lodash-es'
+import { Delete, Edit, Minus, Plus } from 'lucide-react'
 
 import {
   selectBallots,
@@ -58,27 +53,27 @@ export const ListVotesGroup: React.FC = () => {
                 <br />
                 <Button
                   type="text"
-                  icon={<MinusOutlined />}
+                  icon={<Minus />}
                   size="small"
                   onClick={() => changeBallotWeight(-1)(b.id)}
                 />
                 {b.weight}
                 <Button
                   type="text"
-                  icon={<PlusOutlined />}
+                  icon={<Plus />}
                   size="small"
                   onClick={() => changeBallotWeight(1)(b.id)}
                 />
                 <br />
                 <Button
                   type="text"
-                  icon={<DeleteOutlined />}
+                  icon={<Delete />}
                   size="small"
                   onClick={() => changeBallotWeight(-b.weight)(b.id)}
                 />
                 <Button
                   type="text"
-                  icon={<EditOutlined />}
+                  icon={<Edit />}
                   size="small"
                   onClick={() =>
                     selectBallot(selectedBallot?.id === b.id ? null : b.id)

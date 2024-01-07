@@ -1,11 +1,5 @@
-import {
-  ArrowRightOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  MinusOutlined,
-  PlusOutlined,
-} from '@ant-design/icons'
 import { Button, Typography } from 'antd'
+import { ArrowRight, Delete, Minus, Plus } from 'lucide-react'
 
 import {
   selectAddRandomBallot,
@@ -26,10 +20,10 @@ export const BallotsComp = () => {
       <Typography.Title level={4}>{totalW} voters</Typography.Title>
 
       <p>
-        Preferences can be edited by clicking the buttons <EditOutlined />
-        <PlusOutlined />
-        <MinusOutlined />
-        <DeleteOutlined />
+        Preferences can be edited by clicking the buttons <Edit />
+        <Plus />
+        <Minus />
+        <Delete />
       </p>
       <div className="flex-horiz">
         <Button
@@ -40,7 +34,7 @@ export const BallotsComp = () => {
           +1 random vote
         </Button>
         <Button
-          icon={<ArrowRightOutlined />}
+          icon={<ArrowRight />}
           size="small"
           onClick={normalizeWeights100}
         >

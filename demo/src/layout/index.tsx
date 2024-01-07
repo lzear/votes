@@ -1,6 +1,6 @@
 import React from 'react'
-import { GithubOutlined } from '@ant-design/icons'
 import { Layout } from 'antd'
+import { Github } from 'lucide-react'
 import Link from 'next/link'
 
 const { Header, Content } = Layout
@@ -25,7 +25,7 @@ export const MyLayout: React.FC<{ children: React.ReactNode }> = ({
           target="_blank"
           rel="noopener noreferrer"
         >
-          <GithubOutlined />
+          <Github />
         </a>
         {/*<Me />*/}
       </Header>
