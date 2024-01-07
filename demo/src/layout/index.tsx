@@ -1,17 +1,14 @@
 import React from 'react'
-import { Layout } from 'antd'
 import { Github } from 'lucide-react'
 import Link from 'next/link'
-
-const { Header, Content } = Layout
 
 export const MyLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   return (
-    <Layout id="layout">
+    <div id="layout">
       {/*<div id="scroll" className="scroll">*/}
-      <Header id="header">
+      <div id="header">
         <h1>
           <Link href="/">
             <span className="white">Ranked votes</span>
@@ -28,8 +25,8 @@ export const MyLayout: React.FC<{ children: React.ReactNode }> = ({
           <Github />
         </a>
         {/*<Me />*/}
-      </Header>
-      <Content id="content">{children}</Content>
+      </div>
+      <div id="content">{children}</div>
       {/*</div>*/}
       {/*<Foot />*/}
       <style jsx>{`
@@ -57,6 +54,6 @@ export const MyLayout: React.FC<{ children: React.ReactNode }> = ({
           display: flex;
         }
       `}</style>
-    </Layout>
+    </div>
   )
 }

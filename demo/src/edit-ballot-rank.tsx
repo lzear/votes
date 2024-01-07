@@ -1,5 +1,4 @@
 import React from 'react'
-import { Button } from 'antd'
 
 import Ranker from './react-ranker/ranker'
 import { WithWidth } from './react-ranker/use-width'
@@ -33,7 +32,7 @@ export const EditBallotRank: React.FC = () => {
           }
           showHovers
         />
-        <Button onClick={() => selectBallot(null)}>Done</Button>
+        <button onClick={() => selectBallot(null)}>Done</button>
       </>
     )) ||
     null

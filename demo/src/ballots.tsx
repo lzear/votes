@@ -1,5 +1,4 @@
-import { Button, Typography } from 'antd'
-import { ArrowRight, Delete, Minus, Plus } from 'lucide-react'
+import { ArrowRight, Delete, Edit, Minus, Plus } from 'lucide-react'
 
 import {
   selectAddRandomBallot,
@@ -17,7 +16,7 @@ export const BallotsComp = () => {
   const normalizeWeights100 = useStore(selectNormalizeWeights100)
   return (
     <div className="container">
-      <Typography.Title level={4}>{totalW} voters</Typography.Title>
+      <h1 level={4}>{totalW} voters</h1>
 
       <p>
         Preferences can be edited by clicking the buttons <Edit />
@@ -26,20 +25,20 @@ export const BallotsComp = () => {
         <Delete />
       </p>
       <div className="flex-horiz">
-        <Button
+        <button
           size="small"
           onClick={addRandomBallot}
           style={{ marginLeft: 20 }}
         >
           +1 random vote
-        </Button>
-        <Button
+        </button>
+        <button
           icon={<ArrowRight />}
           size="small"
           onClick={normalizeWeights100}
         >
           Normalize to 100
-        </Button>
+        </button>
       </div>
       <style jsx>{`
         .container {

@@ -1,5 +1,4 @@
 import React from 'react'
-import { Typography } from 'antd'
 
 import { selectMethod } from './store/selectors'
 import { methods } from './methods'
@@ -11,7 +10,7 @@ export const Results: React.FC = () => {
   const MethodObj = methods[method]
   return (
     <div className="container">
-      <Typography.Title level={3}>{MethodObj.data.name}</Typography.Title>
+      <h2 level={3}>{MethodObj.data.name}</h2>
       <div className="block">{MethodObj.data.description}</div>
       <MethodObj.Visualisation />
       <style jsx>{`

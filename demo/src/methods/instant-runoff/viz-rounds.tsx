@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Button, Typography } from 'antd'
 import _ from 'lodash-es'
 import numeral from 'numeral'
 import type { Ballot, Round } from 'votes'
@@ -60,16 +59,16 @@ export const RoundsSummary: React.FC<{
     .at(-1)?.roundResult.eliminated
   return (
     <>
-      <Typography.Title level={4}>Summary</Typography.Title>
-      <Typography.Title level={5}>
+      <h2 level={4}>Summary</h2>
+      <h2 level={5}>
         Winner{winners && winners.length > 1 && 's'}
-      </Typography.Title>
+      </h2>
       <div className="block">
         {winners && (
           <CandiTagList candidates={winners.map((c) => candidatesById[c])} />
         )}
       </div>
-      <Typography.Title level={5}>Iterations</Typography.Title>
+      <h2 level={5}>Iterations</h2>
       {[...rounds].reverse().map((round, reverseRoundIdx) => {
         const roundIdx = rounds.length - reverseRoundIdx - 1
         if (roundIdx === rounds.length - 1) return null
@@ -107,7 +106,7 @@ export const RoundDescription: React.FC<{
     : roundR.roundResult.qualified
   return (
     <div className="container">
-      <Typography.Title level={4}>Round #{roundIdx + 1}</Typography.Title>
+      <h2 level={4}>Round #{roundIdx + 1}</h2>
       {roundIdx > 0 && (
         <div>
           Eliminated in previous rounds:{' '}
@@ -218,7 +217,7 @@ export const VizRoundsBallots: React.FC<{
       </div>
       <div className="buttons">
         {roundIdx > 0 && (
-          <Button
+          <button
             style={{
               flex: '0 0 auto',
             }}
@@ -226,10 +225,10 @@ export const VizRoundsBallots: React.FC<{
             disabled={roundIdx <= 0}
           >
             {roundName(roundIdx - 1)}
-          </Button>
+          </button>
         )}
         {roundIdx < roundsToShow.length - 1 && (
-          <Button
+          <button
             style={{
               flex: '0 0 auto',
               marginLeft: 'auto',
@@ -238,7 +237,7 @@ export const VizRoundsBallots: React.FC<{
             disabled={roundIdx >= roundsToShow.length - 1}
           >
             {roundName(roundIdx + 1)}
-          </Button>
+          </button>
         )}
       </div>
       <style jsx>{`

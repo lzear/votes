@@ -2,9 +2,6 @@ import { config } from '@fortawesome/fontawesome-svg-core'
 import type { AppProps } from 'next/app'
 import PlausibleProvider from 'next-plausible'
 
-import '../assets/antd-custom.less'
-import 'antd/dist/antd.less'
-
 import '@fortawesome/fontawesome-svg-core/styles.css'
 
 config.autoAddCss = false

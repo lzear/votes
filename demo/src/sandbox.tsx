@@ -1,7 +1,6 @@
 import React from 'react'
 import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Typography } from 'antd'
 
 import { BallotsComp } from './ballots'
 import { Candidates } from './candidates'
@@ -16,7 +15,7 @@ import { WidthSetter } from './width-setter'
 export const Sandbox: React.FC = () => {
   return (
     <div className="container">
-      <Typography.Title>A sandbox for ranked voting systems</Typography.Title>
+      <h2>A sandbox for ranked voting systems</h2>
       <p>
         This website showcases some ranked voting systems. Simulate an election
         by adding candidates, and voter preferences. Read more on{' '}

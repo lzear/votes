@@ -1,7 +1,6 @@
 import React, { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { a, to, useSpring } from '@react-spring/web'
 import { useHover } from '@use-gesture/react'
-import { Button } from 'antd'
 import type * as d3 from 'd3'
 import { hierarchy, treemap } from 'd3-hierarchy'
 import { scaleBand } from 'd3-scale'
@@ -470,15 +469,15 @@ export const BordaTreeMapInner: React.FC<{
       </div>
       <div className="buttons">
         {step !== Step.INIT && (
-          <Button
+          <button
             style={{ flex: '0 0 auto' }}
             onClick={() => setStep((s) => s - 1)}
           >
             <ArrowLeft /> {BUTTONS[steps[step - 1]]}
-          </Button>
+          </button>
         )}
         {step !== Step.TREEMAP && (
-          <Button
+          <button
             style={{
               flex: '0 0 auto',
               marginLeft: 'auto',
@@ -486,7 +485,7 @@ export const BordaTreeMapInner: React.FC<{
             onClick={() => setStep((s) => s + 1)}
           >
             {BUTTONS[steps[step + 1]]} <ArrowRight />
-          </Button>
+          </button>
         )}
       </div>
       <style jsx>{`

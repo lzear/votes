@@ -1,5 +1,4 @@
 import React from 'react'
-import { Typography } from 'antd'
 
 import { Borda } from 'votes'
 
@@ -25,7 +24,7 @@ export const VizBorda: React.FC = () => {
     <>
       <ScoresSummary scores={bordiScores} candidatesById={candidatesById} />
 
-      <Typography.Title level={4}>Visualization</Typography.Title>
+      <h3 level={4}>Visualization</h3>
       <BordaTreeMap />
     </>
   )

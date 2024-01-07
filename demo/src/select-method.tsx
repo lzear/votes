@@ -1,5 +1,4 @@
 import React from 'react'
-import { Select, Typography } from 'antd'
 
 import { votingTypeData } from './methods/descriptions'
 import { selectMethod, selectSetMethod } from './store/selectors'
@@ -15,8 +14,8 @@ export const SelectMethod: React.FC = () => {
   const method = useStore(selectMethod)
   return (
     <div className="container">
-      <Typography.Title level={4}>Voting system</Typography.Title>
-      <Select<DemoSystems>
+      <h2 level={4}>Voting system</h2>
+      <span
         size="large"
         style={{ minWidth: 250 }}
         placeholder="Select a voting system"

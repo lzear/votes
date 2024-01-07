@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Checkbox } from 'antd'
 import _ from 'lodash-es'
 import type { ScoreObject } from 'votes'
 
@@ -38,9 +37,9 @@ export const QuickScores: React.FC<{
   return (
     <div className="container">
       <div className="checkbox-container">
-        <Checkbox onChange={(e) => setRanked(e.target.checked)}>
+        <span onChange={(e) => setRanked(e.target.checked)}>
           Order by score
-        </Checkbox>
+        </span>
       </div>
       <svg height={HEIGHT} width={WI}>
         {filteredCandidates.map((candidate) => {

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Button, Input, Tag, type TagProps, Typography } from 'antd'
 import { Plus } from 'lucide-react'
 
 import {
@@ -29,9 +28,9 @@ export const Candidates: React.FC = () => {
   }
   return (
     <div className="container">
-      <Typography.Title level={4}>
+      <h2 level={4}>
         {candidates.length} candidates
-      </Typography.Title>
+      </h2>
       <div className="tags">
         {candidates.map((c) => (
           <CandiTag
@@ -46,7 +45,7 @@ export const Candidates: React.FC = () => {
       </div>
 
       <div className="flex-horiz">
-        <Tag
+        <span
           style={{
             width: 150,
             paddingRight: 23,
@@ -54,7 +53,7 @@ export const Candidates: React.FC = () => {
             margin: 0,
           }}
         >
-          <Input
+          <input
             placeholder="Add candidate"
             size="small"
             style={{ height: 19, border: 0, background: 'transparent' }}
@@ -62,7 +61,7 @@ export const Candidates: React.FC = () => {
             onChange={(v) => setAdding(v.target.value)}
             onPressEnter={submit}
           />
-          <Button
+          <button
             disabled={disabled}
             // type="text"
             type="primary"
@@ -71,9 +70,9 @@ export const Candidates: React.FC = () => {
             onClick={submit}
             style={{ height: 20 }}
           />
-        </Tag>
+        </span>
         <span>or</span>
-        <Tag
+        <span
           tabIndex={0}
           style={{
             cursor: 'pointer',
@@ -86,7 +85,7 @@ export const Candidates: React.FC = () => {
           }}
         >
           <Plus /> Add random emoji
-        </Tag>
+        </span>
       </div>
       <style jsx>{`
         .container {
@@ -125,9 +124,9 @@ export const CandiTag: React.FC<
   {
     candidate: Candidate
     onClose?: (candidate: Candidate) => void
-  } & TagProps
+  }
 > = ({ candidate, onClose, ...rest }) => (
-  <Tag
+  <span
     closable={!!onClose}
     onClose={onClose ? () => onClose(candidate) : undefined}
     color={candidate.color}
@@ -135,7 +134,7 @@ export const CandiTag: React.FC<
     {...rest}
   >
     {candidate.id}
-  </Tag>
+  </span>
 )
 
 export const CandiTagList: React.FC<

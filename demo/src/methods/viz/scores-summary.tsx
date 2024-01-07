@@ -1,5 +1,4 @@
 import React from 'react'
-import { Typography } from 'antd'
 import type { ScoreObject } from 'votes'
 
 import { CandiTagList } from '../../candidates'
@@ -15,14 +14,14 @@ export const ScoresSummary: React.FC<{
   const winners = Object.keys(scores).filter((c) => scores[c] === maxScore)
   return (
     <>
-      <Typography.Title level={4}>Scores summary</Typography.Title>
-      <Typography.Title level={5}>Winner</Typography.Title>
+      <h2 level={4}>Scores summary</h2>
+      <h2 level={5}>Winner</h2>
       <div className="block">
         <CandiTagList candidates={winners.map((c) => candidatesById[c])} />
       </div>
-      <Typography.Title level={5} style={{ marginBottom: 0 }}>
+      <h2 level={5} style={{ marginBottom: 0 }}>
         Scores
-      </Typography.Title>
+      </h2>
       <QuickScores candidatesById={candidatesById} scoreObject={scores} />
       <style jsx>{`
         .block {

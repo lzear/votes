@@ -7,7 +7,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 const withLess = require('next-with-less')
-const { getThemeVariables } = require('antd/dist/theme')
 const { withSentryConfig } = require('@sentry/nextjs')
 
 const sentryWebpackPluginOptions = {
@@ -33,10 +32,6 @@ const withLessOptions = {
     lessOptions: {
       /* ... */
       modifyVars: {
-        ...getThemeVariables({
-          dark: true, // Enable dark mode
-          compact: true, // Enable compact mode
-        }),
 
         // Light
         // 'primary-color': '#237f61',

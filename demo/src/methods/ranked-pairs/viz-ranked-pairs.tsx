@@ -1,5 +1,4 @@
 import React, { useRef } from 'react'
-import { Tag } from 'antd'
 import _ from 'lodash-es'
 
 import { RankedPairs, utils } from 'votes'
@@ -78,14 +77,14 @@ export const VizRankedPairs: React.FC = () => {
       <ScoresSummary scores={rp.scores()} candidatesById={candidatesById} />
       {groupp.map((g) =>
         g.map((e) => (
-          <Tag
+          <span
             key={`${e.from}-${e.to}`}
             color={color(e.ok)}
             style={{ marginBottom: 5 }}
             className={`li ${colorClass(e.ok)}`}
           >
             {e.value}: {candidatesStrings[e.from]}→{candidatesStrings[e.to]}
-          </Tag>
+          </span>
         )),
       )}
       {/*{divWidth && candidatesStrings.length > 2 && <ForceGraph />}*/}

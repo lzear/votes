@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Checkbox, Typography } from 'antd'
 import { shallow } from 'zustand/shallow'
 
 import { utils } from 'votes'
@@ -33,14 +32,14 @@ export const MatrixComp: React.FC = () => {
 
   return (
     <div className="container">
-      <Typography.Title level={5}>Matrix of duels</Typography.Title>
-      <Checkbox
+      <h2 level={5}>Matrix of duels</h2>
+      <span
         checked={skew}
         name="Ske"
         onChange={(v) => setSkew(v.target.checked)}
       >
         Normalize to skew matrix
-      </Checkbox>
+      </span>
       <div className="scroll">
         <table>
           <thead>

@@ -1,5 +1,4 @@
 import React from 'react'
-import { Button } from 'antd'
 import _ from 'lodash-es'
 import { Delete, Edit, Minus, Plus } from 'lucide-react'
 
@@ -51,27 +50,27 @@ export const ListVotesGroup: React.FC = () => {
               <th className="th" key={b.id}>
                 {numberToLetters(b.idx)}
                 <br />
-                <Button
+                <button
                   type="text"
                   icon={<Minus />}
                   size="small"
                   onClick={() => changeBallotWeight(-1)(b.id)}
                 />
                 {b.weight}
-                <Button
+                <button
                   type="text"
                   icon={<Plus />}
                   size="small"
                   onClick={() => changeBallotWeight(1)(b.id)}
                 />
                 <br />
-                <Button
+                <button
                   type="text"
                   icon={<Delete />}
                   size="small"
                   onClick={() => changeBallotWeight(-b.weight)(b.id)}
                 />
-                <Button
+                <button
                   type="text"
                   icon={<Edit />}
                   size="small"

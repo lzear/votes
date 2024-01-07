@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Select } from 'antd'
 import type { Ballot } from 'votes'
 
 import { badBorda } from './premade/bad-borda'
@@ -36,7 +35,7 @@ export const SelectPremade: React.FC = () => {
         voting systems.
       </label>
       <br />
-      <Select<string>
+      <div
         id="presets"
         size="small"
         style={{ minWidth: 250 }}
