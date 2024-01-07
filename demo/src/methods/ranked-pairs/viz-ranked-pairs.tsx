@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { Tag } from 'antd'
-import _ from 'lodash'
+import _ from 'lodash-es'
 
 import { RankedPairs, utils } from 'votes'
 

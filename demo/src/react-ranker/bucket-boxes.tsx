@@ -1,5 +1,5 @@
 import React from 'react'
-import _ from 'lodash'
+import _ from 'lodash-es'
 
 import { B_GUTTER, B_HEIGHT } from './constants'
 

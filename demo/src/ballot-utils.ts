@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import _ from 'lodash-es'
 import type { Ballot } from 'votes'
 
 import type { WithWeights } from './generate-ballots'

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Checkbox } from 'antd'
-import _ from 'lodash'
+import _ from 'lodash-es'
 import type { ScoreObject } from 'votes'
 
 import { AxisCandidatesBot } from '../../axis'

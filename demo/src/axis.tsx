@@ -1,5 +1,5 @@
 import React from 'react'
-import _ from 'lodash'
+import _ from 'lodash-es'
 
 import type { StoreBallots } from './ballot-with-id'
 import { numberToLetters } from './list-votes-group'

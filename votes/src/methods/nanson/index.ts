@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import _ from 'lodash-es'
 import sum from 'lodash/sum'
 
 import { RoundBallotMethod } from '../../classes/round-ballot-method'

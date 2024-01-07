@@ -6,7 +6,7 @@ import { Button } from 'antd'
 import type * as d3 from 'd3'
 import { hierarchy, treemap } from 'd3-hierarchy'
 import { scaleBand } from 'd3-scale'
-import _ from 'lodash'
+import _ from 'lodash-es'
 import { shallow } from 'zustand/shallow'
 
 import { Borda } from 'votes'

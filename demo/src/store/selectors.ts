@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
-import _ from 'lodash'
+import _ from 'lodash-es'
 
 import { utils } from 'votes'
 

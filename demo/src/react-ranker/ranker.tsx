@@ -4,7 +4,7 @@ import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons'
 import { animated, to, useSprings } from '@react-spring/web'
 import { useDrag } from '@use-gesture/react'
 import type { ReactDOMAttributes } from '@use-gesture/react/dist/declarations/src/types'
-import _ from 'lodash'
+import _ from 'lodash-es'
 
 import BucketBoxes from './bucket-boxes'
 import {

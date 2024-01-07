@@ -1,5 +1,5 @@
 import { Hsluv } from 'hsluv'
-import _ from 'lodash'
+import _ from 'lodash-es'
 
 const hsluvToHex = ([h, s, l]: [h: number, s: number, l: number]): string => {
   const hsluv = new Hsluv()

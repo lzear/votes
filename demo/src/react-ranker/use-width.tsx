@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import _ from 'lodash'
+import _ from 'lodash-es'
 
 const getSize = (el: HTMLDivElement | null) => (el ? el.offsetWidth : null)
 

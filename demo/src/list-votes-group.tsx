@@ -6,7 +6,7 @@ import {
   PlusOutlined,
 } from '@ant-design/icons'
 import { Button } from 'antd'
-import _ from 'lodash'
+import _ from 'lodash-es'
 
 import {
   selectBallots,

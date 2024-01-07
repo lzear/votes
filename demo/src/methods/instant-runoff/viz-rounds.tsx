@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Button, Typography } from 'antd'
-import _ from 'lodash'
+import _ from 'lodash-es'
 import numeral from 'numeral'
 import type { Ballot, Round } from 'votes'
 

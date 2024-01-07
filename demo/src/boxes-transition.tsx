@@ -1,7 +1,7 @@
 import type { TransitionFn } from '@react-spring/core'
 import { a, useTransition } from '@react-spring/web'
 import type { useHover } from '@use-gesture/react'
-import _ from 'lodash'
+import _ from 'lodash-es'
 
 import type { BoxMeta, BoxPosition, WithColor } from './ballots-ui'
 

@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import _ from 'lodash-es'
 
 import type { Matrix, ScoreObject } from '../types'
 import { shuffleArray } from '../utils/shuffle-array'
