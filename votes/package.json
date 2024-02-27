@@ -63,7 +63,7 @@
   },
   "dependencies": {
     "javascript-lp-solver": "0.4.15",
-    "lodash": "^4.17.21"
+    "lodash-es": "^4.17.21"
   },
   "peerDependencies": {
     "javascript-lp-solver": ">=0.4.0"

@@ -1,4 +1,4 @@
-import zipObject from 'lodash/zipObject'
+import { zipObject } from 'lodash-es'
 
 import { RandomMatrixMethod } from '../../classes/random-matrix-method'
 import { findNashEquilibrium } from '../../simplex/find-nash-equilibrium'
