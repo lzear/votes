@@ -1,0 +1,11 @@
+checks:
+  javascript: true
+build:
+  environment:
+    node: 20
+  nodes:
+    analysis:
+      tests:
+        override:
+          - js-scrutinizer-run
+    tests: true
