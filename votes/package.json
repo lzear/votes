@@ -1,11 +1,12 @@
 {
   "name": "votes",
+  "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "exports": {
     ".": {
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
     }
   },
   "version": "2.2.2",
@@ -63,7 +64,7 @@
   },
   "dependencies": {
     "javascript-lp-solver": "0.4.15",
-    "lodash": "^4.17.21"
+    "lodash-es": "^4.17.21"
   },
   "peerDependencies": {
     "javascript-lp-solver": ">=0.4.0"

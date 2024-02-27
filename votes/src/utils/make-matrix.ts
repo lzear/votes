@@ -1,6 +1,4 @@
-import difference from 'lodash/difference'
-import range from 'lodash/range'
-import times from 'lodash/times'
+import { difference, range, times } from 'lodash-es'
 
 import type { Ballot, Matrix } from '../types'
 

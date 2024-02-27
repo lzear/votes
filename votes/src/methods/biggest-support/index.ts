@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import _ from 'lodash-es'
 
 import { BallotMethod } from '../../classes/ballot-method'
 import type { Ballot } from '../../types'

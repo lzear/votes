@@ -1,4 +1,4 @@
-import range from 'lodash/range'
+import { range } from 'lodash-es'
 
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import type { Matrix, ScoreObject } from '../../types'
