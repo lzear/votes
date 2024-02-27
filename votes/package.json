@@ -9,7 +9,7 @@
       "import": "./dist/index.js"
     }
   },
-  "version": "2.2.2",
+  "version": "3.0.0",
   "description": "Implementation of some [electoral systems](https://en.wikipedia.org/wiki/Electoral_system)",
   "keywords": [
     "votes",
