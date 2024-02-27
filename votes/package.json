@@ -1,5 +1,6 @@
 {
   "name": "votes",
+  "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "exports": {
