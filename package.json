@@ -87,7 +87,8 @@
     ]
   },
   "volta": {
-    "node": "18.14.0"
+    "node": "18.14.0",
+    "yarn": "1.22.21"
   },
   "nextBundleAnalysis": {
     "budget": null,
