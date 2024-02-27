@@ -94,5 +94,6 @@
     "budget": null,
     "budgetPercentIncreaseRed": 20,
     "showDetails": true
-  }
+  },
+  "dependencies": {}
 }
