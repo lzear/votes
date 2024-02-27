@@ -8,7 +8,7 @@
       "import": "./dist/index.mjs"
     }
   },
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Implementation of some [electoral systems](https://en.wikipedia.org/wiki/Electoral_system)",
   "keywords": [
     "votes",

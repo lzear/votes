@@ -1,5 +1,11 @@
 # votes
 
+## 2.2.2
+
+### Patch Changes
+
+- 91eeb7a: Update some dependencies
+
 ## 2.2.1
 
 ### Patch Changes
