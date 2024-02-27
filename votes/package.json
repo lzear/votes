@@ -5,8 +5,8 @@
   "module": "dist/index.mjs",
   "exports": {
     ".": {
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
     }
   },
   "version": "2.2.2",
