@@ -124,7 +124,7 @@ export const Candidates: React.FC = () => {
 export const CandiTag: React.FC<
   {
     candidate: Candidate
-    onClose?: (candidate: Candidate) => void
+    onClose?: (_candidate: Candidate) => void
   } & TagProps
 > = ({ candidate, onClose, ...rest }) => (
   <Tag
@@ -141,7 +141,7 @@ export const CandiTag: React.FC<
 export const CandiTagList: React.FC<
   {
     candidates: Candidate[]
-    onClose?: (candidate: Candidate) => void
+    onClose?: (_candidate: Candidate) => void
   } & TagProps
 > = ({ candidates, onClose, style, ...rest }) => (
   <div style={{ margin: -2, display: 'inline' }}>
