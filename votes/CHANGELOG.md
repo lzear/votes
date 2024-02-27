@@ -1,5 +1,12 @@
 # votes
 
+## 3.0.0
+
+### Major Changes
+
+- 63568c3: Update `lodash` to `lodash-es`. Change the package to be ESM by
+  default.
+
 ## 2.2.2
 
 ### Patch Changes
