@@ -1,5 +1,13 @@
 # demo
 
+## 0.0.5
+
+### Patch Changes
+
+- 91eeb7a: Update some dependencies
+- Updated dependencies [91eeb7a]
+  - votes@2.2.2
+
 ## 0.0.4
 
 ### Patch Changes
