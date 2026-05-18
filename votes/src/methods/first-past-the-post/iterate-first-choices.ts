@@ -1,27 +1,18 @@
 import type { Ballot, ScoreObject } from '../../types'
-import { normalizeBallots } from '../../utils/normalize'
-import { scoresZero } from '../../utils/scores-zero'
+import { scoresZero } from '../../utils'
 
-export const iterateFirstChoices = (
-  ballots: Ballot[],
-  candidates: string[],
+// Callers (BallotMethod subclasses) pass already-normalized ballots.
+export const iterateFirstChoices = <C extends string>(
+  ballots: Ballot<C>[],
+  candidates: C[],
   computeBallotScore: (rank: string[], rankIdx: number) => number,
-): ScoreObject => iterateNthChoices(ballots, candidates, computeBallotScore, 0)
-
-export const iterateNthChoices = (
-  ballots: Ballot[],
-  candidates: string[],
-  computeBallotScore: (rank: string[], rankIdx: number) => number,
-  rankIdx: number,
-): ScoreObject => {
-  const result: ScoreObject = scoresZero(candidates)
-  for (const ballot of normalizeBallots(ballots, candidates))
-    if (ballot.ranking.length > rankIdx) {
-      const votes = ballot.ranking[rankIdx].filter((c) =>
-        candidates.includes(c),
-      )
+): ScoreObject<C> => {
+  const result = scoresZero(candidates)
+  for (const ballot of ballots)
+    if (ballot.ranking.length > 0) {
+      const votes = ballot.ranking.at(0) ?? []
       for (const candidate of votes)
-        result[candidate] += computeBallotScore(votes, rankIdx) * ballot.weight
+        result[candidate] += computeBallotScore(votes, 0) * ballot.weight
     }
   return result
 }

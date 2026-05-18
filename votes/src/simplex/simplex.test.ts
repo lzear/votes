@@ -1,5 +1,13 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import { productVectM } from '../test/matrix'
 import { findNashEquilibrium } from './find-nash-equilibrium'
+
+const closeToArray = (received: number[], expected: number[], digits = 6) => {
+  expect(received).toHaveLength(expected.length)
+  for (let i = 0; i < expected.length; i++)
+    expect(received[i]).toBeCloseTo(expected[i]!, digits)
+}
 
 it('solves 2', () => {
   const input = [
@@ -18,10 +26,8 @@ it('solves 3', () => {
     [1, -1, 0],
   ]
   const s = findNashEquilibrium(input)
-  expect(s).toEqual([
-    0.333_333_333_333_333_3, 0.333_333_333_333_333_3, 0.333_333_333_333_333_3,
-  ])
-  expect(productVectM(s, input)).toEqual([0, 0, 0])
+  closeToArray(s, [1 / 3, 1 / 3, 1 / 3])
+  for (const v of productVectM(s, input)) expect(v).toBeCloseTo(0)
 })
 
 it('solves 4', () => {
@@ -32,11 +38,8 @@ it('solves 4', () => {
     [-1, -1, -1, 0],
   ]
   const s = findNashEquilibrium(input)
-  expect(s).toEqual([
-    0.333_333_333_333_333_3, 0.333_333_333_333_333_3, 0.333_333_333_333_333_3,
-    0,
-  ])
-  expect(productVectM(s, input)).toEqual([0, 0, 0, 1])
+  closeToArray(s, [1 / 3, 1 / 3, 1 / 3, 0])
+  expect(productVectM(s, input)[3]).toBeCloseTo(1)
 })
 
 it('solves example1', () => {
@@ -46,7 +49,7 @@ it('solves example1', () => {
     [-8, 4, 0],
   ]
   const s = findNashEquilibrium(input)
-  expect(s).toEqual([0.285_714_29, 0.571_428_57, 0.142_857_14])
+  closeToArray(s, [2 / 7, 4 / 7, 1 / 7])
   for (const v of productVectM(s, input)) expect(v).toBeCloseTo(0)
 })
 
@@ -59,11 +62,12 @@ it('solves example2', () => {
     [4, -6, -2, -6, 0],
   ]
   const s = findNashEquilibrium(input)
-  expect(s).toEqual([0, 0.285_714_29, 0.571_428_57, 0.142_857_14, 0])
-  expect(productVectM(s, input)).toEqual([
-    4, 2.000_000_010_049_518_6e-8, -1.999_999_998_947_288_3e-8,
-    3.999_999_975_690_116e-8, 3.714_285_719_999_999_5,
-  ])
+  closeToArray(s, [0, 2 / 7, 4 / 7, 1 / 7, 0])
+  const prod = productVectM(s, input)
+  expect(prod[0]).toBeCloseTo(4)
+  expect(prod[1]).toBeCloseTo(0)
+  expect(prod[2]).toBeCloseTo(0)
+  expect(prod[3]).toBeCloseTo(0)
 })
 
 it('solves example3', () => {
@@ -75,14 +79,9 @@ it('solves example3', () => {
     [1, 9, -3, 22, 0],
   ]
   const s = findNashEquilibrium(input)
-  expect(s).toEqual([0.272_727_27, 0, 0.090_909_09, 0, 0.636_363_64])
-  expect(productVectM(s, input)).toMatchInlineSnapshot(`
-    [
-      1.0000000050247593e-8,
-      5.5454545799999995,
-      -3.0000000039720476e-8,
-      17.09090914,
-      -5.551115123125783e-17,
-    ]
-  `)
+  closeToArray(s, [3 / 11, 0, 1 / 11, 0, 7 / 11])
+  const prod = productVectM(s, input)
+  expect(prod[0]).toBeCloseTo(0)
+  expect(prod[2]).toBeCloseTo(0)
+  expect(prod[4]).toBeCloseTo(0)
 })

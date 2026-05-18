@@ -2,11 +2,11 @@ import { zipObject } from 'lodash-es'
 import { RandomMatrixMethod } from '../../classes/random-matrix-method'
 import { findNashEquilibrium } from '../../simplex/find-nash-equilibrium'
 import type { Matrix, ScoreObject } from '../../types'
-import { findSmithSet, makeAntisymetric } from '../../utils'
-import { scoresZero } from '../../utils/scores-zero'
+import { findSmithSet, makeAntisymmetric, scoresZero } from '../../utils'
 
-export const computeLottery = (_matrix: Matrix): Record<string, number> => {
-  const matrix = makeAntisymetric(_matrix)
+export const lotteryFromAntisymmetric = <C extends string>(
+  matrix: Matrix<C>,
+): Record<C, number> => {
   const condorset = findSmithSet(matrix)
 
   const solution = findNashEquilibrium(condorset.array).map((v) =>
@@ -19,8 +19,8 @@ export const computeLottery = (_matrix: Matrix): Record<string, number> => {
   }
 }
 
-export class MaximalLotteries extends RandomMatrixMethod {
-  public scores(): ScoreObject {
-    return computeLottery(this.matrix)
+export class MaximalLotteries<C extends string> extends RandomMatrixMethod<C> {
+  public scores(): ScoreObject<C> {
+    return lotteryFromAntisymmetric(makeAntisymmetric(this.matrix))
   }
 }

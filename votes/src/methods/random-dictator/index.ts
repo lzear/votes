@@ -1,42 +1,36 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { RandomBallotMethod } from '../../classes/random-ballot-method'
 import type { Ballot } from '../../types'
-import { totalBallotsWeight } from '../../utils/normalize'
+import { normalizeRanking, totalBallotsWeight } from '../../utils'
 
-const pickBallotIdx = (ballots: Ballot[], ratio: number) => {
-  const W = totalBallotsWeight(ballots)
-  const pickAt = ratio * W
+const pickBallotIdx = <C extends string>(
+  ballots: Ballot<C>[],
+  ratio: number,
+) => {
+  const pickAt = ratio * totalBallotsWeight(ballots)
   let w = 0
-  let i = 0
-
-  while (w < pickAt) {
-    const b = ballots[i]
-    if (!b) throw new Error('Could not pick a ballot?!')
-    w += b.weight
-    if (w >= pickAt) return i
-    i++
+  for (const [i, ballot] of ballots.entries()) {
+    w += ballot.weight
+    if (w > pickAt) return i
   }
-  throw new Error('Could not pick a ballot?!')
+  return ballots.length - 1
 }
 
-const rank = (candidates: string[], ballots: Ballot[], rng: () => number) => {
+const rank = <C extends string>(
+  candidates: C[],
+  ballots: Ballot<C>[],
+  rng: () => number,
+): C[][] => {
   if (candidates.length === 0) return []
   if (ballots.length === 0) return [candidates]
 
   const ratio = rng()
   const idx = pickBallotIdx(ballots, ratio)
-  return ballots[idx].ranking
+  return normalizeRanking(ballots[idx]!.ranking, candidates)
 }
 
-export class RandomDictator extends RandomBallotMethod {
-  constructor(i: {
-    ballots: Ballot[]
-    candidates: string[]
-    rng?: () => number
-  }) {
-    super(i)
-  }
-
-  public ranking(): string[][] {
+export class RandomDictator<C extends string> extends RandomBallotMethod<C> {
+  public ranking(): C[][] {
     return rank(this.candidates, this.ballots, this.rng)
   }
 }

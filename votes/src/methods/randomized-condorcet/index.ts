@@ -1,19 +1,22 @@
 import { RandomMatrixMethod } from '../../classes/random-matrix-method'
 import type { Matrix, ScoreObject } from '../../types'
-import { makeAntisymetric } from '../../utils'
-import { computeLottery } from '../maximal-lotteries'
+import { makeAntisymmetric } from '../../utils'
+import { lotteryFromAntisymmetric } from '../maximal-lotteries'
 
-const computeScores = (matrix: Matrix): ScoreObject => {
-  const antisymetric = makeAntisymetric(matrix)
-  const antisymetricUnit = {
-    ...antisymetric,
-    array: antisymetric.array.map((r) => r.map((v) => Math.sign(v))),
+const computeScores = <C extends string>(matrix: Matrix<C>): ScoreObject<C> => {
+  const signMatrix = {
+    candidates: matrix.candidates,
+    array: makeAntisymmetric(matrix).array.map((r) =>
+      r.map((v) => Math.sign(v)),
+    ),
   }
-  return computeLottery(antisymetricUnit)
+  return lotteryFromAntisymmetric(signMatrix)
 }
 
-export class RandomizedCondorcet extends RandomMatrixMethod {
-  public scores(): ScoreObject {
+export class RandomizedCondorcet<
+  C extends string,
+> extends RandomMatrixMethod<C> {
+  public scores(): ScoreObject<C> {
     return computeScores(this.matrix)
   }
 }

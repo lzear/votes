@@ -1,20 +1,18 @@
 import { BallotScoreMethod } from '../../classes/ballot-score-method'
 import type { Ballot, ScoreObject } from '../../types'
-import { normalizeBallots } from '../../utils/normalize'
-import { scoresZero } from '../../utils/scores-zero'
+import { normalizeBallots, scoresZero } from '../../utils'
 
-const computeScores = (
-  candidates: string[],
-  _ballots: Ballot[],
-): ScoreObject => {
+const computeScores = <C extends string>(
+  candidates: C[],
+  _ballots: Ballot<C>[],
+): ScoreObject<C> => {
   const scores = scoresZero(candidates)
-  const ballots = normalizeBallots(_ballots, candidates)
-  for (const ballot of normalizeBallots(ballots, candidates)) {
+  for (const ballot of normalizeBallots(_ballots, candidates)) {
     let voteValue = candidates.length // - 1
     for (const candidatesAtRank of ballot.ranking) {
       const value = voteValue - (candidatesAtRank.length - 1) / 2
       for (const candidate of candidatesAtRank)
-        scores[candidate] += value * ballot.weight
+        scores[candidate] = scores[candidate] + value * ballot.weight
 
       voteValue -= candidatesAtRank.length
     }
@@ -27,8 +25,8 @@ const computeScores = (
  *
  * #### Wikipedia: [Borda count](https://en.wikipedia.org/wiki/Borda_count)
  */
-export class Borda extends BallotScoreMethod {
-  public scores(): ScoreObject {
+export class Borda<C extends string> extends BallotScoreMethod<C> {
+  public scores(): ScoreObject<C> {
     return computeScores(this.candidates, this.ballots)
   }
 }

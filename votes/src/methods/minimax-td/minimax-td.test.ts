@@ -106,7 +106,7 @@ describe(MinimaxTD, () => {
       C beat D: 99% to 1%. (98% margin)
      */
 
-    const matrix: Matrix = {
+    const matrix: Matrix<'A' | 'B' | 'C' | 'D'> = {
       candidates: ['A', 'B', 'C', 'D'],
       array: [
         [0, 58, 30, 55],
@@ -151,7 +151,7 @@ describe(MinimaxTD, () => {
       C beat D: 55% to 45% (10% margin)
      */
 
-    const matrix: Matrix = {
+    const matrix: Matrix<'A' | 'B' | 'C' | 'D'> = {
       candidates: ['A', 'B', 'C', 'D'],
       array: [
         [0, 50, 68, 99],

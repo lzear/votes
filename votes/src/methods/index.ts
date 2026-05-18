@@ -22,6 +22,12 @@ import { Schulze } from './schulze'
 import { Smith } from './smith'
 import { TwoRoundRunoff } from './two-round-runoff'
 
+export interface MethodCtor {
+  readonly needsMatrix: boolean
+  readonly needsBallot: boolean
+  readonly isRandom: boolean
+}
+
 export const methods = {
   [VotingSystem.AbsoluteMajority]: AbsoluteMajority,
   [VotingSystem.Approbation]: Approbation,
@@ -45,6 +51,6 @@ export const methods = {
   [VotingSystem.Schulze]: Schulze,
   [VotingSystem.Smith]: Smith,
   [VotingSystem.TwoRoundRunoff]: TwoRoundRunoff,
-} as const
+} as const satisfies Record<VotingSystem, MethodCtor>
 
 export type Methods = (typeof methods)[keyof typeof methods]

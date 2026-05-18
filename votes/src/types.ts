@@ -1,14 +1,14 @@
-export interface Ballot {
-  ranking: string[][]
+export interface Ballot<C extends string> {
+  ranking: C[][]
   weight: number
 }
 
-export interface Matrix {
-  candidates: string[]
+export interface Matrix<C extends string> {
+  candidates: C[]
   array: number[][]
 }
 
-export type ScoreObject = Record<string, number>
+export type ScoreObject<C extends string> = Record<C, number>
 
 export enum VotingSystem {
   Approbation = 'APPROBATION',

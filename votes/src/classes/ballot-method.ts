@@ -1,35 +1,42 @@
 import type { Ballot, Matrix } from '../types'
-import { matrixFromBallots } from '../utils/make-matrix'
-import type { Ranker } from './method'
-import { Method } from './method'
+import { matrixFromBallots, normalizeBallots } from '../utils'
+import type { Matrixer } from './matrix-score-method'
+import { Method, type Ranker } from './method'
 
-export abstract class BallotMethod extends Method implements Ranker {
+export abstract class BallotMethod<C extends string>
+  extends Method<C>
+  implements Ranker<C>, Matrixer<C>
+{
   public static readonly needsBallot = true
-  protected readonly ballots: Ballot[]
-  private _matrix?: Matrix
+  protected readonly ballots: Ballot<C>[]
+  private _matrix?: Matrix<C>
 
-  /**
-   * @param ballots - ballots cast by the voters
-   * @param candidates - canidates to consider
-   */
-  constructor({
-    ballots,
-    candidates,
-  }: {
-    ballots: Ballot[]
-    candidates: string[]
-  }) {
-    super(candidates)
-    this.ballots = ballots
+  constructor(c: { ballots: Ballot<C>[]; candidates: C[] }) {
+    super(c.candidates)
+    this.ballots = normalizeBallots(c.ballots, c.candidates, true)
   }
 
   /**
    * Return a matrix of duels from all the ballots
    */
-  get matrix(): Matrix {
-    if (!this._matrix)
-      this._matrix = matrixFromBallots(this.ballots, this.candidates)
-
+  get matrix(): Matrix<C> {
+    this._matrix ??= matrixFromBallots(this.ballots, this.candidates)
     return this._matrix
+  }
+
+  /**
+   * Return a new instance of the same method restricted to a subset of candidates.
+   * Ballots are filtered to remove candidates not in the subset; unranked candidates
+   * are NOT appended (preserves only opinions voters expressed).
+   */
+  restrict<D extends C>(candidates: D[]): BallotMethod<D> {
+    type Ctor = new (input: {
+      ballots: Ballot<D>[]
+      candidates: D[]
+    }) => BallotMethod<D>
+    return new (this.constructor as Ctor)({
+      ballots: normalizeBallots(this.ballots as Ballot<D>[], candidates, false),
+      candidates,
+    })
   }
 }
