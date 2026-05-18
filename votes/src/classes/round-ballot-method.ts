@@ -27,7 +27,7 @@ export abstract class RoundBallotMethod extends BallotMethod implements Ranker {
 
   public ranking(): string[][] {
     return [...this.computeRounds()]
-      .reverse()
+      .toReversed()
       .map((r) => r.roundResult.eliminated)
       .filter((eliminated) => eliminated.length)
   }

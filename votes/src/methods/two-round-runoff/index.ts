@@ -36,7 +36,7 @@ export class TwoRoundRunoff extends RoundBallotMethod {
         scores,
       }
     }
-    const scoreValues = Object.values(scores).sort((a, b) => b - a)
+    const scoreValues = Object.values(scores).toSorted((a, b) => b - a)
 
     if (idx === 0) {
       const qualified = candidates.filter((c) => scores[c] >= scoreValues[1])

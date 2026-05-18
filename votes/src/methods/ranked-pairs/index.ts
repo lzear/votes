@@ -22,7 +22,7 @@ const computeFromMatrix = (matrix: Matrix): ScoreObject => {
   )
   const edgesGroups = groupBy(allEdges, 'value')
   const groups = Object.keys(edgesGroups)
-    .sort((a, b) => Number(b) - Number(a))
+    .toSorted((a, b) => Number(b) - Number(a))
     .map((value) => edgesGroups[value]!)
 
   const acyclicGraph = groups.reduce<Edge[]>(

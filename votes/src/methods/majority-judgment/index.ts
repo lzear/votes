@@ -57,7 +57,7 @@ const majorityJudgmentRanking = (
   ballots: Ballot[],
 ): string[][] => {
   const judgements = makeJudgement(candidates, ballots)
-  return tieBreak(judgements).reverse()
+  return tieBreak(judgements).toReversed()
 }
 
 const tieBreak = (judgements: Judgements): string[][] => {

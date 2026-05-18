@@ -11,7 +11,7 @@ const deTie = (ranking: string[][], ballots: Ballot[]): string[][] =>
     const pickedScores = pick(scores, rank)
     const groups = groupBy(rank, (c) => pickedScores[c])
     return Object.keys(groups)
-      .sort((a, b) => Number(b) - Number(a))
+      .toSorted((a, b) => Number(b) - Number(a))
       .map((score) => groups[score])
   })
 

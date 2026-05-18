@@ -9,7 +9,7 @@ import { FirstPastThePost } from '../first-past-the-post'
 const reverseBallots = (ballots: Ballot[]) =>
   ballots.map((ballot) => ({
     ...ballot,
-    ranking: [...ballot.ranking].reverse(),
+    ranking: ballot.ranking.toReversed(),
   }))
 
 const round = (
