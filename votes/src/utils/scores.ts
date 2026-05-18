@@ -1,7 +1,14 @@
-import { groupBy, sortBy, toPairs } from 'lodash-es'
+import { config } from './config'
 
-export const scoresToRanking = (scores: Record<string, number>): string[][] =>
-  sortBy(
-    groupBy(toPairs(scores), (e) => e[1]),
-    (e) => -e[0][1],
-  ).map((e) => e.map((f) => f[0]))
+export const scoresToRanking = (
+  scores: Record<string, number>,
+  epsilon = config.EPSILON,
+): string[][] => {
+  const buckets: { score: number; candidates: string[] }[] = []
+  for (const [c, score] of Object.entries(scores)) {
+    const bucket = buckets.find((b) => Math.abs(b.score - score) <= epsilon)
+    if (bucket) bucket.candidates.push(c)
+    else buckets.push({ score, candidates: [c] })
+  }
+  return buckets.toSorted((a, b) => b.score - a.score).map((b) => b.candidates)
+}
