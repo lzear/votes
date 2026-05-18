@@ -1,3 +1,12 @@
+engines:
+  eslint:
+    enabled: true
+  duplication:
+    enabled: true
+
 exclude_paths:
   - '**/*.test.ts'
   - 'src/test/'
+  - 'dist/**'
+  - 'coverage/**'
+  - '*.min.js'
