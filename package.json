@@ -1,6 +1,7 @@
 {
   "type": "commonjs",
   "name": "votes--root",
+  "description": "Voting systems library monorepo",
   "version": "0.0.0",
   "private": true,
   "workspaces": [
@@ -11,60 +12,47 @@
   "repository": "github:lzear/votes",
   "license": "MIT",
   "scripts": {
-    "build": "turbo run build",
-    "changeset:version": "yarn changeset version",
-    "precommit": "lint-staged",
-    "commit": "git-cz",
+    "build": "yarn workspaces foreach -A --topological run build",
+    "build-docs": "yarn workspaces foreach -A run build-docs",
+    "changeset": "changeset",
     "dev": "turbo run dev",
     "fix:prettier": "prettier --write \"**/*.*\"",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "eslint .",
-    "ncu": "npx npm-check-updates --workspaces --upgrade --root",
-    "npkill": "npx npkill",
-    "release": "yarn workspace votes release && changeset publish",
-    "test": "turbo run test",
-    "test-prod": "yarn run eslint && yarn workspaces run test-prod"
+    "ncu": "yarn dlx npm-check-updates --dep dev,optional,peer,prod,packageManager -u --workspaces && yarn up --recursive '*' '@*/*'",
+    "qa": "yarn install --immutable && yarn build && concurrently -g 'yarn typecheck' 'yarn lint' 'yarn test' 'yarn workspaces foreach -A run build-docs' 'yarn forge check'",
+    "release": "changeset publish",
+    "setup-repo": "forge setup",
+    "test": "yarn workspaces foreach -A run test",
+    "test-prod": "yarn run eslint && yarn workspaces run test-prod",
+    "typecheck": "yarn workspaces foreach -A run typecheck",
+    "version-packages": "changeset version"
   },
   "devDependencies": {
-    "@changesets/changelog-github": "^0.7",
     "@changesets/cli": "^2",
     "@commitlint/cli": "^21",
     "@commitlint/config-conventional": "^21",
     "@lzear/forge": "^4",
     "@types/node": "^25",
-    "commitizen": "^4",
-    "dotenv": "^17",
+    "concurrently": "^10",
     "eslint": "^9",
-    "husky": "^9",
-    "is-boolean-object": "^1",
+    "lefthook": "^2",
     "lint-staged": "^17",
     "prettier": "^3",
     "turbo": "^2",
     "typescript": "6.0.3"
-  },
-  "bugs": {
-    "url": "https://github.com/lzear/votes/issues"
-  },
-  "homepage": "https://github.com/lzear/votes",
-  "lint-staged": {
-    "{src,test}/**/*.ts": [
-      "prettier --write"
-    ]
-  },
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-conventional-changelog"
-    }
   },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
     ]
   },
-  "nextBundleAnalysis": {
-    "budget": null,
-    "budgetPercentIncreaseRed": 20,
-    "showDetails": true
+  "lint-staged": {
+    "**/*.{ts,tsx,md}": "prettier --write"
   },
+  "bugs": {
+    "url": "https://github.com/lzear/votes/issues"
+  },
+  "homepage": "https://github.com/lzear/votes",
   "packageManager": "yarn@4.15.0"
 }

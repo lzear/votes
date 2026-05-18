@@ -1,14 +1,5 @@
 {
   "name": "votes",
-  "type": "module",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "exports": {
-    ".": {
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
-    }
-  },
   "version": "3.0.0",
   "description": "Implementation of some [electoral systems](https://en.wikipedia.org/wiki/Electoral_system)",
   "keywords": [
@@ -17,15 +8,32 @@
     "voting-systems",
     "elections"
   ],
+  "homepage": "https://github.com/lzear/votes",
+  "bugs": {
+    "url": "https://github.com/lzear/votes/issues"
+  },
+  "repository": "lzear/votes",
+  "license": "MIT",
+  "author": "lzear",
   "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
   "files": [
     "dist",
     "src"
   ],
-  "author": "lzear",
-  "repository": "github:lzear/votes",
-  "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsup",
@@ -34,7 +42,15 @@
     "release": "cp ../README.md . && yarn run build",
     "test": "node --experimental-vm-modules node_modules/.bin/jest --coverage --runInBand --detectOpenHandles --forceExit",
     "test-prod": "yarn run test && yarn run build",
+    "typecheck": "tsc --noEmit",
     "typedoc": "npx typedoc src/index.ts --tsconfig tsconfig.typedoc.json"
+  },
+  "dependencies": {
+    "javascript-lp-solver": "0.4.15",
+    "lodash-es": "^4"
+  },
+  "peerDependencies": {
+    "javascript-lp-solver": ">=0.4.0"
   },
   "devDependencies": {
     "@types/jest": "^30",
@@ -56,25 +72,7 @@
     "typedoc": "^0.28",
     "typescript": "6.0.3"
   },
-  "dependencies": {
-    "javascript-lp-solver": "0.4.15",
-    "lodash-es": "^4"
-  },
-  "peerDependencies": {
-    "javascript-lp-solver": ">=0.4.0"
-  },
   "engines": {
-    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
-  },
-  "bugs": {
-    "url": "https://github.com/lzear/votes/issues"
-  },
-  "homepage": "https://github.com/lzear/votes",
-  "directories": {
-    "doc": "docs",
-    "test": "test"
-  },
-  "volta": {
-    "extends": "../package.json"
+    "node": ">=18.0.0"
   }
 }
