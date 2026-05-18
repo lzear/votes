@@ -1,5 +1,3 @@
-import './typings/javascript-lp-solver.d.ts'
-
 export type { Round } from './classes/round-ballot-method'
 export { type Methods, methods } from './methods'
 export { AbsoluteMajority } from './methods/absolute-majority'

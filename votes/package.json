@@ -46,11 +46,7 @@
     "typedoc": "npx typedoc src/index.ts --tsconfig tsconfig.typedoc.json"
   },
   "dependencies": {
-    "javascript-lp-solver": "0.4.15",
     "lodash-es": "^4"
-  },
-  "peerDependencies": {
-    "javascript-lp-solver": ">=0.4.0"
   },
   "devDependencies": {
     "@types/lodash-es": "^4",

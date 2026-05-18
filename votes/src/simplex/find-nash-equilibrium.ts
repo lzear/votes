@@ -1,46 +1,107 @@
-import solver from 'javascript-lp-solver'
-
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 type SkewSymmetricMatrix = number[][]
 
 const isZero = (matrix: number[][]): boolean => {
-  for (let i = 0; i < matrix.length; i++)
-    for (let j = 0; j < matrix.length; j++) if (matrix[i][j] !== 0) return false
+  for (const row of matrix) for (const val of row) if (val !== 0) return false
   return true
 }
 
 const normalizeVector = (vector: number[]): number[] => {
   const positive = vector.map((v) => Math.max(v, 0))
   const sum = positive.reduce((acc, cur) => acc + cur, 0)
+  if (sum === 0) return vector.map(() => 1 / vector.length)
   return positive.map((v) => v / sum)
+}
+
+const initTableau = (n: number, cols: number, A: number[][]): number[][] => {
+  const tab = Array.from({ length: n + 1 }, () =>
+    Array.from({ length: cols }, () => 0),
+  )
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) tab[i]![j] = A[i]![j]!
+    tab[i]![n + i] = 1
+    tab[i]![cols - 1] = 1
+  }
+  for (let j = 0; j < n; j++) tab[n]![j] = -1
+  return tab
+}
+
+const findEntering = (tab: number[][], n: number): number => {
+  let enterCol = -1
+  let minCost = -1e-10
+  for (let j = 0; j < 2 * n; j++)
+    if (tab[n]![j]! < minCost) {
+      minCost = tab[n]![j]!
+      enterCol = j
+    }
+  return enterCol
+}
+
+const findLeaving = (
+  tab: number[][],
+  n: number,
+  cols: number,
+  enterCol: number,
+): number => {
+  let leaveRow = -1
+  let minRatio = Infinity
+  for (let i = 0; i < n; i++)
+    if (tab[i]![enterCol]! > 1e-10) {
+      const ratio = tab[i]![cols - 1]! / tab[i]![enterCol]!
+      if (ratio < minRatio) {
+        minRatio = ratio
+        leaveRow = i
+      }
+    }
+  return leaveRow
+}
+
+const pivotStep = (
+  tab: number[][],
+  n: number,
+  cols: number,
+  leaveRow: number,
+  enterCol: number,
+): void => {
+  const pivotVal = tab[leaveRow]![enterCol]!
+  for (let j = 0; j < cols; j++) tab[leaveRow]![j]! /= pivotVal
+  for (let i = 0; i <= n; i++)
+    if (i !== leaveRow && Math.abs(tab[i]![enterCol]!) > 1e-12) {
+      const factor = tab[i]![enterCol]!
+      for (let j = 0; j < cols; j++) tab[i]![j]! -= factor * tab[leaveRow]![j]!
+    }
+}
+
+// Solves: maximize sum(y) s.t. A*y <= 1, y >= 0
+const solveLP = (A: number[][]): number[] => {
+  const n = A.length
+  const cols = 2 * n + 1
+  const tab = initTableau(n, cols, A)
+  const basis = Array.from({ length: n }, (_, i) => n + i)
+
+  for (let iter = 0; iter < 10 * (2 * n + 1); iter++) {
+    const enterCol = findEntering(tab, n)
+    if (enterCol === -1) break
+    const leaveRow = findLeaving(tab, n, cols, enterCol)
+    if (leaveRow === -1) break
+    basis[leaveRow] = enterCol
+    pivotStep(tab, n, cols, leaveRow, enterCol)
+  }
+
+  const y = Array.from({ length: n }, () => 0)
+  for (let i = 0; i < n; i++)
+    if (basis[i]! < n) y[basis[i]!] = tab[i]![cols - 1]!
+  return y
 }
 
 export const findNashEquilibrium = (matrix: SkewSymmetricMatrix): number[] => {
   if (isZero(matrix)) return matrix.map(() => 1 / matrix.length)
 
-  const constraints: Record<string, Record<string, number>> = {
-    sum: { equal: 1 },
-  }
-  const variables: Record<string, Record<string, number>> = {}
-  for (let i = 0; i < matrix.length; i++) {
-    constraints[`p${i + 1}`] = { min: 0 }
+  let maxAbs = 0
+  for (const row of matrix)
+    for (const v of row) if (Math.abs(v) > maxAbs) maxAbs = Math.abs(v)
+  const K = maxAbs + 1
+  const B = matrix.map((row) => row.map((v) => v + K))
 
-    const variable: Record<string, number> = { v: matrix[i][0], sum: 1 }
-    for (let j = 0; j < matrix.length; j++) variable[`p${j + 1}`] = matrix[i][j]
-    variables[`p${i + 1}`] = variable
-  }
-
-  const model = {
-    optimize: 'v',
-    opType: 'min',
-    constraints,
-    variables,
-  }
-
-  const result = solver.Solve(model)
-
-  const probabilities = []
-  for (let i = 0; i < matrix.length; i++)
-    probabilities.push(result[`p${i + 1}`] || 0)
-
-  return normalizeVector(probabilities)
+  return normalizeVector(solveLP(B))
 }
