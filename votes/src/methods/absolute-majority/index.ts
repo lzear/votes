@@ -1,28 +1,37 @@
 import { BallotScoreMethod } from '../../classes/ballot-score-method'
 import type { ScoreObject } from '../../types'
-import { totalBallotsWeight } from '../../utils/normalize'
-import { scoresZero } from '../../utils/scores-zero'
+import { scoresToRanking, totalBallotsWeight } from '../../utils'
 import { FirstPastThePost } from '../first-past-the-post'
 
 /**
  * #### Wikipedia: [Majority](https://en.wikipedia.org/wiki/Majority)
  */
-export class AbsoluteMajority extends BallotScoreMethod {
-  public scores(): ScoreObject {
-    const totalWeight = totalBallotsWeight(this.ballots)
-
-    const fptp = new FirstPastThePost({
+export class AbsoluteMajority<C extends string> extends BallotScoreMethod<C> {
+  private _fptp?: FirstPastThePost<C>
+  private get fptp(): FirstPastThePost<C> {
+    this._fptp ??= new FirstPastThePost({
       ballots: this.ballots,
       candidates: this.candidates,
     })
-    const topRank = fptp.ranking()[0]
-    const fptpScores = fptp.scores()
+    return this._fptp
+  }
 
-    if (topRank?.length === 1 && fptpScores[topRank[0]] > totalWeight / 2)
-      return {
-        ...scoresZero(this.candidates),
-        [topRank[0]]: fptpScores[topRank[0]],
-      }
-    return scoresZero(this.candidates)
+  public scores(): ScoreObject<C> {
+    return this.fptp.scores()
+  }
+
+  public ranking(): C[][] {
+    const totalWeight = totalBallotsWeight(this.ballots)
+    const fptpScores = this.fptp.scores()
+    const topRank = scoresToRanking(fptpScores)[0] ?? []
+    const top0 = topRank[0]
+    const top0Score = top0 === undefined ? undefined : fptpScores[top0]
+
+    return top0 !== undefined &&
+      top0Score !== undefined &&
+      topRank.length === 1 &&
+      top0Score > totalWeight / 2
+      ? [[top0], this.candidates.filter((c: C) => c !== top0)]
+      : [this.candidates]
   }
 }

@@ -1,6 +1,13 @@
-import './typings/javascript-lp-solver.d.ts'
-
-export type { Round } from './classes/round-ballot-method'
+export type { Ranker } from './classes/method'
+export type { Round, TieBreakStep } from './classes/round-ballot-method'
+export { tb, type TbEntry } from './classes/round-ballot-method-tb'
+export type { StepResult } from './election'
+export { Election } from './election'
+export {
+  parseCondorcetElectionFormat,
+  type ParsedCondorcetElection,
+  stringifyCondorcetElectionFormat,
+} from './formats/condorcet-election-format'
 export { type Methods, methods } from './methods'
 export { AbsoluteMajority } from './methods/absolute-majority'
 export { Approbation } from './methods/approbation'
@@ -20,7 +27,8 @@ export { Nanson } from './methods/nanson'
 export { RandomCandidates } from './methods/random-candidates'
 export { RandomDictator } from './methods/random-dictator'
 export { RandomizedCondorcet } from './methods/randomized-condorcet'
-export { RankedPairs } from './methods/ranked-pairs'
+export { byTotalParticipation, RankedPairs } from './methods/ranked-pairs'
+export type { Edge as RankedPairsEdge } from './methods/ranked-pairs/generate-acyclic-graph'
 export { Schulze } from './methods/schulze'
 export { Smith } from './methods/smith'
 export { TwoRoundRunoff } from './methods/two-round-runoff'
@@ -32,8 +40,10 @@ export type {
   BallotSystem,
   MatrixMethods,
   MatrixSystem,
+  MethodsContaining,
   RandomMethods,
   RandomSystem,
+  SystemsBeing,
 } from './utils/categories'
 export {
   isBallotMethod,
@@ -43,3 +53,5 @@ export {
   isRandomMethod,
   isRandomSystem,
 } from './utils/categories'
+export { matrixFromBallots } from './utils/make-matrix'
+export { rngGenerator } from './utils/rng-generator'

@@ -1,4 +1,4 @@
-import { matrixString } from '../../test/test-utils'
+import { closeTo, matrixString } from '../../test/test-utils'
 import { MaximalLotteries } from '.'
 
 const example1 = [
@@ -33,9 +33,9 @@ describe('maximal lotteries', () => {
         candidates: ['a', 'b', 'c'],
       }).scores(),
     ).toEqual({
-      a: 0.285_714_29,
-      b: 0.571_428_57,
-      c: 0.142_857_14,
+      a: closeTo(2 / 7, 6),
+      b: closeTo(4 / 7, 6),
+      c: closeTo(1 / 7, 6),
     })
   })
   it('works with "complexer" example', () => {
@@ -43,9 +43,9 @@ describe('maximal lotteries', () => {
       new MaximalLotteries({ array: example2, candidates }).scores(),
     ).toEqual({
       a: 0,
-      b: 0.285_714_29,
-      c: 0.571_428_57,
-      d: 0.142_857_14,
+      b: closeTo(2 / 7, 6),
+      c: closeTo(4 / 7, 6),
+      d: closeTo(1 / 7, 6),
       e: 0,
     })
   })
@@ -56,11 +56,11 @@ describe('maximal lotteries', () => {
         candidates: ['a', 'b', 'c', 'd', 'e'],
       }).scores(),
     ).toEqual({
-      a: 0.272_727_27,
+      a: closeTo(3 / 11, 6),
       b: 0,
-      c: 0.090_909_09,
+      c: closeTo(1 / 11, 6),
       d: 0,
-      e: 0.636_363_64,
+      e: closeTo(7 / 11, 6),
     })
   })
 })

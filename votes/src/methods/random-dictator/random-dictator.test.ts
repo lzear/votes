@@ -1,13 +1,16 @@
-import { rngGenerator } from '../../test/rng-generator'
 import type { Ballot } from '../../types'
-import { toWeightedBallots } from '../../utils'
+import { rngGenerator, toWeightedBallots } from '../../utils'
 import { RandomDictator } from '.'
 
 const expectNTimes = <T>(value: T, expected: T, times: number) => {
   for (let i = 0; i < times; i++) expect(value).toStrictEqual(expected)
 }
 
-const vote = (ballots: Ballot[], candidates: string[], seed?: string) =>
+const vote = <C extends string>(
+  ballots: Ballot<C>[],
+  candidates: C[],
+  seed?: string,
+): RandomDictator<C> =>
   new RandomDictator({
     ballots,
     candidates,
@@ -75,52 +78,29 @@ describe(RandomDictator, () => {
       5,
     )
   })
-  it('breaks ties', () => {
-    expectNTimes(
-      vote(
-        toWeightedBallots([
-          [['a'], ['b']],
-          [['b'], ['a']],
-        ]),
-        ['a', 'b'],
-      ).tieBreak([['b'], ['a']]),
+  it('picks first ballot when rng returns 0', () => {
+    const ballots = toWeightedBallots([
+      [['a'], ['b']],
       [['b'], ['a']],
-      5,
-    )
-    expectNTimes(
-      vote(
-        toWeightedBallots([
-          [['a'], ['b']],
-          [['b'], ['a']],
-        ]),
-        ['a', 'b'],
-      ).tieBreak([['a'], ['b']]),
+    ])
+    const result = new RandomDictator({
+      ballots,
+      candidates: ['a', 'b'],
+      rng: () => 0,
+    }).ranking()
+    expect(result).toStrictEqual([['a'], ['b']])
+  })
+
+  it('picks last ballot when rng returns 1', () => {
+    const ballots = toWeightedBallots([
       [['a'], ['b']],
-      5,
-    )
-    expectNTimes(
-      vote(
-        toWeightedBallots([
-          [['a'], ['b']],
-          [['b'], ['a']],
-        ]),
-        ['a', 'b'],
-        '222',
-      ).tieBreak([['a', 'b']]),
-      [['a'], ['b']],
-      5,
-    )
-    expectNTimes(
-      vote(
-        toWeightedBallots([
-          [['a'], ['b']],
-          [['b'], ['a']],
-        ]),
-        ['a', 'b'],
-        '333',
-      ).tieBreak([['a', 'b']]),
-      [['a'], ['b']],
-      5,
-    )
+      [['b'], ['a']],
+    ])
+    const result = new RandomDictator({
+      ballots,
+      candidates: ['a', 'b'],
+      rng: () => 1,
+    }).ranking()
+    expect(result).toStrictEqual([['b'], ['a']])
   })
 })

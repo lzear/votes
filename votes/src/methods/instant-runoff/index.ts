@@ -1,42 +1,20 @@
-import { RoundBallotMethod } from '../../classes/round-ballot-method'
-import type { Ballot, ScoreObject } from '../../types'
-import { normalizeBallots } from '../../utils'
+import { TbEliminateLast } from '../../classes/round-ballot-method-tb'
+import type { ScoreObject } from '../../types'
+import { scoresToRanking } from '../../utils'
 import { FirstPastThePost } from '../first-past-the-post'
-
-const round = (
-  candidates: string[],
-  ballots: Ballot[],
-): {
-  qualified: string[]
-  eliminated: string[]
-  scores: ScoreObject
-} => {
-  const normalizedBallots = normalizeBallots(ballots, candidates)
-
-  const fptp = new FirstPastThePost({
-    ballots: normalizedBallots,
-    candidates,
-  })
-  const round1 = fptp.scores()
-  const minScore = Math.min(...Object.values(round1))
-  const qualified = candidates.filter((c) => round1[c] > minScore)
-  const eliminated = candidates.filter((c) => round1[c] <= minScore)
-  return {
-    eliminated,
-    qualified,
-    scores: round1,
-  }
-}
 
 /**
  * #### Wikipedia: [Instant-runoff voting](https://en.wikipedia.org/wiki/Instant-runoff_voting)
  */
-export class InstantRunoff extends RoundBallotMethod {
-  protected round(candidates: string[]): {
-    qualified: string[]
-    eliminated: string[]
-    scores: ScoreObject
+export class InstantRunoff<C extends string> extends TbEliminateLast<C> {
+  protected oneRound(candidates: C[]): {
+    ranking: C[][]
+    scores: ScoreObject<C>
   } {
-    return round(candidates, this.ballots)
+    const scores = new FirstPastThePost({
+      ballots: this.ballots,
+      candidates,
+    }).scores()
+    return { ranking: scoresToRanking(scores), scores }
   }
 }

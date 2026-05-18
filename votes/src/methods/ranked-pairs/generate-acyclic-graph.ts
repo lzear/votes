@@ -1,11 +1,14 @@
-import _ from 'lodash-es'
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import { Tarjan } from './tarjan'
 import { Vertex } from './vertex'
 
-interface Edge {
+export interface Edge {
   from: number
   to: number
   value: number
+  /** Total voters expressing a preference between these two candidates. */
+  total: number
 }
 
 export const generateAcyclicGraph = (
@@ -14,16 +17,16 @@ export const generateAcyclicGraph = (
 ): Edge[] => {
   const allEdges = [...graph, ...edgesToAdd]
   const vDict = {} as Record<number, Vertex>
-  for (const c of _.uniq(allEdges.flatMap((e) => [e.from, e.to])))
+  for (const c of new Set(allEdges.flatMap((e) => [e.from, e.to])))
     vDict[c] = new Vertex(c)
 
-  for (const e of allEdges) vDict[e.from].connect(vDict[e.to])
+  for (const e of allEdges) vDict[e.from]!.connect(vDict[e.to]!)
   const tarjan = new Tarjan(Object.values(vDict))
   tarjan.run()
   return [
     ...graph,
     ...edgesToAdd.filter(
-      (edge) => vDict[edge.from].lowlink !== vDict[edge.to].lowlink,
+      (edge) => vDict[edge.from]!.lowlink !== vDict[edge.to]!.lowlink,
     ),
   ]
 }

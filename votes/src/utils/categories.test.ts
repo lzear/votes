@@ -1,4 +1,6 @@
-import { methods } from '../methods'
+/* eslint-disable vitest/no-conditional-expect */
+import { type MethodCtor, methods } from '../methods'
+import { MajorityJudgment } from '../methods/majority-judgment'
 import { RandomCandidates } from '../methods/random-candidates'
 import { VotingSystem } from '../types'
 import {
@@ -11,29 +13,36 @@ import {
 } from './categories'
 
 describe('systems categoris', () => {
-  it.each(Object.values(VotingSystem))('needs ballots xor matrix', (system) => {
-    const Method = methods[system]
+  const specialCases = new Set<MethodCtor>([RandomCandidates, MajorityJudgment])
+  it.each(Object.values(VotingSystem))(
+    'needs ballots xor matrix (%s)',
+    (system) => {
+      const Method = methods[system]
 
-    if (system !== VotingSystem.RandomCandidates)
-      expect(Method.needsMatrix !== Method.needsBallot).toBe(true)
+      if (!specialCases.has(Method))
+        expect(Method.needsMatrix !== Method.needsBallot).toBe(true)
 
-    expect(isRandomSystem(system) === isRandomMethod(Method)).toBe(true)
-    expect(isBallotSystem(system) === isBallotMethod(Method)).toBe(true)
-    expect(isMatrixSystem(system) === isMatrixMethod(Method)).toBe(true)
+      expect(isRandomSystem(system) === isRandomMethod(Method)).toBe(true)
+      expect(isBallotSystem(system) === isBallotMethod(Method)).toBe(true)
+      expect(isMatrixSystem(system) === isMatrixMethod(Method)).toBe(true)
 
-    expect(isRandomSystem(system) === Method.isRandom).toBe(true)
-    expect(isBallotSystem(system) === Method.needsBallot).toBe(true)
-    expect(isMatrixSystem(system) === Method.needsMatrix).toBe(true)
-  })
+      expect(isRandomSystem(system) === Method.isRandom).toBe(true)
+      expect(isBallotSystem(system) === Method.needsBallot).toBe(true)
+      expect(isMatrixSystem(system) === Method.needsMatrix).toBe(true)
+    },
+  )
 
-  it.each(Object.values(methods))('needs ballots xor matrix 2', (Method) => {
-    if (Method !== RandomCandidates)
-      expect(Method.needsMatrix !== Method.needsBallot).toBe(true)
+  it.each(Object.values(methods))(
+    'needs ballots xor matrix 2 (%O)',
+    (Method) => {
+      if (!specialCases.has(Method))
+        expect(Method.needsMatrix !== Method.needsBallot).toBe(true)
 
-    expect(isRandomMethod(Method) === Method.isRandom).toBe(true)
-    expect(isBallotMethod(Method) === Method.needsBallot).toBe(true)
-    expect(isMatrixMethod(Method) === Method.needsMatrix).toBe(true)
-  })
+      expect(isRandomMethod(Method) === Method.isRandom).toBe(true)
+      expect(isBallotMethod(Method) === Method.needsBallot).toBe(true)
+      expect(isMatrixMethod(Method) === Method.needsMatrix).toBe(true)
+    },
+  )
 
   it('has correct categories', () => {
     const systems = Object.values(VotingSystem)
@@ -59,7 +68,6 @@ describe('systems categoris', () => {
         "COOMBS",
         "FIRST_PAST_THE_POST",
         "INSTANT_RUNOFF",
-        "MAJORITY_JUDGEMENT",
         "NANSON",
         "RANDOM_DICTATOR",
         "TWO_ROUND_RUNOFF",

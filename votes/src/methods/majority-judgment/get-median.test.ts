@@ -34,4 +34,16 @@ describe(getMedian, () => {
     expect(getMedian([1, 0, 0, 0, 0])).toBe(0)
     expect(getMedian([1, 0, 0, 0, 0, 0])).toBe(0)
   })
+  it('handles weights greater than 1', () => {
+    expect(getMedian([2, 2])).toBe(0.5)
+    expect(getMedian([3, 1])).toBe(0)
+    expect(getMedian([1, 3])).toBe(1)
+    expect(getMedian([0, 2, 0, 2])).toBe(2)
+    expect(getMedian([2, 0, 2])).toBe(1)
+  })
+  it('handles non-integer weights', () => {
+    expect(getMedian([0.5, 0.5])).toBe(0.5)
+    expect(getMedian([1.5, 0.5])).toBe(0)
+    expect(getMedian([0.5, 1.5])).toBe(1)
+  })
 })

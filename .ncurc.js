@@ -1,3 +1,4 @@
+// eslint-disable-next-line unicorn/prefer-module
 module.exports = {
-  reject: ['eslint', 'javascript-lp-solver'],
+  reject: ['eslint'],
 }

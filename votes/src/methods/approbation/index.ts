@@ -5,8 +5,8 @@ import { iterateFirstChoices } from '../first-past-the-post/iterate-first-choice
 /**
  * #### Wikipedia: [Approval voting](https://en.wikipedia.org/wiki/Approval_voting)
  */
-export class Approbation extends BallotScoreMethod {
-  public scores(): ScoreObject {
+export class Approbation<C extends string> extends BallotScoreMethod<C> {
+  public scores(): ScoreObject<C> {
     return iterateFirstChoices(this.ballots, this.candidates, () => 1)
   }
 }
