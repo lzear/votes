@@ -13,4 +13,5 @@ export {
   removeInvalidCandidates,
   toWeightedBallots,
 } from './normalize'
+export { rngGenerator } from './rng-generator'
 export { scoresToRanking } from './scores'
