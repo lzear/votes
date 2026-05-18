@@ -22,4 +22,12 @@ export abstract class RandomMethod<C extends string>
   public abstract scores(): ScoreObject<C>
 
   public abstract ranking(): C[][]
+
+  restrict<D extends C>(candidates: D[]): Method<D> {
+    type Ctor = new (i: {
+      candidates: D[]
+      rng?: () => number
+    }) => RandomMethod<D>
+    return new (this.constructor as Ctor)({ candidates, rng: this.rng })
+  }
 }

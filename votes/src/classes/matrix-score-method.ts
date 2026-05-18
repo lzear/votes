@@ -1,6 +1,6 @@
 import type { Matrix } from '../types'
-import type { Scorer } from './score-method'
-import { ScoreMethod } from './score-method'
+import { subMatrix } from '../utils/make-matrix'
+import { ScoreMethod, type Scorer } from './score-method'
 
 export interface Matrixer<C extends string> {
   matrix: Matrix<C>
@@ -23,5 +23,10 @@ export abstract class MatrixScoreMethod<C extends string>
 
   get matrix(): Matrix<C> {
     return this._matrix
+  }
+
+  restrict<D extends C>(candidates: D[]): MatrixScoreMethod<D> {
+    type Ctor = new (matrix: Matrix<D>) => MatrixScoreMethod<D>
+    return new (this.constructor as Ctor)(subMatrix(this.matrix, candidates))
   }
 }

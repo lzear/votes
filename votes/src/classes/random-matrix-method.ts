@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import { mapValues, omit, sum } from 'lodash-es'
 import type { Matrix, ScoreObject } from '../types'
+import { subMatrix } from '../utils/make-matrix'
 import { shuffleArray } from '../utils/shuffle-array'
 import type { Matrixer } from './matrix-score-method'
 import { RandomMethod } from './random-method'
@@ -30,7 +33,8 @@ const randomRankingFromSores = <C extends string>(
       ]
   }
 
-  throw new Error('Unable to generate random ranking from scores')
+  const last = candidates.at(-1)!
+  return [last, ...randomRankingFromScores(omit(scoreObject, last), random)]
 }
 
 export abstract class RandomMatrixMethod<C extends string>
@@ -58,5 +62,15 @@ export abstract class RandomMatrixMethod<C extends string>
 
   public ranking(): C[][] {
     return randomRankingFromSores(this.scores(), this.rng).map((c) => [c])
+  }
+
+  public restrict<D extends C>(candidates: D[]): RandomMatrixMethod<D> {
+    type Ctor = new (
+      i: Matrix<D> & { rng?: () => number },
+    ) => RandomMatrixMethod<D>
+    return new (this.constructor as Ctor)({
+      ...subMatrix(this.matrix, candidates),
+      rng: this.rng,
+    })
   }
 }

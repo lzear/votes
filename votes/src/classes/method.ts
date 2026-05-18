@@ -17,6 +17,8 @@ export abstract class Method<C extends string> implements Ranker<C> {
    */
   public abstract ranking(): C[][]
 
+  protected abstract restrict<D extends C>(candidates: D[]): Method<D>
+
   /**
    * Split tied candidates in a ranking.
    *
