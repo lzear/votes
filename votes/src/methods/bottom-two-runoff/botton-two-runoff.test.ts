@@ -39,40 +39,14 @@ describe(BottomTwoRunoff, () => {
             "qualified": [
               "😡",
               "🤡",
-              "🤥",
               "🎽",
+              "🤥",
             ],
             "scores": {
-              "🎽": 2,
+              "🎽": 0,
               "🔏": 0,
-              "😡": 2,
-              "🤡": 2,
-              "🤥": 1,
-            },
-          },
-        },
-        {
-          "candidates": [
-            "😡",
-            "🤡",
-            "🤥",
-            "🎽",
-          ],
-          "finished": false,
-          "idx": 1,
-          "roundResult": {
-            "eliminated": [
-              "🤥",
-            ],
-            "qualified": [
-              "😡",
-              "🤡",
-              "🎽",
-            ],
-            "scores": {
-              "🎽": 2,
-              "😡": 2,
-              "🤡": 1,
+              "😡": 3,
+              "🤡": 0,
               "🤥": 0,
             },
           },
@@ -82,6 +56,32 @@ describe(BottomTwoRunoff, () => {
             "😡",
             "🤡",
             "🎽",
+            "🤥",
+          ],
+          "finished": false,
+          "idx": 1,
+          "roundResult": {
+            "eliminated": [
+              "🤥",
+            ],
+            "qualified": [
+              "😡",
+              "🎽",
+              "🤡",
+            ],
+            "scores": {
+              "🎽": 0,
+              "😡": 3,
+              "🤡": 0,
+              "🤥": 0,
+            },
+          },
+        },
+        {
+          "candidates": [
+            "😡",
+            "🎽",
+            "🤡",
           ],
           "finished": false,
           "idx": 2,
@@ -94,8 +94,8 @@ describe(BottomTwoRunoff, () => {
               "🎽",
             ],
             "scores": {
-              "🎽": 1,
-              "😡": 2,
+              "🎽": 0,
+              "😡": 3,
               "🤡": 0,
             },
           },
@@ -116,7 +116,7 @@ describe(BottomTwoRunoff, () => {
             ],
             "scores": {
               "🎽": 0,
-              "😡": 1,
+              "😡": 3,
             },
           },
         },
@@ -132,7 +132,7 @@ describe(BottomTwoRunoff, () => {
             ],
             "qualified": [],
             "scores": {
-              "😡": 0,
+              "😡": 3,
             },
           },
         },

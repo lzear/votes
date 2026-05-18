@@ -19,6 +19,12 @@ export abstract class Method<C extends string> implements Ranker<C> {
 
   protected abstract restrict<D extends C>(candidates: D[]): Method<D>
 
+  public deTie(): C[][] {
+    return this.ranking().flatMap((r) =>
+      r.length <= 1 ? [r] : this.restrict(r).ranking(),
+    )
+  }
+
   /**
    * Split tied candidates in a ranking.
    *
