@@ -24,7 +24,7 @@ export const matrixFromBallots = (
   return { array, candidates }
 }
 
-export const makeAntisymetric = (matrix: Matrix): Matrix => ({
+export const makeAntisymmetric = (matrix: Matrix): Matrix => ({
   array: matrix.array.map((values, row) =>
     values.map((v, col) => v - matrix.array[col]![row]!),
   ),

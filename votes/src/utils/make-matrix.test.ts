@@ -1,19 +1,21 @@
 import { abcde, balinski } from '../test/test-utils'
+import { makeAntisymmetric, matrixFromBallots } from '.'
 import { subMatrix } from './make-matrix'
-import { makeAntisymetric, matrixFromBallots } from '.'
 
 describe('matrixes', () => {
   it('makes antisymetric', () => {
-    expect(makeAntisymetric(matrixFromBallots(balinski, abcde))).toStrictEqual({
-      array: [
-        [0, -34, -34, -34, -28],
-        [34, 0, -2, 58, 4],
-        [34, 2, 0, 32, 20],
-        [34, -58, -32, 0, 40],
-        [28, -4, -20, -40, 0],
-      ],
-      candidates: ['a', 'b', 'c', 'd', 'e'],
-    })
+    expect(makeAntisymmetric(matrixFromBallots(balinski, abcde))).toStrictEqual(
+      {
+        array: [
+          [0, -34, -34, -34, -28],
+          [34, 0, -2, 58, 4],
+          [34, 2, 0, 32, 20],
+          [34, -58, -32, 0, 40],
+          [28, -4, -20, -40, 0],
+        ],
+        candidates: ['a', 'b', 'c', 'd', 'e'],
+      },
+    )
   })
 
   it('makes matrix', () => {

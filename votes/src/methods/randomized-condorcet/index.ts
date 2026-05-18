@@ -1,10 +1,10 @@
 import { RandomMatrixMethod } from '../../classes/random-matrix-method'
 import type { Matrix, ScoreObject } from '../../types'
-import { makeAntisymetric } from '../../utils'
+import { makeAntisymmetric } from '../../utils'
 import { computeLottery } from '../maximal-lotteries'
 
 const computeScores = (matrix: Matrix): ScoreObject => {
-  const antisymetric = makeAntisymetric(matrix)
+  const antisymetric = makeAntisymmetric(matrix)
   const antisymetricUnit = {
     ...antisymetric,
     array: antisymetric.array.map((r) => r.map((v) => Math.sign(v))),

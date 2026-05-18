@@ -1,6 +1,6 @@
 export { generateAcyclicGraph } from '../methods/ranked-pairs/generate-acyclic-graph'
 export { findCondorcet, findSmithSet } from './condorcet'
-export { makeAntisymetric, matrixFromBallots } from './make-matrix'
+export { makeAntisymmetric, matrixFromBallots } from './make-matrix'
 export {
   candidatesFromBallots,
   checkDuplicatedCandidate,
