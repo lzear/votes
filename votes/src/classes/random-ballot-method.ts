@@ -17,7 +17,7 @@ export abstract class RandomBallotMethod
   }) {
     super(i)
 
-    this.rng = i.rng || Math.random
+    this.rng = i.rng ?? Math.random
   }
 
   public abstract ranking(): string[][]

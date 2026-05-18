@@ -24,8 +24,7 @@ export abstract class BallotScoreMethod
   }
 
   get matrix(): Matrix {
-    if (!this._matrix)
-      this._matrix = matrixFromBallots(this.ballots, this.candidates)
+    this._matrix ??= matrixFromBallots(this.ballots, this.candidates)
 
     return this._matrix
   }

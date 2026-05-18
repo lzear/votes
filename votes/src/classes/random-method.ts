@@ -13,7 +13,7 @@ export abstract class RandomMethod extends Method implements Scorer {
   constructor(i: { candidates: string[]; rng?: () => number }) {
     super(i.candidates)
 
-    this.rng = i.rng || Math.random
+    this.rng = i.rng ?? Math.random
   }
 
   public abstract scores(): ScoreObject

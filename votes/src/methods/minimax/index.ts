@@ -47,8 +47,8 @@ export class Minimax extends MatrixScoreMethod {
 
   constructor(i: Matrix & { variant?: MinimaxVariant; excludeTies?: boolean }) {
     super(i)
-    this.minimaxVariant = i.variant || MinimaxVariant.Margins
-    this.excludeTies = i.excludeTies || false
+    this.minimaxVariant = i.variant ?? MinimaxVariant.Margins
+    this.excludeTies = i.excludeTies ?? false
   }
 
   public scores(): ScoreObject {

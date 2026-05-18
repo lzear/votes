@@ -27,8 +27,7 @@ export abstract class BallotMethod extends Method implements Ranker {
    * Return a matrix of duels from all the ballots
    */
   get matrix(): Matrix {
-    if (!this._matrix)
-      this._matrix = matrixFromBallots(this.ballots, this.candidates)
+    this._matrix ??= matrixFromBallots(this.ballots, this.candidates)
 
     return this._matrix
   }

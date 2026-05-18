@@ -43,7 +43,7 @@ export abstract class RoundBallotMethod extends BallotMethod implements Ranker {
 
   private computeNextRound(): void {
     const previousRound = this.rounds.at(-1)
-    const candidates = previousRound?.roundResult.qualified || this.candidates
+    const candidates = previousRound?.roundResult.qualified ?? this.candidates
 
     const idx = previousRound ? previousRound.idx + 1 : 0
 
@@ -64,6 +64,6 @@ export abstract class RoundBallotMethod extends BallotMethod implements Ranker {
 
   private lastRoundQualified(): string[] {
     const previousRound = this.rounds.at(-1)
-    return previousRound?.roundResult.qualified || this.candidates
+    return previousRound?.roundResult.qualified ?? this.candidates
   }
 }

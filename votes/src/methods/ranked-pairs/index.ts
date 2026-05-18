@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import { groupBy, range, zipObject } from 'lodash-es'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import type { Matrix, ScoreObject } from '../../types'
@@ -21,7 +23,7 @@ const computeFromMatrix = (matrix: Matrix): ScoreObject => {
   const edgesGroups = groupBy(allEdges, 'value')
   const groups = Object.keys(edgesGroups)
     .sort((a, b) => Number(b) - Number(a))
-    .map((value) => edgesGroups[value])
+    .map((value) => edgesGroups[value]!)
 
   const acyclicGraph = groups.reduce<Edge[]>(
     (graph: Edge[], edgesToAdd) => generateAcyclicGraph(graph, edgesToAdd),
@@ -31,7 +33,7 @@ const computeFromMatrix = (matrix: Matrix): ScoreObject => {
     (candidate, key) => !acyclicGraph.some(({ to }) => to === key),
   )
   const scores = graphsWinners.reduce<Record<number, number>>((acc, curr) => {
-    acc[curr] = (acc[curr] || 0) + 1
+    acc[curr] = (acc[curr] ?? 0) + 1
     return acc
   }, {})
   const maxScore1 = Math.max(...Object.values(scores))
