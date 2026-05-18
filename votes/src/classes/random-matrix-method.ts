@@ -5,11 +5,11 @@ import type { Matrixer } from './matrix-score-method'
 import { RandomMethod } from './random-method'
 import type { Scorer } from './score-method'
 
-const randomRankingFromSores = (
-  scoreObject: ScoreObject,
+const randomRankingFromSores = <C extends string>(
+  scoreObject: ScoreObject<C>,
   random: () => number,
-): string[] => {
-  const candidates = Object.keys(scoreObject)
+): C[] => {
+  const candidates = Object.keys(scoreObject) as C[]
   if (candidates.length < 2) return candidates
 
   const sumScores = sum(Object.values(scoreObject))
@@ -33,15 +33,15 @@ const randomRankingFromSores = (
   throw new Error('Unable to generate random ranking from scores')
 }
 
-export abstract class RandomMatrixMethod
-  extends RandomMethod
-  implements Scorer, Matrixer
+export abstract class RandomMatrixMethod<C extends string>
+  extends RandomMethod<C>
+  implements Scorer<C>, Matrixer<C>
 {
   public static readonly needsMatrix = true
 
-  private readonly _matrix: Matrix
+  private readonly _matrix: Matrix<C>
 
-  constructor(i: Matrix & { rng?: () => number }) {
+  constructor(i: Matrix<C> & { rng?: () => number }) {
     super(i)
 
     this._matrix = {
@@ -50,13 +50,13 @@ export abstract class RandomMatrixMethod
     }
   }
 
-  get matrix(): Matrix {
+  get matrix(): Matrix<C> {
     return this._matrix
   }
 
-  public abstract scores(): ScoreObject
+  public abstract scores(): ScoreObject<C>
 
-  public ranking(): string[][] {
+  public ranking(): C[][] {
     return randomRankingFromSores(this.scores(), this.rng).map((c) => [c])
   }
 }

@@ -3,7 +3,7 @@ import { BallotMethod } from '../../classes/ballot-method'
 import type { Ballot } from '../../types'
 import { iterateFirstChoices } from '../first-past-the-post/iterate-first-choices'
 
-const deTie = (ranking: string[][], ballots: Ballot[]): string[][] =>
+const deTie = <C extends string>(ranking: C[][], ballots: Ballot<C>[]): C[][] =>
   ranking.flatMap((rank) => {
     if (rank.length < 2) return [rank]
 
@@ -12,14 +12,14 @@ const deTie = (ranking: string[][], ballots: Ballot[]): string[][] =>
     const groups = groupBy(rank, (c) => pickedScores[c])
     return Object.keys(groups)
       .toSorted((a, b) => Number(b) - Number(a))
-      .map((score) => groups[score])
+      .map((score) => groups[score]!)
   })
 
 export const isTied = (ranking: string[][]): boolean =>
   ranking.some((rank) => rank.length > 1)
 
-export class BiggestSupport extends BallotMethod {
-  public ranking(): string[][] {
+export class BiggestSupport<C extends string> extends BallotMethod<C> {
+  public ranking(): C[][] {
     let ranking = [this.candidates]
 
     let rankIdx = 0

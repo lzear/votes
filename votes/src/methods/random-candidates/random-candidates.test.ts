@@ -1,7 +1,7 @@
 import { rngGenerator } from '../../test/rng-generator'
 import { RandomCandidates } from '.'
 
-const vote = (candidates: string[], seed?: string) =>
+const vote = (candidates: C[], seed?: string) =>
   new RandomCandidates({
     candidates,
     rng: seed ? rngGenerator(seed) : undefined,

@@ -3,7 +3,10 @@ import { RandomBallotMethod } from '../../classes/random-ballot-method'
 import type { Ballot } from '../../types'
 import { totalBallotsWeight } from '../../utils/normalize'
 
-const pickBallotIdx = (ballots: Ballot[], ratio: number) => {
+const pickBallotIdx = <C extends string>(
+  ballots: Ballot<C>[],
+  ratio: number,
+) => {
   const W = totalBallotsWeight(ballots)
   const pickAt = ratio * W
   let w = 0
@@ -19,25 +22,29 @@ const pickBallotIdx = (ballots: Ballot[], ratio: number) => {
   throw new Error('Could not pick a ballot?!')
 }
 
-const rank = (candidates: string[], ballots: Ballot[], rng: () => number) => {
+const rank = <C extends string>(
+  candidates: C[],
+  ballots: Ballot<C>[],
+  rng: () => number,
+) => {
   if (candidates.length === 0) return []
   if (ballots.length === 0) return [candidates]
 
   const ratio = rng()
   const idx = pickBallotIdx(ballots, ratio)
-  return ballots[idx].ranking
+  return ballots[idx]!.ranking
 }
 
-export class RandomDictator extends RandomBallotMethod {
+export class RandomDictator<C extends string> extends RandomBallotMethod<C> {
   constructor(i: {
-    ballots: Ballot[]
-    candidates: string[]
+    ballots: Ballot<C>[]
+    candidates: C[]
     rng?: () => number
   }) {
     super(i)
   }
 
-  public ranking(): string[][] {
+  public ranking(): C[][] {
     return rank(this.candidates, this.ballots, this.rng)
   }
 }

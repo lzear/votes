@@ -5,18 +5,20 @@ import { toWeightedBallots } from '../utils'
 export const closeTo = (num: number, numDigits?: number) =>
   expect.closeTo(num, numDigits) as number
 
-export const abcde = ['a', 'b', 'c', 'd', 'e']
+type ABCDE = 'a' | 'b' | 'c' | 'd' | 'e'
 
-export const balinski: Ballot[] = toWeightedBallots([
+export const abcde = ['a', 'b', 'c', 'd', 'e'] as ABCDE[]
+
+export const balinski = toWeightedBallots([
   ...fill(Array.from({ length: 33 }), [['a'], ['b'], ['c'], ['d'], ['e']]),
   ...fill(Array.from({ length: 16 }), [['b'], ['d'], ['c'], ['e'], ['a']]),
   ...fill(Array.from({ length: 3 }), [['c'], ['d'], ['b'], ['a'], ['e']]),
   ...fill(Array.from({ length: 8 }), [['c'], ['e'], ['b'], ['d'], ['a']]),
   ...fill(Array.from({ length: 18 }), [['d'], ['e'], ['c'], ['b'], ['a']]),
   ...fill(Array.from({ length: 22 }), [['e'], ['c'], ['b'], ['d'], ['a']]),
-])
+]) as Ballot<ABCDE>[]
 
-export const sW: Ballot[] = toWeightedBallots([
+export const sW = toWeightedBallots([
   ...fill(Array.from({ length: 5 }), [['a'], ['c'], ['b'], ['e'], ['d']]),
   ...fill(Array.from({ length: 5 }), [['a'], ['d'], ['e'], ['c'], ['b']]),
   ...fill(Array.from({ length: 8 }), [['b'], ['e'], ['d'], ['a'], ['c']]),
@@ -25,13 +27,13 @@ export const sW: Ballot[] = toWeightedBallots([
   ...fill(Array.from({ length: 2 }), [['c'], ['b'], ['a'], ['d'], ['e']]),
   ...fill(Array.from({ length: 7 }), [['d'], ['c'], ['e'], ['b'], ['a']]),
   ...fill(Array.from({ length: 8 }), [['e'], ['b'], ['a'], ['d'], ['c']]),
-])
+]) as Ballot<ABCDE>[]
 
-export const dummyProfile: Ballot[] = toWeightedBallots([
+export const dummyProfile = toWeightedBallots([
   [['a'], ['b'], ['c'], ['d'], ['e']],
 ])
 
-export const dummyProfile10: Ballot[] = toWeightedBallots(
+export const dummyProfile10: Ballot<ABCDE>[] = toWeightedBallots(
   fill(Array.from({ length: 10 }), [['a'], ['b'], ['c'], ['d'], ['e']]),
 )
 

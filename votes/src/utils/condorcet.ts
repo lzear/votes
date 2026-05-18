@@ -4,7 +4,9 @@ import { difference } from 'lodash-es'
 import type { Matrix } from '../types'
 import { makeAntisymmetric } from './make-matrix'
 
-export const findSmithSet = (_matrix: Matrix): Matrix => {
+export const findSmithSet = <C extends string>(
+  _matrix: Matrix<C>,
+): Matrix<C> => {
   const { candidates, array } = makeAntisymmetric(_matrix)
   const dominatingDirectList = candidates.map((_c, k) =>
     array[k]!.map((_v, k2) => k2).filter((k2) => array[k]![k2]! >= 0),

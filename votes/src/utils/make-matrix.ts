@@ -3,10 +3,10 @@
 import { difference, range, times } from 'lodash-es'
 import type { Ballot, Matrix } from '../types'
 
-export const matrixFromBallots = (
-  ballots: Ballot[],
-  candidates: string[],
-): Matrix => {
+export const matrixFromBallots = <C extends string>(
+  ballots: Ballot<C>[],
+  candidates: C[],
+): Matrix<C> => {
   const array: number[][] = times(candidates.length, () =>
     times(candidates.length, () => 0),
   )
@@ -24,17 +24,19 @@ export const matrixFromBallots = (
   return { array, candidates }
 }
 
-export const makeAntisymmetric = (matrix: Matrix): Matrix => ({
+export const makeAntisymmetric = <C extends string>(
+  matrix: Matrix<C>,
+): Matrix<C> => ({
   array: matrix.array.map((values, row) =>
     values.map((v, col) => v - matrix.array[col]![row]!),
   ),
   candidates: matrix.candidates,
 })
 
-export const subMatrix = (
-  matrix: Matrix,
-  selectedCandidates: string[],
-): Matrix => {
+export const subMatrix = <C extends string, S extends C>(
+  matrix: Matrix<C>,
+  selectedCandidates: S[],
+): Matrix<S> => {
   const selectedIdxs = new Set(
     selectedCandidates.map((selectedCandidate) => {
       const idx = matrix.candidates.indexOf(selectedCandidate)
@@ -50,6 +52,9 @@ export const subMatrix = (
     array: matrix.array
       .filter((_row, rowIdx) => selectedIdxs.has(rowIdx))
       .map((row) => row.filter((_col, colIdx) => selectedIdxs.has(colIdx))),
-    candidates: matrix.candidates.filter((c) => selectedCandidates.includes(c)),
+    candidates: matrix.candidates.filter((c) =>
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-explicit-any
+      selectedCandidates.includes(c as any),
+    ) as S[],
   }
 }

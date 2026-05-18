@@ -5,6 +5,8 @@ import { abcde, dummyProfile, dummyProfile10 } from '../test/test-utils'
 import { isRandomSystem } from './categories'
 import { matrixFromBallots } from './make-matrix'
 
+type ABC = 'a' | 'b' | 'c'
+
 describe('sanity check', () => {
   it.each(Object.values(VotingSystem))(
     'empty list and empty candidates %s',
@@ -27,7 +29,7 @@ describe('sanity check', () => {
       if (isRandomSystem(system)) return
 
       const candidates = ['a', 'b', 'c']
-      const ballots: Ballot[] = []
+      const ballots: Ballot<ABC>[] = []
       const matrix = matrixFromBallots(ballots, candidates)
       const election = new methods[system]({
         ballots,
@@ -39,8 +41,8 @@ describe('sanity check', () => {
   it.each(Object.values(VotingSystem))(
     'empty ballot list %s (scores)',
     (system) => {
-      const candidates = ['a', 'b', 'c']
-      const ballots: Ballot[] = []
+      const candidates: ABC[] = ['a', 'b', 'c']
+      const ballots: Ballot<ABC>[] = []
       const matrix = matrixFromBallots(ballots, candidates)
       const election = new methods[system]({
         ballots,
@@ -137,8 +139,8 @@ describe('sanity check', () => {
   it.each(Object.values(VotingSystem))(
     'gets the condorcet cycle %s (scores)',
     (system) => {
-      const candidates = ['a', 'b', 'c']
-      const ballots = [
+      const candidates: ABC[] = ['a', 'b', 'c']
+      const ballots: Ballot<ABC>[] = [
         { ranking: [['a'], ['b'], ['c']], weight: 1 },
         { ranking: [['b'], ['c'], ['a']], weight: 1 },
         { ranking: [['c'], ['a'], ['b']], weight: 1 },

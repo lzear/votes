@@ -1,13 +1,13 @@
-export interface Ranker {
-  ranking(): string[][]
+export interface Ranker<C extends string> {
+  ranking(): C[][]
 }
 
-export abstract class Method implements Ranker {
+export abstract class Method<C extends string> implements Ranker<C> {
   public static readonly needsMatrix: boolean = false
   public static readonly needsBallot: boolean = false
   public static readonly isRandom: boolean = false
 
-  constructor(readonly candidates: string[]) {}
+  constructor(readonly candidates: C[]) {}
 
   /**
    * Result of the vote. The first item lists the winners of the vote.
@@ -15,22 +15,25 @@ export abstract class Method implements Ranker {
    * For example this ranking means that `Bear` wins, `Sheep` is second and `Lion` third
    * `[ [ 'Bear' ], [ 'Sheep' ], [ 'Lion' ] ]`
    */
-  public abstract ranking(): string[][]
+  public abstract ranking(): C[][]
 
   /**
    * Split tied candidates in a ranking.
    *
    * @param rankingToTieBreak - a ranking in which ties will be attempted to be broken by the current voting system
    */
-  public tieBreak(rankingToTieBreak: string[][]): string[][] {
+  public tieBreak(rankingToTieBreak: C[][]): C[][] {
     const ranking = this.ranking()
 
-    const scores = ranking.reduce<Record<string, number>>((acc, rank, idx) => {
-      return {
-        ...acc,
-        ...zipObject(rank, Array.from({ length: rank.length }).fill(-idx)),
-      }
-    }, {})
+    const scores = ranking.reduce<Record<C, number>>(
+      (acc, rank, idx) => {
+        return {
+          ...acc,
+          ...zipObject(rank, Array.from({ length: rank.length }).fill(-idx)),
+        }
+      },
+      {} as Record<C, number>,
+    )
 
     return rankingToTieBreak.flatMap((rank) =>
       scoresToRanking(pick(scores, rank)),

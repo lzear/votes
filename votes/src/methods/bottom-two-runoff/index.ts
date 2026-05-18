@@ -10,17 +10,17 @@ import { Copeland } from '../copeland'
 /**
  * #### Electowiki: [Bottom-Two-Runoff IRV](https://electowiki.org/wiki/Bottom-Two-Runoff_IRV)
  */
-export class BottomTwoRunoff extends RoundBallotMethod {
-  private copeland: Copeland
-  constructor(i: { ballots: Ballot[]; candidates: string[] }) {
+export class BottomTwoRunoff<C extends string> extends RoundBallotMethod<C> {
+  private copeland: Copeland<C>
+  constructor(i: { ballots: Ballot<C>[]; candidates: C[] }) {
     super(i)
     this.copeland = new Copeland(matrixFromBallots(i.ballots, i.candidates))
   }
 
-  protected round(candidates: string[]): {
-    qualified: string[]
-    eliminated: string[]
-    scores: ScoreObject
+  protected round(candidates: C[]): {
+    qualified: C[]
+    eliminated: C[]
+    scores: ScoreObject<C>
   } {
     const biggestSupport = new BiggestSupport({
       ballots: normalizeBallots(this.ballots, candidates),

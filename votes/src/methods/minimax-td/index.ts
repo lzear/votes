@@ -5,16 +5,18 @@ import { scoresAny } from '../../utils/scores-zero'
 import type { MinimaxVariant } from '../minimax'
 import { Minimax } from '../minimax'
 
-const computeScores = (
-  matrix: Matrix,
+const computeScores = <C extends string>(
+  matrix: Matrix<C>,
   variant: MinimaxVariant,
   excludeTies: boolean,
-): ScoreObject => {
+): ScoreObject<C> => {
   const minimax = new Minimax({ ...matrix, variant, excludeTies })
   const smithSet = findSmithSet(matrix)
   const minimaxScores = minimax.scores()
   const smithSetScores = pick(minimaxScores, smithSet.candidates)
-  const smithSetScoresMin = Math.min(...Object.values(smithSetScores))
+  const smithSetScoresMin = Math.min(
+    ...Object.values(smithSetScores as Record<string, number>),
+  )
   return {
     // give all non-Smith-set candidates a score worse than the worst of the Smith set
     ...scoresAny(matrix.candidates, Math.min(smithSetScoresMin, 0) * 2 - 1),
@@ -66,8 +68,8 @@ const computeScores = (
  *
  * A has the lowest "worst pairwise victory" against all the candidates, therefore A is the winner.
  */
-export class MinimaxTD extends Minimax {
-  public scores(): ScoreObject {
+export class MinimaxTD<C extends string> extends Minimax<C> {
+  public scores(): ScoreObject<C> {
     return computeScores(this.matrix, this.minimaxVariant, this.excludeTies)
   }
 }

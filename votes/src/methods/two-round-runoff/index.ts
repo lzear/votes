@@ -7,16 +7,16 @@ import { FirstPastThePost } from '../first-past-the-post'
 /**
  * #### Wikipedia: [Two-round system](https://en.wikipedia.org/wiki/Two-round_system)
  */
-export class TwoRoundRunoff extends RoundBallotMethod {
+export class TwoRoundRunoff<C extends string> extends RoundBallotMethod<C> {
   protected round(
-    candidates: string[],
+    candidates: C[],
     idx: number,
   ): {
-    eliminated: string[]
-    qualified: string[]
-    scores: ScoreObject
+    eliminated: C[]
+    qualified: C[]
+    scores: ScoreObject<C>
   } {
-    const scores: ScoreObject = new FirstPastThePost({
+    const scores: ScoreObject<C> = new FirstPastThePost({
       ballots: this.ballots,
       candidates,
     }).scores()

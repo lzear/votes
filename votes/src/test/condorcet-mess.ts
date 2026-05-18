@@ -2,7 +2,7 @@ import type { Ballot } from '../types'
 
 const candidates = ['🐸', '🐷', '🦁', '🐻', '🐭']
 
-const ballots: Ballot[] = [
+const ballots: Ballot<C>[] = [
   { weight: 2, ranking: [[3], [2, 4], [1], [5]] },
   { weight: 3, ranking: [[5], [4], [2], [1], [3]] },
   { weight: 5, ranking: [[4], [5], [3], [2], [1]] },

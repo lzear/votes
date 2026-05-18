@@ -6,17 +6,17 @@ import { shuffleArray } from '../../utils/shuffle-array'
 /**
  * Pick a candidate at random, regardless of the ballots
  */
-export class RandomCandidates extends RandomMethod {
-  public ranking(): string[][] {
+export class RandomCandidates<C extends string> extends RandomMethod<C> {
+  public ranking(): C[][] {
     return shuffleArray(this.candidates, this.rng).map((c) => [c])
   }
 
-  public scores(): ScoreObject {
+  public scores(): ScoreObject<C> {
     return zipObject(
       this.candidates,
       Array.from({ length: this.candidates.length }).fill(
         1 / this.candidates.length,
       ),
-    )
+    ) as ScoreObject<C>
   }
 }

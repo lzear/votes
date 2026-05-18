@@ -3,7 +3,9 @@ import { range } from 'lodash-es'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import type { Matrix, ScoreObject } from '../../types'
 
-const computeFromMatrix = (matrix: Matrix): ScoreObject => {
+const computeFromMatrix = <C extends string>(
+  matrix: Matrix<C>,
+): ScoreObject<C> => {
   const n = matrix.candidates.length
   const p: number[][] = range(n).map(() => range(n).map(() => 0))
 
@@ -20,7 +22,7 @@ const computeFromMatrix = (matrix: Matrix): ScoreObject => {
           if (i !== k && j !== k)
             p[j]![k] = Math.max(p[j]![k]!, Math.min(p[j]![i]!, p[i]![k]!))
 
-  const s: ScoreObject = {}
+  const s: ScoreObject<C> = {}
   for (const [k, c] of matrix.candidates.entries())
     s[c] = p[k]!.filter((v, k2) => v > p[k2]![k]!).length
 
@@ -30,8 +32,8 @@ const computeFromMatrix = (matrix: Matrix): ScoreObject => {
 /**
  * #### Wikipedia: [Schulze method](https://en.wikipedia.org/wiki/Schulze_method)
  */
-export class Schulze extends MatrixScoreMethod {
-  public scores(): ScoreObject {
+export class Schulze<C extends string> extends MatrixScoreMethod<C> {
+  public scores(): ScoreObject<C> {
     return computeFromMatrix(this.matrix)
   }
 }

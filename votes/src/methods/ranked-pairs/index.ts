@@ -11,7 +11,9 @@ interface Edge {
   value: number
 }
 
-const computeFromMatrix = (matrix: Matrix): ScoreObject => {
+const computeFromMatrix = <C extends string>(
+  matrix: Matrix<C>,
+): ScoreObject<C> => {
   const allEdges: Edge[] = matrix.array.flatMap(
     (row, from) =>
       row
@@ -64,8 +66,8 @@ const computeFromMatrix = (matrix: Matrix): ScoreObject => {
 /**
  * #### Wikipedia: [Ranked pairs](https://en.wikipedia.org/wiki/Ranked_pairs)
  */
-export class RankedPairs extends MatrixScoreMethod {
-  public scores(): ScoreObject {
+export class RankedPairs<C extends string> extends MatrixScoreMethod<C> {
+  public scores(): ScoreObject<C> {
     return computeFromMatrix(this.matrix)
   }
 }

@@ -7,8 +7,8 @@ import { FirstPastThePost } from '../first-past-the-post'
 /**
  * #### Wikipedia: [Majority](https://en.wikipedia.org/wiki/Majority)
  */
-export class AbsoluteMajority extends BallotScoreMethod {
-  public scores(): ScoreObject {
+export class AbsoluteMajority<C extends string> extends BallotScoreMethod<C> {
+  public scores(): ScoreObject<C> {
     const totalWeight = totalBallotsWeight(this.ballots)
 
     const fptp = new FirstPastThePost({

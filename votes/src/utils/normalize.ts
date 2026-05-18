@@ -33,7 +33,9 @@ export const normalizeRankInput = (
  *
  * @param ballots - ballots to group
  */
-export const groupBallots = <B extends Ballot>(ballots: B[]): B[] => {
+export const groupBallots = <C extends string, B extends Ballot<C>>(
+  ballots: B[],
+): B[] => {
   const acc: B[] = []
   for (const ballot of ballots) {
     const match = acc.findIndex((b) => isBallotEqual(b.ranking, ballot.ranking))
@@ -47,8 +49,10 @@ export const groupBallots = <B extends Ballot>(ballots: B[]): B[] => {
   return acc.filter((b) => b.weight > 0).toSorted((a, b) => b.weight - a.weight)
 }
 
-export const toWeightedBallots = (ballots: string[][][]): Ballot[] => {
-  const result: Ballot[] = []
+export const toWeightedBallots = <C extends string>(
+  ballots: C[][][],
+): Ballot<C>[] => {
+  const result: Ballot<C>[] = []
   for (const ballot of ballots) {
     const match = result.findIndex((ww) => isBallotEqual(ww.ranking, ballot))
     if (match === -1) result.push({ ranking: ballot, weight: 1 })
@@ -78,9 +82,11 @@ export const checkDuplicatedCandidate = (ranking: string[][]): void => {
  *
  * @param ranking - input ranking
  */
-export const removeDuplicatedCandidates = (ranking: string[][]): string[][] => {
-  const result: string[][] = []
-  const usedCandidates: string[] = []
+export const removeDuplicatedCandidates = <C extends string>(
+  ranking: C[][],
+): C[][] => {
+  const result: C[][] = []
+  const usedCandidates: C[] = []
   for (const cur of ranking) {
     const unique = difference(uniq(cur), usedCandidates)
     if (unique.length > 0) {
@@ -97,12 +103,16 @@ export const removeDuplicatedCandidates = (ranking: string[][]): string[][] => {
  * @param ranking - ranking to check
  * @param candidates - official candidates
  */
-export const removeInvalidCandidates = (
+export const removeInvalidCandidates = <C extends string>(
   ranking: string[][],
-  candidates: string[],
-): string[][] =>
+  candidates: C[],
+): C[][] =>
   ranking
-    .map((names) => names.filter((name) => candidates.includes(name)))
+    .map((names) =>
+      names.filter((name): name is C =>
+        (candidates as string[]).includes(name),
+      ),
+    )
     .filter((rank) => rank.length > 0)
 
 /**
@@ -111,10 +121,10 @@ export const removeInvalidCandidates = (
  * @param ranking - ranking to normalize
  * @param candidates - official candidates
  */
-export const normalizeRanking = (
+export const normalizeRanking = <C extends string>(
   ranking: string[][],
-  candidates: string[],
-): string[][] =>
+  candidates: C[],
+): C[][] =>
   removeDuplicatedCandidates(removeInvalidCandidates(ranking, candidates))
 
 /**
@@ -123,9 +133,9 @@ export const normalizeRanking = (
  * @param ballot - ballot to normalize
  * @param candidates - official candidates
  */
-export const normalizeBallot = <B extends Ballot>(
+export const normalizeBallot = <C extends string, B extends Ballot<C>>(
   ballot: B,
-  candidates: string[],
+  candidates: C[],
 ): B => ({
   ...ballot,
   ranking: normalizeRanking(ballot.ranking, candidates),
@@ -136,19 +146,22 @@ export const normalizeBallot = <B extends Ballot>(
  *
  * @param ballots - ranking to normalize
  */
-export const candidatesFromBallots = (ballots: Ballot[]): string[] => {
-  const candidates: string[] = []
+export const candidatesFromBallots = <C extends string>(
+  ballots: Ballot<C>[],
+): C[] => {
+  const candidates: C[] = []
   for (const ballot of ballots) candidates.push(...ballot.ranking.flat())
   return uniq(candidates)
 }
 
-export const normalizeBallots = <B extends Ballot>(
+export const normalizeBallots = <C extends string, B extends Ballot<C>>(
   ballots: B[],
-  candidates?: string[],
+  candidates?: C[],
 ): B[] => {
   const c = candidates ?? candidatesFromBallots(ballots)
   return ballots.map((ballot) => normalizeBallot(ballot, c))
 }
 
-export const totalBallotsWeight = (ballots: Ballot[]): number =>
-  ballots.reduce((acc, ballot) => acc + ballot.weight, 0)
+export const totalBallotsWeight = <C extends string>(
+  ballots: Ballot<C>[],
+): number => ballots.reduce((acc, ballot) => acc + ballot.weight, 0)

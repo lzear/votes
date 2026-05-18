@@ -2,30 +2,34 @@ import type { ScoreObject } from '../types'
 import { BallotMethod } from './ballot-method'
 import type { Ranker } from './method'
 
-export interface Round {
+export interface Round<C extends string> {
   finished?: boolean
   idx: number
-  candidates: string[]
+  candidates: C[]
   roundResult: {
-    eliminated: string[]
-    qualified: string[]
-    scores: ScoreObject
+    eliminated: C[]
+    qualified: C[]
+    scores: ScoreObject<C>
   }
 }
 
 /**
  * Voting system in which candidates are iteratively eliminated.
  */
-export abstract class RoundBallotMethod extends BallotMethod implements Ranker {
-  protected rounds: Round[] = []
 
-  public computeRounds(): Round[] {
+export abstract class RoundBallotMethod<C extends string>
+  extends BallotMethod<C>
+  implements Ranker<C>
+{
+  protected rounds: Round<C>[] = []
+
+  public computeRounds(): Round<C>[] {
     while (this.lastRoundQualified().length > 0) this.computeNextRound()
 
     return this.rounds
   }
 
-  public ranking(): string[][] {
+  public ranking(): C[][] {
     return [...this.computeRounds()]
       .toReversed()
       .map((r) => r.roundResult.eliminated)
@@ -33,12 +37,12 @@ export abstract class RoundBallotMethod extends BallotMethod implements Ranker {
   }
 
   protected abstract round(
-    candidates: string[],
+    candidates: C[],
     idx?: number,
   ): {
-    qualified: string[]
-    eliminated: string[]
-    scores: ScoreObject
+    qualified: C[]
+    eliminated: C[]
+    scores: ScoreObject<C>
   }
 
   private computeNextRound(): void {

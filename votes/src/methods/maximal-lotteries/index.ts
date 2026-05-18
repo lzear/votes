@@ -5,7 +5,9 @@ import type { Matrix, ScoreObject } from '../../types'
 import { findSmithSet, makeAntisymmetric } from '../../utils'
 import { scoresZero } from '../../utils/scores-zero'
 
-export const computeLottery = (_matrix: Matrix): Record<string, number> => {
+export const computeLottery = <C extends string>(
+  _matrix: Matrix<C>,
+): Record<C, number> => {
   const matrix = makeAntisymmetric(_matrix)
   const condorset = findSmithSet(matrix)
 
@@ -19,8 +21,8 @@ export const computeLottery = (_matrix: Matrix): Record<string, number> => {
   }
 }
 
-export class MaximalLotteries extends RandomMatrixMethod {
-  public scores(): ScoreObject {
+export class MaximalLotteries<C extends string> extends RandomMatrixMethod<C> {
+  public scores(): ScoreObject<C> {
     return computeLottery(this.matrix)
   }
 }

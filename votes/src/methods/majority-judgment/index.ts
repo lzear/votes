@@ -3,16 +3,19 @@ import { BallotMethod } from '../../classes/ballot-method'
 import type { Ballot, ScoreObject } from '../../types'
 import { scoresToRanking } from '../../utils'
 
-export type Judgements = Record<
-  string,
+export type Judgements<C extends string> = Record<
+  C,
   [number, number, number, number, number, number]
 >
 
-const makeJudgement = (candidates: string[], ballots: Ballot[]): Judgements => {
-  const judgements: Judgements = zipObject(
+const makeJudgement = <C extends string>(
+  candidates: C[],
+  ballots: Ballot<C>[],
+): Judgements<C> => {
+  const judgements: Judgements<C> = zipObject(
     candidates,
     candidates.map(() => [0, 0, 0, 0, 0, 0]),
-  )
+  ) as Judgements<C>
 
   for (const ballot of ballots)
     for (const [rankIdx, rank] of ballot.ranking.entries())
@@ -44,27 +47,29 @@ export const getMedian = (arr: number[]): number => {
   return med - 1
 }
 
-const getMedians = (judgements: Judgements) => {
-  const candidates = Object.keys(judgements)
+const getMedians = <C extends string>(
+  judgements: Judgements<C>,
+): ScoreObject<C> => {
+  const candidates = Object.keys(judgements) as C[]
 
-  const medians: Record<string, number> = {}
+  const medians = {} as Record<C, number>
   for (const c of candidates) medians[c] = getMedian(judgements[c])
   return medians
 }
 
-const majorityJudgmentRanking = (
-  candidates: string[],
-  ballots: Ballot[],
-): string[][] => {
+const majorityJudgmentRanking = <C extends string>(
+  candidates: C[],
+  ballots: Ballot<C>[],
+): C[][] => {
   const judgements = makeJudgement(candidates, ballots)
   return tieBreak(judgements).toReversed()
 }
 
-const tieBreak = (judgements: Judgements): string[][] => {
+const tieBreak = <C extends string>(judgements: Judgements<C>): C[][] => {
   const medians = getMedians(judgements)
   const ranking = scoresToRanking(medians)
   return ranking.flatMap((cs) => {
-    const median = medians[cs[0]]
+    const median = medians[cs[0]!]
     if (median === -1 || !Number.isInteger(median)) return [cs]
     const j = pick(judgements, cs)
     const minGroup = Math.min(...cs.map((c) => j[c][median]))
@@ -76,16 +81,16 @@ const tieBreak = (judgements: Judgements): string[][] => {
   })
 }
 
-export class MajorityJudgment extends BallotMethod {
-  public judgements(): Judgements {
+export class MajorityJudgment<C extends string> extends BallotMethod<C> {
+  public judgements(): Judgements<C> {
     return makeJudgement(this.candidates, this.ballots)
   }
 
-  public medians(): ScoreObject {
+  public medians(): ScoreObject<C> {
     return getMedians(this.judgements())
   }
 
-  public ranking(): string[][] {
+  public ranking(): C[][] {
     return majorityJudgmentRanking(this.candidates, this.ballots)
   }
 }

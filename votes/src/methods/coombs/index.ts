@@ -6,19 +6,19 @@ import { scoresZero } from '../../utils/scores-zero'
 import { AbsoluteMajority } from '../absolute-majority'
 import { FirstPastThePost } from '../first-past-the-post'
 
-const reverseBallots = (ballots: Ballot[]) =>
+const reverseBallots = <C extends string>(ballots: Ballot<C>[]) =>
   ballots.map((ballot) => ({
     ...ballot,
     ranking: ballot.ranking.toReversed(),
   }))
 
-const round = (
-  candidates: string[],
-  _ballots: Ballot[],
+const round = <C extends string>(
+  candidates: C[],
+  _ballots: Ballot<C>[],
 ): {
-  qualified: string[]
-  eliminated: string[]
-  scores: ScoreObject
+  qualified: C[]
+  eliminated: C[]
+  scores: ScoreObject<C>
   absoluteMajority?: true
 } => {
   if (candidates.length < 2)
@@ -57,11 +57,11 @@ const round = (
 /**
  * #### Wikipedia: [Coombs' method](https://en.wikipedia.org/wiki/Coombs%27_method)
  */
-export class Coombs extends RoundBallotMethod {
-  protected round(candidates: string[]): {
-    eliminated: string[]
-    qualified: string[]
-    scores: ScoreObject
+export class Coombs<C extends string> extends RoundBallotMethod<C> {
+  protected round(candidates: C[]): {
+    eliminated: C[]
+    qualified: C[]
+    scores: ScoreObject<C>
   } {
     return round(candidates, this.ballots)
   }

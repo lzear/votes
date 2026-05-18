@@ -3,7 +3,7 @@ import type { Matrix, ScoreObject } from '../../types'
 import { findSmithSet } from '../../utils/condorcet'
 import { scoresAny } from '../../utils/scores-zero'
 
-const computeScores = (matrix: Matrix): ScoreObject => {
+const computeScores = <C extends string>(matrix: Matrix<C>): ScoreObject<C> => {
   const smithSet = findSmithSet(matrix)
   return {
     // give all non-Smith-set candidates a score of 0
@@ -16,8 +16,8 @@ const computeScores = (matrix: Matrix): ScoreObject => {
 /**
  * #### Wikipedia: [Smith's method](https://en.wikipedia.org/wiki/Smith_set#Smith's_method)
  */
-export class Smith extends MatrixScoreMethod {
-  public scores(): ScoreObject {
+export class Smith<C extends string> extends MatrixScoreMethod<C> {
+  public scores() {
     return computeScores(this.matrix)
   }
 }

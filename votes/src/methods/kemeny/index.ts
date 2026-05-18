@@ -48,7 +48,7 @@ const nextPermutation = (arr: number[]): number[] | false => {
   return array
 }
 
-const computeScores = (matrix: Matrix): ScoreObject => {
+const computeScores = <C extends string>(matrix: Matrix<C>): ScoreObject<C> => {
   let bestPermutations: number[][] = []
   let bestScore = Infinity
   let p: number[] | false = range(matrix.candidates.length)
@@ -66,14 +66,14 @@ const computeScores = (matrix: Matrix): ScoreObject => {
       .map((perm) => perm.indexOf(cIdx))
       .reduce((a, v) => a + v, 0),
   )
-  return zipObject(matrix.candidates, sumIdx)
+  return zipObject(matrix.candidates, sumIdx) as ScoreObject<C>
 }
 
 /**
  * #### Wikipedia: [Kemeny–Young method](https://en.wikipedia.org/wiki/Kemeny%E2%80%93Young_method)
  */
-export class Kemeny extends MatrixScoreMethod {
-  public scores(): ScoreObject {
+export class Kemeny<C extends string> extends MatrixScoreMethod<C> {
+  public scores(): ScoreObject<C> {
     return computeScores(this.matrix)
   }
 }

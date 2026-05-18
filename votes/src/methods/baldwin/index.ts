@@ -3,13 +3,13 @@ import { RoundBallotMethod } from '../../classes/round-ballot-method'
 import type { Ballot, ScoreObject } from '../../types'
 import { Borda } from '../borda'
 
-const round = (
-  candidates: string[],
-  ballots: Ballot[],
+const round = <C extends string>(
+  candidates: C[],
+  ballots: Ballot<C>[],
 ): {
-  qualified: string[]
-  eliminated: string[]
-  scores: ScoreObject
+  qualified: C[]
+  eliminated: C[]
+  scores: ScoreObject<C>
 } => {
   const borda = new Borda({ candidates, ballots })
 
@@ -24,11 +24,11 @@ const round = (
 /**
  * Iterative {@link Borda | Borda count} in which, each round, candidates scoring the lowest score are eliminated.
  */
-export class Baldwin extends RoundBallotMethod {
-  protected round(candidates: string[]): {
-    qualified: string[]
-    eliminated: string[]
-    scores: ScoreObject
+export class Baldwin<C extends string> extends RoundBallotMethod<C> {
+  protected round(candidates: C[]): {
+    qualified: C[]
+    eliminated: C[]
+    scores: ScoreObject<C>
   } {
     return round(candidates, this.ballots)
   }

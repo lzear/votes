@@ -2,19 +2,20 @@ import type { Ballot, ScoreObject } from '../../types'
 import { normalizeBallots } from '../../utils/normalize'
 import { scoresZero } from '../../utils/scores-zero'
 
-export const iterateFirstChoices = (
-  ballots: Ballot[],
-  candidates: string[],
+export const iterateFirstChoices = <C extends string>(
+  ballots: Ballot<C>[],
+  candidates: C[],
   computeBallotScore: (rank: string[], rankIdx: number) => number,
-): ScoreObject => iterateNthChoices(ballots, candidates, computeBallotScore, 0)
+): ScoreObject<C> =>
+  iterateNthChoices(ballots, candidates, computeBallotScore, 0)
 
-export const iterateNthChoices = (
-  ballots: Ballot[],
-  candidates: string[],
+export const iterateNthChoices = <C extends string>(
+  ballots: Ballot<C>[],
+  candidates: C[],
   computeBallotScore: (rank: string[], rankIdx: number) => number,
   rankIdx: number,
-): ScoreObject => {
-  const result: ScoreObject = scoresZero(candidates)
+): ScoreObject<C> => {
+  const result: ScoreObject<C> = scoresZero(candidates)
   for (const ballot of normalizeBallots(ballots, candidates))
     if (ballot.ranking.length > rankIdx) {
       const votes = ballot.ranking[rankIdx].filter((c) =>

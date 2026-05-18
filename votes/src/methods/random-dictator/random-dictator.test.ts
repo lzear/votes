@@ -7,7 +7,11 @@ const expectNTimes = <T>(value: T, expected: T, times: number) => {
   for (let i = 0; i < times; i++) expect(value).toStrictEqual(expected)
 }
 
-const vote = (ballots: Ballot[], candidates: string[], seed?: string) =>
+const vote = <C extends string>(
+  ballots: Ballot<C>[],
+  candidates: C[],
+  seed?: string,
+) =>
   new RandomDictator({
     ballots,
     candidates,
