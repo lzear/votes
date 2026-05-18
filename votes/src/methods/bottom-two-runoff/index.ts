@@ -1,7 +1,6 @@
 import { difference } from 'lodash-es'
 import { RoundBallotMethod } from '../../classes/round-ballot-method'
 import type { Ballot, ScoreObject } from '../../types'
-import { arrayAt } from '../../utils/array-at'
 import { matrixFromBallots } from '../../utils/make-matrix'
 import { normalizeBallots } from '../../utils/normalize'
 import { scoresAny } from '../../utils/scores-zero'
@@ -28,16 +27,16 @@ export class BottomTwoRunoff extends RoundBallotMethod {
       candidates,
     }).ranking()
 
-    const leastSupport = arrayAt(biggestSupport, -1)
+    const leastSupport = biggestSupport.at(-1)
 
     const bottom = []
     if (leastSupport) bottom.push(...leastSupport)
     if (bottom.length === 1) {
-      const leastSupport2 = arrayAt(biggestSupport, -2)
+      const leastSupport2 = biggestSupport.at(-2)
       if (leastSupport2) bottom.push(...leastSupport2)
     }
 
-    const eliminated = arrayAt(this.copeland.tieBreak([bottom]), -1)
+    const eliminated = this.copeland.tieBreak([bottom]).at(-1)
 
     if (!eliminated || eliminated.length === 0)
       throw new Error('Unexpected round result!')

@@ -1,5 +1,4 @@
 import type { ScoreObject } from '../types'
-import { arrayAt } from '../utils/array-at'
 import { BallotMethod } from './ballot-method'
 import type { Ranker } from './method'
 
@@ -43,7 +42,7 @@ export abstract class RoundBallotMethod extends BallotMethod implements Ranker {
   }
 
   private computeNextRound(): void {
-    const previousRound = arrayAt(this.rounds, -1)
+    const previousRound = this.rounds.at(-1)
     const candidates = previousRound?.roundResult.qualified || this.candidates
 
     const idx = previousRound ? previousRound.idx + 1 : 0
@@ -64,7 +63,7 @@ export abstract class RoundBallotMethod extends BallotMethod implements Ranker {
   }
 
   private lastRoundQualified(): string[] {
-    const previousRound = arrayAt(this.rounds, -1)
+    const previousRound = this.rounds.at(-1)
     return previousRound?.roundResult.qualified || this.candidates
   }
 }
