@@ -1,4 +1,4 @@
-import _ from 'lodash-es'
+import { difference, sum } from 'lodash-es'
 import { RoundBallotMethod } from '../../classes/round-ballot-method'
 import type { Ballot, ScoreObject } from '../../types'
 import { Borda } from '../borda'
@@ -14,9 +14,9 @@ const round = (
   const borda = new Borda({ candidates, ballots })
   const bordaScores = borda.scores()
   const scores = Object.values(bordaScores)
-  const avg = _.sum(scores) / scores.length
+  const avg = sum(scores) / scores.length
   const eliminated = candidates.filter((c) => bordaScores[c] <= avg)
-  const qualified = _.difference(candidates, eliminated)
+  const qualified = difference(candidates, eliminated)
   return { eliminated, qualified, scores: bordaScores }
 }
 

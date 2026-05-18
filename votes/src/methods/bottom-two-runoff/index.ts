@@ -1,4 +1,4 @@
-import _ from 'lodash-es'
+import { difference } from 'lodash-es'
 import { RoundBallotMethod } from '../../classes/round-ballot-method'
 import type { Ballot, ScoreObject } from '../../types'
 import { arrayAt } from '../../utils/array-at'
@@ -44,7 +44,7 @@ export class BottomTwoRunoff extends RoundBallotMethod {
 
     return {
       eliminated,
-      qualified: _.difference(candidates, eliminated),
+      qualified: difference(candidates, eliminated),
       scores: {
         ...scoresAny(candidates, 2),
         ...scoresAny(bottom, 1),

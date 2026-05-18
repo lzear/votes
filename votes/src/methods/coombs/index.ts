@@ -1,4 +1,4 @@
-import _ from 'lodash-es'
+import { difference, mapValues } from 'lodash-es'
 import { RoundBallotMethod } from '../../classes/round-ballot-method'
 import type { Ballot, ScoreObject } from '../../types'
 import { normalizeBallots } from '../../utils'
@@ -35,7 +35,7 @@ const round = (
   if (absoluteMajority.ranking()[0].length === 1) {
     const qualified = absoluteMajority.ranking()[0]
     return {
-      eliminated: _.difference(candidates, qualified),
+      eliminated: difference(candidates, qualified),
       qualified,
       scores: absoluteMajority.scores(),
       absoluteMajority: true,
@@ -49,8 +49,8 @@ const round = (
   const eliminated = reversedFptp.ranking()[0]
   return {
     eliminated,
-    qualified: _.difference(candidates, eliminated),
-    scores: _.mapValues(reversedFptp.scores(), (s) => -s),
+    qualified: difference(candidates, eliminated),
+    scores: mapValues(reversedFptp.scores(), (s) => -s),
   }
 }
 

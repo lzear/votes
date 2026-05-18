@@ -1,4 +1,4 @@
-import _ from 'lodash-es'
+import { difference } from 'lodash-es'
 import type { Matrix } from '../types'
 import { makeAntisymetric } from './make-matrix'
 
@@ -12,7 +12,7 @@ export const findSmithSet = (_matrix: Matrix): Matrix => {
     let toCheck = [k]
     while (toCheck.length > 0) {
       const check = toCheck.pop()!
-      const toAdd = _.difference(dominatingDirectList[check], dominating)
+      const toAdd = difference(dominatingDirectList[check], dominating)
       dominating = [...dominating, ...toAdd]
       toCheck = [...toCheck, ...toAdd]
     }

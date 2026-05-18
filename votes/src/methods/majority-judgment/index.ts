@@ -1,4 +1,4 @@
-import _ from 'lodash-es'
+import { mapValues, pick, sum, zipObject } from 'lodash-es'
 import { BallotMethod } from '../../classes/ballot-method'
 import type { Ballot, ScoreObject } from '../../types'
 import { scoresToRanking } from '../../utils'
@@ -9,7 +9,7 @@ export type Judgements = Record<
 >
 
 const makeJudgement = (candidates: string[], ballots: Ballot[]): Judgements => {
-  const judgements: Judgements = _.zipObject(
+  const judgements: Judgements = zipObject(
     candidates,
     candidates.map(() => [0, 0, 0, 0, 0, 0]),
   )
@@ -24,7 +24,7 @@ const makeJudgement = (candidates: string[], ballots: Ballot[]): Judgements => {
 }
 
 export const getMedian = (arr: number[]): number => {
-  const sumWeights = _.sum(arr)
+  const sumWeights = sum(arr)
 
   let s = 0
   let i = 0
@@ -66,10 +66,10 @@ const tieBreak = (judgements: Judgements): string[][] => {
   return ranking.flatMap((cs) => {
     const median = medians[cs[0]]
     if (median === -1 || !Number.isInteger(median)) return [cs]
-    const j = _.pick(judgements, cs)
+    const j = pick(judgements, cs)
     const minGroup = Math.min(...cs.map((c) => j[c][median]))
     if (minGroup <= 0) return [cs]
-    const j2 = _.mapValues(j, (jc) =>
+    const j2 = mapValues(j, (jc) =>
       Object.assign([], jc, { [median]: jc[median] - minGroup }),
     )
     return tieBreak(j2)

@@ -1,4 +1,4 @@
-import _ from 'lodash-es'
+import { pick } from 'lodash-es'
 import type { Matrix, ScoreObject } from '../../types'
 import { findSmithSet } from '../../utils/condorcet'
 import { scoresAny } from '../../utils/scores-zero'
@@ -13,7 +13,7 @@ const computeScores = (
   const minimax = new Minimax({ ...matrix, variant, excludeTies })
   const smithSet = findSmithSet(matrix)
   const minimaxScores = minimax.scores()
-  const smithSetScores = _.pick(minimaxScores, smithSet.candidates)
+  const smithSetScores = pick(minimaxScores, smithSet.candidates)
   const smithSetScoresMin = Math.min(...Object.values(smithSetScores))
   return {
     // give all non-Smith-set candidates a score worse than the worst of the Smith set

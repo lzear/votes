@@ -1,4 +1,4 @@
-import _ from 'lodash-es'
+import { groupBy, pick } from 'lodash-es'
 import { BallotMethod } from '../../classes/ballot-method'
 import type { Ballot } from '../../types'
 import { iterateFirstChoices } from '../first-past-the-post/iterate-first-choices'
@@ -8,8 +8,8 @@ const deTie = (ranking: string[][], ballots: Ballot[]): string[][] =>
     if (rank.length < 2) return [rank]
 
     const scores = iterateFirstChoices(ballots, rank, (r) => 1 / r.length)
-    const pickedScores = _.pick(scores, rank)
-    const groups = _.groupBy(rank, (c) => pickedScores[c])
+    const pickedScores = pick(scores, rank)
+    const groups = groupBy(rank, (c) => pickedScores[c])
     return Object.keys(groups)
       .sort((a, b) => Number(b) - Number(a))
       .map((score) => groups[score])

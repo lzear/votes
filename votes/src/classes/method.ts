@@ -1,6 +1,3 @@
-import _ from 'lodash-es'
-import { scoresToRanking } from '../utils/scores'
-
 export interface Ranker {
   ranking(): string[][]
 }
@@ -31,12 +28,12 @@ export abstract class Method implements Ranker {
     const scores = ranking.reduce<Record<string, number>>((acc, rank, idx) => {
       return {
         ...acc,
-        ..._.zipObject(rank, Array.from({ length: rank.length }).fill(-idx)),
+        ...zipObject(rank, Array.from({ length: rank.length }).fill(-idx)),
       }
     }, {})
 
     return rankingToTieBreak.flatMap((rank) =>
-      scoresToRanking(_.pick(scores, rank)),
+      scoresToRanking(pick(scores, rank)),
     )
   }
 }

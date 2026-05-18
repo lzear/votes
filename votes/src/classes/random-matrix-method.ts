@@ -1,4 +1,4 @@
-import _ from 'lodash-es'
+import { mapValues, omit, sum } from 'lodash-es'
 import type { Matrix, ScoreObject } from '../types'
 import { shuffleArray } from '../utils/shuffle-array'
 import type { Matrixer } from './matrix-score-method'
@@ -12,11 +12,11 @@ const randomRankingFromSores = (
   const candidates = Object.keys(scoreObject)
   if (candidates.length < 2) return candidates
 
-  const sumScores = _.sum(Object.values(scoreObject))
+  const sumScores = sum(Object.values(scoreObject))
 
   if (sumScores <= 0) return shuffleArray(candidates, random)
 
-  const normalizedScoreObject = _.mapValues(scoreObject, (s) => s / sumScores)
+  const normalizedScoreObject = mapValues(scoreObject, (s) => s / sumScores)
 
   const pickAt = random()
   let w = 0
@@ -26,7 +26,7 @@ const randomRankingFromSores = (
     if (w >= pickAt)
       return [
         candidate,
-        ...randomRankingFromSores(_.omit(scoreObject, candidate), random),
+        ...randomRankingFromSores(omit(scoreObject, candidate), random),
       ]
   }
 

@@ -1,11 +1,11 @@
-import _ from 'lodash-es'
+import { range, zipObject } from 'lodash-es'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import type { Matrix, ScoreObject } from '../../types'
 
 const computeFromMatrix = (matrix: Matrix) => {
   const n = matrix.candidates.length
 
-  const p: number[][] = _.range(n).map(() => _.range(n).map(() => 0))
+  const p: number[][] = range(n).map(() => range(n).map(() => 0))
   for (let i = 0; i < n; i++)
     for (let j = 0; j < n; j++)
       if (i !== j)
@@ -13,7 +13,7 @@ const computeFromMatrix = (matrix: Matrix) => {
 
   const scores = p.map((m) => m.reduce((acc, cur) => acc + cur, 0))
 
-  return _.zipObject(matrix.candidates, scores)
+  return zipObject(matrix.candidates, scores)
 }
 
 export class Copeland extends MatrixScoreMethod {

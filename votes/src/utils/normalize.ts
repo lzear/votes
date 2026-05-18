@@ -1,4 +1,4 @@
-import _ from 'lodash-es'
+import { difference, every, intersection, isEqual, uniq } from 'lodash-es'
 import type { Ballot } from '../types'
 
 /**
@@ -10,7 +10,7 @@ import type { Ballot } from '../types'
 export const isBallotEqual = (a: string[][], b: string[][]): boolean => {
   if (a.length !== b.length) return false
   if (a.length === 0) return true
-  return _.every(a, (rank, k) => _.isEqual([...rank].sort(), [...b[k]].sort()))
+  return every(a, (rank, k) => isEqual([...rank].sort(), [...b[k]].sort()))
 }
 
 /**
@@ -65,7 +65,7 @@ export const toWeightedBallots = (ballots: string[][][]): Ballot[] =>
 
 export const checkDuplicatedCandidate = (ranking: string[][]): void => {
   ranking.reduce((acc, rank) => {
-    const inter = _.intersection(acc, rank)
+    const inter = intersection(acc, rank)
     if (inter.length > 0)
       throw new Error(`Some candidates are present multiple times: ${inter}`)
 
@@ -81,7 +81,7 @@ export const checkDuplicatedCandidate = (ranking: string[][]): void => {
 export const removeDuplicatedCandidates = (ranking: string[][]): string[][] =>
   ranking.reduce(
     (acc, cur) => {
-      const unique = _.difference(_.uniq(cur), acc.usedCandidates)
+      const unique = difference(uniq(cur), acc.usedCandidates)
       return {
         ranking: unique.length > 0 ? [...acc.ranking, unique] : acc.ranking,
         usedCandidates: [...acc.usedCandidates, ...unique],
@@ -140,7 +140,7 @@ export const normalizeBallot = <B extends Ballot>(
  */
 export const candidatesFromBallots = (ballots: Ballot[]): string[] =>
   ballots.reduce<string[]>(
-    (acc, curr) => _.uniq([...acc, ...curr.ranking.flat()]),
+    (acc, curr) => uniq([...acc, ...curr.ranking.flat()]),
     [],
   )
 

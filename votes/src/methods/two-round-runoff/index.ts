@@ -1,4 +1,4 @@
-import _ from 'lodash-es'
+import { difference } from 'lodash-es'
 import { RoundBallotMethod } from '../../classes/round-ballot-method'
 import type { ScoreObject } from '../../types'
 import { AbsoluteMajority } from '../absolute-majority'
@@ -31,7 +31,7 @@ export class TwoRoundRunoff extends RoundBallotMethod {
         throw new Error('Unexpected error in absolute majority computation')
 
       return {
-        eliminated: _.difference(candidates, qualified),
+        eliminated: difference(candidates, qualified),
         qualified,
         scores,
       }
@@ -41,7 +41,7 @@ export class TwoRoundRunoff extends RoundBallotMethod {
     if (idx === 0) {
       const qualified = candidates.filter((c) => scores[c] >= scoreValues[1])
       return {
-        eliminated: _.difference(candidates, qualified),
+        eliminated: difference(candidates, qualified),
         qualified,
         scores,
       }
@@ -49,7 +49,7 @@ export class TwoRoundRunoff extends RoundBallotMethod {
     if (idx === 1) {
       const qualified = candidates.filter((c) => scores[c] >= scoreValues[0])
       return {
-        eliminated: _.difference(candidates, qualified),
+        eliminated: difference(candidates, qualified),
         qualified,
         scores,
       }
