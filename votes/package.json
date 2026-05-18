@@ -40,7 +40,7 @@
     "build-docs": "cp ../README.md . && yarn typedoc",
     "lint": "eslint .",
     "release": "cp ../README.md . && yarn run build",
-    "test": "node --experimental-vm-modules node_modules/.bin/jest --coverage --runInBand --detectOpenHandles --forceExit",
+    "test": "vitest",
     "test-prod": "yarn run test && yarn run build",
     "typecheck": "tsc --noEmit",
     "typedoc": "npx typedoc src/index.ts --tsconfig tsconfig.typedoc.json"
@@ -53,24 +53,23 @@
     "javascript-lp-solver": ">=0.4.0"
   },
   "devDependencies": {
-    "@types/jest": "^30",
     "@types/lodash": "^4",
     "@types/lodash-es": "^4",
     "@types/node": "^25",
     "@types/shelljs": "^0.10",
+    "@vitest/coverage-v8": "^4",
     "dotenv": "^17",
-    "jest": "^30",
     "microbundle": "^0.15",
     "rimraf": "^6",
     "shelljs": "^0.10",
     "travis-deploy-once": "^5",
-    "ts-jest": "^29",
     "ts-node": "^10",
     "tsconfig": "*",
     "tslib": "^2",
     "tsup": "^8",
     "typedoc": "^0.28",
-    "typescript": "6.0.3"
+    "typescript": "6.0.3",
+    "vitest": "^4"
   },
   "engines": {
     "node": ">=18.0.0"
