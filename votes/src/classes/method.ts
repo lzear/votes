@@ -24,27 +24,4 @@ export abstract class Method<C extends string> implements Ranker<C> {
       r.length <= 1 ? [r] : this.restrict(r).ranking(),
     )
   }
-
-  /**
-   * Split tied candidates in a ranking.
-   *
-   * @param rankingToTieBreak - a ranking in which ties will be attempted to be broken by the current voting system
-   */
-  public tieBreak(rankingToTieBreak: C[][]): C[][] {
-    const ranking = this.ranking()
-
-    const scores = ranking.reduce<Record<C, number>>(
-      (acc, rank, idx) => {
-        return {
-          ...acc,
-          ...zipObject(rank, Array.from({ length: rank.length }).fill(-idx)),
-        }
-      },
-      {} as Record<C, number>,
-    )
-
-    return rankingToTieBreak.flatMap((rank) =>
-      scoresToRanking(pick(scores, rank)),
-    )
-  }
 }
