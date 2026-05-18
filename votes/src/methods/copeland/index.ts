@@ -9,7 +9,10 @@ const computeFromMatrix = (matrix: Matrix) => {
   for (let i = 0; i < n; i++)
     for (let j = 0; j < n; j++)
       if (i !== j)
-        p[i][j] = (Math.sign(matrix.array[i][j] - matrix.array[j][i]) + 1) / 2
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        p[i]![j] =
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          (Math.sign(matrix.array[i]![j]! - matrix.array[j]![i]!) + 1) / 2
 
   const scores = p.map((m) => m.reduce((acc, cur) => acc + cur, 0))
 

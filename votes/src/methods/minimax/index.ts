@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import type { Matrix, ScoreObject } from '../../types'
 
@@ -22,13 +23,12 @@ const computeScores = (
   const s: ScoreObject = {}
   for (const [c1Index, candidate] of matrix.candidates.entries())
     s[candidate] = -Math.max(
-      ...matrix.array[c1Index]
-        .map((yOverX, c2Index) => {
-          const xOverY = matrix.array[c2Index][c1Index]
-          return xOverY === yOverX && excludeTies
-            ? null
-            : scoreXY[variant](xOverY, yOverX)
-        })
+      ...matrix.array[c1Index]!.map((yOverX, c2Index) => {
+        const xOverY = matrix.array[c2Index]![c1Index]
+        return xOverY === yOverX && excludeTies
+          ? null
+          : scoreXY[variant](xOverY, yOverX)
+      })
         .filter((_, c2Index) => c2Index !== c1Index)
         .filter((v) => v !== null),
     )

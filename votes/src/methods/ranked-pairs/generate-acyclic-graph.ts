@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import { uniq } from 'lodash-es'
 import { Tarjan } from './tarjan'
 import { Vertex } from './vertex'
@@ -17,13 +19,13 @@ export const generateAcyclicGraph = (
   for (const c of uniq(allEdges.flatMap((e) => [e.from, e.to])))
     vDict[c] = new Vertex(c)
 
-  for (const e of allEdges) vDict[e.from].connect(vDict[e.to])
+  for (const e of allEdges) vDict[e.from]!.connect(vDict[e.to]!)
   const tarjan = new Tarjan(Object.values(vDict))
   tarjan.run()
   return [
     ...graph,
     ...edgesToAdd.filter(
-      (edge) => vDict[edge.from].lowlink !== vDict[edge.to].lowlink,
+      (edge) => vDict[edge.from]!.lowlink !== vDict[edge.to]!.lowlink,
     ),
   ]
 }

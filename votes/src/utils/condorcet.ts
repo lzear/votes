@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import { difference } from 'lodash-es'
 import type { Matrix } from '../types'
 import { makeAntisymetric } from './make-matrix'
@@ -5,9 +7,9 @@ import { makeAntisymetric } from './make-matrix'
 export const findSmithSet = (_matrix: Matrix): Matrix => {
   const { candidates, array } = makeAntisymetric(_matrix)
   const dominatingDirectList = candidates.map((_c, k) =>
-    array[k].map((_v, k2) => k2).filter((k2) => array[k][k2] >= 0),
+    array[k]!.map((_v, k2) => k2).filter((k2) => array[k]![k2]! >= 0),
   )
-  const dominatingList = candidates.map((c, k) => {
+  const dominatingList = candidates.map((_c, k) => {
     let dominating = [k]
     let toCheck = [k]
     while (toCheck.length > 0) {
@@ -21,9 +23,9 @@ export const findSmithSet = (_matrix: Matrix): Matrix => {
 
   return {
     array: array
-      .filter((row, k1) => dominatingList[k1])
-      .map((row) => row.filter((v, k2) => dominatingList[k2])),
-    candidates: candidates.filter((c, k) => dominatingList[k]),
+      .filter((_row, k1) => dominatingList[k1])
+      .map((row) => row.filter((_v, k2) => dominatingList[k2])),
+    candidates: candidates.filter((_c, k) => dominatingList[k]),
   }
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { RandomBallotMethod } from '../../classes/random-ballot-method'
 import type { Ballot } from '../../types'
 import { totalBallotsWeight } from '../../utils/normalize'
