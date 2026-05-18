@@ -1,73 +1,60 @@
 import type { ScoreObject } from '../types'
+import { scoresZero } from '../utils'
 import { BallotMethod } from './ballot-method'
 import type { Ranker } from './method'
 
+export interface QE<C extends string> {
+  qualified: C[]
+  eliminated: C[]
+  scores: ScoreObject<C>
+}
+
 export interface Round<C extends string> {
-  finished?: boolean
+  finished: boolean
   idx: number
   candidates: C[]
   roundResult: {
     eliminated: C[]
     qualified: C[]
     scores: ScoreObject<C>
+    tieBreakSteps?: C[][]
   }
 }
 
 /**
  * Voting system in which candidates are iteratively eliminated.
  */
-
 export abstract class RoundBallotMethod<C extends string>
   extends BallotMethod<C>
   implements Ranker<C>
 {
-  protected rounds: Round<C>[] = []
-
   public computeRounds(): Round<C>[] {
-    while (this.lastRoundQualified().length > 0) this.computeNextRound()
-
-    return this.rounds
+    let inRace = this.candidates
+    const rounds: Round<C>[] = []
+    while (inRace.length > 0) {
+      const idx = rounds.length
+      const { qualified, eliminated, scores } = this.round(inRace, idx)
+      rounds.push({
+        idx,
+        candidates: inRace,
+        finished: inRace.length <= 1,
+        roundResult: { qualified, eliminated, scores },
+      })
+      inRace = qualified
+    }
+    return rounds
   }
 
   public ranking(): C[][] {
-    return [...this.computeRounds()]
+    return this.computeRounds()
       .toReversed()
       .map((r) => r.roundResult.eliminated)
-      .filter((eliminated) => eliminated.length)
+      .filter((eliminated) => eliminated.length > 0)
   }
 
-  protected abstract round(
-    candidates: C[],
-    idx?: number,
-  ): {
-    qualified: C[]
-    eliminated: C[]
-    scores: ScoreObject<C>
-  }
+  protected abstract round(candidates: C[], idx: number): QE<C>
 
-  private computeNextRound(): void {
-    const previousRound = this.rounds.at(-1)
-    const candidates = previousRound?.roundResult.qualified ?? this.candidates
-
-    const idx = previousRound ? previousRound.idx + 1 : 0
-
-    const round = {
-      candidates,
-      idx,
-      roundResult: this.round(candidates, idx),
-    }
-
-    this.rounds = [
-      ...this.rounds,
-      {
-        finished: round.roundResult.qualified.length === 0,
-        ...round,
-      },
-    ]
-  }
-
-  private lastRoundQualified(): string[] {
-    const previousRound = this.rounds.at(-1)
-    return previousRound?.roundResult.qualified ?? this.candidates
+  protected roundScoresZero(candidates: C[]): ScoreObject<C> {
+    return scoresZero(candidates)
   }
 }
