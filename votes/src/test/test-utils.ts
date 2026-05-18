@@ -2,6 +2,9 @@ import { fill } from 'lodash-es'
 import type { Ballot } from '../types'
 import { toWeightedBallots } from '../utils'
 
+export const closeTo = (num: number, numDigits?: number) =>
+  expect.closeTo(num, numDigits) as number
+
 export const abcde = ['a', 'b', 'c', 'd', 'e']
 
 export const balinski: Ballot[] = toWeightedBallots([

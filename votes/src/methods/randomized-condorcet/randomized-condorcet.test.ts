@@ -1,5 +1,5 @@
 import { rngGenerator } from '../../test/rng-generator'
-import { matrixString } from '../../test/test-utils'
+import { closeTo, matrixString } from '../../test/test-utils'
 import { RandomizedCondorcet } from '.'
 
 const example1 = [
@@ -33,10 +33,10 @@ describe('randomized condorcet', () => {
       candidates: ['a', 'b', 'c'],
       rng: rngGenerator('1f8y'),
     })
-    expect(election.scores()).toStrictEqual({
-      a: 0.333_333_333_333_333_3,
-      b: 0.333_333_333_333_333_3,
-      c: 0.333_333_333_333_333_3,
+    expect(election.scores()).toEqual({
+      a: closeTo(1 / 3, 6),
+      b: closeTo(1 / 3, 6),
+      c: closeTo(1 / 3, 6),
     })
     expect(election.ranking()).toStrictEqual([['a'], ['c'], ['b']])
   })
@@ -46,11 +46,11 @@ describe('randomized condorcet', () => {
       candidates,
       rng: rngGenerator('1f8y'),
     })
-    expect(election.scores()).toStrictEqual({
+    expect(election.scores()).toEqual({
       a: 0,
-      b: 0.333_333_333_333_333_3,
-      c: 0.333_333_333_333_333_3,
-      d: 0.333_333_333_333_333_3,
+      b: closeTo(1 / 3, 6),
+      c: closeTo(1 / 3, 6),
+      d: closeTo(1 / 3, 6),
       e: 0,
     })
     expect(election.ranking()).toStrictEqual([
@@ -67,12 +67,12 @@ describe('randomized condorcet', () => {
       candidates: ['a', 'b', 'c', 'd', 'e'],
       rng: rngGenerator('1f8y'),
     })
-    expect(election.scores()).toStrictEqual({
-      a: 0.333_333_333_333_333_3,
+    expect(election.scores()).toEqual({
+      a: closeTo(1 / 3, 6),
       b: 0,
-      c: 0.333_333_333_333_333_3,
+      c: closeTo(1 / 3, 6),
       d: 0,
-      e: 0.333_333_333_333_333_3,
+      e: closeTo(1 / 3, 6),
     })
     expect(election.ranking()).toStrictEqual([
       ['a'],

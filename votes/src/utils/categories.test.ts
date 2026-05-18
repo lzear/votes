@@ -1,3 +1,4 @@
+/* eslint-disable vitest/no-conditional-expect */
 import { methods } from '../methods'
 import { RandomCandidates } from '../methods/random-candidates'
 import { VotingSystem } from '../types'

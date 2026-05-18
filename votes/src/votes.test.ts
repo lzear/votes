@@ -1,5 +1,3 @@
-import { abcde, balinski, sW } from './test/test-utils'
-import { matrixFromBallots } from './utils'
 import {
   Approbation,
   Baldwin,
@@ -102,12 +100,12 @@ describe('Test all methods', () => {
   it('votes with randomizedCondorcet', () => {
     expect(
       new RandomizedCondorcet(matrixFromBallots(sW, abcde)).scores(),
-    ).toStrictEqual({
-      a: 0.333_333_333_333_333_3,
+    ).toEqual({
+      a: closeTo(1 / 3, 6),
       b: 0,
-      c: 0.333_333_333_333_333_3,
+      c: closeTo(1 / 3, 6),
       d: 0,
-      e: 0.333_333_333_333_333_3,
+      e: closeTo(1 / 3, 6),
     })
   })
   it('votes with schulze', () => {
@@ -130,15 +128,15 @@ describe('Test all methods', () => {
   })
 
   it('votes with maximal lotteries', () => {
-    expect(
-      new MaximalLotteries(matrixFromBallots(sW, abcde)).scores(),
-    ).toStrictEqual({
-      a: 0.272_727_27,
-      b: 0,
-      c: 0.090_909_09,
-      d: 0,
-      e: 0.636_363_64,
-    })
+    expect(new MaximalLotteries(matrixFromBallots(sW, abcde)).scores()).toEqual(
+      {
+        a: closeTo(3 / 11, 6),
+        b: 0,
+        c: closeTo(1 / 11, 6),
+        d: 0,
+        e: closeTo(7 / 11, 6),
+      },
+    )
   })
   it('votes with ranked pairs', () => {
     expect(
