@@ -40,7 +40,6 @@
     "typedoc": "npx typedoc src/index.ts --tsconfig tsconfig.typedoc.json"
   },
   "devDependencies": {
-    "@babel/preset-typescript": "^7.23.3",
     "@types/jest": "^29.5.12",
     "@types/lodash": "^4.14.202",
     "@types/lodash-es": "^4.17.12",
