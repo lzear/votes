@@ -1,8 +1,6 @@
 import _ from 'lodash-es'
-
 import type { Matrix, ScoreObject } from '../types'
 import { shuffleArray } from '../utils/shuffle-array'
-
 import type { Matrixer } from './matrix-score-method'
 import { RandomMethod } from './random-method'
 import type { Scorer } from './score-method'

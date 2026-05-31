@@ -1,5 +1,4 @@
 import { difference, range, times } from 'lodash-es'
-
 import type { Ballot, Matrix } from '../types'
 
 export const matrixFromBallots = (
@@ -17,9 +16,7 @@ export const matrixFromBallots = (
     for (const rank of rIndex) {
       rankedLower = difference(rankedLower, rank)
       for (const w of rank)
-        for (const l of rankedLower) {
-          array[w][l] += ranking.weight
-        }
+        for (const l of rankedLower) array[w][l] += ranking.weight
     }
   }
   return { array, candidates }

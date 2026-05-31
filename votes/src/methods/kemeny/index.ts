@@ -1,15 +1,13 @@
 import { range, zipObject } from 'lodash-es'
-
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import type { Matrix, ScoreObject } from '../../types'
 
 const rankingPenalty = (ranking: number[], matrix: number[][]) => {
   let p = 0
-  for (let i = 0; i < matrix.length; i += 1) {
-    for (let j = i + 1; j < matrix.length; j += 1) {
+  for (let i = 0; i < matrix.length; i += 1)
+    for (let j = i + 1; j < matrix.length; j += 1)
       p += matrix[ranking[i]][ranking[j]]
-    }
-  }
+
   return p
 }
 

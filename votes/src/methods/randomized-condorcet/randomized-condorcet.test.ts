@@ -1,6 +1,5 @@
 import { rngGenerator } from '../../test/rng-generator'
 import { matrixString } from '../../test/test-utils'
-
 import { RandomizedCondorcet } from '.'
 
 const example1 = [

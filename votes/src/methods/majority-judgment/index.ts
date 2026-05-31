@@ -1,12 +1,12 @@
 import _ from 'lodash-es'
-
 import { BallotMethod } from '../../classes/ballot-method'
 import type { Ballot, ScoreObject } from '../../types'
 import { scoresToRanking } from '../../utils'
 
-export type Judgements = {
-  [candidate: string]: [number, number, number, number, number, number]
-}
+export type Judgements = Record<
+  string,
+  [number, number, number, number, number, number]
+>
 
 const makeJudgement = (candidates: string[], ballots: Ballot[]): Judgements => {
   const judgements: Judgements = _.zipObject(
@@ -18,7 +18,7 @@ const makeJudgement = (candidates: string[], ballots: Ballot[]): Judgements => {
     for (const [rankIdx, rank] of ballot.ranking.entries())
       for (const can of rank)
         if (candidates.includes(can))
-          judgements[can][rankIdx < 5 ? rankIdx : 5] += ballot.weight
+          judgements[can][Math.min(rankIdx, 5)] += ballot.weight
 
   return judgements
 }
@@ -47,7 +47,7 @@ export const getMedian = (arr: number[]): number => {
 const getMedians = (judgements: Judgements) => {
   const candidates = Object.keys(judgements)
 
-  const medians: { [candidate: string]: number } = {}
+  const medians: Record<string, number> = {}
   for (const c of candidates) medians[c] = getMedian(judgements[c])
   return medians
 }

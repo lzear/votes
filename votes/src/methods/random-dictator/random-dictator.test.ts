@@ -1,13 +1,10 @@
 import { rngGenerator } from '../../test/rng-generator'
 import type { Ballot } from '../../types'
 import { toWeightedBallots } from '../../utils'
-
 import { RandomDictator } from '.'
 
 const expectNTimes = <T>(value: T, expected: T, times: number) => {
-  for (let i = 0; i < times; i++) {
-    expect(value).toStrictEqual(expected)
-  }
+  for (let i = 0; i < times; i++) expect(value).toStrictEqual(expected)
 }
 
 const vote = (ballots: Ballot[], candidates: string[], seed?: string) =>

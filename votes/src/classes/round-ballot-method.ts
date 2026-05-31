@@ -1,10 +1,9 @@
 import type { ScoreObject } from '../types'
 import { arrayAt } from '../utils/array-at'
-
 import { BallotMethod } from './ballot-method'
 import type { Ranker } from './method'
 
-export type Round = {
+export interface Round {
   finished?: boolean
   idx: number
   candidates: string[]
@@ -22,9 +21,8 @@ export abstract class RoundBallotMethod extends BallotMethod implements Ranker {
   protected rounds: Round[] = []
 
   public computeRounds(): Round[] {
-    while (this.lastRoundQualified().length > 0) {
-      this.computeNextRound()
-    }
+    while (this.lastRoundQualified().length > 0) this.computeNextRound()
+
     return this.rounds
   }
 

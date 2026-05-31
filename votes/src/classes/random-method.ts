@@ -1,5 +1,4 @@
 import type { ScoreObject } from '../types'
-
 import { Method } from './method'
 import type { Scorer } from './score-method'
 

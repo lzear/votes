@@ -13,9 +13,9 @@ const computeScores = (
     let voteValue = candidates.length // - 1
     for (const candidatesAtRank of ballot.ranking) {
       const value = voteValue - (candidatesAtRank.length - 1) / 2
-      for (const candidate of candidatesAtRank) {
+      for (const candidate of candidatesAtRank)
         scores[candidate] += value * ballot.weight
-      }
+
       voteValue -= candidatesAtRank.length
     }
   }

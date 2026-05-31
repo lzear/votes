@@ -1,6 +1,5 @@
 import type { Ballot, Matrix } from '../types'
 import { matrixFromBallots } from '../utils/make-matrix'
-
 import type { Ranker } from './method'
 import { Method } from './method'
 

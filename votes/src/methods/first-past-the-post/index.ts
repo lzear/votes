@@ -1,6 +1,5 @@
 import { BallotScoreMethod } from '../../classes/ballot-score-method'
 import type { Ballot, ScoreObject } from '../../types'
-
 import { iterateFirstChoices } from './iterate-first-choices'
 
 const computeScores = (candidates: string[], ballots: Ballot[]) => {

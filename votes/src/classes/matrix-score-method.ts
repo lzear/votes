@@ -1,5 +1,4 @@
 import type { Matrix } from '../types'
-
 import type { Scorer } from './score-method'
 import { ScoreMethod } from './score-method'
 

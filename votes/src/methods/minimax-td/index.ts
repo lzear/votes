@@ -1,5 +1,4 @@
 import _ from 'lodash-es'
-
 import type { Matrix, ScoreObject } from '../../types'
 import { findSmithSet } from '../../utils/condorcet'
 import { scoresAny } from '../../utils/scores-zero'
