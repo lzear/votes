@@ -2,14 +2,9 @@
   "name": "votes--root",
   "version": "0.0.0",
   "private": true,
-  "workspaces": {
-    "packages": [
-      "d3-force",
-      "demo",
-      "votes",
-      "tsconfig"
-    ]
-  },
+  "workspaces": [
+    "votes"
+  ],
   "sideEffects": false,
   "author": "lzear",
   "repository": {

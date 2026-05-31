@@ -117,11 +117,6 @@
   // -> [ [ 'Bear' ], [ 'Sheep' ], [ 'Lion' ] ]
   ```
 
-  ### Monorepo
-
-  The repository now also contains the code for a demo, which will be hosted on
-  www.rank-votes.vercel.app
-
   ### Back to classes
 
   My implementation of the voting systems keep on alternating between classes
@@ -129,7 +124,6 @@
   classes.
 
   ## Added systems
-
   - **Random candidate**: Selects a random ranking, regardless of ballots.
 
   - **Random dictator**: Selects a random ballot that decides the ranking.

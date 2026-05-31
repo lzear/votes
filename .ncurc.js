@@ -1,3 +1,3 @@
 module.exports = {
-  reject: ['antd', 'javascript-lp-solver']
+  reject: ['eslint', 'javascript-lp-solver']
 }
