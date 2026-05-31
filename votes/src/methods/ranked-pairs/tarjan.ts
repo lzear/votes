@@ -15,11 +15,13 @@ export class Tarjan {
     this.graph = graph
     this.scc = []
   }
+
   public run(): Vertex[][] {
     for (const i in this.graph)
       if (this.graph[i].index < 0) this.strongconnect(this.graph[i])
     return this.scc
   }
+
   private strongconnect(vertex: Vertex): void {
     // Set the depth index for v to the smallest unused index
     vertex.index = this.index
