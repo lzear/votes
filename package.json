@@ -63,14 +63,10 @@
       "@commitlint/config-conventional"
     ]
   },
-  "volta": {
-    "node": "18.19.1",
-    "yarn": "1.22.21"
-  },
   "nextBundleAnalysis": {
     "budget": null,
     "budgetPercentIncreaseRed": 20,
     "showDetails": true
   },
-  "dependencies": {}
+  "packageManager": "yarn@4.15.0"
 }
