@@ -3,7 +3,7 @@ export interface Ballot {
   weight: number
 }
 
-export type Matrix = {
+export interface Matrix {
   candidates: string[]
   array: number[][]
 }

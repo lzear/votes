@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        type: string
+        default: '24'
+      coverage-command:
+        type: string
+        default: 'yarn workspaces foreach -A run test --coverage'
+      run-check:
+        type: boolean
+        default: true
+    secrets:
+      CODACY_PROJECT_TOKEN:
+        required: false
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    env:
+      HAS_CODACY_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+      - run: corepack enable
+      - uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            votes/node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+      - run: yarn install --immutable
+      - run: yarn build
+      - run: yarn typecheck
+      - run: yarn workspaces foreach -A run lint
+      - run: ${{ inputs.coverage-command }}
+      - run: yarn forge check --skip-remote
+        if: ${{ inputs.run-check }}
+        continue-on-error: true
+      - name: collect coverage paths
+        id: coverage
+        run: |
+          paths=$(find votes -name 'lcov.info' 2>/dev/null | tr '\n' ',' | sed 's/,$//')
+          echo "paths=$paths" >> $GITHUB_OUTPUT
+      - uses: codacy/codacy-coverage-reporter-action@v1
+        if: env.HAS_CODACY_TOKEN == 'true' && steps.coverage.outputs.paths != ''
+        continue-on-error: true
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: ${{ steps.coverage.outputs.paths }}

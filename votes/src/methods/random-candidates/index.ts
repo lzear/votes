@@ -1,5 +1,4 @@
 import { zipObject } from 'lodash-es'
-
 import { RandomMethod } from '../../classes/random-method'
 import type { ScoreObject } from '../../types'
 import { shuffleArray } from '../../utils/shuffle-array'
@@ -15,7 +14,9 @@ export class RandomCandidates extends RandomMethod {
   public scores(): ScoreObject {
     return zipObject(
       this.candidates,
-      new Array(this.candidates.length).fill(1 / this.candidates.length),
+      Array.from({ length: this.candidates.length }).fill(
+        1 / this.candidates.length,
+      ),
     )
   }
 }

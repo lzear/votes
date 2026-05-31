@@ -1,16 +1,19 @@
 import _ from 'lodash-es'
-
 import { Tarjan } from './tarjan'
 import { Vertex } from './vertex'
 
-type Edge = { from: number; to: number; value: number }
+interface Edge {
+  from: number
+  to: number
+  value: number
+}
 
 export const generateAcyclicGraph = (
   graph: Edge[],
   edgesToAdd: Edge[],
 ): Edge[] => {
   const allEdges = [...graph, ...edgesToAdd]
-  const vDict = {} as { [i: number]: Vertex }
+  const vDict = {} as Record<number, Vertex>
   for (const c of _.uniq(allEdges.flatMap((e) => [e.from, e.to])))
     vDict[c] = new Vertex(c)
 

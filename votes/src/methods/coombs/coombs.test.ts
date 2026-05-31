@@ -1,5 +1,4 @@
 import { condorcetMess } from '../../test/condorcet-mess'
-
 import { Coombs } from './index'
 
 describe(Coombs, () => {
