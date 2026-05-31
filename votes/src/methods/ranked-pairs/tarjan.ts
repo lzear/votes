@@ -5,13 +5,12 @@ import type { Vertex } from './vertex'
 import { VertexStack } from './vertex-stack'
 
 export class Tarjan {
-  private index: number
+  private index = 0
   private stack: VertexStack
   private readonly graph: Vertex[]
   private readonly scc: Vertex[][]
 
   constructor(graph: Vertex[]) {
-    this.index = 0
     this.stack = new VertexStack()
     this.graph = graph
     this.scc = []
@@ -37,10 +36,9 @@ export class Tarjan {
         // Successor w has not yet been visited; recurse on it
         this.strongconnect(w)
         v.lowlink = Math.min(v.lowlink, w.lowlink)
-      } else if (this.stack.contains(w)) {
+      } else if (this.stack.contains(w))
         // Successor w is in stack S and hence in the current SCC
         v.lowlink = Math.min(v.lowlink, w.index)
-      }
     }
 
     // If v is a root node, pop the stack and generate an SCC

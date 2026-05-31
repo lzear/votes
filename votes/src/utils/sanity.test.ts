@@ -1,6 +1,5 @@
-import { abcde, dummyProfile, dummyProfile10 } from '../test/test-utils'
 import { type Ballot, methods, VotingSystem } from '..'
-
+import { abcde, dummyProfile, dummyProfile10 } from '../test/test-utils'
 import { isRandomSystem } from './categories'
 import { matrixFromBallots } from './make-matrix'
 

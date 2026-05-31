@@ -1,0 +1,23 @@
+name: Main
+
+on:
+  push:
+  pull_request:
+    branches: [master]
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+    secrets:
+      CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
+
+  release:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs: ci
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
+    uses: ./.github/workflows/release.yml
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

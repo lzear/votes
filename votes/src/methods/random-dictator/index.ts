@@ -9,7 +9,7 @@ const pickBallotIdx = (ballots: Ballot[], ratio: number) => {
   let i = 0
 
   while (w < pickAt) {
-    const b = ballots[i] as Ballot | undefined
+    const b = ballots[i]
     if (!b) throw new Error('Could not pick a ballot?!')
     w += b.weight
     if (w >= pickAt) return i

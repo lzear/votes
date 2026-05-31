@@ -1,5 +1,3 @@
-# stolen from https://github.com/pmndrs/react-spring/blob/1ca8b10/.github/workflows/bundle-size.yml
-
 name: Bundle-size
 
 on:
@@ -10,22 +8,14 @@ on:
 jobs:
   size:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Setup node
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '18'
-
-      - name: Install
-        run: yarn install
-
-      - name: Build packages
-        run: yarn workspace votes build
-
+          node-version: '24'
+      - run: corepack enable
+      - run: yarn install --immutable
+      - run: yarn workspace votes build
       - uses: preactjs/compressed-size-action@v2
         with:
           pattern: '**/dist/**/*.{mjs,js}'

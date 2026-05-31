@@ -1,5 +1,4 @@
 import _ from 'lodash-es'
-
 import { RoundBallotMethod } from '../../classes/round-ballot-method'
 import type { Ballot, ScoreObject } from '../../types'
 import { normalizeBallots } from '../../utils'

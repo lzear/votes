@@ -20,9 +20,9 @@ const computeScores = (
   excludeTies: boolean,
 ): ScoreObject => {
   const s: ScoreObject = {}
-  for (const [c1Index, candidate] of matrix.candidates.entries()) {
+  for (const [c1Index, candidate] of matrix.candidates.entries())
     s[candidate] = -Math.max(
-      ...(matrix.array[c1Index]
+      ...matrix.array[c1Index]
         .map((yOverX, c2Index) => {
           const xOverY = matrix.array[c2Index][c1Index]
           return xOverY === yOverX && excludeTies
@@ -30,9 +30,9 @@ const computeScores = (
             : scoreXY[variant](xOverY, yOverX)
         })
         .filter((_, c2Index) => c2Index !== c1Index)
-        .filter((v) => v !== null) as number[]),
+        .filter((v) => v !== null),
     )
-  }
+
   return s
 }
 

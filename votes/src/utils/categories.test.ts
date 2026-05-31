@@ -1,7 +1,6 @@
 import { methods } from '../methods'
 import { RandomCandidates } from '../methods/random-candidates'
 import { VotingSystem } from '../types'
-
 import {
   isBallotMethod,
   isBallotSystem,

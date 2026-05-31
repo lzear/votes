@@ -10,7 +10,6 @@ import {
   removeInvalidCandidates,
   scoresToRanking,
 } from '../utils'
-
 import { isBallotEqual } from './normalize'
 
 describe('normalize', () => {
@@ -46,9 +45,9 @@ describe('normalize', () => {
   })
 
   it('throw on duplicated candidates', () => {
-    expect(() => checkDuplicatedCandidate([['a', 'b'], ['a']])).toThrow(
-      'Some candidates are present multiple times: a',
-    )
+    expect(() => {
+      checkDuplicatedCandidate([['a', 'b'], ['a']])
+    }).toThrow('Some candidates are present multiple times: a')
   })
 
   it('removes duplicated candidates', () => {

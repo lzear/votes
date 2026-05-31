@@ -1,99 +1,58 @@
 {
+  "type": "commonjs",
   "name": "votes--root",
+  "description": "Voting systems library monorepo",
   "version": "0.0.0",
   "private": true,
-  "workspaces": {
-    "packages": [
-      "d3-force",
-      "demo",
-      "votes",
-      "tsconfig"
-    ]
-  },
+  "workspaces": [
+    "votes"
+  ],
   "sideEffects": false,
   "author": "lzear",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/lzear/votes.git"
-  },
+  "repository": "github:lzear/votes",
   "license": "MIT",
   "scripts": {
-    "build": "turbo run build",
-    "test": "turbo run test",
+    "build": "yarn workspaces foreach -A --topological run build",
+    "build-docs": "yarn workspaces foreach -A run build-docs",
+    "changeset": "changeset",
     "dev": "turbo run dev",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "npkill": "npx npkill",
-    "ncu": "npx npm-check-updates --workspaces --upgrade --root",
-    "lint": "eslint . && yarn turbo run lint",
     "fix:prettier": "prettier --write \"**/*.*\"",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "lint": "eslint .",
+    "ncu": "yarn dlx npm-check-updates --dep dev,optional,peer,prod,packageManager -u --workspaces && yarn up --recursive '*' '@*/*'",
+    "qa": "yarn install --immutable && yarn build && concurrently -g 'yarn typecheck' 'yarn lint' 'yarn test' 'yarn workspaces foreach -A run build-docs' 'yarn forge check'",
+    "release": "changeset publish",
+    "setup-repo": "forge setup",
+    "test": "yarn workspaces foreach -A run test",
     "test-prod": "yarn run eslint && yarn workspaces run test-prod",
-    "commit": "git-cz",
-    "precommit": "lint-staged",
-    "changeset:version": "yarn changeset version",
-    "release": "yarn workspace votes release && changeset publish"
+    "typecheck": "yarn workspaces foreach -A run typecheck",
+    "version-packages": "changeset version"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.9",
-    "@babel/preset-env": "^7.23.9",
-    "@babel/preset-typescript": "^7.23.3",
-    "@changesets/changelog-github": "^0.5.0",
-    "@changesets/cli": "^2.27.1",
-    "@commitlint/cli": "^18.6.1",
-    "@commitlint/config-conventional": "^18.6.2",
-    "@types/node": "^20.11.20",
-    "@typescript-eslint/eslint-plugin": "^7.1.0",
-    "@typescript-eslint/parser": "^7.1.0",
-    "commitizen": "^4.3.0",
-    "dotenv": "^16.4.5",
-    "eslint": "^8.43.0",
-    "eslint-config-next": "^13.4.7",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-markdown": "^3.0.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-simple-import-sort": "^10.0.0",
-    "eslint-plugin-tsdoc": "^0.2.17",
-    "eslint-plugin-unicorn": "^47.0.0",
-    "eslint-scope": "^7.2.0",
-    "eslint-visitor-keys": "^3.4.1",
-    "husky": "^9.0.11",
-    "is-boolean-object": "^1.1.2",
-    "lint-staged": "^15.2.2",
-    "prettier": "^2.8.8",
-    "turbo": "^1.12.4",
-    "typescript": "5.3.3"
-  },
-  "bugs": {
-    "url": "https://github.com/lzear/votes/issues"
-  },
-  "homepage": "https://github.com/lzear/votes",
-  "lint-staged": {
-    "{src,test}/**/*.ts": [
-      "prettier --write"
-    ]
-  },
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-conventional-changelog"
-    }
+    "@changesets/cli": "^2",
+    "@commitlint/cli": "^21",
+    "@commitlint/config-conventional": "^21",
+    "@lzear/forge": "^4",
+    "@types/node": "^25",
+    "concurrently": "^10",
+    "eslint": "^9",
+    "lefthook": "^2",
+    "lint-staged": "^17",
+    "prettier": "^3",
+    "turbo": "^2",
+    "typescript": "6.0.3"
   },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
     ]
   },
-  "volta": {
-    "node": "18.19.1",
-    "yarn": "1.22.21"
+  "lint-staged": {
+    "**/*.{ts,tsx,md}": "prettier --write"
   },
-  "nextBundleAnalysis": {
-    "budget": null,
-    "budgetPercentIncreaseRed": 20,
-    "showDetails": true
+  "bugs": {
+    "url": "https://github.com/lzear/votes/issues"
   },
-  "dependencies": {}
+  "homepage": "https://github.com/lzear/votes",
+  "packageManager": "yarn@4.15.0"
 }

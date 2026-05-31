@@ -19,3 +19,4 @@ docs
 votes/dist
 votes/coverage
 .turbo
+.yarn

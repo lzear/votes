@@ -1,8 +1,6 @@
 import { groupBy, sortBy, toPairs } from 'lodash-es'
 
-export const scoresToRanking = (scores: {
-  [candidate: string]: number
-}): string[][] =>
+export const scoresToRanking = (scores: Record<string, number>): string[][] =>
   sortBy(
     groupBy(toPairs(scores), (e) => e[1]),
     (e) => -e[0][1],

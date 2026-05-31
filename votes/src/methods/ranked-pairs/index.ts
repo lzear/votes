@@ -1,11 +1,13 @@
 import { groupBy, range, zipObject } from 'lodash-es'
-
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import type { Matrix, ScoreObject } from '../../types'
-
 import { generateAcyclicGraph } from './generate-acyclic-graph'
 
-type Edge = { from: number; to: number; value: number }
+interface Edge {
+  from: number
+  to: number
+  value: number
+}
 
 const computeFromMatrix = (matrix: Matrix): ScoreObject => {
   const allEdges: Edge[] = matrix.array.flatMap(
@@ -21,17 +23,17 @@ const computeFromMatrix = (matrix: Matrix): ScoreObject => {
     .sort((a, b) => Number(b) - Number(a))
     .map((value) => edgesGroups[value])
 
-  const acyclicGraph = groups.reduce(
+  const acyclicGraph = groups.reduce<Edge[]>(
     (graph: Edge[], edgesToAdd) => generateAcyclicGraph(graph, edgesToAdd),
-    [] as Edge[],
+    [],
   )
   const graphsWinners = range(matrix.candidates.length).filter(
     (candidate, key) => !acyclicGraph.some(({ to }) => to === key),
   )
-  const scores = graphsWinners.reduce((acc, curr) => {
+  const scores = graphsWinners.reduce<Record<number, number>>((acc, curr) => {
     acc[curr] = (acc[curr] || 0) + 1
     return acc
-  }, {} as { [k: number]: number })
+  }, {})
   const maxScore1 = Math.max(...Object.values(scores))
   const winnersIdx = range(matrix.candidates.length).filter(
     (i) => scores[i] === maxScore1,
@@ -39,7 +41,7 @@ const computeFromMatrix = (matrix: Matrix): ScoreObject => {
   if (winnersIdx.length === matrix.candidates.length)
     return zipObject(
       matrix.candidates,
-      new Array(matrix.candidates.length).fill(1),
+      Array.from({ length: matrix.candidates.length }).fill(1),
     )
   const nextResults = computeFromMatrix({
     array: matrix.array

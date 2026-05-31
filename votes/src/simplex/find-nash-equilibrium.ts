@@ -9,7 +9,7 @@ const isZero = (matrix: number[][]): boolean => {
 }
 
 const normalizeVector = (vector: number[]): number[] => {
-  const positive = vector.map((v) => (v > 0 ? v : 0))
+  const positive = vector.map((v) => Math.max(v, 0))
   const sum = positive.reduce((acc, cur) => acc + cur, 0)
   return positive.map((v) => v / sum)
 }

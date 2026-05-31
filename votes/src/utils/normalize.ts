@@ -1,5 +1,4 @@
 import _ from 'lodash-es'
-
 import type { Ballot } from '../types'
 
 /**
@@ -32,7 +31,7 @@ export const normalizeRankInput = (
  */
 export const groupBallots = <B extends Ballot>(ballots: B[]): B[] =>
   ballots
-    .reduce((acc, ballot) => {
+    .reduce<B[]>((acc, ballot) => {
       const match = acc.findIndex((b) =>
         isBallotEqual(b.ranking, ballot.ranking),
       )
@@ -45,16 +44,15 @@ export const groupBallots = <B extends Ballot>(ballots: B[]): B[] =>
             }
           : b,
       )
-    }, [] as B[])
+    }, [])
     .filter((b) => b.weight !== 0)
     .sort((a, b) => b.weight - a.weight)
 
 export const toWeightedBallots = (ballots: string[][][]): Ballot[] =>
-  ballots.reduce((w, ballot) => {
+  ballots.reduce<Ballot[]>((w, ballot) => {
     const match = w.findIndex((ww) => isBallotEqual(ww.ranking, ballot))
-    if (match === -1) {
-      return [...w, { ranking: ballot, weight: 1 }]
-    }
+    if (match === -1) return [...w, { ranking: ballot, weight: 1 }]
+
     return w.map((ww, k) =>
       k === match
         ? {
@@ -63,14 +61,14 @@ export const toWeightedBallots = (ballots: string[][][]): Ballot[] =>
           }
         : ww,
     )
-  }, [] as Ballot[])
+  }, [])
 
 export const checkDuplicatedCandidate = (ranking: string[][]): void => {
   ranking.reduce((acc, rank) => {
     const inter = _.intersection(acc, rank)
-    if (inter.length > 0) {
+    if (inter.length > 0)
       throw new Error(`Some candidates are present multiple times: ${inter}`)
-    }
+
     return [...acc, ...rank]
   }, [])
 }
@@ -141,9 +139,9 @@ export const normalizeBallot = <B extends Ballot>(
  * @param ballots - ranking to normalize
  */
 export const candidatesFromBallots = (ballots: Ballot[]): string[] =>
-  ballots.reduce(
+  ballots.reduce<string[]>(
     (acc, curr) => _.uniq([...acc, ...curr.ranking.flat()]),
-    [] as string[],
+    [],
   )
 
 export const normalizeBallots = <B extends Ballot>(
