@@ -204,4 +204,3 @@ The repository is split in 2 packages:
 
 - `/votes` — NPM package source
   ([votes on npm](https://www.npmjs.com/package/votes))
-- `/demo` — demo website source

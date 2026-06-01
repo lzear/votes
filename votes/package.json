@@ -37,9 +37,9 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsup",
-    "build-docs": "cp ../README.md . && yarn typedoc",
+    "build-docs": "yarn typedoc",
     "lint": "eslint .",
-    "release": "cp ../README.md . && yarn run build",
+    "release": "yarn run build",
     "test": "vitest",
     "test-prod": "yarn run test && yarn run build",
     "typecheck": "tsc --noEmit",
