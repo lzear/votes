@@ -15,7 +15,6 @@
     "build": "yarn workspaces foreach -A --topological run build",
     "build-docs": "yarn workspaces foreach -A run build-docs",
     "changeset": "changeset",
-    "dev": "turbo run dev",
     "fix:prettier": "prettier --write \"**/*.*\"",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "eslint .",
@@ -39,7 +38,6 @@
     "lefthook": "^2",
     "lint-staged": "^17",
     "prettier": "^3",
-    "turbo": "^2",
     "typescript": "6.0.3"
   },
   "commitlint": {
