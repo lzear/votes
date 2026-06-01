@@ -30,7 +30,3 @@ export const findSmithSet = <C extends string>(
     candidates: candidates.filter((_c, k) => dominatingList[k]),
   }
 }
-
-// We renamed findCondorcet -> findSmithSet
-// Keeping the old name exported, so we don't introduce breaking changes
-export const findCondorcet = findSmithSet
