@@ -14,7 +14,7 @@ export class RandomCandidates<C extends string> extends RandomMethod<C> {
   public scores(): ScoreObject<C> {
     return zipObject(
       this.candidates,
-      Array.from({ length: this.candidates.length }).fill(
+      Array.from<number>({ length: this.candidates.length }).fill(
         1 / this.candidates.length,
       ),
     ) as ScoreObject<C>

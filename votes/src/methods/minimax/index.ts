@@ -30,7 +30,6 @@ const computeScores = <C extends string>(
         return [scoreXY[variant](xOverY, yOverX)]
       }),
     )
-
   return s
 }
 

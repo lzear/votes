@@ -1,7 +1,6 @@
 import { pick } from 'lodash-es'
 import type { Matrix, ScoreObject } from '../../types'
-import { findSmithSet } from '../../utils/condorcet'
-import { scoresAny } from '../../utils/scores-zero'
+import { findSmithSet, scoresAny } from '../../utils'
 import { Minimax, type MinimaxVariant } from '../minimax'
 
 const computeScores = <C extends string>(

@@ -1,7 +1,6 @@
 import { BallotScoreMethod } from '../../classes/ballot-score-method'
 import type { Ballot, ScoreObject } from '../../types'
-import { normalizeBallots } from '../../utils/normalize'
-import { scoresZero } from '../../utils/scores-zero'
+import { normalizeBallots, scoresZero } from '../../utils'
 
 const computeScores = <C extends string>(
   candidates: C[],

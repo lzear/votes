@@ -1,6 +1,5 @@
 import type { Ballot, Matrix } from '../types'
-import { normalizeBallots } from '../utils'
-import { matrixFromBallots } from '../utils/make-matrix'
+import { matrixFromBallots, normalizeBallots } from '../utils'
 import type { Matrixer } from './matrix-score-method'
 import { Method, type Ranker } from './method'
 
@@ -12,15 +11,9 @@ export abstract class BallotMethod<C extends string>
   protected readonly ballots: Ballot<C>[]
   private _matrix?: Matrix<C>
 
-  constructor({
-    ballots,
-    candidates,
-  }: {
-    ballots: Ballot<C>[]
-    candidates: C[]
-  }) {
-    super(candidates)
-    this.ballots = ballots
+  constructor(c: { ballots: Ballot<C>[]; candidates: C[] }) {
+    super(c.candidates)
+    this.ballots = normalizeBallots(c.ballots, c.candidates, true)
   }
 
   /**
@@ -28,7 +21,6 @@ export abstract class BallotMethod<C extends string>
    */
   get matrix(): Matrix<C> {
     this._matrix ??= matrixFromBallots(this.ballots, this.candidates)
-
     return this._matrix
   }
 
@@ -43,7 +35,7 @@ export abstract class BallotMethod<C extends string>
       candidates: D[]
     }) => BallotMethod<D>
     return new (this.constructor as Ctor)({
-      ballots: normalizeBallots(this.ballots as Ballot<D>[], candidates),
+      ballots: normalizeBallots(this.ballots as Ballot<D>[], candidates, false),
       candidates,
     })
   }

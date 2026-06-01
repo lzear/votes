@@ -15,10 +15,7 @@ export abstract class MatrixScoreMethod<C extends string>
 
   constructor(i: Matrix<C>) {
     super(i.candidates)
-    this._matrix = {
-      array: i.array,
-      candidates: i.candidates,
-    }
+    this._matrix = { array: i.array, candidates: i.candidates }
   }
 
   get matrix(): Matrix<C> {

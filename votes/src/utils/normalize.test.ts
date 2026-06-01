@@ -76,6 +76,7 @@ describe('normalize', () => {
   })
 
   it('normalizes ballots', () => {
+    // candidates derived from all ballots: [a, b, c, d] — unranked appended as tied-last
     expect(
       normalizeBallots([
         { weight: 3, ranking: [['a', 'b'], ['c']] },
@@ -83,10 +84,11 @@ describe('normalize', () => {
         { weight: 5, ranking: [['a', 'b'], ['c']] },
       ]),
     ).toStrictEqual([
-      { weight: 3, ranking: [['a', 'b'], ['c']] },
-      { weight: 4, ranking: [['d', 'b'], ['c']] },
-      { weight: 5, ranking: [['a', 'b'], ['c']] },
+      { weight: 3, ranking: [['a', 'b'], ['c'], ['d']] },
+      { weight: 4, ranking: [['d', 'b'], ['c'], ['a']] },
+      { weight: 5, ranking: [['a', 'b'], ['c'], ['d']] },
     ])
+    // explicit candidates [a, b, c]: d stripped from ballot2, a appended as unranked
     expect(
       normalizeBallots(
         [
@@ -98,7 +100,7 @@ describe('normalize', () => {
       ),
     ).toStrictEqual([
       { weight: 3, ranking: [['a', 'b'], ['c']] },
-      { weight: 4, ranking: [['b'], ['c']] },
+      { weight: 4, ranking: [['b'], ['c'], ['a']] },
       { weight: 5, ranking: [['a', 'b'], ['c']] },
     ])
   })

@@ -132,14 +132,22 @@ export const normalizeRanking = <C extends string>(
  *
  * @param ballot - ballot to normalize
  * @param candidates - official candidates
+ * @param appendUnranked - if true, append an extra rank at the end of the ballot with all the candidates that are not ranked in the ballot
  */
 export const normalizeBallot = <C extends string, B extends Ballot<C>>(
   ballot: B,
-  candidates: C[],
-): B => ({
-  ...ballot,
-  ranking: normalizeRanking(ballot.ranking, candidates),
-})
+  candidates: string[],
+  appendUnranked = true,
+): B => {
+  const ranking = normalizeRanking(ballot.ranking, candidates) as C[][]
+  if (appendUnranked && ranking.length > 0) {
+    const ranked = new Set(ranking.flat())
+    const unranked = (candidates as C[]).filter((c) => !ranked.has(c))
+    if (unranked.length > 0)
+      return { ...ballot, ranking: [...ranking, unranked] }
+  }
+  return { ...ballot, ranking }
+}
 
 /**
  * Gather all the candidates present in `ballots`
@@ -157,9 +165,10 @@ export const candidatesFromBallots = <C extends string>(
 export const normalizeBallots = <C extends string, B extends Ballot<C>>(
   ballots: B[],
   candidates?: C[],
+  appendUnranked = true,
 ): B[] => {
   const c = candidates ?? candidatesFromBallots(ballots)
-  return ballots.map((ballot) => normalizeBallot(ballot, c))
+  return ballots.map((ballot) => normalizeBallot(ballot, c, appendUnranked))
 }
 
 export const totalBallotsWeight = <C extends string>(

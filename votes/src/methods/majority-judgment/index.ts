@@ -54,7 +54,6 @@ export const getMedian = (arr: number[]): number => {
 
 const getMedians = <C extends string>(judgements: Judgements<C>) => {
   const candidates = Object.keys(judgements) as C[]
-
   const medians = {} as Record<C, number>
   for (const c of candidates) medians[c] = getMedian(judgements[c])
   return medians

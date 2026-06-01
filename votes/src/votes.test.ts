@@ -1,3 +1,5 @@
+import { abcde, balinski, closeTo, sW } from './test/test-utils'
+import { matrixFromBallots } from './utils'
 import {
   Approbation,
   Baldwin,
