@@ -47,7 +47,16 @@ export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
         : [...last, ...secondLast.slice(0, 2 - last.length)]
 
     const mainQualified = difference(candidates, pending)
-    const { qualified: q2, eliminated } = this.resolvePending(pending)
-    return { qualified: [...mainQualified, ...q2], eliminated, scores }
+    const {
+      qualified: q2,
+      eliminated,
+      tieBreakSteps,
+    } = this.resolvePending(pending)
+    return {
+      qualified: [...mainQualified, ...q2],
+      eliminated,
+      scores,
+      ...(tieBreakSteps.length > 0 ? { tieBreakSteps } : {}),
+    }
   }
 }

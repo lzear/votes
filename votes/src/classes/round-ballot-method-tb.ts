@@ -1,10 +1,15 @@
 import type { Ballot, Matrix, ScoreObject } from '../types'
 import { matrixFromBallots, normalizeBallots, normalizeRanking } from '../utils'
-import { type QE, RoundBallotMethod } from './round-ballot-method'
+import {
+  type QE,
+  RoundBallotMethod,
+  type TieBreakStep,
+} from './round-ballot-method'
 
 export interface TbMeta {
   full?: boolean
   stable?: boolean
+  label?: string
 }
 
 type BallotCtor<C extends string> = new (input: {
@@ -45,30 +50,47 @@ export const tb = <C extends string, T extends AnyCtor<C>>(
 
 // ─── Internal: entry to ranked function ──────────────────────────────────────
 
+type TiebreakerResult<C extends string> = {
+  ranking: C[][]
+  scores?: Partial<Record<C, number>>
+}
+
 type TiebreakerFn<C extends string> = (
   tied: C[],
   ballots: Ballot<C>[],
   allCandidates: C[],
-) => C[][]
+) => TiebreakerResult<C>
+
+interface TiebreakerEntry<C extends string> {
+  name: string
+  fn: TiebreakerFn<C>
+}
 
 type AnyCtorWithStatics<C extends string> = AnyCtor<C> & {
   needsMatrix?: boolean
   needsBallot?: boolean
 }
 
-const entryToFn = <C extends string>(entry: TbEntry<C>): TiebreakerFn<C> => {
+const entryToEntry = <C extends string>(
+  entry: TbEntry<C>,
+): TiebreakerEntry<C> => {
   const Ctor = (
     Array.isArray(entry) ? entry[0] : entry
   ) as AnyCtorWithStatics<C>
   const allOpts = (Array.isArray(entry) ? entry[1] : {}) as TbMeta &
     Record<string, unknown>
 
-  const { full = false, stable: isStable = false, ...extra } = allOpts
+  const { full = false, stable: isStable = false, label, ...extra } = allOpts
+  const name = label ?? Ctor.name
 
-  const run = (tied: C[], ballots: Ballot<C>[], allCandidates: C[]): C[][] => {
+  const run = (
+    tied: C[],
+    ballots: Ballot<C>[],
+    allCandidates: C[],
+  ): TiebreakerResult<C> => {
     const candidates = full ? allCandidates : tied
 
-    let method: { ranking(): C[][] }
+    let method: { ranking(): C[][]; scores?(): Partial<Record<C, number>> }
     if (Ctor.needsMatrix === true)
       method = new (Ctor as unknown as MatrixCtor<C>)(
         matrixFromBallots(ballots, candidates),
@@ -88,23 +110,30 @@ const entryToFn = <C extends string>(entry: TbEntry<C>): TiebreakerFn<C> => {
     const ranking = full
       ? normalizeRanking(method.ranking(), tied)
       : method.ranking()
+    const scores =
+      typeof method.scores === 'function' ? method.scores() : undefined
 
-    if (!isStable) return ranking
+    const result = (r: C[][]): TiebreakerResult<C> =>
+      scores !== undefined ? { ranking: r, scores } : { ranking: r }
 
-    return ranking.flatMap((tier) =>
-      tier.length <= 1 || tier.length === tied.length
-        ? [tier]
-        : run(tier, ballots, allCandidates),
+    if (!isStable) return result(ranking)
+
+    return result(
+      ranking.flatMap((tier) =>
+        tier.length <= 1 || tier.length === tied.length
+          ? [tier]
+          : run(tier, ballots, allCandidates).ranking,
+      ),
     )
   }
 
-  return run
+  return { name, fn: run }
 }
 
 export abstract class RoundBallotMethodTb<
   C extends string,
 > extends RoundBallotMethod<C> {
-  private readonly tbFns: TiebreakerFn<C>[]
+  private readonly tbEntries: TiebreakerEntry<C>[]
 
   constructor(input: {
     ballots: Ballot<C>[]
@@ -112,30 +141,44 @@ export abstract class RoundBallotMethodTb<
     tieBreakers?: TbEntry<C>[]
   }) {
     super(input)
-    this.tbFns = (input.tieBreakers ?? []).map((e) => entryToFn(e))
+    this.tbEntries = (input.tieBreakers ?? []).map((e) => entryToEntry(e))
   }
 
   /**
    * Apply tiebreakers sequentially to a set of tied candidates.
-   * Returns { qualified: survivors, eliminated: losers }.
+   * Returns qualified survivors, eliminated losers, and a trace of each step.
    * If unresolvable, all pending are returned as eliminated.
    */
-  protected resolvePending(pending: C[]): { qualified: C[]; eliminated: C[] } {
+  protected resolvePending(pending: C[]): {
+    qualified: C[]
+    eliminated: C[]
+    tieBreakSteps: TieBreakStep<C>[]
+  } {
     let current = pending
     const promoted: C[] = []
+    const tieBreakSteps: TieBreakStep<C>[] = []
 
-    for (const fn of this.tbFns) {
+    for (const [tbIndex, { name: tbName, fn }] of this.tbEntries.entries()) {
       if (current.length <= 1) break
-      const ranking = fn(current, this.ballots, this.candidates)
+      const { ranking, scores } = fn(current, this.ballots, this.candidates)
       const last = ranking.at(-1) ?? []
       const upper = ranking.slice(0, -1).flat()
+      tieBreakSteps.push({
+        tbIndex,
+        tbName,
+        input: current,
+        ranking,
+        ...(scores !== undefined ? { scores } : {}),
+        resolved: upper,
+        remaining: last,
+      })
       if (last.length < current.length) {
         promoted.push(...upper)
         current = last
       }
     }
 
-    return { qualified: promoted, eliminated: current }
+    return { qualified: promoted, eliminated: current, tieBreakSteps }
   }
 }
 
@@ -165,7 +208,16 @@ export abstract class TbEliminateLast<
 
     if (lastTier.length <= 1) return { qualified, eliminated: lastTier, scores }
 
-    const { qualified: q2, eliminated } = this.resolvePending(lastTier)
-    return { qualified: [...qualified, ...q2], eliminated, scores }
+    const {
+      qualified: q2,
+      eliminated,
+      tieBreakSteps,
+    } = this.resolvePending(lastTier)
+    return {
+      qualified: [...qualified, ...q2],
+      eliminated,
+      scores,
+      ...(tieBreakSteps.length > 0 ? { tieBreakSteps } : {}),
+    }
   }
 }

@@ -26,11 +26,16 @@ export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
       const losers = ranking.slice(1).flat()
       if (winner.length === 1)
         return { qualified: winner, eliminated: losers, scores: fptp.scores() }
-      const { qualified: q, eliminated: e } = this.resolvePending(winner)
+      const {
+        qualified: q,
+        eliminated: e,
+        tieBreakSteps,
+      } = this.resolvePending(winner)
       return {
         qualified: q,
         eliminated: [...e, ...losers],
         scores: fptp.scores(),
+        ...(tieBreakSteps.length > 0 ? { tieBreakSteps } : {}),
       }
     }
 
@@ -58,8 +63,17 @@ export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
       if (firsts.length === 2)
         return { qualified: firsts, eliminated: [...seconds, ...rest], scores }
       // >2 tied for 1st: tiebreak to narrow down
-      const { qualified: q, eliminated: e } = this.resolvePending(firsts)
-      return { qualified: q, eliminated: [...e, ...seconds, ...rest], scores }
+      const {
+        qualified: q,
+        eliminated: e,
+        tieBreakSteps: tbs1,
+      } = this.resolvePending(firsts)
+      return {
+        qualified: q,
+        eliminated: [...e, ...seconds, ...rest],
+        scores,
+        ...(tbs1.length > 0 ? { tieBreakSteps: tbs1 } : {}),
+      }
     }
 
     // firsts.length === 1
@@ -69,11 +83,16 @@ export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
       return { qualified: [...firsts, ...seconds], eliminated: rest, scores }
 
     // seconds.length > 1: break tie for 2nd qualifying spot
-    const { qualified: q2, eliminated: e2 } = this.resolvePending(seconds)
+    const {
+      qualified: q2,
+      eliminated: e2,
+      tieBreakSteps: tbs2,
+    } = this.resolvePending(seconds)
     return {
       qualified: [...firsts, ...q2],
       eliminated: [...e2, ...rest],
       scores,
+      ...(tbs2.length > 0 ? { tieBreakSteps: tbs2 } : {}),
     }
   }
 }

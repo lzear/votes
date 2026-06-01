@@ -18,7 +18,7 @@ describe('sanity check', () => {
           ballots: [],
           candidates: [],
         })
-        expect(election.ranking()).toStrictEqual([])
+        expect(election.canonicalRanking()).toStrictEqual([])
         if ('scores' in election) expect(election.scores()).toStrictEqual({})
       }
     },
@@ -64,7 +64,7 @@ describe('sanity check', () => {
         ballots: [{ ranking: [['a'], ['b'], ['c']], weight: 1 }],
         candidates: [],
       })
-      expect(election.ranking()).toStrictEqual([])
+      expect(election.canonicalRanking()).toStrictEqual([])
     },
   )
   it.each(Object.values(VotingSystem))(
@@ -107,7 +107,7 @@ describe('sanity check', () => {
         ballots,
         ...matrix,
       })
-      expect(election.ranking()[0]).toStrictEqual(
+      expect(election.canonicalRanking()[0]).toStrictEqual(
         system === VotingSystem.AbsoluteMajority
           ? ['a', 'b', 'c', 'd']
           : ['a', 'd'],

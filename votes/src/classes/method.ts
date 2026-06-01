@@ -1,3 +1,5 @@
+import { canonizeRanking } from '../utils/normalize'
+
 export interface Ranker<C extends string> {
   ranking(): C[][]
 }
@@ -19,6 +21,10 @@ export abstract class Method<C extends string> implements Ranker<C> {
    * `[ [ 'Bear' ], [ 'Sheep' ], [ 'Lion' ] ]`
    */
   public abstract ranking(): C[][]
+
+  public canonicalRanking(): C[][] {
+    return canonizeRanking(this.ranking())
+  }
 
   protected abstract restrict<D extends C>(candidates: D[]): Method<D>
 

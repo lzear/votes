@@ -3,10 +3,29 @@ import { scoresZero } from '../utils'
 import { BallotMethod } from './ballot-method'
 import type { Ranker } from './method'
 
+/** Trace of one tiebreaker's work within a round. */
+export interface TieBreakStep<C extends string> {
+  /** Position in the tieBreakers array (0-based). */
+  tbIndex: number
+  /** Constructor name of the tiebreaker method. */
+  tbName: string
+  /** Candidates that were tied going into this step. */
+  input: C[]
+  /** Full ranking produced by the tiebreaker on `input`. */
+  ranking: C[][]
+  /** Scores produced by the tiebreaker (when the method supports scores()). */
+  scores?: Partial<Record<C, number>>
+  /** Candidates promoted out of the tie (upper tiers of `ranking`). */
+  resolved: C[]
+  /** Candidates still tied after this step (last tier of `ranking`). */
+  remaining: C[]
+}
+
 export interface QE<C extends string> {
   qualified: C[]
   eliminated: C[]
   scores: ScoreObject<C>
+  tieBreakSteps?: TieBreakStep<C>[]
 }
 
 export interface Round<C extends string> {
@@ -17,7 +36,7 @@ export interface Round<C extends string> {
     eliminated: C[]
     qualified: C[]
     scores: ScoreObject<C>
-    tieBreakSteps?: C[][]
+    tieBreakSteps?: TieBreakStep<C>[]
   }
 }
 
@@ -33,12 +52,20 @@ export abstract class RoundBallotMethod<C extends string>
     const rounds: Round<C>[] = []
     while (inRace.length > 0) {
       const idx = rounds.length
-      const { qualified, eliminated, scores } = this.round(inRace, idx)
+      const { qualified, eliminated, scores, tieBreakSteps } = this.round(
+        inRace,
+        idx,
+      )
       rounds.push({
         idx,
         candidates: inRace,
         finished: inRace.length <= 1,
-        roundResult: { qualified, eliminated, scores },
+        roundResult: {
+          qualified,
+          eliminated,
+          scores,
+          ...(tieBreakSteps ? { tieBreakSteps } : {}),
+        },
       })
       inRace = qualified
     }

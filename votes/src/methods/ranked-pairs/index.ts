@@ -3,13 +3,7 @@
 import { groupBy, range, zipObject } from 'lodash-es'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import type { Matrix, ScoreObject } from '../../types'
-import { generateAcyclicGraph } from './generate-acyclic-graph'
-
-interface Edge {
-  from: number
-  to: number
-  value: number
-}
+import { type Edge, generateAcyclicGraph } from './generate-acyclic-graph'
 
 const computeFromMatrix = <C extends string>(
   matrix: Matrix<C>,

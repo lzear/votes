@@ -10,6 +10,8 @@ export interface TieBreaker<C extends string> {
 }
 
 export interface StepResult<C extends string> {
+  /** Constructor name of the ranker that produced this step. */
+  rankerName: string
   before: C[][]
   after: C[][]
   rounds?: Round<C>[]
@@ -21,7 +23,9 @@ export interface ElectionResult<C extends string> {
   steps: StepResult<C>[]
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+const instanceName = (instance: object): string =>
+  (Object.getPrototypeOf(instance) as { constructor?: { name?: string } })
+    .constructor?.name ?? 'Unknown'
 
 const isRandomInstance = (instance: object): boolean =>
   (Object.getPrototypeOf(instance) as { constructor?: { isRandom?: unknown } })
@@ -113,6 +117,7 @@ export class Election<C extends string> implements Ranker<C> {
     const allCandidates = firstRanking.flat()
 
     steps.push({
+      rankerName: instanceName(this.rankers[0]),
       before: [allCandidates],
       after: firstRanking,
       ...(rounds ? { rounds } : {}),
@@ -129,12 +134,18 @@ export class Election<C extends string> implements Ranker<C> {
       if ('ranking' in ranker) {
         const { ranking, rounds: r2, scores: s2 } = computeFor(ranker)
         step = {
+          rankerName: instanceName(ranker),
           before: current,
           after: applyAsTiebreaker(ranking, current),
           ...(r2 ? { rounds: r2 } : {}),
           ...(s2 ? { scores: s2 } : {}),
         }
-      } else step = { before: current, after: ranker.tieBreak(current) }
+      } else
+        step = {
+          rankerName: instanceName(ranker),
+          before: current,
+          after: ranker.tieBreak(current),
+        }
 
       steps.push(step)
       current = step.after
