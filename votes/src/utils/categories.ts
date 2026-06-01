@@ -1,7 +1,7 @@
 import { type Methods, methods } from '../methods'
 import type { VotingSystem } from '../types'
 
-type MethodsContaining<
+export type MethodsContaining<
   StaticProp extends 'isRandom' | 'needsBallot' | 'needsMatrix',
   Method,
 > = Method extends Methods
@@ -10,7 +10,7 @@ type MethodsContaining<
     : never
   : never
 
-type SystemsBeing<
+export type SystemsBeing<
   MethodType extends Methods,
   System,
 > = System extends VotingSystem

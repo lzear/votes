@@ -1,3 +1,4 @@
+export type { Ranker } from './classes/method'
 export type { Round } from './classes/round-ballot-method'
 export { type Methods, methods } from './methods'
 export { AbsoluteMajority } from './methods/absolute-majority'
@@ -30,8 +31,10 @@ export type {
   BallotSystem,
   MatrixMethods,
   MatrixSystem,
+  MethodsContaining,
   RandomMethods,
   RandomSystem,
+  SystemsBeing,
 } from './utils/categories'
 export {
   isBallotMethod,
@@ -41,3 +44,4 @@ export {
   isRandomMethod,
   isRandomSystem,
 } from './utils/categories'
+export { rngGenerator } from './utils/rng-generator'
