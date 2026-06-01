@@ -23,14 +23,12 @@ const computeScores = <C extends string>(
   const s = {} as ScoreObject<C>
   for (const [c1Index, candidate] of matrix.candidates.entries())
     s[candidate] = -Math.max(
-      ...matrix.array[c1Index]!.map((yOverX, c2Index) => {
-        const xOverY = matrix.array[c2Index]![c1Index]
-        return xOverY === yOverX && excludeTies
-          ? null
-          : scoreXY[variant](xOverY, yOverX)
-      })
-        .filter((_, c2Index) => c2Index !== c1Index)
-        .filter((v) => v !== null),
+      ...matrix.array[c1Index]!.flatMap((yOverX, c2Index) => {
+        if (c2Index === c1Index) return []
+        const xOverY = matrix.array[c2Index]![c1Index]!
+        if (xOverY === yOverX && excludeTies) return []
+        return [scoreXY[variant](xOverY, yOverX)]
+      }),
     )
 
   return s
@@ -40,10 +38,10 @@ const computeScores = <C extends string>(
  * #### Wikipedia: [Minimax Condorcet method](https://en.wikipedia.org/wiki/Minimax_Condorcet_method)
  */
 export class Minimax<C extends string> extends MatrixScoreMethod<C> {
-  public minimaxVariant: MinimaxVariant
-  public excludeTies: boolean
+  public readonly minimaxVariant: MinimaxVariant
+  public readonly excludeTies: boolean
 
-  public static Variants = MinimaxVariant
+  public static readonly Variants = MinimaxVariant
 
   constructor(
     i: Matrix<C> & { variant?: MinimaxVariant; excludeTies?: boolean },
