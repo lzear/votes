@@ -5,7 +5,7 @@
 ![language](https://img.shields.io/github/languages/top/lzear/votes)
 ![downloads](https://img.shields.io/npm/dm/votes)
 ![last commit](https://img.shields.io/github/last-commit/lzear/votes)
-[![license](https://img.shields.io/github/license/lzear/votes)](https://github.com/lzear/votes/blob/master/LICENSE)
+[![license](https://img.shields.io/github/license/lzear/votes)](https://github.com/lzear/votes/blob/main/LICENSE)
 [![CI](https://github.com/lzear/votes/actions/workflows/ci.yml/badge.svg)](https://github.com/lzear/votes/actions/workflows/ci.yml)
 [![Website](https://img.shields.io/website?url=https%3A%2F%2Frank-votes.vercel.app%2F)](https://rank-votes.vercel.app/)
 
