@@ -1,8 +1,10 @@
 import type { Ballot } from '../types'
 
-const candidates = ['🐸', '🐷', '🦁', '🐻', '🐭']
+type Candidate = '🐸' | '🐷' | '🦁' | '🐻' | '🐭'
 
-const ballots: Ballot<C>[] = [
+const candidates: Candidate[] = ['🐸', '🐷', '🦁', '🐻', '🐭']
+
+const ballots = [
   { weight: 2, ranking: [[3], [2, 4], [1], [5]] },
   { weight: 3, ranking: [[5], [4], [2], [1], [3]] },
   { weight: 5, ranking: [[4], [5], [3], [2], [1]] },
@@ -15,6 +17,6 @@ const ballots: Ballot<C>[] = [
 ].map((b) => ({
   ...b,
   ranking: b.ranking.map((r) => r.map((c) => candidates[c - 1])),
-}))
+})) as Ballot<Candidate>[]
 
 export const condorcetMess = { ballots, candidates }
