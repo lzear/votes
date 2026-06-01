@@ -7,13 +7,12 @@ const computeScores = <C extends string>(
   _ballots: Ballot<C>[],
 ): ScoreObject<C> => {
   const scores = scoresZero(candidates)
-  const ballots = normalizeBallots(_ballots, candidates)
-  for (const ballot of normalizeBallots(ballots, candidates)) {
+  for (const ballot of normalizeBallots(_ballots, candidates)) {
     let voteValue = candidates.length // - 1
     for (const candidatesAtRank of ballot.ranking) {
       const value = voteValue - (candidatesAtRank.length - 1) / 2
       for (const candidate of candidatesAtRank)
-        scores[candidate] += value * ballot.weight
+        scores[candidate] = scores[candidate] + value * ballot.weight
 
       voteValue -= candidatesAtRank.length
     }

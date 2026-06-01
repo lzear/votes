@@ -4,10 +4,9 @@ import { findNashEquilibrium } from '../../simplex/find-nash-equilibrium'
 import type { Matrix, ScoreObject } from '../../types'
 import { findSmithSet, makeAntisymmetric, scoresZero } from '../../utils'
 
-export const computeLottery = <C extends string>(
-  _matrix: Matrix<C>,
+export const lotteryFromAntisymmetric = <C extends string>(
+  matrix: Matrix<C>,
 ): Record<C, number> => {
-  const matrix = makeAntisymmetric(_matrix)
   const condorset = findSmithSet(matrix)
 
   const solution = findNashEquilibrium(condorset.array).map((v) =>
@@ -22,6 +21,6 @@ export const computeLottery = <C extends string>(
 
 export class MaximalLotteries<C extends string> extends RandomMatrixMethod<C> {
   public scores(): ScoreObject<C> {
-    return computeLottery(this.matrix)
+    return lotteryFromAntisymmetric(makeAntisymmetric(this.matrix))
   }
 }

@@ -1,26 +1,23 @@
 import type { Ballot, ScoreObject } from '../../types'
-import { normalizeBallots } from '../../utils/normalize'
-import { scoresZero } from '../../utils/scores-zero'
+import { normalizeBallots, scoresZero } from '../../utils'
 
 export const iterateFirstChoices = <C extends string>(
   ballots: Ballot<C>[],
   candidates: C[],
   computeBallotScore: (rank: string[], rankIdx: number) => number,
-): ScoreObject<C> =>
-  iterateNthChoices(ballots, candidates, computeBallotScore, 0)
+) => iterateNthChoices(ballots, candidates, computeBallotScore, 0)
 
-export const iterateNthChoices = <C extends string>(
+const iterateNthChoices = <C extends string>(
   ballots: Ballot<C>[],
   candidates: C[],
   computeBallotScore: (rank: string[], rankIdx: number) => number,
   rankIdx: number,
 ): ScoreObject<C> => {
-  const result: ScoreObject<C> = scoresZero(candidates)
+  const result = scoresZero(candidates)
   for (const ballot of normalizeBallots(ballots, candidates))
     if (ballot.ranking.length > rankIdx) {
-      const votes = ballot.ranking[rankIdx].filter((c) =>
-        candidates.includes(c),
-      )
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const votes = ballot.ranking[rankIdx]!
       for (const candidate of votes)
         result[candidate] += computeBallotScore(votes, rankIdx) * ballot.weight
     }

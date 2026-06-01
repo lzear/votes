@@ -1,62 +1,78 @@
-import { difference } from 'lodash-es'
-import { RoundBallotMethod } from '../../classes/round-ballot-method'
-import type { ScoreObject } from '../../types'
+import { type QE } from '../../classes/round-ballot-method'
+import { RoundBallotMethodTb } from '../../classes/round-ballot-method-tb'
 import { AbsoluteMajority } from '../absolute-majority'
 import { FirstPastThePost } from '../first-past-the-post'
 
 /**
  * #### Wikipedia: [Two-round system](https://en.wikipedia.org/wiki/Two-round_system)
  */
-export class TwoRoundRunoff<C extends string> extends RoundBallotMethod<C> {
-  protected round(
-    candidates: C[],
-    idx: number,
-  ): {
-    eliminated: C[]
-    qualified: C[]
-    scores: ScoreObject<C>
-  } {
-    const scores: ScoreObject<C> = new FirstPastThePost({
-      ballots: this.ballots,
-      candidates,
-    }).scores()
+export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
+  protected round(candidates: C[], idx: number): QE<C> {
+    const { ballots } = this
 
-    const absoluteMajority = new AbsoluteMajority({
-      ballots: this.ballots,
-      candidates,
-    })
-    if (absoluteMajority.ranking().length > 1) {
-      const qualified = absoluteMajority.ranking()[0]
-      if (!qualified)
-        throw new Error('Unexpected error in absolute majority computation')
-
+    // idx > 1 shouldn't happen normally; safety fallback
+    if (idx > 1)
       return {
-        eliminated: difference(candidates, qualified),
-        qualified,
-        scores,
+        qualified: [],
+        eliminated: candidates,
+        scores: this.roundScoresZero(candidates),
       }
-    }
-    const scoreValues = Object.values(scores).toSorted((a, b) => b - a)
 
-    if (idx === 0) {
-      const qualified = candidates.filter((c) => scores[c] >= scoreValues[1])
-      return {
-        eliminated: difference(candidates, qualified),
-        qualified,
-        scores,
-      }
-    }
     if (idx === 1) {
-      const qualified = candidates.filter((c) => scores[c] >= scoreValues[0])
+      // Runoff between the 2 remaining candidates
+      const fptp = new FirstPastThePost({ ballots, candidates })
+      const ranking = fptp.ranking()
+      const winner = ranking[0] ?? []
+      const losers = ranking.slice(1).flat()
+      if (winner.length === 1)
+        return { qualified: winner, eliminated: losers, scores: fptp.scores() }
+      const { qualified: q, eliminated: e } = this.resolvePending(winner)
       return {
-        eliminated: difference(candidates, qualified),
-        qualified,
-        scores,
+        qualified: q,
+        eliminated: [...e, ...losers],
+        scores: fptp.scores(),
       }
     }
+
+    // idx === 0: qualification round — find top 2
+    const amRanking = new AbsoluteMajority({ ballots, candidates }).ranking()
+    const [r1, r2] = amRanking
+    if (r2 && r1?.length === 1) {
+      // Absolute majority — winner already decided
+      const am = new AbsoluteMajority({ ballots, candidates })
+      return {
+        qualified: r1,
+        eliminated: r2,
+        scores: am.scores(),
+      }
+    }
+
+    const fptp = new FirstPastThePost({ ballots, candidates })
+    const ranking = fptp.ranking()
+    const scores = fptp.scores()
+    const [firsts = [], seconds = [], ...restTiers] = ranking
+    const rest = restTiers.flat()
+
+    if (firsts.length >= 2) {
+      // Top tier has 2+ — qualify first 2, eliminate rest
+      if (firsts.length === 2)
+        return { qualified: firsts, eliminated: [...seconds, ...rest], scores }
+      // >2 tied for 1st: tiebreak to narrow down
+      const { qualified: q, eliminated: e } = this.resolvePending(firsts)
+      return { qualified: q, eliminated: [...e, ...seconds, ...rest], scores }
+    }
+
+    // firsts.length === 1
+    if (seconds.length === 0)
+      return { qualified: firsts, eliminated: rest, scores }
+    if (seconds.length === 1)
+      return { qualified: [...firsts, ...seconds], eliminated: rest, scores }
+
+    // seconds.length > 1: break tie for 2nd qualifying spot
+    const { qualified: q2, eliminated: e2 } = this.resolvePending(seconds)
     return {
-      eliminated: candidates,
-      qualified: [],
+      qualified: [...firsts, ...q2],
+      eliminated: [...e2, ...rest],
       scores,
     }
   }
