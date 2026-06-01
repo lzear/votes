@@ -13,7 +13,7 @@ export abstract class RandomMethod<C extends string>
 
   protected readonly rng: () => number
 
-  constructor(i: { candidates: C[]; rng?: () => number }) {
+  constructor(i: { candidates: C[]; rng?: (() => number) | undefined }) {
     super(i.candidates)
 
     this.rng = i.rng ?? Math.random

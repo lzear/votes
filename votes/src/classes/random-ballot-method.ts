@@ -13,7 +13,7 @@ export abstract class RandomBallotMethod<C extends string>
   protected constructor(i: {
     candidates: C[]
     ballots: Ballot<C>[]
-    rng?: () => number
+    rng?: undefined | (() => number)
   }) {
     super(i)
 
