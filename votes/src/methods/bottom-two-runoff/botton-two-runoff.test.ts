@@ -49,6 +49,34 @@ describe(BottomTwoRunoff, () => {
               "🤡": 0,
               "🤥": 0,
             },
+            "tieBreakSteps": [
+              {
+                "input": [
+                  "🤥",
+                  "🔏",
+                ],
+                "ranking": [
+                  [
+                    "🤥",
+                  ],
+                  [
+                    "🔏",
+                  ],
+                ],
+                "remaining": [
+                  "🔏",
+                ],
+                "resolved": [
+                  "🤥",
+                ],
+                "scores": {
+                  "🔏": 0,
+                  "🤥": 3,
+                },
+                "tbIndex": 0,
+                "tbName": "FirstPastThePost",
+              },
+            ],
           },
         },
         {
@@ -75,6 +103,34 @@ describe(BottomTwoRunoff, () => {
               "🤡": 0,
               "🤥": 0,
             },
+            "tieBreakSteps": [
+              {
+                "input": [
+                  "🤥",
+                  "🤡",
+                ],
+                "ranking": [
+                  [
+                    "🤡",
+                  ],
+                  [
+                    "🤥",
+                  ],
+                ],
+                "remaining": [
+                  "🤥",
+                ],
+                "resolved": [
+                  "🤡",
+                ],
+                "scores": {
+                  "🤡": 3,
+                  "🤥": 0,
+                },
+                "tbIndex": 0,
+                "tbName": "FirstPastThePost",
+              },
+            ],
           },
         },
         {
@@ -98,6 +154,34 @@ describe(BottomTwoRunoff, () => {
               "😡": 3,
               "🤡": 0,
             },
+            "tieBreakSteps": [
+              {
+                "input": [
+                  "🤡",
+                  "🎽",
+                ],
+                "ranking": [
+                  [
+                    "🎽",
+                  ],
+                  [
+                    "🤡",
+                  ],
+                ],
+                "remaining": [
+                  "🤡",
+                ],
+                "resolved": [
+                  "🎽",
+                ],
+                "scores": {
+                  "🎽": 2,
+                  "🤡": 1,
+                },
+                "tbIndex": 0,
+                "tbName": "FirstPastThePost",
+              },
+            ],
           },
         },
         {
@@ -118,6 +202,34 @@ describe(BottomTwoRunoff, () => {
               "🎽": 0,
               "😡": 3,
             },
+            "tieBreakSteps": [
+              {
+                "input": [
+                  "🎽",
+                  "😡",
+                ],
+                "ranking": [
+                  [
+                    "😡",
+                  ],
+                  [
+                    "🎽",
+                  ],
+                ],
+                "remaining": [
+                  "🎽",
+                ],
+                "resolved": [
+                  "😡",
+                ],
+                "scores": {
+                  "🎽": 0,
+                  "😡": 3,
+                },
+                "tbIndex": 0,
+                "tbName": "FirstPastThePost",
+              },
+            ],
           },
         },
         {

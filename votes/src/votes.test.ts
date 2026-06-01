@@ -1,5 +1,3 @@
-import { abcde, balinski, closeTo, sW } from './test/test-utils'
-import { matrixFromBallots, rngGenerator } from './utils'
 import {
   Approbation,
   Baldwin,
@@ -19,6 +17,8 @@ import {
   tb,
   TwoRoundRunoff,
 } from '.'
+import { abcde, balinski, closeTo, sW } from './test/test-utils'
+import { matrixFromBallots, rngGenerator } from './utils'
 
 type ABCD = 'a' | 'b' | 'c' | 'd'
 const tieCandidates: ABCD[] = ['a', 'b', 'c', 'd']

@@ -48,9 +48,7 @@ export const tb = <C extends string, T extends AnyCtor<C>>(
   opts?: PropsOf<T> & TbMeta,
 ): TbEntry<C, T> => (opts === undefined ? ctor : ([ctor, opts] as const))
 
-// ─── Internal: entry to ranked function ──────────────────────────────────────
-
-type TiebreakerResult<C extends string> = {
+interface TiebreakerResult<C extends string> {
   ranking: C[][]
   scores?: Partial<Record<C, number>>
 }
@@ -114,7 +112,7 @@ const entryToEntry = <C extends string>(
       typeof method.scores === 'function' ? method.scores() : undefined
 
     const result = (r: C[][]): TiebreakerResult<C> =>
-      scores !== undefined ? { ranking: r, scores } : { ranking: r }
+      scores === undefined ? { ranking: r } : { ranking: r, scores }
 
     if (!isStable) return result(ranking)
 
@@ -168,7 +166,7 @@ export abstract class RoundBallotMethodTb<
         tbName,
         input: current,
         ranking,
-        ...(scores !== undefined ? { scores } : {}),
+        ...(scores === undefined ? {} : { scores }),
         resolved: upper,
         remaining: last,
       })

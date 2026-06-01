@@ -7,6 +7,27 @@ import { FirstPastThePost } from '../first-past-the-post'
  * #### Wikipedia: [Two-round system](https://en.wikipedia.org/wiki/Two-round_system)
  */
 export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
+  private runoffRound(candidates: C[]): QE<C> {
+    const fptp = new FirstPastThePost({ ballots: this.ballots, candidates })
+    const ranking = fptp.ranking()
+    const winner = ranking[0] ?? []
+    const losers = ranking.slice(1).flat()
+    const scores = fptp.scores()
+    if (winner.length === 1)
+      return { qualified: winner, eliminated: losers, scores }
+    const {
+      qualified: q,
+      eliminated: e,
+      tieBreakSteps,
+    } = this.resolvePending(winner)
+    return {
+      qualified: q,
+      eliminated: [...e, ...losers],
+      scores,
+      ...(tieBreakSteps.length > 0 ? { tieBreakSteps } : {}),
+    }
+  }
+
   protected round(candidates: C[], idx: number): QE<C> {
     const { ballots } = this
 
@@ -18,26 +39,7 @@ export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
         scores: this.roundScoresZero(candidates),
       }
 
-    if (idx === 1) {
-      // Runoff between the 2 remaining candidates
-      const fptp = new FirstPastThePost({ ballots, candidates })
-      const ranking = fptp.ranking()
-      const winner = ranking[0] ?? []
-      const losers = ranking.slice(1).flat()
-      if (winner.length === 1)
-        return { qualified: winner, eliminated: losers, scores: fptp.scores() }
-      const {
-        qualified: q,
-        eliminated: e,
-        tieBreakSteps,
-      } = this.resolvePending(winner)
-      return {
-        qualified: q,
-        eliminated: [...e, ...losers],
-        scores: fptp.scores(),
-        ...(tieBreakSteps.length > 0 ? { tieBreakSteps } : {}),
-      }
-    }
+    if (idx === 1) return this.runoffRound(candidates)
 
     // idx === 0: qualification round — find top 2
     const amRanking = new AbsoluteMajority({ ballots, candidates }).ranking()
