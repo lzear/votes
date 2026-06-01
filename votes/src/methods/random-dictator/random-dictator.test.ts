@@ -1,6 +1,5 @@
-import { rngGenerator } from '../../test/rng-generator'
 import type { Ballot } from '../../types'
-import { toWeightedBallots } from '../../utils'
+import { rngGenerator, toWeightedBallots } from '../../utils'
 import { RandomDictator } from '.'
 
 const expectNTimes = <T>(value: T, expected: T, times: number) => {
@@ -78,5 +77,30 @@ describe(RandomDictator, () => {
       [['a'], ['b']],
       5,
     )
+  })
+  it('picks first ballot when rng returns 0', () => {
+    const ballots = toWeightedBallots([
+      [['a'], ['b']],
+      [['b'], ['a']],
+    ])
+    const result = new RandomDictator({
+      ballots,
+      candidates: ['a', 'b'],
+      rng: () => 0,
+    }).ranking()
+    expect(result).toStrictEqual([['a'], ['b']])
+  })
+
+  it('picks last ballot when rng returns 1', () => {
+    const ballots = toWeightedBallots([
+      [['a'], ['b']],
+      [['b'], ['a']],
+    ])
+    const result = new RandomDictator({
+      ballots,
+      candidates: ['a', 'b'],
+      rng: () => 1,
+    }).ranking()
+    expect(result).toStrictEqual([['b'], ['a']])
   })
 })
