@@ -1,5 +1,8 @@
 export type { Ranker } from './classes/method'
 export type { Round } from './classes/round-ballot-method'
+export { tb, type TbEntry } from './classes/round-ballot-method-tb'
+export type { StepResult } from './election'
+export { Election, type TieBreaker } from './election'
 export {
   parseCondorcetElectionFormat,
   type ParsedCondorcetElection,
@@ -28,6 +31,15 @@ export { RankedPairs } from './methods/ranked-pairs'
 export { Schulze } from './methods/schulze'
 export { Smith } from './methods/smith'
 export { TwoRoundRunoff } from './methods/two-round-runoff'
+export {
+  bordaTieBreaker,
+  copelandTieBreaker,
+  headToHeadTieBreaker,
+  noTieBreaker,
+  rngTieBreaker,
+  tiebreak,
+  type TiebreakOptions,
+} from './tiebreakers'
 export type { Ballot, Matrix, ScoreObject } from './types'
 export { VotingSystem } from './types'
 export * as utils from './utils'
