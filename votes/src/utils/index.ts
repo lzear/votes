@@ -11,6 +11,7 @@ export {
   normalizeRankInput,
   removeDuplicatedCandidates,
   removeInvalidCandidates,
+  totalBallotsWeight,
   toWeightedBallots,
 } from './normalize'
 export { rngGenerator } from './rng-generator'
