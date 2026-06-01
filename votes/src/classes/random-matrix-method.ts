@@ -8,7 +8,7 @@ import type { Matrixer } from './matrix-score-method'
 import { RandomMethod } from './random-method'
 import type { Scorer } from './score-method'
 
-const randomRankingFromSores = <C extends string>(
+const randomRankingFromScores = <C extends string>(
   scoreObject: ScoreObject<C>,
   random: () => number,
 ): C[] => {
@@ -29,7 +29,7 @@ const randomRankingFromSores = <C extends string>(
     if (w >= pickAt)
       return [
         candidate,
-        ...randomRankingFromSores(omit(scoreObject, candidate), random),
+        ...randomRankingFromScores(omit(scoreObject, candidate), random),
       ]
   }
 
@@ -61,7 +61,7 @@ export abstract class RandomMatrixMethod<C extends string>
   public abstract scores(): ScoreObject<C>
 
   public ranking(): C[][] {
-    return randomRankingFromSores(this.scores(), this.rng).map((c) => [c])
+    return randomRankingFromScores(this.scores(), this.rng).map((c) => [c])
   }
 
   public restrict<D extends C>(candidates: D[]): RandomMatrixMethod<D> {
