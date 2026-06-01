@@ -1,3 +1,4 @@
+import { normalizeRanking } from '../utils'
 import { canonizeRanking } from '../utils/normalize'
 
 export interface Ranker<C extends string> {
@@ -27,6 +28,10 @@ export abstract class Method<C extends string> implements Ranker<C> {
   }
 
   protected abstract restrict<D extends C>(candidates: D[]): Method<D>
+
+  public restrictRanking<D extends C>(candidates: D[]): D[][] {
+    return normalizeRanking(this.ranking(), candidates)
+  }
 
   public deTie(): C[][] {
     return this.ranking().flatMap((r) =>
