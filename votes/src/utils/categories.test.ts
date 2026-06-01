@@ -60,7 +60,6 @@ describe('systems categoris', () => {
         "COOMBS",
         "FIRST_PAST_THE_POST",
         "INSTANT_RUNOFF",
-        "MAJORITY_JUDGEMENT",
         "NANSON",
         "RANDOM_DICTATOR",
         "TWO_ROUND_RUNOFF",

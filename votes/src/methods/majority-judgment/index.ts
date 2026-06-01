@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 import { mapValues, pick, sum, zipObject } from 'lodash-es'
-import { BallotMethod } from '../../classes/ballot-method'
-import type { Ballot, ScoreObject } from '../../types'
-import { scoresToRanking } from '../../utils'
+import { Method } from '../../classes/method'
+import type { Ballot, Matrix, ScoreObject } from '../../types'
+import { matrixFromBallots, scoresToRanking } from '../../utils'
+import { config } from '../../utils/config'
 
 export type Judgements<C extends string> = Record<
   C,
@@ -12,7 +15,7 @@ const makeJudgement = <C extends string>(
   candidates: C[],
   ballots: Ballot<C>[],
 ): Judgements<C> => {
-  const judgements: Judgements<C> = zipObject(
+  const judgements = zipObject(
     candidates,
     candidates.map(() => [0, 0, 0, 0, 0, 0]),
   ) as Judgements<C>
@@ -21,7 +24,7 @@ const makeJudgement = <C extends string>(
     for (const [rankIdx, rank] of ballot.ranking.entries())
       for (const can of rank)
         if (candidates.includes(can))
-          judgements[can][Math.min(rankIdx, 5)] += ballot.weight
+          judgements[can][Math.min(rankIdx, 5)]! += ballot.weight
 
   return judgements
 }
@@ -34,9 +37,11 @@ export const getMedian = (arr: number[]): number => {
   let prevI = 0
   let med = 0
   for (const j of arr) {
+    const prevS = s
     s += j
     i++
-    if (s === sumWeights / 2 + 1) med = (prevI + i) / 2
+    if (j > 0 && Math.abs(prevS * 2 - sumWeights) < sumWeights * config.EPSILON)
+      med = (prevI + i) / 2
     else if (s > sumWeights / 2) med = i
     else {
       if (j > 0) prevI = i
@@ -47,9 +52,7 @@ export const getMedian = (arr: number[]): number => {
   return med - 1
 }
 
-const getMedians = <C extends string>(
-  judgements: Judgements<C>,
-): ScoreObject<C> => {
+const getMedians = <C extends string>(judgements: Judgements<C>) => {
   const candidates = Object.keys(judgements) as C[]
 
   const medians = {} as Record<C, number>
@@ -72,18 +75,34 @@ const tieBreak = <C extends string>(judgements: Judgements<C>): C[][] => {
     const median = medians[cs[0]!]
     if (median === -1 || !Number.isInteger(median)) return [cs]
     const j = pick(judgements, cs)
-    const minGroup = Math.min(...cs.map((c) => j[c][median]))
+    const minGroup = Math.min(...cs.map((c) => j[c][median]!))
     if (minGroup <= 0) return [cs]
     const j2 = mapValues(j, (jc) =>
-      Object.assign([], jc, { [median]: jc[median] - minGroup }),
+      Object.assign([], jc, { [median]: jc[median]! - minGroup }),
     )
     return tieBreak(j2)
   })
 }
 
-export class MajorityJudgment<C extends string> extends BallotMethod<C> {
+export class MajorityJudgment<C extends string> extends Method<C> {
+  private _judgements: Judgements<C> | undefined
+  private _matrix?: Matrix<C>
+  // BallotMethod strips empty tiers; store raw ballots preserving them for grade computation
+  private readonly gradeBallots: Ballot<C>[]
+
+  constructor(i: { ballots: Ballot<C>[]; candidates: C[] }) {
+    super(i.candidates)
+    this.gradeBallots = i.ballots.map((b) => ({
+      ...b,
+      ranking: b.ranking.map((rank) =>
+        rank.filter((c) => this.candidates.includes(c)),
+      ),
+    }))
+  }
+
   public judgements(): Judgements<C> {
-    return makeJudgement(this.candidates, this.ballots)
+    this._judgements ??= makeJudgement(this.candidates, this.gradeBallots)
+    return this._judgements
   }
 
   public medians(): ScoreObject<C> {
@@ -91,6 +110,23 @@ export class MajorityJudgment<C extends string> extends BallotMethod<C> {
   }
 
   public ranking(): C[][] {
-    return majorityJudgmentRanking(this.candidates, this.ballots)
+    return majorityJudgmentRanking(this.candidates, this.gradeBallots)
+  }
+
+  public restrict<D extends C>(candidates: D[]): Method<D> {
+    return new MajorityJudgment({
+      ballots: this.gradeBallots.map((b) => ({
+        ...b,
+        ranking: b.ranking.map(
+          (rank) => rank.filter((c) => (candidates as C[]).includes(c)) as D[],
+        ),
+      })),
+      candidates,
+    })
+  }
+
+  get matrix(): Matrix<C> {
+    this._matrix ??= matrixFromBallots(this.gradeBallots, this.candidates)
+    return this._matrix
   }
 }
