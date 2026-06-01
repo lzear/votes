@@ -57,6 +57,7 @@ describe('matrixes', () => {
   it('throws when making submatrix from missing candidates', () => {
     const m = matrixFromBallots(balinski, abcde)
 
+    // @ts-expect-error - that's the point of the test
     expect(() => subMatrix(m, ['f'])).toThrow()
   })
 })

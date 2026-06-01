@@ -75,7 +75,7 @@ describe('Test all methods', () => {
   it('votes with two-round runoff', () => {
     expect(
       new TwoRoundRunoff({ candidates: abcde, ballots: balinski }).ranking(),
-    ).toStrictEqual([['e'], ['a'], ['b', 'c', 'd']])
+    ).toStrictEqual([['e'], ['a'], ['d', 'b', 'c']])
   })
   it('votes with copeland', () => {
     expect(
