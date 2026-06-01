@@ -1,5 +1,10 @@
 export type { Ranker } from './classes/method'
 export type { Round } from './classes/round-ballot-method'
+export {
+  parseCondorcetElectionFormat,
+  type ParsedCondorcetElection,
+  stringifyCondorcetElectionFormat,
+} from './formats/condorcet-election-format'
 export { type Methods, methods } from './methods'
 export { AbsoluteMajority } from './methods/absolute-majority'
 export { Approbation } from './methods/approbation'
