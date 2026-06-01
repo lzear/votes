@@ -11,8 +11,6 @@ export class VertexStack {
   }
 
   public contains(vertex: Vertex): boolean {
-    for (const i in this.vertices)
-      if (this.vertices[i].equals(vertex)) return true
-    return false
+    return this.vertices.some((v) => v.equals(vertex))
   }
 }

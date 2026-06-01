@@ -27,40 +27,37 @@ const computeFromMatrix = <C extends string>(
     .toSorted((a, b) => Number(b) - Number(a))
     .map((value) => edgesGroups[value]!)
 
-  const acyclicGraph = groups.reduce<Edge[]>(
-    (graph: Edge[], edgesToAdd) => generateAcyclicGraph(graph, edgesToAdd),
-    [],
-  )
+  let acyclicGraph: Edge[] = []
+  for (const edgesToAdd of groups)
+    acyclicGraph = generateAcyclicGraph(acyclicGraph, edgesToAdd)
+
   const graphsWinners = range(matrix.candidates.length).filter(
-    (candidate, key) => !acyclicGraph.some(({ to }) => to === key),
+    (_c, key) => !acyclicGraph.some(({ to }) => to === key),
   )
-  const scores = graphsWinners.reduce<Record<number, number>>((acc, curr) => {
-    acc[curr] = (acc[curr] ?? 0) + 1
-    return acc
-  }, {})
-  const maxScore1 = Math.max(...Object.values(scores))
+  const scores: Record<number, number> = {}
+  for (const curr of graphsWinners) scores[curr] = (scores[curr] ?? 0) + 1
+
+  const maxScore1 = Math.max(...Object.values(scores as Record<string, number>))
   const winnersIdx = range(matrix.candidates.length).filter(
     (i) => scores[i] === maxScore1,
   )
   if (winnersIdx.length === matrix.candidates.length)
     return zipObject(
       matrix.candidates,
-      Array.from({ length: matrix.candidates.length }).fill(1),
-    )
+      Array.from<number>({ length: matrix.candidates.length }).fill(1),
+    ) as ScoreObject<C>
   const nextResults = computeFromMatrix({
     array: matrix.array
-      .filter((c, k) => !winnersIdx.includes(k))
-      .map((row) => row.filter((c, k) => !winnersIdx.includes(k))),
-    candidates: matrix.candidates.filter((c, k) => !winnersIdx.includes(k)),
+      .filter((_c, k) => !winnersIdx.includes(k))
+      .map((row) => row.filter((_c, k) => !winnersIdx.includes(k))),
+    candidates: matrix.candidates.filter((_c, k) => !winnersIdx.includes(k)),
   })
-  const maxScore2 = Math.max(...Object.values(nextResults))
-  return winnersIdx.reduce(
-    (scoreObject, winnerIdx) => ({
-      ...scoreObject,
-      [matrix.candidates[winnerIdx]]: maxScore2 + 1,
-    }),
-    nextResults,
+  const maxScore2 = Math.max(
+    ...Object.values(nextResults as Record<string, number>),
   )
+  for (const winnerIdx of winnersIdx)
+    nextResults[matrix.candidates[winnerIdx]!] = maxScore2 + 1
+  return nextResults
 }
 
 /**

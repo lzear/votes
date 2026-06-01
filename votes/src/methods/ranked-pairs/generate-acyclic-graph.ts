@@ -4,7 +4,7 @@ import { uniq } from 'lodash-es'
 import { Tarjan } from './tarjan'
 import { Vertex } from './vertex'
 
-interface Edge {
+export interface Edge {
   from: number
   to: number
   value: number
