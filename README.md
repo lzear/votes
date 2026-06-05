@@ -33,7 +33,7 @@ const borda = new Borda({
 })
 
 borda.scores()
-// { Bear: 10, Lion: 8, Sheep: 9 }
+// { Lion: 17, Bear: 19, Sheep: 18 }
 
 borda.ranking()
 // [ ['Bear'], ['Sheep'], ['Lion'] ]
@@ -41,14 +41,15 @@ borda.ranking()
 
 ## Tiebreakers
 
-Round-based methods (`InstantRunoff`, `Baldwin`, `Coombs`, `Nanson`, …) accept a
-`tieBreakers` array. When multiple candidates tie for last place in a round,
-tiebreakers are applied in order until one candidate can be singled out.
+Round-based methods (`InstantRunoff`, `Baldwin`, `Coombs`, `Nanson`,
+`TwoRoundRunoff`, `BottomTwoRunoff`) accept a `tieBreakers` array. When multiple
+candidates tie for last place in a round, tiebreakers are applied in order until
+one candidate can be singled out.
 
 ```typescript
 import {
   InstantRunoff,
-  Baldwin,
+  RandomCandidates,
   Borda,
   Copeland,
   tb,
@@ -67,6 +68,7 @@ new InstantRunoff({
     Copeland, // first try Copeland
     tb(Borda, { full: true }), // run Borda on ALL candidates, not just the tied subset
     tb(Borda, { stable: true }), // recurse into sub-ties until stable
+    tb(RandomCandidates, { rng }), // last resort: random with seeded RNG
   ],
 })
 ```
@@ -152,13 +154,12 @@ Each `StepResult` records `rankerName`, `before`, `after`, and optionally
 | Copeland's method    | `Copeland`            | matrix             |
 | First-past-the-post  | `FirstPastThePost`    | ballots            |
 | Instant-runoff (IRV) | `InstantRunoff`       | ballots            |
-| Kemeny–Young         | `Kemeny`              | matrix             |
+| Kemeny–Young ⚠️      | `Kemeny`              | matrix             |
 | Majority judgment    | `MajorityJudgment`    | ballots (6 grades) |
 | Maximal lotteries    | `MaximalLotteries`    | matrix             |
 | Minimax Condorcet    | `Minimax`             | matrix             |
 | Minimax-TD           | `MinimaxTD`           | matrix             |
 | Nanson method        | `Nanson`              | ballots            |
-| Plurality (FPTP)     | `FirstPastThePost`    | ballots            |
 | Random candidate     | `RandomCandidates`    | —                  |
 | Random dictator      | `RandomDictator`      | ballots            |
 | Randomized Condorcet | `RandomizedCondorcet` | matrix             |
@@ -167,13 +168,28 @@ Each `StepResult` records `rankerName`, `before`, `after`, and optionally
 | Smith's method       | `Smith`               | matrix             |
 | Two-round runoff     | `TwoRoundRunoff`      | ballots            |
 
+⚠️ `Kemeny` runs in O(n!) time — impractical beyond ~8 candidates.
+
 Matrix-input methods take the output of
 `matrixFromBallots(ballots, candidates)`.
+
+`BottomTwoRunoff` always prepends `tb(FirstPastThePost)` to `tieBreakers` — that
+FPTP step is the head-to-head runoff mechanism, not a fallback. It will appear
+as the first entry in `tieBreakSteps`. User-supplied `tieBreakers` fire after it
+only if the head-to-head itself ties.
+
+Every method also exposes `deTie()`, which recursively resolves ties by
+re-running the same method on each tied subset:
+
+```typescript
+new Borda({ candidates, ballots }).deTie()
+// same as ranking() but each tied tier is re-ranked with Borda on that subset
+```
 
 ## Utilities
 
 ```typescript
-import { matrixFromBallots, rngGenerator, tiebreak } from 'votes'
+import { matrixFromBallots, rngGenerator } from 'votes'
 
 // Build a pairwise matrix from ballots
 const matrix = matrixFromBallots(ballots, candidates)
@@ -181,9 +197,27 @@ const matrix = matrixFromBallots(ballots, candidates)
 // Seeded RNG for reproducible random methods
 const rng = rngGenerator('my-seed')
 new RandomCandidates({ candidates, rng })
+```
 
-// Functional tiebreaker helpers (for Election / custom use)
-import { bordaTieBreaker, copelandTieBreaker, rngTieBreaker } from 'votes'
+## Condorcet election format
+
+Parse and serialize the
+[Condorcet Election Format](https://www.condorcet.io/cef/) (`.blt`-style text
+files):
+
+```typescript
+import {
+  parseCondorcetElectionFormat,
+  stringifyCondorcetElectionFormat,
+} from 'votes'
+
+const { candidates, ballots } = parseCondorcetElectionFormat(`
+#/Candidates: A; B; C
+A > B > C * 3
+B > C > A * 2
+`)
+
+const text = stringifyCondorcetElectionFormat({ candidates, ballots })
 ```
 
 ## Documentation
@@ -199,8 +233,3 @@ import { bordaTieBreaker, copelandTieBreaker, rngTieBreaker } from 'votes'
 
 Contributions, issues and feature requests are welcome. Feel free to check the
 [issues page](https://github.com/lzear/votes/issues).
-
-The repository is split in 2 packages:
-
-- `/votes` — NPM package source
-  ([votes on npm](https://www.npmjs.com/package/votes))
