@@ -52,9 +52,8 @@ export const subMatrix = <C extends string, S extends C>(
     array: matrix.array
       .filter((_row, rowIdx) => selectedIdxs.has(rowIdx))
       .map((row) => row.filter((_col, colIdx) => selectedIdxs.has(colIdx))),
-    candidates: matrix.candidates.filter((c) =>
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-explicit-any
-      selectedCandidates.includes(c as any),
-    ) as S[],
+    candidates: matrix.candidates.filter((c): c is S =>
+      (selectedCandidates as C[]).includes(c),
+    ),
   }
 }
