@@ -111,4 +111,11 @@ export class RankedPairs<C extends string> extends MatrixScoreMethod<C> {
   public scores(): ScoreObject<C> {
     return computeFromMatrix(this.matrix, this.edgeSorter)
   }
+
+  public restrict<D extends C>(candidates: D[]): RankedPairs<D> {
+    return new RankedPairs({
+      ...subMatrix(this.matrix, candidates),
+      ...(this.edgeSorter ? { edgeSorter: this.edgeSorter } : {}),
+    })
+  }
 }
