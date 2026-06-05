@@ -42,17 +42,11 @@ export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
     if (idx === 1) return this.runoffRound(candidates)
 
     // idx === 0: qualification round — find top 2
-    const amRanking = new AbsoluteMajority({ ballots, candidates }).ranking()
-    const [r1, r2] = amRanking
-    if (r2 && r1?.length === 1) {
+    const am = new AbsoluteMajority({ ballots, candidates })
+    const [r1, r2] = am.ranking()
+    if (r2 && r1?.length === 1)
       // Absolute majority — winner already decided
-      const am = new AbsoluteMajority({ ballots, candidates })
-      return {
-        qualified: r1,
-        eliminated: r2,
-        scores: am.scores(),
-      }
-    }
+      return { qualified: r1, eliminated: r2, scores: am.scores() }
 
     const fptp = new FirstPastThePost({ ballots, candidates })
     const ranking = fptp.ranking()
