@@ -34,7 +34,7 @@
     "@lzear/forge": "^4",
     "@types/node": "^25",
     "concurrently": "^10",
-    "eslint": "^9",
+    "eslint": "^10",
     "lefthook": "^2",
     "lint-staged": "^17",
     "prettier": "^3",
