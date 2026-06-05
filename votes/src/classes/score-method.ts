@@ -13,9 +13,12 @@ export abstract class ScoreMethod<C extends string>
   extends Method<C>
   implements Scorer<C>
 {
+  private _scores?: ScoreObject<C>
+
   public abstract scores(): ScoreObject<C>
 
   public ranking(): C[][] {
-    return scoresToRanking(this.scores())
+    this._scores ??= this.scores()
+    return scoresToRanking(this._scores)
   }
 }

@@ -47,7 +47,10 @@ export abstract class RoundBallotMethod<C extends string>
   extends BallotMethod<C>
   implements Ranker<C>
 {
+  private _rounds?: Round<C>[]
+
   public computeRounds(): Round<C>[] {
+    if (this._rounds) return this._rounds
     let inRace = this.candidates
     const rounds: Round<C>[] = []
     while (inRace.length > 0) {
@@ -69,6 +72,7 @@ export abstract class RoundBallotMethod<C extends string>
       })
       inRace = qualified
     }
+    this._rounds = rounds
     return rounds
   }
 
