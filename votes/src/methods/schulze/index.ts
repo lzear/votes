@@ -42,7 +42,7 @@ const computeFromMatrix = <C extends string>(
  * #### Wikipedia: [Schulze method](https://en.wikipedia.org/wiki/Schulze_method)
  */
 export class Schulze<C extends string> extends MatrixScoreMethod<C> {
-  public scores() {
+  public scores(): ScoreObject<C> {
     return computeFromMatrix(this.matrix)
   }
 }

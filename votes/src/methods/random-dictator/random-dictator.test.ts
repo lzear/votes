@@ -10,7 +10,7 @@ const vote = <C extends string>(
   ballots: Ballot<C>[],
   candidates: C[],
   seed?: string,
-) =>
+): RandomDictator<C> =>
   new RandomDictator({
     ballots,
     candidates,

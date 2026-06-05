@@ -16,7 +16,7 @@ const computeScores = <C extends string>(matrix: Matrix<C>): ScoreObject<C> => {
 export class RandomizedCondorcet<
   C extends string,
 > extends RandomMatrixMethod<C> {
-  public scores() {
+  public scores(): ScoreObject<C> {
     return computeScores(this.matrix)
   }
 }
