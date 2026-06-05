@@ -59,14 +59,6 @@ const getMedians = <C extends string>(judgements: Judgements<C>) => {
   return medians
 }
 
-const majorityJudgmentRanking = <C extends string>(
-  candidates: C[],
-  ballots: Ballot<C>[],
-): C[][] => {
-  const judgements = makeJudgement(candidates, ballots)
-  return tieBreak(judgements).toReversed()
-}
-
 const tieBreak = <C extends string>(judgements: Judgements<C>): C[][] => {
   const medians = getMedians(judgements)
   const ranking = scoresToRanking(medians)
@@ -109,7 +101,7 @@ export class MajorityJudgment<C extends string> extends Method<C> {
   }
 
   public ranking(): C[][] {
-    return majorityJudgmentRanking(this.candidates, this.gradeBallots)
+    return tieBreak(this.judgements()).toReversed()
   }
 
   public restrict<D extends C>(candidates: D[]): Method<D> {
