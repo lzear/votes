@@ -1,4 +1,15 @@
+import { pick } from 'lodash-es'
 import { config } from './config'
+
+export const applyRankingAsTiebreaker = <C extends string>(
+  fallbackRanking: C[][],
+  before: C[][],
+): C[][] => {
+  const scores: Record<string, number> = {}
+  for (const [i, tier] of fallbackRanking.entries())
+    for (const c of tier) scores[c] = -i
+  return before.flatMap((tier) => scoresToRanking(pick(scores, tier)))
+}
 
 export const scoresToRanking = <C extends string>(
   scores: Record<C, number>,

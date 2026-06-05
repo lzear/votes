@@ -2,7 +2,7 @@ export type { Ranker } from './classes/method'
 export type { Round, TieBreakStep } from './classes/round-ballot-method'
 export { tb, type TbEntry } from './classes/round-ballot-method-tb'
 export type { StepResult } from './election'
-export { Election, type TieBreaker } from './election'
+export { Election } from './election'
 export {
   parseCondorcetElectionFormat,
   type ParsedCondorcetElection,
@@ -32,15 +32,6 @@ export type { Edge as RankedPairsEdge } from './methods/ranked-pairs/generate-ac
 export { Schulze } from './methods/schulze'
 export { Smith } from './methods/smith'
 export { TwoRoundRunoff } from './methods/two-round-runoff'
-export {
-  bordaTieBreaker,
-  copelandTieBreaker,
-  headToHeadTieBreaker,
-  noTieBreaker,
-  rngTieBreaker,
-  tiebreak,
-  type TiebreakOptions,
-} from './tiebreakers'
 export type { Ballot, Matrix, ScoreObject } from './types'
 export { VotingSystem } from './types'
 export * as utils from './utils'
@@ -62,4 +53,5 @@ export {
   isRandomMethod,
   isRandomSystem,
 } from './utils/categories'
+export { matrixFromBallots } from './utils/make-matrix'
 export { rngGenerator } from './utils/rng-generator'

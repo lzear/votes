@@ -1,11 +1,11 @@
 import {
   Baldwin,
   Borda,
-  copelandTieBreaker,
+  Copeland,
   Election,
+  matrixFromBallots,
+  RandomCandidates,
   rngGenerator,
-  rngTieBreaker,
-  type TieBreaker,
 } from '.'
 
 type ABC = 'a' | 'b' | 'c'
@@ -41,22 +41,22 @@ describe('Election', () => {
     expect(ranking.flat()).toStrictEqual(['a', 'c', 'b'])
   })
 
-  it('rngTieBreaker as fallback produces fully resolved ranking', () => {
+  it('RandomCandidates as fallback produces fully resolved ranking', () => {
     const election = new Election({
       rankers: [
         new Baldwin({ ballots: tieBallots, candidates, tieBreakers: [] }),
-        rngTieBreaker(rngGenerator('seed')),
+        new RandomCandidates({ candidates, rng: rngGenerator('seed') }),
       ],
     })
     const ranking = election.ranking()
     expect(ranking.every((r) => r.length === 1)).toBe(true)
   })
 
-  it('copelandTieBreaker as fallback', () => {
+  it('Copeland as fallback', () => {
     const election = new Election({
       rankers: [
         new Baldwin({ ballots: tieBallots, candidates, tieBreakers: [] }),
-        copelandTieBreaker(tieBallots, candidates),
+        new Copeland(matrixFromBallots(tieBallots, candidates)),
       ],
     })
     const ranking = election.ranking()
@@ -64,8 +64,8 @@ describe('Election', () => {
   })
 
   it('stops early when no ties remain', () => {
-    const sentinel: TieBreaker<ABC> = {
-      tieBreak: () => {
+    const sentinel = {
+      ranking: (): ABC[][] => {
         throw new Error('should not be called')
       },
     }

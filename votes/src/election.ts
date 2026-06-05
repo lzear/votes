@@ -1,13 +1,7 @@
-import { pick } from 'lodash-es'
 import type { Ranker } from './classes/method'
 import type { Round } from './classes/round-ballot-method'
 import type { ScoreObject } from './types'
-import { scoresToRanking } from './utils'
-
-/** Pre-built ranker that refines an existing ranking by resolving ties. */
-export interface TieBreaker<C extends string> {
-  tieBreak(ranking: C[][]): C[][]
-}
+import { applyRankingAsTiebreaker, scoresToRanking } from './utils'
 
 export interface StepResult<C extends string> {
   /** Constructor name of the ranker that produced this step. */
@@ -65,16 +59,6 @@ const computeFor = <C extends string>(
   return { ranking: instance.ranking() }
 }
 
-const applyAsTiebreaker = <C extends string>(
-  fallbackRanking: C[][],
-  before: C[][],
-): C[][] => {
-  const scores: Record<string, number> = {}
-  for (const [i, tier] of fallbackRanking.entries())
-    for (const c of tier) scores[c] = -i
-  return before.flatMap((tier) => scoresToRanking(pick(scores, tier)))
-}
-
 /**
  * Chains pre-built rankers: the first provides the primary ranking, each
  * subsequent one breaks remaining ties.
@@ -85,21 +69,17 @@ const applyAsTiebreaker = <C extends string>(
  *   rankers: [
  *     new InstantRunoff({ ballots, candidates, tieBreakers: [tb(Copeland)] }),
  *     new Schulze(matrixFromBallots(ballots, candidates)),
- *     rngTieBreaker(myRng),
+ *     new RandomCandidates({ candidates, rng: myRng }),
  *   ],
  * })
  * ```
  */
 export class Election<C extends string> implements Ranker<C> {
-  private readonly rankers: [Ranker<C>, ...(Ranker<C> | TieBreaker<C>)[]]
+  private readonly rankers: [Ranker<C>, ...Ranker<C>[]]
 
   private _result?: ElectionResult<C>
 
-  constructor({
-    rankers,
-  }: {
-    rankers: [Ranker<C>, ...(Ranker<C> | TieBreaker<C>)[]]
-  }) {
+  constructor({ rankers }: { rankers: [Ranker<C>, ...Ranker<C>[]] }) {
     this.rankers = rankers
   }
 
@@ -130,22 +110,14 @@ export class Election<C extends string> implements Ranker<C> {
     for (const ranker of this.rankers.slice(1)) {
       if (current.every((r) => r.length <= 1)) break
 
-      let step: StepResult<C>
-      if ('ranking' in ranker) {
-        const { ranking, rounds: r2, scores: s2 } = computeFor(ranker)
-        step = {
-          rankerName: instanceName(ranker),
-          before: current,
-          after: applyAsTiebreaker(ranking, current),
-          ...(r2 ? { rounds: r2 } : {}),
-          ...(s2 ? { scores: s2 } : {}),
-        }
-      } else
-        step = {
-          rankerName: instanceName(ranker),
-          before: current,
-          after: ranker.tieBreak(current),
-        }
+      const { ranking, rounds: r2, scores: s2 } = computeFor(ranker)
+      const step: StepResult<C> = {
+        rankerName: instanceName(ranker),
+        before: current,
+        after: applyRankingAsTiebreaker(ranking, current),
+        ...(r2 ? { rounds: r2 } : {}),
+        ...(s2 ? { scores: s2 } : {}),
+      }
 
       steps.push(step)
       current = step.after
