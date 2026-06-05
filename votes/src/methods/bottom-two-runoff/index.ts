@@ -1,4 +1,3 @@
-import { difference } from 'lodash-es'
 import { type QE } from '../../classes/round-ballot-method'
 import {
   RoundBallotMethodTb,
@@ -46,7 +45,8 @@ export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
         ? last.slice(0, 2)
         : [...last, ...secondLast.slice(0, 2 - last.length)]
 
-    const mainQualified = difference(candidates, pending)
+    const pendingSet = new Set(pending)
+    const mainQualified = candidates.filter((c) => !pendingSet.has(c))
     const {
       qualified: q2,
       eliminated,

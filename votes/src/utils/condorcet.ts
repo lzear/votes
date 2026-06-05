@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { difference } from 'lodash-es'
 import type { Matrix } from '../types'
 import { makeAntisymmetric } from './make-matrix'
 
@@ -12,15 +11,16 @@ export const findSmithSet = <C extends string>(
     array[k]!.map((_v, k2) => k2).filter((k2) => array[k]![k2]! >= 0),
   )
   const dominatingList = candidates.map((_c, k) => {
-    let dominating = [k]
-    let toCheck = [k]
-    while (toCheck.length > 0) {
-      const check = toCheck.pop()!
-      const toAdd = difference(dominatingDirectList[check], dominating)
-      dominating = [...dominating, ...toAdd]
-      toCheck = [...toCheck, ...toAdd]
-    }
-    return dominating.length === candidates.length
+    const dominating = new Set([k])
+    const toCheck = [k]
+    while (toCheck.length > 0)
+      for (const d of dominatingDirectList[toCheck.pop()!]!)
+        if (!dominating.has(d)) {
+          dominating.add(d)
+          toCheck.push(d)
+        }
+
+    return dominating.size === candidates.length
   })
 
   return {
