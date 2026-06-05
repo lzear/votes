@@ -33,7 +33,7 @@ export class Tarjan {
     let w: Vertex | undefined
     if (this.stack.vertices.length > 0)
       do {
-        w = this.stack.vertices.pop()
+        w = this.stack.pop()
         if (w) vertices.push(w)
       } while (w && !vertex.equals(w))
     if (vertices.length > 0) this.scc.push(vertices)
@@ -43,7 +43,7 @@ export class Tarjan {
     vertex.index = this.index
     vertex.lowlink = this.index
     this.index = this.index + 1
-    this.stack.vertices.push(vertex)
+    this.stack.push(vertex)
 
     for (const connection of vertex.connections)
       this.processConnection(vertex, connection)

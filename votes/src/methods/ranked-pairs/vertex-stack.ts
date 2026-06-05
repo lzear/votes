@@ -1,16 +1,25 @@
-// From chadhutchins:
-// https://gist.github.com/chadhutchins/1440602
-
 import type { Vertex } from './vertex'
 
 export class VertexStack {
-  public vertices: Vertex[]
+  private readonly _vertices: Vertex[] = []
+  private readonly _set = new Set<Vertex>()
 
-  constructor() {
-    this.vertices = []
+  public get vertices(): readonly Vertex[] {
+    return this._vertices
+  }
+
+  public push(vertex: Vertex): void {
+    this._vertices.push(vertex)
+    this._set.add(vertex)
+  }
+
+  public pop(): Vertex | undefined {
+    const v = this._vertices.pop()
+    if (v) this._set.delete(v)
+    return v
   }
 
   public contains(vertex: Vertex): boolean {
-    return this.vertices.some((v) => v.equals(vertex))
+    return this._set.has(vertex)
   }
 }
