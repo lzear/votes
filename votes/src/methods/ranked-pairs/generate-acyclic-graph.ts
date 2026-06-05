@@ -7,6 +7,8 @@ export interface Edge {
   from: number
   to: number
   value: number
+  /** Total voters expressing a preference between these two candidates. */
+  total: number
 }
 
 export const generateAcyclicGraph = (

@@ -1,4 +1,4 @@
-import { RankedPairs } from '.'
+import { byTotalParticipation, RankedPairs } from '.'
 
 const example1 = [
   [0, -2, 8],
@@ -96,6 +96,62 @@ describe('ranked pairs', () => {
       bwLvxwn4: 4,
       hNtQKVPG: 2,
       xhAvdxz2: 4,
+    })
+  })
+
+  describe('equal-strength edges forming a cycle', () => {
+    // a>b, b>c, c>a all with equal margin — a perfect 3-cycle
+    const cycle = {
+      array: [
+        [0, 1, -1],
+        [-1, 0, 1],
+        [1, -1, 0],
+      ],
+      candidates: ['a', 'b', 'c'],
+    }
+
+    it('simultaneous (default): no edge locked, all tied', () => {
+      const rp = new RankedPairs(cycle)
+      expect(rp.ranking()).toStrictEqual([['a', 'b', 'c']])
+    })
+
+    it('byTotalParticipation with antisymmetric matrix: all totals=0 → still tied', () => {
+      // total = value + (-value) = 0 for all edges in an antisymmetric matrix.
+      // Sorter cannot differentiate → falls back to simultaneous → tie preserved.
+      const rp = new RankedPairs({ ...cycle, edgeSorter: byTotalParticipation })
+      expect(rp.ranking()).toStrictEqual([['a', 'b', 'c']])
+    })
+
+    it('sequential with raw-count matrix: byTotalParticipation breaks tie by participation', () => {
+      // a→b, b→c, c→a all have raw count=4 (same value group), but different totals:
+      //   c-a pair: 4+3=7  ← locked first by byTotalParticipation
+      //   a-b pair: 4+2=6  ← locked second
+      //   b-c pair: 4+1=5  ← skipped (would close cycle c→a→b→c)
+      // Simultaneous: simple 3-cycle → all lowlinks equal → none locked → lower-value
+      // edges determine result → b wins. Sequential: c→a then a→b locked → c wins.
+      const rawCounts = {
+        array: [
+          [0, 4, 3], // a→b:4 (total 6), a→c:3 (total 7)
+          [2, 0, 4], // b→a:2,           b→c:4 (total 5)
+          [4, 1, 0], // c→a:4 (total 7), c→b:1
+        ],
+        candidates: ['a', 'b', 'c'],
+      }
+
+      // simultaneous: 3-cycle locked simultaneously → none kept → b wins via lower edges
+      expect(new RankedPairs(rawCounts).ranking()).toStrictEqual([
+        ['b'],
+        ['c'],
+        ['a'],
+      ])
+
+      // sequential byTotalParticipation: c→a(7) then a→b(6) locked, b→c skipped → c wins
+      expect(
+        new RankedPairs({
+          ...rawCounts,
+          edgeSorter: byTotalParticipation,
+        }).ranking(),
+      ).toStrictEqual([['c'], ['a'], ['b']])
     })
   })
 })
