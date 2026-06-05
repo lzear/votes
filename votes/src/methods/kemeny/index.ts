@@ -70,6 +70,8 @@ const computeScores = <C extends string>(matrix: Matrix<C>): ScoreObject<C> => {
 }
 
 /**
+ * **Warning:** runs in O(n!) time — unusable beyond ~8 candidates.
+ *
  * #### Wikipedia: [Kemeny–Young method](https://en.wikipedia.org/wiki/Kemeny%E2%80%93Young_method)
  */
 export class Kemeny<C extends string> extends MatrixScoreMethod<C> {

@@ -9,6 +9,16 @@ import { normalizeBallots } from '../../utils'
 import { FirstPastThePost } from '../first-past-the-post'
 
 /**
+ * Each round:
+ * 1. Rank remaining candidates by FPTP (first-choice votes).
+ * 2. Take the bottom-2 candidates from that ranking.
+ * 3. Eliminate whichever of the two loses a head-to-head FPTP matchup.
+ *
+ * The head-to-head step in (3) is implemented by prepending
+ * `tb(FirstPastThePost)` to the tieBreakers array — so it will always appear
+ * as the first entry in `tieBreakSteps`. Any additional `tieBreakers` you
+ * supply are applied after FPTP if the head-to-head itself ends in a tie.
+ *
  * #### Electowiki: [Bottom-Two-Runoff IRV](https://electowiki.org/wiki/Bottom-Two-Runoff_IRV)
  */
 export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
@@ -19,7 +29,6 @@ export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
   }) {
     super({
       ...input,
-      // FPTP is always injected first: it IS the head-to-head runoff mechanism
       tieBreakers: [tb(FirstPastThePost), ...(input.tieBreakers ?? [])],
     })
   }
@@ -38,7 +47,9 @@ export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
     if (last.length === candidates.length)
       return { qualified: [], eliminated: candidates, scores }
 
-    // bottom candidate, plus second-to-last if bottom is unambiguous
+    // Build the bottom-2 pair. When more than 2 candidates share the last tier
+    // (all unresolvable by FPTP even on the restricted subset), the first 2 by
+    // array order are used — this is an edge case with no canonical resolution.
     const secondLast = ranked.at(-2) ?? []
     const pending: C[] =
       last.length >= 2

@@ -11,7 +11,7 @@ export class Vertex {
     this.name = name
 
     // used in tarjan algorithm
-    // went ahead and explicity initalized them
+    // went ahead and explicitly initialized them
     this.index = -1
     this.lowlink = -1
   }
