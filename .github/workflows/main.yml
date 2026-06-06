@@ -14,10 +14,30 @@ jobs:
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: ci
+    runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
       id-token: write
-    uses: ./.github/workflows/release.yml
-    secrets:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+      - run: corepack enable
+      - run: yarn install --immutable
+      - run: yarn build
+      - id: changesets
+        uses: changesets/action@v1
+        with:
+          version: yarn changeset version
+          createGithubReleases: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - if: steps.changesets.outputs.hasChangesets == 'false'
+        run: npm publish --workspace=votes --access public --provenance
+        env:
+          NPM_CONFIG_PROVENANCE: 'true'
