@@ -1,5 +1,14 @@
 # votes
 
+## 4.0.0
+
+### Major Changes
+
+- af1be8f: Refactor everything. New API. Main changes:
+  - Remove external dependency `javascript-lp-solver`.
+  - Implement tie-breaking mechanism.
+  - New `Election` class to chain rankers together.
+
 ## 3.0.0
 
 ### Major Changes
