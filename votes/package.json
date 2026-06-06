@@ -38,7 +38,6 @@
     "prebuild": "rimraf dist",
     "build": "tsup",
     "build-docs": "yarn typedoc",
-    "lint": "eslint .",
     "release": "yarn run build",
     "test": "vitest",
     "test-prod": "yarn run test && yarn run build",
@@ -59,6 +58,6 @@
     "vitest": "^4"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20"
   }
 }
