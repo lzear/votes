@@ -202,7 +202,7 @@ new RandomCandidates({ candidates, rng })
 ## Condorcet election format
 
 Parse and serialize the
-[Condorcet Election Format](https://www.condorcet.io/cef/) (`.blt`-style text
+[Condorcet Election Format](https://github.com/CondorcetVote/CondorcetElectionFormat) (`.blt`-style text
 files):
 
 ```typescript
