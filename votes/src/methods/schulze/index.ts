@@ -1,20 +1,15 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { range } from 'lodash-es'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import type { Matrix, ScoreObject } from '../../types'
+import { pairwiseMatrix } from '../../utils/make-matrix'
 
 const initStrengths = <C extends string>(
   n: number,
   matrix: Matrix<C>,
-): number[][] => {
-  const p: number[][] = range(n).map(() => range(n).map(() => 0))
-  for (let i = 0; i < n; i++)
-    for (let j = 0; j < n; j++)
-      if (i !== j)
-        p[i]![j] =
-          matrix.array[i]![j]! > matrix.array[j]![i]! ? matrix.array[i]![j]! : 0
-  return p
-}
+): number[][] =>
+  pairwiseMatrix(n, (i, j) =>
+    matrix.array[i]![j]! > matrix.array[j]![i]! ? matrix.array[i]![j]! : 0,
+  )
 
 const floydWarshall = (p: number[][], n: number): void => {
   for (let i = 0; i < n; i++)
@@ -26,14 +21,12 @@ const floydWarshall = (p: number[][], n: number): void => {
     }
 }
 
-const computeFromMatrix = <C extends string>(
-  matrix: Matrix<C>,
+const scoresFromStrengths = <C extends string>(
+  candidates: C[],
+  p: number[][],
 ): ScoreObject<C> => {
-  const n = matrix.candidates.length
-  const p = initStrengths(n, matrix)
-  floydWarshall(p, n)
   const s = {} as ScoreObject<C>
-  for (const [k, c] of matrix.candidates.entries())
+  for (const [k, c] of candidates.entries())
     s[c] = p[k]!.filter((v, k2) => v > p[k2]![k]!).length
   return s
 }
@@ -42,7 +35,20 @@ const computeFromMatrix = <C extends string>(
  * #### Wikipedia: [Schulze method](https://en.wikipedia.org/wiki/Schulze_method)
  */
 export class Schulze<C extends string> extends MatrixScoreMethod<C> {
+  /**
+   * Strongest-path ("beatpath") strength between every ordered pair of
+   * candidates, after Floyd-Warshall — the matrix Schulze's win count is
+   * derived from.
+   */
+  public strengths(): Matrix<C> {
+    const { candidates } = this.matrix
+    const p = initStrengths(candidates.length, this.matrix)
+    floydWarshall(p, candidates.length)
+    return { candidates, array: p }
+  }
+
   public scores(): ScoreObject<C> {
-    return computeFromMatrix(this.matrix)
+    const { candidates, array } = this.strengths()
+    return scoresFromStrengths(candidates, array)
   }
 }

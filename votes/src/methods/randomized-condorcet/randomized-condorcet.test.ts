@@ -24,6 +24,14 @@ const example3 = [
   [1, 9, -3, 22, 0],
 ]
 
+const exampleThirdsAndNinths = [
+  [0, 1, 1, 1, -1],
+  [-1, 0, 1, -1, 1],
+  [-1, -1, 0, 1, 1],
+  [-1, 1, -1, 0, 1],
+  [1, -1, -1, -1, 0],
+]
+
 const candidates = ['a', 'b', 'c', 'd', 'e']
 
 describe('randomized condorcet', () => {
@@ -80,6 +88,27 @@ describe('randomized condorcet', () => {
       ['c'],
       ['b'],
       ['d'],
+    ])
+  })
+  it('works with "thirds and ninths" example', () => {
+    const election = new RandomizedCondorcet({
+      array: exampleThirdsAndNinths,
+      candidates,
+      rng: rngGenerator('1f8y'),
+    })
+    expect(election.scores()).toEqual({
+      a: closeTo(1 / 3, 6),
+      b: closeTo(1 / 9, 6),
+      c: closeTo(1 / 9, 6),
+      d: closeTo(1 / 9, 6),
+      e: closeTo(1 / 3, 6),
+    })
+    expect(election.ranking()).toStrictEqual([
+      ['a'],
+      ['e'],
+      ['d'],
+      ['c'],
+      ['b'],
     ])
   })
 })

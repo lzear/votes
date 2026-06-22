@@ -5,7 +5,6 @@ import {
   type TbEntry,
 } from '../../classes/round-ballot-method-tb'
 import type { Ballot, ScoreObject } from '../../types'
-import { normalizeBallots } from '../../utils'
 import { FirstPastThePost } from '../first-past-the-post'
 
 /**
@@ -26,6 +25,7 @@ export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
     ballots: Ballot<C>[]
     candidates: C[]
     tieBreakers?: TbEntry<C>[]
+    unrankedLast?: boolean
   }) {
     super({
       ...input,
@@ -35,7 +35,7 @@ export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
 
   protected round(candidates: C[]): QE<C> {
     const fptp = new FirstPastThePost({
-      ballots: normalizeBallots(this.ballots, candidates),
+      ballots: this.ballotsFor(candidates),
       candidates,
     })
     const ranked = fptp.deTie()

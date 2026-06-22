@@ -1,4 +1,5 @@
 import type { Ballot } from '../types'
+import { normalizeBallots } from '../utils'
 import { BallotMethod } from './ballot-method'
 import type { Ranker } from './method'
 
@@ -14,6 +15,7 @@ export abstract class RandomBallotMethod<C extends string>
     candidates: C[]
     ballots: Ballot<C>[]
     rng?: undefined | (() => number)
+    unrankedLast?: boolean
   }) {
     super(i)
 
@@ -21,4 +23,21 @@ export abstract class RandomBallotMethod<C extends string>
   }
 
   public abstract ranking(): C[][]
+
+  // BallotMethod#restrict would drop the rng; keep it so restricted runs
+  // stay deterministic under a seeded generator.
+  public restrict<D extends C>(candidates: D[]): RandomBallotMethod<D> {
+    type Ctor = new (input: {
+      ballots: Ballot<D>[]
+      candidates: D[]
+      rng?: () => number
+      unrankedLast?: boolean
+    }) => RandomBallotMethod<D>
+    return new (this.constructor as Ctor)({
+      ballots: normalizeBallots(this.ballots as Ballot<D>[], candidates, false),
+      candidates,
+      rng: this.rng,
+      unrankedLast: this.unrankedLast,
+    })
+  }
 }

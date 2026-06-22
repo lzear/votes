@@ -5,14 +5,13 @@ import { scoresZero } from '../../utils'
 export const iterateFirstChoices = <C extends string>(
   ballots: Ballot<C>[],
   candidates: C[],
-  computeBallotScore: (rank: string[], rankIdx: number) => number,
+  computeBallotScore: (rank: string[]) => number,
 ): ScoreObject<C> => {
   const result = scoresZero(candidates)
-  for (const ballot of ballots)
-    if (ballot.ranking.length > 0) {
-      const votes = ballot.ranking.at(0) ?? []
-      for (const candidate of votes)
-        result[candidate] += computeBallotScore(votes, 0) * ballot.weight
-    }
+  for (const ballot of ballots) {
+    const votes = ballot.ranking[0] ?? []
+    for (const candidate of votes)
+      result[candidate] += computeBallotScore(votes) * ballot.weight
+  }
   return result
 }
