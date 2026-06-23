@@ -23,22 +23,21 @@ const parseParamLine = <C extends string>(
   const paramValue = line.slice(colonIdx + 1).trim()
 
   switch (paramName) {
-    case 'candidates': {
+    case 'candidates':
       state.candidates = paramValue
         .split(';')
         .map((c) => c.trim())
         .filter((c) => c.length > 0) as C[]
       break
-    }
-    case 'implicit ranking': {
+
+    case 'implicit ranking':
       state.implicitRanking = paramValue.toLowerCase() === 'true'
       break
-    }
-    case 'weight allowed': {
+
+    case 'weight allowed':
       state.weightAllowed = paramValue.toLowerCase() === 'true'
       // No default
       break
-    }
   }
 }
 

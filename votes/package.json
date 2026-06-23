@@ -37,9 +37,8 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsup",
-    "build-docs": "cp ../README.md . && yarn typedoc",
-    "lint": "eslint .",
-    "release": "cp ../README.md . && yarn run build",
+    "build-docs": "yarn typedoc",
+    "release": "yarn run build",
     "test": "vitest",
     "test-prod": "yarn run test && yarn run build",
     "typecheck": "tsc --noEmit",
@@ -50,15 +49,14 @@
   },
   "devDependencies": {
     "@types/lodash-es": "^4",
-    "@types/node": "^25",
+    "@types/node": "^26",
     "@vitest/coverage-v8": "^4",
     "rimraf": "^6",
     "tsup": "^8",
     "typedoc": "^0.28",
-    "typescript": "6.0.3",
     "vitest": "^4"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20"
   }
 }
