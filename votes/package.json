@@ -49,12 +49,11 @@
   },
   "devDependencies": {
     "@types/lodash-es": "^4",
-    "@types/node": "^25",
+    "@types/node": "^26",
     "@vitest/coverage-v8": "^4",
     "rimraf": "^6",
     "tsup": "^8",
     "typedoc": "^0.28",
-    "typescript": "6.0.3",
     "vitest": "^4"
   },
   "engines": {
