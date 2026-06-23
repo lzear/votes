@@ -32,7 +32,7 @@
     "@commitlint/cli": "^21",
     "@commitlint/config-conventional": "^21",
     "@lzear/forge": "^4",
-    "@types/node": "^25",
+    "@types/node": "^26",
     "concurrently": "^10",
     "eslint": "^10",
     "lefthook": "^2",
