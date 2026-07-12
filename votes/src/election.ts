@@ -2,6 +2,7 @@ import type { Ranker } from './classes/method'
 import type { Round } from './classes/round-ballot-method'
 import type { ScoreObject } from './types'
 import { applyRankingAsTiebreaker, scoresToRanking } from './utils'
+import { iterateRanking } from './utils/iterate-ranking'
 
 export interface StepResult<C extends string> {
   /** Constructor name of the ranker that produced this step. */
@@ -114,5 +115,32 @@ export class Election<C extends string> implements Ranker<C> {
 
   ranking(): C[][] {
     return this.result().ranking
+  }
+
+  /**
+   * A new Election with every ranker restricted to a subset of candidates.
+   * Requires every ranker to support `restrict()` (all built-in methods do).
+   */
+  restrict(candidates: C[]): Election<C> {
+    const restricted = this.rankers.map((ranker) => {
+      const r = ranker as Ranker<C> & {
+        restrict?: (candidates: C[]) => Ranker<C>
+      }
+      if (typeof r.restrict !== 'function')
+        throw new TypeError(
+          `Ranker "${instanceName(ranker)}" does not support restrict()`,
+        )
+      return r.restrict(candidates)
+    })
+    return new Election({ rankers: restricted as [Ranker<C>, ...Ranker<C>[]] })
+  }
+
+  /**
+   * Ranking built by repeated wins: run the full election, record the
+   * winning tier, then re-run the whole election restricted to the remaining
+   * candidates for the next place, and so on. See `Method#iteratedRanking`.
+   */
+  iteratedRanking(): C[][] {
+    return iterateRanking(this)
   }
 }

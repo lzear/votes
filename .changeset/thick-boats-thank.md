@@ -14,4 +14,8 @@ Refactor everything. New API. Main changes:
   method-specific `info` (`CoombsInfo`, `NansonInfo`).
 - Round-method `ranking()` now includes the winners tier.
 - New `Schulze#strengths()` exposing the beatpath strength matrix.
+- New `iteratedRanking()` on all methods and `Election`: fill each place by
+  re-running the full method without the already-placed candidates, instead of
+  using the method's own full ranking. `restrict()` is now public, and the
+  `iterateRanking` helper is exported under `utils`.
 - Ranked pairs: fix infinite recursion on raw win-count matrices with wide ties.
