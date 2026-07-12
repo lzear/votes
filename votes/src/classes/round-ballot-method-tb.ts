@@ -127,7 +127,8 @@ const entryToEntry = <C extends string>(
 
 export abstract class RoundBallotMethodTb<
   C extends string,
-> extends RoundBallotMethod<C> {
+  I = undefined,
+> extends RoundBallotMethod<C, I> {
   private readonly tbEntries: TiebreakerEntry<C>[]
 
   constructor(input: {
@@ -183,13 +184,14 @@ export abstract class RoundBallotMethodTb<
  */
 export abstract class TbEliminateLast<
   C extends string,
-> extends RoundBallotMethodTb<C> {
+  I = undefined,
+> extends RoundBallotMethodTb<C, I> {
   protected abstract oneRound(
     candidates: C[],
     idx: number,
   ): { ranking: C[][]; scores: ScoreObject<C> }
 
-  protected round(candidates: C[], idx: number): QE<C> {
+  protected round(candidates: C[], idx: number): QE<C, I> {
     if (candidates.length < 2)
       return {
         qualified: [],

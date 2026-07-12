@@ -21,14 +21,16 @@ export interface TieBreakStep<C extends string> {
   remaining: C[]
 }
 
-export interface QE<C extends string> {
+export interface QE<C extends string, I = undefined> {
   qualified: C[]
   eliminated: C[]
   scores: ScoreObject<C>
   tieBreakSteps?: TieBreakStep<C>[]
+  // Method-specific detail about this round
+  info?: I
 }
 
-export interface Round<C extends string> {
+export interface Round<C extends string, I = undefined> {
   finished: boolean
   idx: number
   candidates: C[]
@@ -37,25 +39,26 @@ export interface Round<C extends string> {
     qualified: C[]
     scores: ScoreObject<C>
     tieBreakSteps?: TieBreakStep<C>[]
+    info?: I
   }
 }
 
 /**
  * Voting system in which candidates are iteratively eliminated.
  */
-export abstract class RoundBallotMethod<C extends string>
+export abstract class RoundBallotMethod<C extends string, I = undefined>
   extends BallotMethod<C>
   implements Ranker<C>
 {
-  private _rounds?: Round<C>[]
+  private _rounds?: Round<C, I>[]
 
-  public computeRounds(): Round<C>[] {
+  public computeRounds(): Round<C, I>[] {
     if (this._rounds) return this._rounds
     let inRace = this.candidates
-    const rounds: Round<C>[] = []
+    const rounds: Round<C, I>[] = []
     while (inRace.length > 1) {
       const idx = rounds.length
-      const { qualified, eliminated, scores, tieBreakSteps } = this.round(
+      const { qualified, eliminated, scores, tieBreakSteps, info } = this.round(
         inRace,
         idx,
       )
@@ -68,6 +71,7 @@ export abstract class RoundBallotMethod<C extends string>
           eliminated,
           scores,
           ...(tieBreakSteps ? { tieBreakSteps } : {}),
+          ...(info === undefined ? {} : { info }),
         },
       })
       inRace = qualified
@@ -85,7 +89,7 @@ export abstract class RoundBallotMethod<C extends string>
     ].filter((tier) => tier.length > 0)
   }
 
-  protected abstract round(candidates: C[], idx: number): QE<C>
+  protected abstract round(candidates: C[], idx: number): QE<C, I>
 
   protected roundScoresZero(candidates: C[]): ScoreObject<C> {
     return scoresZero(candidates)

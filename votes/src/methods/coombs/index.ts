@@ -10,10 +10,14 @@ import { FirstPastThePost } from '../first-past-the-post'
 const reverseBallots = <C extends string>(ballots: Ballot<C>[]): Ballot<C>[] =>
   ballots.map((ballot) => ({ ...ballot, ranking: ballot.ranking.toReversed() }))
 
+export interface CoombsInfo {
+  resolution: 'majority' | 'elimination'
+}
+
 /**
  * #### Wikipedia: [Coombs' method](https://en.wikipedia.org/wiki/Coombs%27_method)
  */
-export class Coombs<C extends string> extends TbEliminateLast<C> {
+export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {
   protected oneRound(candidates: C[]): {
     ranking: C[][]
     scores: ScoreObject<C>
@@ -27,12 +31,13 @@ export class Coombs<C extends string> extends TbEliminateLast<C> {
     return { ranking: scoresToRanking(scores, config.EPSILON), scores }
   }
 
-  protected round(candidates: C[], idx: number): QE<C> {
+  protected round(candidates: C[], idx: number): QE<C, CoombsInfo> {
     if (candidates.length < 2)
       return {
         eliminated: candidates,
         qualified: [],
         scores: this.roundScoresZero(candidates),
+        info: { resolution: 'elimination' },
       }
 
     const ballots = normalizeBallots(this.ballots, candidates)
@@ -44,9 +49,13 @@ export class Coombs<C extends string> extends TbEliminateLast<C> {
         eliminated: difference(candidates, qualified),
         qualified,
         scores: am.scores(),
+        info: { resolution: 'majority' },
       }
     }
 
-    return super.round(candidates, idx)
+    return {
+      ...super.round(candidates, idx),
+      info: { resolution: 'elimination' },
+    }
   }
 }

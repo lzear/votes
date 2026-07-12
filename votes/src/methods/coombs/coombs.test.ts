@@ -72,6 +72,9 @@ describe(Coombs, () => {
             "eliminated": [
               "🐻",
             ],
+            "info": {
+              "resolution": "elimination",
+            },
             "qualified": [
               "🦁",
               "🐸",
@@ -102,6 +105,9 @@ describe(Coombs, () => {
               "🐸",
               "🐷",
             ],
+            "info": {
+              "resolution": "majority",
+            },
             "qualified": [
               "🐭",
             ],

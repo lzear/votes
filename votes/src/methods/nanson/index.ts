@@ -4,14 +4,22 @@ import { RoundBallotMethodTb } from '../../classes/round-ballot-method-tb'
 import { config } from '../../utils/config'
 import { Borda } from '../borda'
 
+export interface NansonInfo {
+  average: number
+}
+
 /**
  * #### Wikipedia: [Nanson's method](https://en.wikipedia.org/wiki/Nanson%27s_method)
  */
-export class Nanson<C extends string> extends RoundBallotMethodTb<C> {
-  protected round(candidates: C[]): QE<C> {
+export class Nanson<C extends string> extends RoundBallotMethodTb<
+  C,
+  NansonInfo
+> {
+  protected round(candidates: C[]): QE<C, NansonInfo> {
     const scores = new Borda({ candidates, ballots: this.ballots }).scores()
     const values = Object.values(scores)
     const avg = sum(values) / values.length
+    const info = { average: avg }
 
     const qualified = candidates.filter((c) => scores[c] > avg + config.EPSILON)
     const eliminated = candidates.filter(
@@ -20,8 +28,8 @@ export class Nanson<C extends string> extends RoundBallotMethodTb<C> {
 
     // All equal scores → eliminate everyone as one group (complete tie)
     if (qualified.length === 0)
-      return { eliminated: candidates, qualified: [], scores }
+      return { eliminated: candidates, qualified: [], scores, info }
 
-    return { qualified, eliminated, scores }
+    return { qualified, eliminated, scores, info }
   }
 }
