@@ -26,9 +26,7 @@ type CandidatesCtor<C extends string> = new (input: { candidates: C[] }) => {
 }
 
 export type AnyCtor<C extends string> =
-  | BallotCtor<C>
-  | MatrixCtor<C>
-  | CandidatesCtor<C>
+  BallotCtor<C> | MatrixCtor<C> | CandidatesCtor<C>
 
 // Extracts extra constructor props beyond the base shape
 export type PropsOf<T> = T extends { needsMatrix: true }
@@ -40,8 +38,7 @@ export type PropsOf<T> = T extends { needsMatrix: true }
     : Record<never, never>
 
 export type TbEntry<C extends string, T extends AnyCtor<C> = AnyCtor<C>> =
-  | T
-  | readonly [T, PropsOf<T> & TbMeta]
+  T | readonly [T, PropsOf<T> & TbMeta]
 
 export const tb = <C extends string, T extends AnyCtor<C>>(
   ctor: T,
