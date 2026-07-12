@@ -68,6 +68,7 @@ type AnyCtorWithStatics<C extends string> = AnyCtor<C> & {
 
 const entryToEntry = <C extends string>(
   entry: TbEntry<C>,
+  unrankedLast: boolean,
 ): TiebreakerEntry<C> => {
   const Ctor = (
     Array.isArray(entry) ? entry[0] : entry
@@ -92,7 +93,7 @@ const entryToEntry = <C extends string>(
       )
     else if (Ctor.needsBallot === true)
       method = new (Ctor as unknown as BallotCtor<C>)({
-        ballots: normalizeBallots(ballots, candidates),
+        ballots: normalizeBallots(ballots, candidates, unrankedLast),
         candidates,
         ...extra,
       })
@@ -135,9 +136,12 @@ export abstract class RoundBallotMethodTb<
     ballots: Ballot<C>[]
     candidates: C[]
     tieBreakers?: TbEntry<C>[]
+    unrankedLast?: boolean
   }) {
     super(input)
-    this.tbEntries = (input.tieBreakers ?? []).map((e) => entryToEntry(e))
+    this.tbEntries = (input.tieBreakers ?? []).map((e) =>
+      entryToEntry(e, this.unrankedLast),
+    )
   }
 
   /**

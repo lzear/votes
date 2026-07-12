@@ -14,6 +14,7 @@ export abstract class RandomBallotMethod<C extends string>
     candidates: C[]
     ballots: Ballot<C>[]
     rng?: undefined | (() => number)
+    unrankedLast?: boolean
   }) {
     super(i)
 

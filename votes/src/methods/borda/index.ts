@@ -5,9 +5,10 @@ import { normalizeBallots, scoresZero } from '../../utils'
 const computeScores = <C extends string>(
   candidates: C[],
   _ballots: Ballot<C>[],
+  appendUnranked: boolean,
 ): ScoreObject<C> => {
   const scores = scoresZero(candidates)
-  for (const ballot of normalizeBallots(_ballots, candidates)) {
+  for (const ballot of normalizeBallots(_ballots, candidates, appendUnranked)) {
     let voteValue = candidates.length // - 1
     for (const candidatesAtRank of ballot.ranking) {
       const value = voteValue - (candidatesAtRank.length - 1) / 2
@@ -27,6 +28,6 @@ const computeScores = <C extends string>(
  */
 export class Borda<C extends string> extends BallotScoreMethod<C> {
   public scores(): ScoreObject<C> {
-    return computeScores(this.candidates, this.ballots)
+    return computeScores(this.candidates, this.ballots, this.unrankedLast)
   }
 }

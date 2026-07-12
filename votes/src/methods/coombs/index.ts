@@ -2,7 +2,7 @@ import { difference, mapValues } from 'lodash-es'
 import { type QE } from '../../classes/round-ballot-method'
 import { TbEliminateLast } from '../../classes/round-ballot-method-tb'
 import type { Ballot, ScoreObject } from '../../types'
-import { normalizeBallots, scoresToRanking } from '../../utils'
+import { scoresToRanking } from '../../utils'
 import { config } from '../../utils/config'
 import { AbsoluteMajority } from '../absolute-majority'
 import { FirstPastThePost } from '../first-past-the-post'
@@ -10,6 +10,13 @@ import { FirstPastThePost } from '../first-past-the-post'
 const reverseBallots = <C extends string>(ballots: Ballot<C>[]): Ballot<C>[] =>
   ballots.map((ballot) => ({ ...ballot, ranking: ballot.ranking.toReversed() }))
 
+/**
+ * Round-level detail specific to Coombs: how this round was resolved.
+ * Normally a round eliminates whoever has the most last-place votes, but it
+ * resolves by outright majority instead as soon as a candidate has an
+ * absolute majority of first choices — which can happen on the very last
+ * round, so this can't be inferred from round position alone.
+ */
 export interface CoombsInfo {
   resolution: 'majority' | 'elimination'
 }
@@ -22,7 +29,7 @@ export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {
     ranking: C[][]
     scores: ScoreObject<C>
   } {
-    const ballots = normalizeBallots(this.ballots, candidates)
+    const ballots = this.ballotsFor(candidates)
     const reversedScores = new FirstPastThePost({
       ballots: reverseBallots(ballots),
       candidates,
@@ -40,7 +47,7 @@ export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {
         info: { resolution: 'elimination' },
       }
 
-    const ballots = normalizeBallots(this.ballots, candidates)
+    const ballots = this.ballotsFor(candidates)
     const am = new AbsoluteMajority({ candidates, ballots })
     const amRanking = am.ranking()
     if (amRanking[0]?.length === 1) {

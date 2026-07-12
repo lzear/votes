@@ -11,7 +11,11 @@ export class Baldwin<C extends string> extends TbEliminateLast<C> {
     ranking: C[][]
     scores: ScoreObject<C>
   } {
-    const scores = new Borda({ candidates, ballots: this.ballots }).scores()
+    const scores = new Borda({
+      candidates,
+      ballots: this.ballots,
+      unrankedLast: this.unrankedLast,
+    }).scores()
     return { ranking: scoresToRanking(scores), scores }
   }
 }
