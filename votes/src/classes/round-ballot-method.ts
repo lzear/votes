@@ -70,8 +70,8 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
           qualified,
           eliminated,
           scores,
-          ...(tieBreakSteps ? { tieBreakSteps } : {}),
-          ...(info === undefined ? {} : { info }),
+          ...(tieBreakSteps && { tieBreakSteps }),
+          ...(info !== undefined && { info }),
         },
       })
       inRace = qualified

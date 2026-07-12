@@ -74,14 +74,14 @@ const stripQuantifierAndWeight = (
   let quantifier = 1
   const quantifierMatch = / \* (\d+(?:\.\d+)?)$/.exec(line)
   if (quantifierMatch?.[1]) {
-    quantifier = Number.parseFloat(quantifierMatch[1])
+    quantifier = Number(quantifierMatch[1])
     line = line.slice(0, line.length - quantifierMatch[0].length).trim()
   }
 
   let voteWeight = 1
   const weightMatch = / \^(\d+(?:\.\d+)?)$/.exec(line)
   if (weightMatch?.[1]) {
-    voteWeight = Number.parseFloat(weightMatch[1])
+    voteWeight = Number(weightMatch[1])
     line = line.slice(0, line.length - weightMatch[0].length).trim()
   }
 

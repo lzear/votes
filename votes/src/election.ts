@@ -86,8 +86,8 @@ export class Election<C extends string> implements Ranker<C> {
       rankerName: instanceName(this.rankers[0]),
       before: [allCandidates],
       after: firstRanking,
-      ...(rounds ? { rounds } : {}),
-      ...(scores ? { scores } : {}),
+      ...(rounds && { rounds }),
+      ...(scores && { scores }),
     })
 
     let current = firstRanking
@@ -101,8 +101,8 @@ export class Election<C extends string> implements Ranker<C> {
         rankerName: instanceName(ranker),
         before: current,
         after: applyRankingAsTiebreaker(ranking, current),
-        ...(r2 ? { rounds: r2 } : {}),
-        ...(s2 ? { scores: s2 } : {}),
+        ...(r2 && { rounds: r2 }),
+        ...(s2 && { scores: s2 }),
       }
 
       steps.push(step)

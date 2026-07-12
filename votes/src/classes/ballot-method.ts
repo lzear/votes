@@ -8,9 +8,9 @@ export abstract class BallotMethod<C extends string>
   implements Ranker<C>, Matrixer<C>
 {
   public static readonly needsBallot = true
+  private _matrix?: Matrix<C>
   protected readonly ballots: Ballot<C>[]
   protected readonly unrankedLast: boolean
-  private _matrix?: Matrix<C>
 
   constructor(c: {
     ballots: Ballot<C>[]

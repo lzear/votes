@@ -11,14 +11,16 @@ const initStrengths = <C extends string>(
     matrix.array[i]![j]! > matrix.array[j]![i]! ? matrix.array[i]![j]! : 0,
   )
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const floydWarshall = (p: number[][], n: number): void => {
   for (let i = 0; i < n; i++)
-    for (let j = 0; j < n; j++) {
+    for (let j = 0; j < n; j++)
+      // eslint-disable-next-line unicorn/no-break-in-nested-loop
       if (i === j) continue
-      for (let k = 0; k < n; k++)
-        if (i !== k && j !== k)
-          p[j]![k] = Math.max(p[j]![k]!, Math.min(p[j]![i]!, p[i]![k]!))
-    }
+      else
+        for (let k = 0; k < n; k++)
+          if (i !== k && j !== k)
+            p[j]![k] = Math.max(p[j]![k]!, Math.min(p[j]![i]!, p[i]![k]!))
 }
 
 const scoresFromStrengths = <C extends string>(

@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-
-import { difference, intersection, isEqual, uniq } from 'lodash-es'
+import { difference, intersection, isEqual } from 'lodash-es'
 import type { Ballot } from '../types'
 
 /**
@@ -41,7 +39,7 @@ const mergeEquivalentBallots = <C extends string, B extends Ballot<C>>(
       byRanking.set(key, { ...match, weight: match.weight + ballot.weight })
     else byRanking.set(key, ballot)
   }
-  return [...byRanking.values()]
+  return byRanking.values().toArray()
 }
 
 /**
@@ -84,7 +82,7 @@ export const removeDuplicatedCandidates = <C extends string>(
   const result: C[][] = []
   const usedCandidates: C[] = []
   for (const cur of ranking) {
-    const unique = difference(uniq(cur), usedCandidates)
+    const unique = difference([...new Set(cur)], usedCandidates)
     if (unique.length > 0) {
       result.push(unique)
       usedCandidates.push(...unique)
@@ -155,7 +153,7 @@ export const candidatesFromBallots = <C extends string>(
 ): C[] => {
   const candidates: C[] = []
   for (const ballot of ballots) candidates.push(...ballot.ranking.flat())
-  return uniq(candidates)
+  return [...new Set(candidates)]
 }
 
 export const normalizeBallots = <C extends string, B extends Ballot<C>>(

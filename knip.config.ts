@@ -1,7 +1,7 @@
 import type { KnipConfig } from 'knip'
 
 const config = {
-  ignore: ['.ncurc.js'],
+  ignore: ['.ncurc.cjs'],
 } satisfies KnipConfig
 
 export default config

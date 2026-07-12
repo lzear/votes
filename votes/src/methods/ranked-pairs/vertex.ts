@@ -2,10 +2,11 @@
 // https://gist.github.com/chadhutchins/1440602
 
 export class Vertex {
+  private readonly name: number | string
   public index: number
   public lowlink: number
   public connections: Vertex[]
-  private readonly name: number | string
+
   constructor(name: number | string) {
     this.connections = []
     this.name = name

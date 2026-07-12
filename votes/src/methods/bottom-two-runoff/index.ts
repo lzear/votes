@@ -67,7 +67,7 @@ export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
       qualified: [...mainQualified, ...q2],
       eliminated,
       scores,
-      ...(tieBreakSteps.length > 0 ? { tieBreakSteps } : {}),
+      ...(tieBreakSteps.length > 0 && { tieBreakSteps }),
     }
   }
 }

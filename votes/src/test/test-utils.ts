@@ -1,4 +1,3 @@
-import { fill } from 'lodash-es'
 import type { Ballot } from '../types'
 import { toWeightedBallots } from '../utils'
 
@@ -9,24 +8,27 @@ type ABCDE = 'a' | 'b' | 'c' | 'd' | 'e'
 
 export const abcde = ['a', 'b', 'c', 'd', 'e'] as ABCDE[]
 
+const repeat = <T>(length: number, value: T): T[] =>
+  Array.from({ length }, () => value)
+
 export const balinski = toWeightedBallots([
-  ...fill(Array.from({ length: 33 }), [['a'], ['b'], ['c'], ['d'], ['e']]),
-  ...fill(Array.from({ length: 16 }), [['b'], ['d'], ['c'], ['e'], ['a']]),
-  ...fill(Array.from({ length: 3 }), [['c'], ['d'], ['b'], ['a'], ['e']]),
-  ...fill(Array.from({ length: 8 }), [['c'], ['e'], ['b'], ['d'], ['a']]),
-  ...fill(Array.from({ length: 18 }), [['d'], ['e'], ['c'], ['b'], ['a']]),
-  ...fill(Array.from({ length: 22 }), [['e'], ['c'], ['b'], ['d'], ['a']]),
+  ...repeat(33, [['a'], ['b'], ['c'], ['d'], ['e']]),
+  ...repeat(16, [['b'], ['d'], ['c'], ['e'], ['a']]),
+  ...repeat(3, [['c'], ['d'], ['b'], ['a'], ['e']]),
+  ...repeat(8, [['c'], ['e'], ['b'], ['d'], ['a']]),
+  ...repeat(18, [['d'], ['e'], ['c'], ['b'], ['a']]),
+  ...repeat(22, [['e'], ['c'], ['b'], ['d'], ['a']]),
 ]) as Ballot<ABCDE>[]
 
 export const sW = toWeightedBallots([
-  ...fill(Array.from({ length: 5 }), [['a'], ['c'], ['b'], ['e'], ['d']]),
-  ...fill(Array.from({ length: 5 }), [['a'], ['d'], ['e'], ['c'], ['b']]),
-  ...fill(Array.from({ length: 8 }), [['b'], ['e'], ['d'], ['a'], ['c']]),
-  ...fill(Array.from({ length: 3 }), [['c'], ['a'], ['b'], ['e'], ['d']]),
-  ...fill(Array.from({ length: 7 }), [['c'], ['a'], ['e'], ['b'], ['d']]),
-  ...fill(Array.from({ length: 2 }), [['c'], ['b'], ['a'], ['d'], ['e']]),
-  ...fill(Array.from({ length: 7 }), [['d'], ['c'], ['e'], ['b'], ['a']]),
-  ...fill(Array.from({ length: 8 }), [['e'], ['b'], ['a'], ['d'], ['c']]),
+  ...repeat(5, [['a'], ['c'], ['b'], ['e'], ['d']]),
+  ...repeat(5, [['a'], ['d'], ['e'], ['c'], ['b']]),
+  ...repeat(8, [['b'], ['e'], ['d'], ['a'], ['c']]),
+  ...repeat(3, [['c'], ['a'], ['b'], ['e'], ['d']]),
+  ...repeat(7, [['c'], ['a'], ['e'], ['b'], ['d']]),
+  ...repeat(2, [['c'], ['b'], ['a'], ['d'], ['e']]),
+  ...repeat(7, [['d'], ['c'], ['e'], ['b'], ['a']]),
+  ...repeat(8, [['e'], ['b'], ['a'], ['d'], ['c']]),
 ]) as Ballot<ABCDE>[]
 
 export const dummyProfile = toWeightedBallots([
@@ -34,7 +36,7 @@ export const dummyProfile = toWeightedBallots([
 ])
 
 export const dummyProfile10: Ballot<ABCDE>[] = toWeightedBallots(
-  fill(Array.from({ length: 10 }), [['a'], ['b'], ['c'], ['d'], ['e']]),
+  repeat(10, [['a'], ['b'], ['c'], ['d'], ['e']]),
 )
 
 export const matrixString = (matrix: number[][]): string => {
