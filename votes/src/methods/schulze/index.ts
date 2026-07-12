@@ -1,20 +1,15 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { range } from 'lodash-es'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import type { Matrix, ScoreObject } from '../../types'
+import { pairwiseMatrix } from '../../utils/make-matrix'
 
 const initStrengths = <C extends string>(
   n: number,
   matrix: Matrix<C>,
-): number[][] => {
-  const p: number[][] = range(n).map(() => range(n).map(() => 0))
-  for (let i = 0; i < n; i++)
-    for (let j = 0; j < n; j++)
-      if (i !== j)
-        p[i]![j] =
-          matrix.array[i]![j]! > matrix.array[j]![i]! ? matrix.array[i]![j]! : 0
-  return p
-}
+): number[][] =>
+  pairwiseMatrix(n, (i, j) =>
+    matrix.array[i]![j]! > matrix.array[j]![i]! ? matrix.array[i]![j]! : 0,
+  )
 
 const floydWarshall = (p: number[][], n: number): void => {
   for (let i = 0; i < n; i++)

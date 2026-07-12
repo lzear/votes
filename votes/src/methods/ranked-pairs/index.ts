@@ -53,15 +53,9 @@ const computeFromMatrix = <C extends string>(
     else acyclicGraph = generateAcyclicGraph(acyclicGraph, edgesToAdd)
   }
 
-  const graphsWinners = range(matrix.candidates.length).filter(
-    (_c, key) => !acyclicGraph.some(({ to }) => to === key),
-  )
-  const scores: Record<number, number> = {}
-  for (const curr of graphsWinners) scores[curr] = (scores[curr] ?? 0) + 1
-
-  const maxScore1 = Math.max(...Object.values(scores as Record<string, number>))
+  // Sources of the acyclic graph (no incoming locked edge) win this iteration
   const winnersIdx = range(matrix.candidates.length).filter(
-    (i) => scores[i] === maxScore1,
+    (key) => !acyclicGraph.some(({ to }) => to === key),
   )
   if (winnersIdx.length === 0 || winnersIdx.length === matrix.candidates.length)
     return zipObject(

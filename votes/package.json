@@ -19,9 +19,16 @@
   "type": "module",
   "exports": {
     ".": {
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
-    }
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      },
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./package.json": "./package.json"
   },
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -48,6 +55,7 @@
     "lodash-es": "^4"
   },
   "devDependencies": {
+    "@lzear/forge": "^4",
     "@types/lodash-es": "^4",
     "@types/node": "^26",
     "@vitest/coverage-v8": "^4",

@@ -9078,6 +9078,7 @@ __metadata:
     "@typescript/native": "npm:typescript@^7.0.2"
     concurrently: "npm:^10"
     eslint: "npm:^10"
+    knip: "npm:^6"
     lefthook: "npm:^2"
     lint-staged: "npm:^17"
     prettier: "npm:^3"
@@ -9089,6 +9090,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "votes@workspace:votes"
   dependencies:
+    "@lzear/forge": "npm:^4"
     "@types/lodash-es": "npm:^4"
     "@types/node": "npm:^26"
     "@vitest/coverage-v8": "npm:^4"

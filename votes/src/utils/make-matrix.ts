@@ -1,7 +1,18 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { difference, range, times } from 'lodash-es'
+import { range, times } from 'lodash-es'
 import type { Ballot, Matrix } from '../types'
+
+/** n×n matrix where off-diagonal cells are `value(i, j)` and the diagonal is 0. */
+export const pairwiseMatrix = (
+  n: number,
+  value: (i: number, j: number) => number,
+): number[][] => {
+  const array: number[][] = times(n, () => times(n, () => 0))
+  for (let i = 0; i < n; i++)
+    for (let j = 0; j < n; j++) if (i !== j) array[i]![j] = value(i, j)
+  return array
+}
 
 export const matrixFromBallots = <C extends string>(
   ballots: Ballot<C>[],
@@ -10,13 +21,16 @@ export const matrixFromBallots = <C extends string>(
   const array: number[][] = times(candidates.length, () =>
     times(candidates.length, () => 0),
   )
+  const candidateIdx = new Map(candidates.map((c, i) => [c, i]))
   for (const ranking of ballots) {
     const rIndex = ranking.ranking.map((rank) =>
-      rank.map((c) => candidates.indexOf(c)).filter((i) => i !== -1),
+      rank
+        .map((c) => candidateIdx.get(c))
+        .filter((i): i is number => i !== undefined),
     )
-    let rankedLower = range(candidates.length)
+    const rankedLower = new Set(range(candidates.length))
     for (const rank of rIndex) {
-      rankedLower = difference(rankedLower, rank)
+      for (const i of rank) rankedLower.delete(i)
       for (const w of rank)
         for (const l of rankedLower) array[w]![l]! += ranking.weight
     }
