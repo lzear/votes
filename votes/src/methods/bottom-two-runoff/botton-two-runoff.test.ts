@@ -189,7 +189,7 @@ describe(BottomTwoRunoff, () => {
             "😡",
             "🎽",
           ],
-          "finished": false,
+          "finished": true,
           "idx": 3,
           "roundResult": {
             "eliminated": [
@@ -230,22 +230,6 @@ describe(BottomTwoRunoff, () => {
                 "tbName": "FirstPastThePost",
               },
             ],
-          },
-        },
-        {
-          "candidates": [
-            "😡",
-          ],
-          "finished": true,
-          "idx": 4,
-          "roundResult": {
-            "eliminated": [
-              "😡",
-            ],
-            "qualified": [],
-            "scores": {
-              "😡": 3,
-            },
           },
         },
       ]
