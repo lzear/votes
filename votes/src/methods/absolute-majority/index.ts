@@ -21,17 +21,13 @@ export class AbsoluteMajority<C extends string> extends BallotScoreMethod<C> {
   }
 
   public ranking(): C[][] {
-    const totalWeight = totalBallotsWeight(this.ballots)
     const fptpScores = this.fptp.scores()
     const topRank = scoresToRanking(fptpScores)[0] ?? []
-    const top0 = topRank[0]
-    const top0Score = top0 === undefined ? undefined : fptpScores[top0]
+    const top = topRank.length === 1 ? topRank[0] : undefined
 
-    return top0 !== undefined &&
-      top0Score !== undefined &&
-      topRank.length === 1 &&
-      top0Score > totalWeight / 2
-      ? [[top0], this.candidates.filter((c: C) => c !== top0)]
+    return top !== undefined &&
+      fptpScores[top] > totalBallotsWeight(this.ballots) / 2
+      ? [[top], this.candidates.filter((c) => c !== top)]
       : [this.candidates]
   }
 }

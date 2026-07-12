@@ -1,6 +1,6 @@
-import { zipObject } from 'lodash-es'
 import { RandomMethod } from '../../classes/random-method'
 import type { ScoreObject } from '../../types'
+import { scoresAny } from '../../utils/scores-zero'
 import { shuffleArray } from '../../utils/shuffle-array'
 
 /**
@@ -12,11 +12,6 @@ export class RandomCandidates<C extends string> extends RandomMethod<C> {
   }
 
   public scores(): ScoreObject<C> {
-    return zipObject(
-      this.candidates,
-      Array.from<number>({ length: this.candidates.length }).fill(
-        1 / this.candidates.length,
-      ),
-    ) as ScoreObject<C>
+    return scoresAny(this.candidates, 1 / this.candidates.length)
   }
 }

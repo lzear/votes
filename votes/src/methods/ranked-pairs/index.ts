@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { groupBy, range, zipObject } from 'lodash-es'
+import { groupBy, range } from 'lodash-es'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import type { Matrix, ScoreObject } from '../../types'
 import { subMatrix } from '../../utils/make-matrix'
+import { scoresAny } from '../../utils/scores-zero'
 import { type Edge, generateAcyclicGraph } from './generate-acyclic-graph'
 
 /**
@@ -58,10 +59,7 @@ const computeFromMatrix = <C extends string>(
     (key) => !acyclicGraph.some(({ to }) => to === key),
   )
   if (winnersIdx.length === 0 || winnersIdx.length === matrix.candidates.length)
-    return zipObject(
-      matrix.candidates,
-      Array.from<number>({ length: matrix.candidates.length }).fill(1),
-    ) as ScoreObject<C>
+    return scoresAny(matrix.candidates, 1)
   const nextResults = computeFromMatrix(
     {
       array: matrix.array

@@ -28,6 +28,22 @@ export const normalizeRankInput = (
 ): string[][] =>
   rankInput.map((rank) => (typeof rank === 'string' ? [rank] : rank))
 
+// Merge ballots with equivalent rankings (see {@link isBallotEqual}), summing
+// weights. The first occurrence's ranking representation and order are kept.
+const mergeEquivalentBallots = <C extends string, B extends Ballot<C>>(
+  ballots: B[],
+): B[] => {
+  const byRanking = new Map<string, B>()
+  for (const ballot of ballots) {
+    const key = JSON.stringify(canonizeRanking(ballot.ranking))
+    const match = byRanking.get(key)
+    if (match)
+      byRanking.set(key, { ...match, weight: match.weight + ballot.weight })
+    else byRanking.set(key, ballot)
+  }
+  return [...byRanking.values()]
+}
+
 /**
  * Group ballots by merging equivalent ballots (see {@link isBallotEqual}).
  *
@@ -35,35 +51,15 @@ export const normalizeRankInput = (
  */
 export const groupBallots = <C extends string, B extends Ballot<C>>(
   ballots: B[],
-): B[] => {
-  const acc: B[] = []
-  for (const ballot of ballots) {
-    const match = acc.findIndex((b) => isBallotEqual(b.ranking, ballot.ranking))
-    if (match === -1) acc.push(ballot)
-    else
-      acc[match] = {
-        ...acc[match]!,
-        weight: acc[match]!.weight + ballot.weight,
-      }
-  }
-  return acc.filter((b) => b.weight > 0).toSorted((a, b) => b.weight - a.weight)
-}
+): B[] =>
+  mergeEquivalentBallots(ballots)
+    .filter((b) => b.weight > 0)
+    .toSorted((a, b) => b.weight - a.weight)
 
 export const toWeightedBallots = <C extends string>(
   ballots: C[][][],
-): Ballot<C>[] => {
-  const result: Ballot<C>[] = []
-  for (const ballot of ballots) {
-    const match = result.findIndex((ww) => isBallotEqual(ww.ranking, ballot))
-    if (match === -1) result.push({ ranking: ballot, weight: 1 })
-    else
-      result[match] = {
-        ranking: result[match]!.ranking,
-        weight: result[match]!.weight + 1,
-      }
-  }
-  return result
-}
+): Ballot<C>[] =>
+  mergeEquivalentBallots(ballots.map((ranking) => ({ ranking, weight: 1 })))
 
 export const checkDuplicatedCandidate = (ranking: string[][]): void => {
   const seen: string[] = []
