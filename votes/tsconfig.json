@@ -2,7 +2,6 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "@lzear/forge/tsconfig/lib",
   "compilerOptions": {
-    "downlevelIteration": true,
     "outDir": "dist",
     "target": "ES2023",
     "types": ["node", "vitest/globals"]

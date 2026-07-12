@@ -54,7 +54,6 @@
     "rimraf": "^6",
     "tsup": "^8",
     "typedoc": "^0.28",
-    "typescript": "6.0.3",
     "vitest": "^4"
   },
   "engines": {

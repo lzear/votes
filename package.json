@@ -33,12 +33,16 @@
     "@commitlint/config-conventional": "^21",
     "@lzear/forge": "^4",
     "@types/node": "^26",
+    "@typescript/native": "npm:typescript@^7.0.2",
     "concurrently": "^10",
     "eslint": "^10",
     "lefthook": "^2",
     "lint-staged": "^17",
     "prettier": "^3",
-    "typescript": "6.0.3"
+    "typescript": "npm:@typescript/typescript6@^6.0.2"
+  },
+  "resolutions": {
+    "eslint-plugin-sonarjs/typescript": "npm:typescript@^6.0.3"
   },
   "commitlint": {
     "extends": [
@@ -52,5 +56,5 @@
     "url": "https://github.com/lzear/votes/issues"
   },
   "homepage": "https://github.com/lzear/votes",
-  "packageManager": "yarn@4.15.0"
+  "packageManager": "yarn@4.17.1"
 }
