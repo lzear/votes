@@ -6,6 +6,10 @@ import { InstantRunoff } from './methods/instant-runoff'
 import { RandomCandidates } from './methods/random-candidates'
 import type { Ballot } from './types'
 import { matrixFromBallots } from './utils'
+import {
+  iterateRanking,
+  type RestrictableRanker,
+} from './utils/iterate-ranking'
 import { rngGenerator } from './utils/rng-generator'
 
 const abc = ['a', 'b', 'c']
@@ -86,6 +90,20 @@ describe('iteratedRanking', () => {
     expect(election.ranking()).toStrictEqual([['b'], ['a'], ['c']])
     // Iterated: the restricted Borda re-run puts c ahead of a.
     expect(election.iteratedRanking()).toStrictEqual([['b'], ['c'], ['a']])
+  })
+
+  it('keeps the rest as one tier when a ranker places nobody first', () => {
+    const stub: RestrictableRanker<string> = {
+      ranking: () => [[], ['a', 'b']],
+      restrict: () => stub,
+    }
+    expect(iterateRanking(stub)).toStrictEqual([['a', 'b']])
+
+    const empty: RestrictableRanker<string> = {
+      ranking: () => [],
+      restrict: () => empty,
+    }
+    expect(iterateRanking(empty)).toStrictEqual([])
   })
 
   it('throws when an Election ranker cannot be restricted', () => {

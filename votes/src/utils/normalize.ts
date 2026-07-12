@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-
 import { difference, intersection, isEqual, uniq } from 'lodash-es'
 import type { Ballot } from '../types'
 
