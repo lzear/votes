@@ -154,4 +154,33 @@ describe('ranked pairs', () => {
       ).toStrictEqual([['c'], ['a'], ['b']])
     })
   })
+
+  it('does not infinitely recurse on a raw win-count matrix with wide ties (regression)', () => {
+    const rawCounts = {
+      array: [
+        [0, 58, 49, 54, 64, 70, 57],
+        [52, 0, 63, 57, 48, 70, 57],
+        [61, 47, 0, 51, 65, 70, 57],
+        [56, 53, 59, 0, 50, 70, 57],
+        [46, 62, 45, 60, 0, 70, 57],
+        [40, 40, 40, 40, 40, 0, 72],
+        [53, 53, 53, 53, 53, 38, 0],
+      ],
+      candidates: ['🐸', '🐷', '🦁', '🐻', '🐭', '🐌', '🪰'],
+    }
+
+    expect(() => new RankedPairs(rawCounts).scores()).not.toThrow()
+    // Can't find any candidate with zero incoming edges in the locked graph
+    // built from this malformed input — falls back to a full tie rather than
+    // hanging, since no shrink-and-recurse step is possible.
+    expect(new RankedPairs(rawCounts).scores()).toStrictEqual({
+      '🐸': 1,
+      '🐷': 1,
+      '🦁': 1,
+      '🐻': 1,
+      '🐭': 1,
+      '🐌': 1,
+      '🪰': 1,
+    })
+  })
 })

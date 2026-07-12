@@ -63,7 +63,7 @@ const computeFromMatrix = <C extends string>(
   const winnersIdx = range(matrix.candidates.length).filter(
     (i) => scores[i] === maxScore1,
   )
-  if (winnersIdx.length === matrix.candidates.length)
+  if (winnersIdx.length === 0 || winnersIdx.length === matrix.candidates.length)
     return zipObject(
       matrix.candidates,
       Array.from<number>({ length: matrix.candidates.length }).fill(1),

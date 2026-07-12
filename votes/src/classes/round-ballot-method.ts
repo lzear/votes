@@ -53,7 +53,7 @@ export abstract class RoundBallotMethod<C extends string>
     if (this._rounds) return this._rounds
     let inRace = this.candidates
     const rounds: Round<C>[] = []
-    while (inRace.length > 0) {
+    while (inRace.length > 1) {
       const idx = rounds.length
       const { qualified, eliminated, scores, tieBreakSteps } = this.round(
         inRace,
@@ -62,7 +62,7 @@ export abstract class RoundBallotMethod<C extends string>
       rounds.push({
         idx,
         candidates: inRace,
-        finished: inRace.length <= 1,
+        finished: qualified.length <= 1,
         roundResult: {
           qualified,
           eliminated,
@@ -77,10 +77,12 @@ export abstract class RoundBallotMethod<C extends string>
   }
 
   public ranking(): C[][] {
-    return this.computeRounds()
-      .toReversed()
-      .map((r) => r.roundResult.eliminated)
-      .filter((eliminated) => eliminated.length > 0)
+    const rounds = this.computeRounds()
+    const winners = rounds.at(-1)?.roundResult.qualified ?? this.candidates
+    return [
+      ...(winners.length > 0 ? [winners] : []),
+      ...rounds.toReversed().map((r) => r.roundResult.eliminated),
+    ].filter((tier) => tier.length > 0)
   }
 
   protected abstract round(candidates: C[], idx: number): QE<C>
