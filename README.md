@@ -1,10 +1,10 @@
 # votes
 
-![version](https://img.shields.io/npm/v/votes)
-![npm bundle size](https://img.shields.io/bundlephobia/minzip/votes)
-![language](https://img.shields.io/github/languages/top/lzear/votes)
-![downloads](https://img.shields.io/npm/dm/votes)
-![last commit](https://img.shields.io/github/last-commit/lzear/votes)
+[![version](https://img.shields.io/npm/v/votes)](https://www.npmjs.com/package/votes)
+[![npm bundle size](https://img.shields.io/bundlephobia/minzip/votes)](https://bundlephobia.com/package/votes)
+[![language](https://img.shields.io/github/languages/top/lzear/votes)](https://github.com/lzear/votes)
+[![downloads](https://img.shields.io/npm/dm/votes)](https://www.npmjs.com/package/votes)
+[![last commit](https://img.shields.io/github/last-commit/lzear/votes)](https://github.com/lzear/votes/commits/main)
 [![license](https://img.shields.io/github/license/lzear/votes)](https://github.com/lzear/votes/blob/main/LICENSE)
 [![CI](https://github.com/lzear/votes/actions/workflows/ci.yml/badge.svg)](https://github.com/lzear/votes/actions/workflows/ci.yml)
 [![Website](https://img.shields.io/website?url=https%3A%2F%2Frank-votes.vercel.app%2F)](https://rank-votes.vercel.app/)
@@ -202,8 +202,8 @@ new RandomCandidates({ candidates, rng })
 ## Condorcet election format
 
 Parse and serialize the
-[Condorcet Election Format](https://github.com/CondorcetVote/CondorcetElectionFormat) (`.blt`-style text
-files):
+[Condorcet Election Format](https://github.com/CondorcetVote/CondorcetElectionFormat)
+(`.blt`-style text files):
 
 ```typescript
 import {
