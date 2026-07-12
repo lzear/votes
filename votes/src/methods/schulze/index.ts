@@ -26,14 +26,12 @@ const floydWarshall = (p: number[][], n: number): void => {
     }
 }
 
-const computeFromMatrix = <C extends string>(
-  matrix: Matrix<C>,
+const scoresFromStrengths = <C extends string>(
+  candidates: C[],
+  p: number[][],
 ): ScoreObject<C> => {
-  const n = matrix.candidates.length
-  const p = initStrengths(n, matrix)
-  floydWarshall(p, n)
   const s = {} as ScoreObject<C>
-  for (const [k, c] of matrix.candidates.entries())
+  for (const [k, c] of candidates.entries())
     s[c] = p[k]!.filter((v, k2) => v > p[k2]![k]!).length
   return s
 }
@@ -42,7 +40,20 @@ const computeFromMatrix = <C extends string>(
  * #### Wikipedia: [Schulze method](https://en.wikipedia.org/wiki/Schulze_method)
  */
 export class Schulze<C extends string> extends MatrixScoreMethod<C> {
+  /**
+   * Strongest-path ("beatpath") strength between every ordered pair of
+   * candidates, after Floyd-Warshall — the matrix Schulze's win count is
+   * derived from.
+   */
+  public strengths(): Matrix<C> {
+    const { candidates } = this.matrix
+    const p = initStrengths(candidates.length, this.matrix)
+    floydWarshall(p, candidates.length)
+    return { candidates, array: p }
+  }
+
   public scores(): ScoreObject<C> {
-    return computeFromMatrix(this.matrix)
+    const { candidates, array } = this.strengths()
+    return scoresFromStrengths(candidates, array)
   }
 }
