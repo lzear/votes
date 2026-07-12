@@ -39,6 +39,12 @@ borda.ranking()
 // [ ['Bear'], ['Sheep'], ['Lion'] ]
 ```
 
+A ballot ranks candidates in tiers: `[['Bear', 'Sheep'], ['Lion']]` means Bear
+and Sheep tied first, Lion last. `weight` is how many voters cast that ballot.
+Candidates a ballot leaves unranked join it as one tied bottom tier by default;
+pass `unrankedLast: false` to score only expressed preferences (unranked
+candidates then earn nothing from that ballot).
+
 ## Tiebreakers
 
 Round-based methods (`InstantRunoff`, `Baldwin`, `Coombs`, `Nanson`,
@@ -112,6 +118,10 @@ rounds[0].roundResult
 // }
 ```
 
+Some methods add method-specific detail as `roundResult.info`: `Coombs` reports
+whether a round was resolved by majority or elimination (`CoombsInfo`), `Nanson`
+reports the Borda average used as elimination cutoff (`NansonInfo`).
+
 ## Election: chaining rankers
 
 `Election` chains pre-built ranker instances. The first provides the primary
@@ -140,6 +150,25 @@ election.result() // { ranking, steps: StepResult[] }
 
 Each `StepResult` records `rankerName`, `before`, `after`, and optionally
 `rounds` / `scores` from that step.
+
+## Iterated ranking
+
+`ranking()` is each method's own full ranking. `iteratedRanking()` instead fills
+places by repeated wins: run the method, take the winning tier, re-run the
+method without the placed candidates, and so on. The two differ whenever a
+method's full ranking disagrees with how it ranks subsets — e.g. instant runoff
+orders losers by elimination time.
+
+```typescript
+const irv = new InstantRunoff({ candidates, ballots })
+irv.ranking() // losers ordered by elimination time
+irv.iteratedRanking() // 2nd place = winner of a re-run without the winner
+
+new Election({ rankers }).iteratedRanking() // re-runs the whole chain per place
+```
+
+Under the hood it uses `restrict(candidates)`, which every method exposes to
+re-run itself on a subset of candidates.
 
 ## Voting systems
 
@@ -177,6 +206,13 @@ Matrix-input methods take the output of
 FPTP step is the head-to-head runoff mechanism, not a fallback. It will appear
 as the first entry in `tieBreakSteps`. User-supplied `tieBreakers` fire after it
 only if the head-to-head itself ties.
+
+`Schulze` also exposes `strengths()` — the beatpath strength matrix its scores
+derive from.
+
+`RankedPairs` locks equal-strength pairs simultaneously by default (ties are
+preserved rather than order-dependent). Pass `edgeSorter` — e.g. the exported
+`byTotalParticipation` — to process them sequentially like canonical Tideman.
 
 Every method also exposes `deTie()`, which recursively resolves ties by
 re-running the same method on each tied subset:
