@@ -26,33 +26,18 @@ const isRandomInstance = (instance: object): boolean =>
     .constructor?.isRandom === true
 
 const computeFor = <C extends string>(
-  instance: Ranker<C>,
+  instance: Ranker<C> & {
+    computeRounds?(): Round<C>[]
+    scores?(): ScoreObject<C>
+  },
 ): { ranking: C[][]; rounds?: Round<C>[]; scores?: ScoreObject<C> } => {
-  interface WithRounds {
-    computeRounds(): Round<C>[]
-  }
-  interface WithScores {
-    scores(): ScoreObject<C>
+  if (typeof instance.computeRounds === 'function') {
+    const rounds = instance.computeRounds()
+    return { ranking: instance.ranking(), rounds }
   }
 
-  if (
-    'computeRounds' in instance &&
-    typeof instance.computeRounds === 'function'
-  ) {
-    const rounds = (instance as unknown as WithRounds).computeRounds()
-    const ranking = rounds
-      .toReversed()
-      .map((r) => r.roundResult.eliminated)
-      .filter((e) => e.length > 0)
-    return { ranking, rounds }
-  }
-
-  if (
-    !isRandomInstance(instance) &&
-    'scores' in instance &&
-    typeof instance.scores === 'function'
-  ) {
-    const scores = (instance as unknown as WithScores).scores()
+  if (!isRandomInstance(instance) && typeof instance.scores === 'function') {
+    const scores = instance.scores()
     return { ranking: scoresToRanking(scores), scores }
   }
 

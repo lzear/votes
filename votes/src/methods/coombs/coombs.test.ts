@@ -94,7 +94,7 @@ describe(Coombs, () => {
             "🐷",
             "🐭",
           ],
-          "finished": false,
+          "finished": true,
           "idx": 1,
           "roundResult": {
             "eliminated": [
@@ -110,22 +110,6 @@ describe(Coombs, () => {
               "🐷": 16.5,
               "🐸": 5,
               "🦁": 11,
-            },
-          },
-        },
-        {
-          "candidates": [
-            "🐭",
-          ],
-          "finished": true,
-          "idx": 2,
-          "roundResult": {
-            "eliminated": [
-              "🐭",
-            ],
-            "qualified": [],
-            "scores": {
-              "🐭": 0,
             },
           },
         },
