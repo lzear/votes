@@ -24,7 +24,7 @@ export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
       qualified: q,
       eliminated: [...e, ...losers],
       scores,
-      ...(tieBreakSteps.length > 0 ? { tieBreakSteps } : {}),
+      ...(tieBreakSteps.length > 0 && { tieBreakSteps }),
     }
   }
 
@@ -68,7 +68,7 @@ export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
         qualified: q,
         eliminated: [...e, ...seconds, ...rest],
         scores,
-        ...(tbs1.length > 0 ? { tieBreakSteps: tbs1 } : {}),
+        ...(tbs1.length > 0 && { tieBreakSteps: tbs1 }),
       }
     }
 
@@ -88,7 +88,7 @@ export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
       qualified: [...firsts, ...q2],
       eliminated: [...e2, ...rest],
       scores,
-      ...(tbs2.length > 0 ? { tieBreakSteps: tbs2 } : {}),
+      ...(tbs2.length > 0 && { tieBreakSteps: tbs2 }),
     }
   }
 }

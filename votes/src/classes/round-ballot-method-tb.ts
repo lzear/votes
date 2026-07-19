@@ -168,7 +168,7 @@ export abstract class RoundBallotMethodTb<
         tbName,
         input: current,
         ranking,
-        ...(scores === undefined ? {} : { scores }),
+        ...(scores !== undefined && { scores }),
         resolved: upper,
         remaining: last,
       })
@@ -218,7 +218,7 @@ export abstract class TbEliminateLast<
       qualified: [...qualified, ...q2],
       eliminated,
       scores,
-      ...(tieBreakSteps.length > 0 ? { tieBreakSteps } : {}),
+      ...(tieBreakSteps.length > 0 && { tieBreakSteps }),
     }
   }
 }

@@ -3,7 +3,6 @@
 export const shuffleArray = <T>(_array: T[], rng: () => number): T[] => {
   const array = [..._array]
   let m = array.length
-  let t
   let i
 
   // While there remain elements to shuffle…
@@ -11,7 +10,7 @@ export const shuffleArray = <T>(_array: T[], rng: () => number): T[] => {
     // Pick a remaining element…
     const r = rng()
     i = Math.floor(r * m--)
-    t = array[m]!
+    const t = array[m]!
     array[m] = array[i]!
     array[i] = t
   }

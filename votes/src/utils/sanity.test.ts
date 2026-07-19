@@ -11,16 +11,16 @@ describe('sanity check', () => {
   it.each(Object.values(VotingSystem))(
     'empty list and empty candidates %s',
     (system) => {
-      if (system in methods) {
-        const Method = methods[system]
-        const election = new Method({
-          array: [],
-          ballots: [],
-          candidates: [],
-        })
-        expect(election.canonicalRanking()).toStrictEqual([])
-        if ('scores' in election) expect(election.scores()).toStrictEqual({})
-      }
+      if (!(system in methods)) return
+
+      const Method = methods[system]
+      const election = new Method({
+        array: [],
+        ballots: [],
+        candidates: [],
+      })
+      expect(election.canonicalRanking()).toStrictEqual([])
+      if ('scores' in election) expect(election.scores()).toStrictEqual({})
     },
   )
   it.each(Object.values(VotingSystem))(

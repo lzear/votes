@@ -42,7 +42,7 @@ export class Tarjan {
   private strongconnect(vertex: Vertex): void {
     vertex.index = this.index
     vertex.lowlink = this.index
-    this.index = this.index + 1
+    this.index += 1
     this.stack.push(vertex)
 
     for (const connection of vertex.connections)
