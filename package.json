@@ -1,16 +1,16 @@
 {
-  "type": "commonjs",
   "name": "votes--root",
-  "description": "Voting systems library monorepo",
   "version": "0.0.0",
   "private": true,
-  "workspaces": [
-    "votes"
-  ],
-  "sideEffects": false,
-  "author": "lzear",
-  "repository": "github:lzear/votes",
+  "description": "Voting systems library monorepo",
   "license": "MIT",
+  "repository": "github:lzear/votes",
+  "homepage": "https://github.com/lzear/votes",
+  "bugs": "https://github.com/lzear/votes/issues",
+  "author": "lzear",
+  "type": "commonjs",
+  "sideEffects": false,
+  "packageManager": "yarn@4.17.1",
   "scripts": {
     "build": "yarn workspaces foreach -A --topological run build",
     "build-docs": "yarn workspaces foreach -A run build-docs",
@@ -18,7 +18,6 @@
     "fix:prettier": "prettier --write \"**/*.*\"",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "eslint .",
-    "ncu": "yarn dlx npm-check-updates --dep dev,optional,peer,prod,packageManager -u --workspaces && yarn up --recursive '*' '@*/*'",
     "qa": "yarn install --immutable && yarn build && concurrently -g 'yarn typecheck' 'yarn lint' 'yarn test' 'yarn workspaces foreach -A run build-docs' 'yarn forge check'",
     "release": "changeset publish",
     "setup-repo": "forge setup",
@@ -27,6 +26,9 @@
     "typecheck": "yarn workspaces foreach -A run typecheck",
     "version-packages": "changeset version"
   },
+  "workspaces": [
+    "votes"
+  ],
   "devDependencies": {
     "@changesets/cli": "^2",
     "@commitlint/cli": "^21",
@@ -52,10 +54,5 @@
   },
   "lint-staged": {
     "**/*.{ts,tsx,md}": "prettier --write"
-  },
-  "bugs": {
-    "url": "https://github.com/lzear/votes/issues"
-  },
-  "homepage": "https://github.com/lzear/votes",
-  "packageManager": "yarn@4.17.1"
+  }
 }
