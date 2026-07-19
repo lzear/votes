@@ -8,8 +8,11 @@
   "homepage": "https://github.com/lzear/votes",
   "bugs": "https://github.com/lzear/votes/issues",
   "author": "lzear",
-  "type": "commonjs",
+  "type": "module",
   "sideEffects": false,
+  "engines": {
+    "node": ">=22"
+  },
   "packageManager": "yarn@4.17.1",
   "scripts": {
     "build": "yarn workspaces foreach -A --topological run build",
