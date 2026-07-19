@@ -1,5 +1,5 @@
 import type { Ballot, Matrix, ScoreObject } from '../types'
-import { matrixFromBallots, normalizeBallots, normalizeRanking } from '../utils'
+import { matrixFromBallots, normalizeRanking } from '../utils'
 import {
   type QE,
   RoundBallotMethod,
@@ -15,6 +15,7 @@ export interface TbMeta {
 type BallotCtor<C extends string> = new (input: {
   ballots: Ballot<C>[]
   candidates: C[]
+  unrankedLast?: boolean
 }) => { ranking(): C[][] }
 
 type MatrixCtor<C extends string> = new (matrix: Matrix<C>) => {
@@ -92,9 +93,14 @@ const entryToEntry = <C extends string>(
         matrixFromBallots(ballots, candidates),
       )
     else if (Ctor.needsBallot === true)
+      // The ctor normalizes ballots against `candidates` itself; forwarding
+      // unrankedLast (instead of pre-normalizing here) keeps the host method's
+      // setting honored — the ctor would otherwise re-append unranked
+      // candidates with its default of true.
       method = new (Ctor as unknown as BallotCtor<C>)({
-        ballots: normalizeBallots(ballots, candidates, unrankedLast),
+        ballots,
         candidates,
+        unrankedLast,
         ...extra,
       })
     else

@@ -186,6 +186,29 @@ describe('tieBreakers', () => {
     expect(irv.computeRounds()[0]?.roundResult.eliminated).toStrictEqual(['c'])
   })
 
+  it("forwards the host's unrankedLast setting into ballot tiebreakers", () => {
+    // First choices: a=1, b=1, c=2 → a and b tie for elimination.
+    const ballots = [
+      { ranking: [['a']], weight: 1 },
+      { ranking: [['b'], ['a']], weight: 1 },
+      { ranking: [['c']], weight: 2 },
+    ]
+    const base = { candidates: ['a', 'b', 'c'], ballots, tieBreakers: [Borda] }
+    // Default (unranked appended): Borda on {a, b} ties 6–6 → unresolved,
+    // both eliminated together.
+    const appended = new InstantRunoff(base)
+    expect(appended.computeRounds()[0]?.roundResult.eliminated).toStrictEqual([
+      'a',
+      'b',
+    ])
+    // Expressed-only: the a-only and c-only ballots give b nothing → Borda
+    // scores a=3, b=2 → b alone eliminated.
+    const expressed = new InstantRunoff({ ...base, unrankedLast: false })
+    expect(expressed.computeRounds()[0]?.roundResult.eliminated).toStrictEqual([
+      'b',
+    ])
+  })
+
   it('Baldwin with empty tieBreakers eliminates all tied-last candidates', () => {
     const ballots = [
       { ranking: [['a'], ['b'], ['c']], weight: 2 },
