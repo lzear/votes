@@ -24,6 +24,29 @@ describe(Borda, () => {
     ])
   })
 
+  it('scores only expressed preferences with unrankedLast: false', () => {
+    const partial: { ranking: string[][]; weight: number }[] = [
+      { ranking: [['a'], ['b']], weight: 1 },
+    ]
+    // Default: unranked candidates join as one tied bottom tier.
+    const withBottom = new Borda({ candidates: abcde, ballots: partial })
+    // c, d, e share the bottom tier -> average of 3rd/4th/5th place points.
+    expect(withBottom.scores()).toStrictEqual({ a: 5, b: 4, c: 2, d: 2, e: 2 })
+    // Opt out: unranked candidates earn nothing from that ballot.
+    const expressedOnly = new Borda({
+      candidates: abcde,
+      ballots: partial,
+      unrankedLast: false,
+    })
+    expect(expressedOnly.scores()).toStrictEqual({
+      a: 5,
+      b: 4,
+      c: 0,
+      d: 0,
+      e: 0,
+    })
+  })
+
   it('has candidates', () => {
     const election = new Borda({ candidates: abcde, ballots: balinski })
     expect(election.candidates).toStrictEqual(abcde)

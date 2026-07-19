@@ -1,14 +1,15 @@
 import { BallotScoreMethod } from '../../classes/ballot-score-method'
 import type { Ballot, ScoreObject } from '../../types'
-import { normalizeBallots, scoresZero } from '../../utils'
+import { scoresZero } from '../../utils'
 
+// Ballots arrive already normalized by the BallotMethod constructor.
 const computeScores = <C extends string>(
   candidates: C[],
-  _ballots: Ballot<C>[],
+  ballots: Ballot<C>[],
 ): ScoreObject<C> => {
   const scores = scoresZero(candidates)
-  for (const ballot of normalizeBallots(_ballots, candidates)) {
-    let voteValue = candidates.length // - 1
+  for (const ballot of ballots) {
+    let voteValue = candidates.length
     for (const candidatesAtRank of ballot.ranking) {
       const value = voteValue - (candidatesAtRank.length - 1) / 2
       for (const candidate of candidatesAtRank)

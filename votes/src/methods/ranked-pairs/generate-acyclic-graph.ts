@@ -11,6 +11,14 @@ export interface Edge {
   total: number
 }
 
+/**
+ * NB: the lowlink comparison below is NOT a strict same-SCC test — Tarjan
+ * lowlinks are not canonical SCC ids, so vertices of one SCC can differ. The
+ * ranked-pairs results rely on this: on raw win-count matrices (both
+ * directions of a pair positive) a strict cycle check would drop nearly every
+ * edge and produce a full tie. Do not "simplify" this to reachability/SCC
+ * without re-deriving the expected results in ranked-pairs.test.ts.
+ */
 export const generateAcyclicGraph = (
   graph: Edge[],
   edgesToAdd: Edge[],

@@ -9,11 +9,33 @@ export abstract class BallotMethod<C extends string>
 {
   public static readonly needsBallot = true
   protected readonly ballots: Ballot<C>[]
+  protected readonly unrankedLast: boolean
   private _matrix?: Matrix<C>
 
-  constructor(c: { ballots: Ballot<C>[]; candidates: C[] }) {
+  constructor(c: {
+    ballots: Ballot<C>[]
+    candidates: C[]
+    /**
+     * Whether candidates a ballot leaves unranked are appended to it as one
+     * tied bottom tier (default true — the classic "pessimistic" completion
+     * of partial ballots). Pass false to score only what voters expressed:
+     * unranked candidates then earn nothing from that ballot (no Borda
+     * points, no transfers, no last-place counts).
+     */
+    unrankedLast?: boolean
+  }) {
     super(c.candidates)
-    this.ballots = normalizeBallots(c.ballots, c.candidates, true)
+    this.unrankedLast = c.unrankedLast ?? true
+    this.ballots = normalizeBallots(c.ballots, c.candidates, this.unrankedLast)
+  }
+
+  /**
+   * The stored ballots re-normalized against a subset of candidates,
+   * honoring this method's `unrankedLast` setting. Round-based methods use
+   * this to restrict ballots to the candidates still in the running.
+   */
+  protected ballotsFor(candidates: C[]): Ballot<C>[] {
+    return normalizeBallots(this.ballots, candidates, this.unrankedLast)
   }
 
   /**
@@ -33,10 +55,12 @@ export abstract class BallotMethod<C extends string>
     type Ctor = new (input: {
       ballots: Ballot<D>[]
       candidates: D[]
+      unrankedLast?: boolean
     }) => BallotMethod<D>
     return new (this.constructor as Ctor)({
       ballots: normalizeBallots(this.ballots as Ballot<D>[], candidates, false),
       candidates,
+      unrankedLast: this.unrankedLast,
     })
   }
 }

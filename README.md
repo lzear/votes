@@ -1,10 +1,10 @@
 # votes
 
-![version](https://img.shields.io/npm/v/votes)
-![npm bundle size](https://img.shields.io/bundlephobia/minzip/votes)
-![language](https://img.shields.io/github/languages/top/lzear/votes)
-![downloads](https://img.shields.io/npm/dm/votes)
-![last commit](https://img.shields.io/github/last-commit/lzear/votes)
+[![version](https://img.shields.io/npm/v/votes)](https://www.npmjs.com/package/votes)
+[![npm bundle size](https://img.shields.io/bundlephobia/minzip/votes)](https://bundlephobia.com/package/votes)
+[![language](https://img.shields.io/github/languages/top/lzear/votes)](https://github.com/lzear/votes)
+[![downloads](https://img.shields.io/npm/dm/votes)](https://www.npmjs.com/package/votes)
+[![last commit](https://img.shields.io/github/last-commit/lzear/votes)](https://github.com/lzear/votes/commits/main)
 [![license](https://img.shields.io/github/license/lzear/votes)](https://github.com/lzear/votes/blob/main/LICENSE)
 [![CI](https://github.com/lzear/votes/actions/workflows/ci.yml/badge.svg)](https://github.com/lzear/votes/actions/workflows/ci.yml)
 [![Website](https://img.shields.io/website?url=https%3A%2F%2Frank-votes.vercel.app%2F)](https://rank-votes.vercel.app/)
@@ -38,6 +38,12 @@ borda.scores()
 borda.ranking()
 // [ ['Bear'], ['Sheep'], ['Lion'] ]
 ```
+
+A ballot ranks candidates in tiers: `[['Bear', 'Sheep'], ['Lion']]` means Bear
+and Sheep tied first, Lion last. `weight` is how many voters cast that ballot.
+Candidates a ballot leaves unranked join it as one tied bottom tier by default;
+pass `unrankedLast: false` to score only expressed preferences (unranked
+candidates then earn nothing from that ballot).
 
 ## Tiebreakers
 
@@ -112,6 +118,10 @@ rounds[0].roundResult
 // }
 ```
 
+Some methods add method-specific detail as `roundResult.info`: `Coombs` reports
+whether a round was resolved by majority or elimination (`CoombsInfo`), `Nanson`
+reports the Borda average used as elimination cutoff (`NansonInfo`).
+
 ## Election: chaining rankers
 
 `Election` chains pre-built ranker instances. The first provides the primary
@@ -140,6 +150,25 @@ election.result() // { ranking, steps: StepResult[] }
 
 Each `StepResult` records `rankerName`, `before`, `after`, and optionally
 `rounds` / `scores` from that step.
+
+## Iterated ranking
+
+`ranking()` is each method's own full ranking. `iteratedRanking()` instead fills
+places by repeated wins: run the method, take the winning tier, re-run the
+method without the placed candidates, and so on. The two differ whenever a
+method's full ranking disagrees with how it ranks subsets — e.g. instant runoff
+orders losers by elimination time.
+
+```typescript
+const irv = new InstantRunoff({ candidates, ballots })
+irv.ranking() // losers ordered by elimination time
+irv.iteratedRanking() // 2nd place = winner of a re-run without the winner
+
+new Election({ rankers }).iteratedRanking() // re-runs the whole chain per place
+```
+
+Under the hood it uses `restrict(candidates)`, which every method exposes to
+re-run itself on a subset of candidates.
 
 ## Voting systems
 
@@ -178,6 +207,13 @@ FPTP step is the head-to-head runoff mechanism, not a fallback. It will appear
 as the first entry in `tieBreakSteps`. User-supplied `tieBreakers` fire after it
 only if the head-to-head itself ties.
 
+`Schulze` also exposes `strengths()` — the beatpath strength matrix its scores
+derive from.
+
+`RankedPairs` locks equal-strength pairs simultaneously by default (ties are
+preserved rather than order-dependent). Pass `edgeSorter` — e.g. the exported
+`byTotalParticipation` — to process them sequentially like canonical Tideman.
+
 Every method also exposes `deTie()`, which recursively resolves ties by
 re-running the same method on each tied subset:
 
@@ -202,8 +238,8 @@ new RandomCandidates({ candidates, rng })
 ## Condorcet election format
 
 Parse and serialize the
-[Condorcet Election Format](https://www.condorcet.io/cef/) (`.blt`-style text
-files):
+[Condorcet Election Format](https://github.com/CondorcetVote/CondorcetElectionFormat)
+(`.blt`-style text files):
 
 ```typescript
 import {

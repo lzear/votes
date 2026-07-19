@@ -1,5 +1,5 @@
 import type { Ballot, Matrix, ScoreObject } from '../types'
-import { matrixFromBallots, normalizeBallots, normalizeRanking } from '../utils'
+import { matrixFromBallots, normalizeRanking } from '../utils'
 import {
   type QE,
   RoundBallotMethod,
@@ -15,6 +15,7 @@ export interface TbMeta {
 type BallotCtor<C extends string> = new (input: {
   ballots: Ballot<C>[]
   candidates: C[]
+  unrankedLast?: boolean
 }) => { ranking(): C[][] }
 
 type MatrixCtor<C extends string> = new (matrix: Matrix<C>) => {
@@ -68,6 +69,7 @@ type AnyCtorWithStatics<C extends string> = AnyCtor<C> & {
 
 const entryToEntry = <C extends string>(
   entry: TbEntry<C>,
+  unrankedLast: boolean,
 ): TiebreakerEntry<C> => {
   const Ctor = (
     Array.isArray(entry) ? entry[0] : entry
@@ -91,9 +93,14 @@ const entryToEntry = <C extends string>(
         matrixFromBallots(ballots, candidates),
       )
     else if (Ctor.needsBallot === true)
+      // The ctor normalizes ballots against `candidates` itself; forwarding
+      // unrankedLast (instead of pre-normalizing here) keeps the host method's
+      // setting honored — the ctor would otherwise re-append unranked
+      // candidates with its default of true.
       method = new (Ctor as unknown as BallotCtor<C>)({
-        ballots: normalizeBallots(ballots, candidates),
+        ballots,
         candidates,
+        unrankedLast,
         ...extra,
       })
     else
@@ -127,16 +134,20 @@ const entryToEntry = <C extends string>(
 
 export abstract class RoundBallotMethodTb<
   C extends string,
-> extends RoundBallotMethod<C> {
+  I = undefined,
+> extends RoundBallotMethod<C, I> {
   private readonly tbEntries: TiebreakerEntry<C>[]
 
   constructor(input: {
     ballots: Ballot<C>[]
     candidates: C[]
     tieBreakers?: TbEntry<C>[]
+    unrankedLast?: boolean
   }) {
     super(input)
-    this.tbEntries = (input.tieBreakers ?? []).map((e) => entryToEntry(e))
+    this.tbEntries = (input.tieBreakers ?? []).map((e) =>
+      entryToEntry(e, this.unrankedLast),
+    )
   }
 
   /**
@@ -183,13 +194,14 @@ export abstract class RoundBallotMethodTb<
  */
 export abstract class TbEliminateLast<
   C extends string,
-> extends RoundBallotMethodTb<C> {
+  I = undefined,
+> extends RoundBallotMethodTb<C, I> {
   protected abstract oneRound(
     candidates: C[],
     idx: number,
   ): { ranking: C[][]; scores: ScoreObject<C> }
 
-  protected round(candidates: C[], idx: number): QE<C> {
+  protected round(candidates: C[], idx: number): QE<C, I> {
     if (candidates.length < 2)
       return {
         qualified: [],

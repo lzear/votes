@@ -1,4 +1,5 @@
 import { normalizeRanking } from '../utils'
+import { iterateRanking } from '../utils/iterate-ranking'
 import { canonizeRanking } from '../utils/normalize'
 
 export interface Ranker<C extends string> {
@@ -27,10 +28,27 @@ export abstract class Method<C extends string> implements Ranker<C> {
     return canonizeRanking(this.ranking())
   }
 
-  protected abstract restrict<D extends C>(candidates: D[]): Method<D>
+  /**
+   * Return a new instance of the same method restricted to a subset of
+   * candidates.
+   */
+  public abstract restrict<D extends C>(candidates: D[]): Method<D>
 
   public restrictRanking<D extends C>(candidates: D[]): D[][] {
     return normalizeRanking(this.ranking(), candidates)
+  }
+
+  /**
+   * Ranking built by repeated wins instead of the method's own full ranking:
+   * run the method, record the winning tier, then re-run it restricted to
+   * the remaining candidates for the next place, and so on.
+   *
+   * Differs from `ranking()` whenever the method's full ranking disagrees
+   * with how it ranks subsets — e.g. instant runoff orders losers by
+   * elimination time, while iterating re-elects a winner at every place.
+   */
+  public iteratedRanking(): C[][] {
+    return iterateRanking(this)
   }
 
   public deTie(): C[][] {
