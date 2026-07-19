@@ -18,6 +18,15 @@ export default defineConfig(
     },
   },
   {
+    files: ['votes/package.json'],
+    rules: {
+      // votes/ is a workspace package published from its own root, so Node
+      // does resolve its `exports` — the nested-package.json heuristic is
+      // wrong here.
+      'package-json/no-nested-exports': 'off',
+    },
+  },
+  {
     files: ['votes/**/*.test.ts'],
     rules: {
       'vitest/expect-expect': [

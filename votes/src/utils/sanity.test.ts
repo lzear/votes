@@ -11,7 +11,7 @@ describe('sanity check', () => {
   it.each(Object.values(VotingSystem))(
     'empty list and empty candidates %s',
     (system) => {
-      if (!(system in methods)) return
+      if (!Object.hasOwn(methods, system)) return
 
       const Method = methods[system]
       const election = new Method({

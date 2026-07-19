@@ -17,13 +17,13 @@
       "import": {
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
+      },
+      "default": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       }
-    },
-    "./package.json": "./package.json"
+    }
   },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "typings": "./dist/index.d.ts",
   "directories": {
     "doc": "docs",
     "test": "test"
@@ -47,7 +47,6 @@
     "src"
   ],
   "keywords": [
-    "votes",
     "condorcet",
     "voting-systems",
     "elections"

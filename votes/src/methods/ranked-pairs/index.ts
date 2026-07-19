@@ -26,7 +26,7 @@ const computeFromMatrix = <C extends string>(
     (row, from) =>
       row
         .map((value, to) =>
-          value > 0 && to !== from
+          to !== from && value > 0
             ? {
                 from,
                 to,

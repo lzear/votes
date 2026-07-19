@@ -13,12 +13,14 @@ export const findSmithSet = <C extends string>(
   const dominatingList = candidates.map((_c, k) => {
     const dominating = new Set([k])
     const toCheck = [k]
-    while (toCheck.length > 0)
-      for (const d of dominatingDirectList[toCheck.pop()!]!)
+    while (toCheck.length > 0) {
+      const dd = dominatingDirectList[toCheck.pop()!]!
+      for (const d of dd)
         if (!dominating.has(d)) {
           dominating.add(d)
           toCheck.push(d)
         }
+    }
 
     return dominating.size === candidates.length
   })

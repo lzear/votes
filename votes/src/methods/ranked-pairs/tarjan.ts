@@ -16,11 +16,6 @@ export class Tarjan {
     this.scc = []
   }
 
-  public run(): Vertex[][] {
-    for (const v of this.graph) if (v.index < 0) this.strongconnect(v)
-    return this.scc
-  }
-
   private processConnection(v: Vertex, w: Vertex): void {
     if (w.index < 0) {
       this.strongconnect(w)
@@ -49,5 +44,10 @@ export class Tarjan {
       this.processConnection(vertex, connection)
 
     if (vertex.lowlink === vertex.index) this.extractSCC(vertex)
+  }
+
+  public run(): Vertex[][] {
+    for (const v of this.graph) if (v.index < 0) this.strongconnect(v)
+    return this.scc
   }
 }
