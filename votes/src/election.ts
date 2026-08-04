@@ -1,11 +1,14 @@
 import type { Ranker } from './classes/method'
 import type { Round } from './classes/round-ballot-method'
 import type { ScoreObject } from './types'
-import { applyRankingAsTiebreaker, scoresToRanking } from './utils'
-import { iterateRanking } from './utils/iterate-ranking'
+import {
+  applyRankingAsTiebreaker,
+  iterateRanking,
+  scoresToRanking,
+} from './utils'
 
 export interface StepResult<C extends string> {
-  /** Constructor name of the ranker that produced this step. */
+  // Constructor name of the ranker that produced this step.
   rankerName: string
   before: C[][]
   after: C[][]

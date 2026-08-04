@@ -1,6 +1,6 @@
 import type { Ranker } from '../classes/method'
 
-/** A ranker that can re-run itself on a subset of its candidates. */
+// A ranker that can re-run itself on a subset of its candidates.
 export interface RestrictableRanker<C extends string> extends Ranker<C> {
   restrict(candidates: C[]): RestrictableRanker<C>
 }

@@ -4,7 +4,7 @@ import { RoundBallotMethodTb } from '../../classes/round-ballot-method-tb'
 import { config } from '../../utils/config'
 import { Borda } from '../borda'
 
-/** Round-level detail specific to Nanson: the Borda-score cutoff used to eliminate candidates. */
+// Round-level detail specific to Nanson: the Borda-score cutoff used to eliminate candidates.
 export interface NansonInfo {
   average: number
 }
