@@ -2,7 +2,7 @@
 
 import { mapValues, pick, sum, zipObject } from 'lodash-es'
 import { Method } from '../../classes/method'
-import type { Ballot, Matrix, ScoreObject } from '../../types'
+import { type Ballot, type Matrix, type ScoreObject } from '../../types'
 import { matrixFromBallots, scoresToRanking } from '../../utils'
 import { config } from '../../utils/config'
 
@@ -64,7 +64,7 @@ const tieBreak = <C extends string>(judgements: Judgements<C>): C[][] => {
   const ranking = scoresToRanking(medians)
   return ranking.flatMap((cs) => {
     const median = medians[cs[0]!]
-    if (median === -1 || !Number.isInteger(median)) return [cs]
+    if (median === -1 || !Number.isSafeInteger(median)) return [cs]
     const j = pick(judgements, cs)
     const minGroup = Math.min(...cs.map((c) => j[c][median]!))
     if (minGroup <= 0) return [cs]

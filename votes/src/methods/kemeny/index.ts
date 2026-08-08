@@ -2,7 +2,7 @@
 
 import { range, zipObject } from 'lodash-es'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
-import type { Matrix, ScoreObject } from '../../types'
+import { type Matrix, type ScoreObject } from '../../types'
 
 const rankingPenalty = (ranking: number[], matrix: number[][]) => {
   let p = 0

@@ -1,4 +1,4 @@
-import type { Ballot } from '../types'
+import { type Ballot } from '../types'
 import { removeDuplicatedCandidates, removeInvalidCandidates } from '../utils'
 
 export interface ParsedCondorcetElection<C extends string> {
@@ -74,14 +74,14 @@ const stripQuantifierAndWeight = (
   let quantifier = 1
   const quantifierMatch = / \* (\d+(?:\.\d+)?)$/.exec(line)
   if (quantifierMatch?.[1]) {
-    quantifier = Number.parseFloat(quantifierMatch[1])
+    quantifier = Number(quantifierMatch[1])
     line = line.slice(0, line.length - quantifierMatch[0].length).trim()
   }
 
   let voteWeight = 1
   const weightMatch = / \^(\d+(?:\.\d+)?)$/.exec(line)
   if (weightMatch?.[1]) {
-    voteWeight = Number.parseFloat(weightMatch[1])
+    voteWeight = Number(weightMatch[1])
     line = line.slice(0, line.length - weightMatch[0].length).trim()
   }
 
@@ -168,12 +168,10 @@ const stripImplicitRank = <C extends string>(
   const lastRank = ranking.at(-1)!
   const ranked = new Set(ranking.slice(0, -1).flat())
   const missing = candidates.filter((c) => !ranked.has(c))
-  if (
-    missing.length === lastRank.length &&
+  return missing.length === lastRank.length &&
     missing.every((c) => lastRank.includes(c))
-  )
-    return ranking.slice(0, -1)
-  return ranking
+    ? ranking.slice(0, -1)
+    : ranking
 }
 
 export const stringifyCondorcetElectionFormat = <C extends string>(

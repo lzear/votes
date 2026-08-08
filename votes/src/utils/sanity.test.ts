@@ -11,16 +11,16 @@ describe('sanity check', () => {
   it.each(Object.values(VotingSystem))(
     'empty list and empty candidates %s',
     (system) => {
-      if (system in methods) {
-        const Method = methods[system]
-        const election = new Method({
-          array: [],
-          ballots: [],
-          candidates: [],
-        })
-        expect(election.canonicalRanking()).toStrictEqual([])
-        if ('scores' in election) expect(election.scores()).toStrictEqual({})
-      }
+      if (!Object.hasOwn(methods, system)) return
+
+      const Method = methods[system]
+      const election = new Method({
+        array: [],
+        ballots: [],
+        candidates: [],
+      })
+      expect(election.canonicalRanking()).toStrictEqual([])
+      if ('scores' in election) expect(election.scores()).toStrictEqual({})
     },
   )
   it.each(Object.values(VotingSystem))(
@@ -48,10 +48,10 @@ describe('sanity check', () => {
         ballots,
         ...matrix,
       })
-      if ('scores' in election) {
-        expect(election.scores().a).toBeCloseTo(election.scores().b, 6)
-        expect(election.scores().a).toBeCloseTo(election.scores().c, 6)
-      }
+      if (!('scores' in election)) return
+
+      expect(election.scores().a).toBeCloseTo(election.scores().b, 6)
+      expect(election.scores().a).toBeCloseTo(election.scores().c, 6)
     },
   )
   it.each(Object.values(VotingSystem))(
@@ -152,10 +152,10 @@ describe('sanity check', () => {
         ...matrix,
       })
 
-      if ('scores' in election) {
-        expect(election.scores().a).toBeCloseTo(election.scores().b, 6)
-        expect(election.scores().a).toBeCloseTo(election.scores().c, 6)
-      }
+      if (!('scores' in election)) return
+
+      expect(election.scores().a).toBeCloseTo(election.scores().b, 6)
+      expect(election.scores().a).toBeCloseTo(election.scores().c, 6)
     },
   )
   it.each(Object.values(VotingSystem))('dummyProfile %s', (system) => {

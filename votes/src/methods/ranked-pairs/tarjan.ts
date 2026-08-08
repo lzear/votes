@@ -1,7 +1,7 @@
 // From chadhutchins:
 // https://gist.github.com/chadhutchins/1440602
 
-import type { Vertex } from './vertex'
+import { type Vertex } from './vertex'
 import { VertexStack } from './vertex-stack'
 
 export class Tarjan {
@@ -14,11 +14,6 @@ export class Tarjan {
     this.stack = new VertexStack()
     this.graph = graph
     this.scc = []
-  }
-
-  public run(): Vertex[][] {
-    for (const v of this.graph) if (v.index < 0) this.strongconnect(v)
-    return this.scc
   }
 
   private processConnection(v: Vertex, w: Vertex): void {
@@ -42,12 +37,17 @@ export class Tarjan {
   private strongconnect(vertex: Vertex): void {
     vertex.index = this.index
     vertex.lowlink = this.index
-    this.index = this.index + 1
+    this.index += 1
     this.stack.push(vertex)
 
     for (const connection of vertex.connections)
       this.processConnection(vertex, connection)
 
     if (vertex.lowlink === vertex.index) this.extractSCC(vertex)
+  }
+
+  public run(): Vertex[][] {
+    for (const v of this.graph) if (v.index < 0) this.strongconnect(v)
+    return this.scc
   }
 }

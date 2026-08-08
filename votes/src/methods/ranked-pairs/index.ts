@@ -2,7 +2,7 @@
 
 import { groupBy, range } from 'lodash-es'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
-import type { Matrix, ScoreObject } from '../../types'
+import { type Matrix, type ScoreObject } from '../../types'
 import { subMatrix } from '../../utils/make-matrix'
 import { scoresAny } from '../../utils/scores-zero'
 import { type Edge, generateAcyclicGraph } from './generate-acyclic-graph'
@@ -26,7 +26,7 @@ const computeFromMatrix = <C extends string>(
     (row, from) =>
       row
         .map((value, to) =>
-          value > 0 && to !== from
+          to !== from && value > 0
             ? {
                 from,
                 to,
@@ -55,8 +55,8 @@ const computeFromMatrix = <C extends string>(
   }
 
   // Sources of the acyclic graph (no incoming locked edge) win this iteration
-  const winnersIdx = range(matrix.candidates.length).filter(
-    (key) => !acyclicGraph.some(({ to }) => to === key),
+  const winnersIdx = range(matrix.candidates.length).filter((key) =>
+    acyclicGraph.every(({ to }) => to !== key),
   )
   if (winnersIdx.length === 0 || winnersIdx.length === matrix.candidates.length)
     return scoresAny(matrix.candidates, 1)
@@ -107,7 +107,7 @@ export class RankedPairs<C extends string> extends MatrixScoreMethod<C> {
   public restrict<D extends C>(candidates: D[]): RankedPairs<D> {
     return new RankedPairs({
       ...subMatrix(this.matrix, candidates),
-      ...(this.edgeSorter ? { edgeSorter: this.edgeSorter } : {}),
+      ...(this.edgeSorter && { edgeSorter: this.edgeSorter }),
     })
   }
 }

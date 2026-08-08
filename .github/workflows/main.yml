@@ -5,39 +5,22 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   ci:
-    uses: ./.github/workflows/ci.yml
+    uses: lzear/forge/.github/workflows/ci.yml@6996b9b74d43075c98841b25c3c0962d9ed495f4 # v4.5.1
     secrets:
       CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
   release:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push'
     needs: ci
-    runs-on: ubuntu-latest
+    uses: lzear/forge/.github/workflows/release.yml@6996b9b74d43075c98841b25c3c0962d9ed495f4 # v4.5.1
     permissions:
       contents: write
       pull-requests: write
       id-token: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-          registry-url: 'https://registry.npmjs.org'
-      - run: corepack enable
-      - run: yarn install --immutable
-      - run: yarn build
-      - id: changesets
-        uses: changesets/action@v1
-        with:
-          version: yarn changeset version
-          createGithubReleases: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - if: steps.changesets.outputs.hasChangesets == 'false'
-        run: npm publish --workspace=votes --access public --provenance
-        env:
-          NPM_CONFIG_PROVENANCE: 'true'
+    with:
+      snapshot-branch: beta

@@ -4,7 +4,7 @@ import {
   tb,
   type TbEntry,
 } from '../../classes/round-ballot-method-tb'
-import type { Ballot, ScoreObject } from '../../types'
+import { type Ballot, type ScoreObject } from '../../types'
 import { FirstPastThePost } from '../first-past-the-post'
 
 /**
@@ -67,7 +67,7 @@ export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
       qualified: [...mainQualified, ...q2],
       eliminated,
       scores,
-      ...(tieBreakSteps.length > 0 ? { tieBreakSteps } : {}),
+      ...(tieBreakSteps.length > 0 && { tieBreakSteps }),
     }
   }
 }

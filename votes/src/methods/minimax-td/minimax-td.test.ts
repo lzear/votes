@@ -1,5 +1,5 @@
 import { abcde, balinski } from '../../test/test-utils'
-import type { Matrix } from '../../types'
+import { type Matrix } from '../../types'
 import { findSmithSet, matrixFromBallots } from '../../utils'
 import { MinimaxTD } from '.'
 

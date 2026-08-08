@@ -1,23 +1,23 @@
-import type { ScoreObject } from '../types'
+import { type ScoreObject } from '../types'
 import { scoresZero } from '../utils'
 import { BallotMethod } from './ballot-method'
-import type { Ranker } from './method'
+import { type Ranker } from './method'
 
-/** Trace of one tiebreaker's work within a round. */
+// Trace of one tiebreaker's work within a round.
 export interface TieBreakStep<C extends string> {
-  /** Position in the tieBreakers array (0-based). */
+  // Position in the tieBreakers array (0-based).
   tbIndex: number
-  /** Constructor name of the tiebreaker method. */
+  // Constructor name of the tiebreaker method.
   tbName: string
-  /** Candidates that were tied going into this step. */
+  // Candidates that were tied going into this step.
   input: C[]
-  /** Full ranking produced by the tiebreaker on `input`. */
+  // Full ranking produced by the tiebreaker on `input`.
   ranking: C[][]
-  /** Scores produced by the tiebreaker (when the method supports scores()). */
+  // Scores produced by the tiebreaker (when the method supports scores()).
   scores?: Partial<Record<C, number>>
-  /** Candidates promoted out of the tie (upper tiers of `ranking`). */
+  // Candidates promoted out of the tie (upper tiers of `ranking`).
   resolved: C[]
-  /** Candidates still tied after this step (last tier of `ranking`). */
+  // Candidates still tied after this step (last tier of `ranking`).
   remaining: C[]
 }
 
@@ -70,8 +70,8 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
           qualified,
           eliminated,
           scores,
-          ...(tieBreakSteps ? { tieBreakSteps } : {}),
-          ...(info === undefined ? {} : { info }),
+          ...(tieBreakSteps && { tieBreakSteps }),
+          ...(info !== undefined && { info }),
         },
       })
       inRace = qualified

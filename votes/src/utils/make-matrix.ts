@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import { range, times } from 'lodash-es'
-import type { Ballot, Matrix } from '../types'
+import { type Ballot, type Matrix } from '../types'
 
-/** n×n matrix where off-diagonal cells are `value(i, j)` and the diagonal is 0. */
+// n×n matrix where off-diagonal cells are `value(i, j)` and the diagonal is 0.
 export const pairwiseMatrix = (
   n: number,
   value: (i: number, j: number) => number,

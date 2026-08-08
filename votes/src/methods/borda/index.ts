@@ -1,5 +1,5 @@
 import { BallotScoreMethod } from '../../classes/ballot-score-method'
-import type { Ballot, ScoreObject } from '../../types'
+import { type Ballot, type ScoreObject } from '../../types'
 import { scoresZero } from '../../utils'
 
 // Ballots arrive already normalized by the BallotMethod constructor.
@@ -13,7 +13,7 @@ const computeScores = <C extends string>(
     for (const candidatesAtRank of ballot.ranking) {
       const value = voteValue - (candidatesAtRank.length - 1) / 2
       for (const candidate of candidatesAtRank)
-        scores[candidate] = scores[candidate] + value * ballot.weight
+        scores[candidate] += value * ballot.weight
 
       voteValue -= candidatesAtRank.length
     }

@@ -1,61 +1,52 @@
 {
-  "type": "commonjs",
   "name": "votes--root",
-  "description": "Voting systems library monorepo",
   "version": "0.0.0",
   "private": true,
-  "workspaces": [
-    "votes"
-  ],
-  "sideEffects": false,
-  "author": "lzear",
-  "repository": "github:lzear/votes",
+  "description": "Voting systems library monorepo",
   "license": "MIT",
+  "repository": "github:lzear/votes",
+  "homepage": "https://github.com/lzear/votes",
+  "bugs": "https://github.com/lzear/votes/issues",
+  "author": "lzear",
+  "type": "module",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "yarn@4.18.1",
   "scripts": {
     "build": "yarn workspaces foreach -A --topological run build",
     "build-docs": "yarn workspaces foreach -A run build-docs",
     "changeset": "changeset",
     "fix:prettier": "prettier --write \"**/*.*\"",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "housekeep": "yarn forge update && yarn test run -u && yarn qa",
     "lint": "eslint .",
-    "ncu": "yarn dlx npm-check-updates --dep dev,optional,peer,prod,packageManager -u --workspaces && yarn up --recursive '*' '@*/*'",
+    "prepare": "lefthook install",
     "qa": "yarn install --immutable && yarn build && concurrently -g 'yarn typecheck' 'yarn lint' 'yarn test' 'yarn workspaces foreach -A run build-docs' 'yarn forge check'",
-    "release": "changeset publish",
     "setup-repo": "forge setup",
     "test": "yarn workspaces foreach -A run test",
     "test-prod": "yarn run eslint && yarn workspaces run test-prod",
-    "typecheck": "yarn workspaces foreach -A run typecheck",
-    "version-packages": "changeset version"
+    "typecheck": "yarn workspaces foreach -A run typecheck"
   },
+  "workspaces": [
+    "votes"
+  ],
   "devDependencies": {
-    "@changesets/cli": "^2",
+    "@changesets/cli": "^3",
     "@commitlint/cli": "^21",
-    "@commitlint/config-conventional": "^21",
+    "@lzear/configs": "^4",
     "@lzear/forge": "^4",
     "@types/node": "^26",
     "@typescript/native": "npm:typescript@^7.0.2",
     "concurrently": "^10",
     "eslint": "^10",
-    "knip": "^6",
     "lefthook": "^2",
     "lint-staged": "^17",
     "prettier": "^3",
     "typescript": "npm:@typescript/typescript6@^6.0.2"
   },
-  "resolutions": {
-    "eslint-plugin-sonarjs/typescript": "npm:typescript@^6.0.3"
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
   "lint-staged": {
     "**/*.{ts,tsx,md}": "prettier --write"
-  },
-  "bugs": {
-    "url": "https://github.com/lzear/votes/issues"
-  },
-  "homepage": "https://github.com/lzear/votes",
-  "packageManager": "yarn@4.17.1"
+  }
 }

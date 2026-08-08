@@ -1,4 +1,4 @@
-import type { Ballot } from '../types'
+import { type Ballot } from '../types'
 
 type Candidate = '🐸' | '🐷' | '🦁' | '🐻' | '🐭'
 

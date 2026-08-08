@@ -1,5 +1,5 @@
 import { BallotScoreMethod } from '../../classes/ballot-score-method'
-import type { ScoreObject } from '../../types'
+import { type ScoreObject } from '../../types'
 import { iterateFirstChoices } from './iterate-first-choices'
 
 /**
