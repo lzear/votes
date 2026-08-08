@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import type { Matrix } from '../types'
+import { type Matrix } from '../types'
 import { makeAntisymmetric } from './make-matrix'
 
 export const findSmithSet = <C extends string>(

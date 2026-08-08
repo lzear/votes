@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
-import type { Matrix, ScoreObject } from '../../types'
+import { type Matrix, type ScoreObject } from '../../types'
 
 export enum MinimaxVariant {
   WinningVotes = 'WINNING_VOTES',
@@ -26,8 +26,9 @@ const computeScores = <C extends string>(
       ...matrix.array[c1Index]!.flatMap((yOverX, c2Index) => {
         if (c2Index === c1Index) return []
         const xOverY = matrix.array[c2Index]![c1Index]!
-        if (xOverY === yOverX && excludeTies) return []
-        return [scoreXY[variant](xOverY, yOverX)]
+        return xOverY === yOverX && excludeTies
+          ? []
+          : [scoreXY[variant](xOverY, yOverX)]
       }),
     )
   return s

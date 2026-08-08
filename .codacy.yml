@@ -1,0 +1,11 @@
+---
+engines:
+  eslint:
+    enabled: true
+  duplication:
+    enabled: true
+
+exclude_paths:
+  - 'dist/**'
+  - 'coverage/**'
+  - '*.min.js'

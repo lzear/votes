@@ -1,6 +1,6 @@
-import type { ScoreObject } from '../types'
+import { type ScoreObject } from '../types'
 import { Method } from './method'
-import type { Scorer } from './score-method'
+import { type Scorer } from './score-method'
 
 /**
  * Voting method that involves some randomness in the computation in the winners.

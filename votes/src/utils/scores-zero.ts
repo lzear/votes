@@ -1,4 +1,4 @@
-import type { ScoreObject } from '../types'
+import { type ScoreObject } from '../types'
 
 export const scoresAny = <C extends string>(
   candidates: C[],

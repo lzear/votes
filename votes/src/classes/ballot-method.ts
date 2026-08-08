@@ -1,6 +1,6 @@
-import type { Ballot, Matrix } from '../types'
+import { type Ballot, type Matrix } from '../types'
 import { matrixFromBallots, normalizeBallots } from '../utils'
-import type { Matrixer } from './matrix-score-method'
+import { type Matrixer } from './matrix-score-method'
 import { Method, type Ranker } from './method'
 
 export abstract class BallotMethod<C extends string>

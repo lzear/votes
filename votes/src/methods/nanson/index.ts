@@ -1,10 +1,10 @@
 import { sum } from 'lodash-es'
-import type { QE } from '../../classes/round-ballot-method'
+import { type QE } from '../../classes/round-ballot-method'
 import { RoundBallotMethodTb } from '../../classes/round-ballot-method-tb'
 import { config } from '../../utils/config'
 import { Borda } from '../borda'
 
-/** Round-level detail specific to Nanson: the Borda-score cutoff used to eliminate candidates. */
+// Round-level detail specific to Nanson: the Borda-score cutoff used to eliminate candidates.
 export interface NansonInfo {
   average: number
 }
@@ -32,9 +32,8 @@ export class Nanson<C extends string> extends RoundBallotMethodTb<
     )
 
     // All equal scores → eliminate everyone as one group (complete tie)
-    if (qualified.length === 0)
-      return { eliminated: candidates, qualified: [], scores, info }
-
-    return { qualified, eliminated, scores, info }
+    return qualified.length === 0
+      ? { eliminated: candidates, qualified: [], scores, info }
+      : { qualified, eliminated, scores, info }
   }
 }

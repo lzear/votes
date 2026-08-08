@@ -1,5 +1,5 @@
 import { RandomMatrixMethod } from '../../classes/random-matrix-method'
-import type { Matrix, ScoreObject } from '../../types'
+import { type Matrix, type ScoreObject } from '../../types'
 import { makeAntisymmetric } from '../../utils'
 import { lotteryFromAntisymmetric } from '../maximal-lotteries'
 

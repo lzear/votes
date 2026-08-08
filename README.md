@@ -6,7 +6,11 @@
 [![downloads](https://img.shields.io/npm/dm/votes)](https://www.npmjs.com/package/votes)
 [![last commit](https://img.shields.io/github/last-commit/lzear/votes)](https://github.com/lzear/votes/commits/main)
 [![license](https://img.shields.io/github/license/lzear/votes)](https://github.com/lzear/votes/blob/main/LICENSE)
-[![CI](https://github.com/lzear/votes/actions/workflows/ci.yml/badge.svg)](https://github.com/lzear/votes/actions/workflows/ci.yml)
+[![CI](https://github.com/lzear/votes/actions/workflows/main.yml/badge.svg)](https://github.com/lzear/votes/actions/workflows/main.yml)
+
+[![Codacy grade](https://app.codacy.com/project/badge/Grade/d2378c63d95f41efb79072176f015976)](https://app.codacy.com/gh/lzear/votes)
+
+[![Codacy coverage](https://app.codacy.com/project/badge/Coverage/d2378c63d95f41efb79072176f015976)](https://app.codacy.com/gh/lzear/votes)
 [![Website](https://img.shields.io/website?url=https%3A%2F%2Frank-votes.vercel.app%2F)](https://rank-votes.vercel.app/)
 
 TypeScript library of ranked voting methods, published to NPM.

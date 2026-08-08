@@ -1,5 +1,5 @@
 import { difference, intersection, isEqual } from 'lodash-es'
-import type { Ballot } from '../types'
+import { type Ballot } from '../types'
 
 /**
  * Returns true if the 2 ballots are equivalent. The order of the candidates inside a rank is irrelevant. Reflexive check.
@@ -83,10 +83,10 @@ export const removeDuplicatedCandidates = <C extends string>(
   const usedCandidates: C[] = []
   for (const cur of ranking) {
     const unique = difference([...new Set(cur)], usedCandidates)
-    if (unique.length > 0) {
-      result.push(unique)
-      usedCandidates.push(...unique)
-    }
+    if (unique.length === 0) continue
+
+    result.push(unique)
+    usedCandidates.push(...unique)
   }
   return result
 }

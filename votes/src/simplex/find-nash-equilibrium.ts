@@ -9,8 +9,9 @@ const isZero = (matrix: number[][]): boolean => {
 const normalizeVector = (vector: number[]): number[] => {
   const positive = vector.map((v) => Math.max(v, 0))
   const sum = positive.reduce((acc, cur) => acc + cur, 0)
-  if (sum === 0) return vector.map(() => 1 / vector.length)
-  return positive.map((v) => v / sum)
+  return sum === 0
+    ? vector.map(() => 1 / vector.length)
+    : positive.map((v) => v / sum)
 }
 
 const initTableau = (n: number, cols: number, A: number[][]): number[][] => {

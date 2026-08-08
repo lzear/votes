@@ -1,5 +1,5 @@
 import { BallotScoreMethod } from '../../classes/ballot-score-method'
-import type { Ballot, ScoreObject } from '../../types'
+import { type Ballot, type ScoreObject } from '../../types'
 import { scoresZero } from '../../utils'
 
 // Ballots arrive already normalized by the BallotMethod constructor.

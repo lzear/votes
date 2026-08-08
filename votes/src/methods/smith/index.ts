@@ -1,5 +1,5 @@
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
-import type { Matrix, ScoreObject } from '../../types'
+import { type Matrix, type ScoreObject } from '../../types'
 import { findSmithSet, scoresAny } from '../../utils'
 
 const computeScores = <C extends string>(matrix: Matrix<C>): ScoreObject<C> => {

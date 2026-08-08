@@ -2,7 +2,7 @@
 
 import { groupBy, range } from 'lodash-es'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
-import type { Matrix, ScoreObject } from '../../types'
+import { type Matrix, type ScoreObject } from '../../types'
 import { subMatrix } from '../../utils/make-matrix'
 import { scoresAny } from '../../utils/scores-zero'
 import { type Edge, generateAcyclicGraph } from './generate-acyclic-graph'

@@ -58,10 +58,11 @@
     "@lzear/forge": "^4",
     "@types/lodash-es": "^4",
     "@types/node": "^26",
-    "@vitest/coverage-v8": "^4",
+    "@vitest/coverage-v8": "^5",
     "rimraf": "^6",
     "tsup": "^8",
     "typedoc": "^0.28",
-    "vitest": "^4"
+    "vite": "^8",
+    "vitest": "^5"
   }
 }
