@@ -1,4 +1,4 @@
-import type { ScoreObject } from '../types'
+import { type ScoreObject } from '../types'
 import { scoresToRanking } from '../utils'
 import { Method, type Ranker } from './method'
 

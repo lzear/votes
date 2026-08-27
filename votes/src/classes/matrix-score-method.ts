@@ -1,4 +1,4 @@
-import type { Matrix } from '../types'
+import { type Matrix } from '../types'
 import { subMatrix } from '../utils/make-matrix'
 import { ScoreMethod, type Scorer } from './score-method'
 

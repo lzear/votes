@@ -1,7 +1,7 @@
-import type { ScoreObject } from '../types'
+import { type ScoreObject } from '../types'
 import { scoresZero } from '../utils'
 import { BallotMethod } from './ballot-method'
-import type { Ranker } from './method'
+import { type Ranker } from './method'
 
 // Trace of one tiebreaker's work within a round.
 export interface TieBreakStep<C extends string> {

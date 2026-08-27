@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { RandomBallotMethod } from '../../classes/random-ballot-method'
-import type { Ballot } from '../../types'
+import { type Ballot } from '../../types'
 import { normalizeRanking, totalBallotsWeight } from '../../utils'
 
 const pickBallotIdx = <C extends string>(

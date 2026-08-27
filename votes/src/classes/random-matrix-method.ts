@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import { mapValues, omit, sum } from 'lodash-es'
-import type { Matrix, ScoreObject } from '../types'
+import { type Matrix, type ScoreObject } from '../types'
 import { subMatrix } from '../utils/make-matrix'
 import { shuffleArray } from '../utils/shuffle-array'
-import type { Matrixer } from './matrix-score-method'
+import { type Matrixer } from './matrix-score-method'
 import { RandomMethod } from './random-method'
-import type { Scorer } from './score-method'
+import { type Scorer } from './score-method'
 
 const randomRankingFromScores = <C extends string>(
   scoreObject: ScoreObject<C>,

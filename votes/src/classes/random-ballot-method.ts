@@ -1,7 +1,7 @@
-import type { Ballot } from '../types'
+import { type Ballot } from '../types'
 import { normalizeBallots } from '../utils'
 import { BallotMethod } from './ballot-method'
-import type { Ranker } from './method'
+import { type Ranker } from './method'
 
 export abstract class RandomBallotMethod<C extends string>
   extends BallotMethod<C>

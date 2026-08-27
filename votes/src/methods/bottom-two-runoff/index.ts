@@ -4,7 +4,7 @@ import {
   tb,
   type TbEntry,
 } from '../../classes/round-ballot-method-tb'
-import type { Ballot, ScoreObject } from '../../types'
+import { type Ballot, type ScoreObject } from '../../types'
 import { FirstPastThePost } from '../first-past-the-post'
 
 /**

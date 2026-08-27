@@ -1,5 +1,5 @@
 import { difference, intersection, isEqual } from 'lodash-es'
-import type { Ballot } from '../types'
+import { type Ballot } from '../types'
 
 /**
  * Returns true if the 2 ballots are equivalent. The order of the candidates inside a rank is irrelevant. Reflexive check.

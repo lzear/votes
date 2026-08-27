@@ -1,4 +1,4 @@
-import type { Ballot } from '../types'
+import { type Ballot } from '../types'
 import { removeDuplicatedCandidates, removeInvalidCandidates } from '../utils'
 
 export interface ParsedCondorcetElection<C extends string> {

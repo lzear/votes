@@ -1,4 +1,4 @@
-import type { Ballot, ScoreObject } from '../../types'
+import { type Ballot, type ScoreObject } from '../../types'
 import { scoresZero } from '../../utils'
 
 // Callers (BallotMethod subclasses) pass already-normalized ballots.

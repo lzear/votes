@@ -1,4 +1,4 @@
-import type { Ballot, Matrix, ScoreObject } from '../types'
+import { type Ballot, type Matrix, type ScoreObject } from '../types'
 import { matrixFromBallots, normalizeRanking } from '../utils'
 import {
   type QE,

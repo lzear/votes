@@ -1,5 +1,5 @@
 import { TbEliminateLast } from '../../classes/round-ballot-method-tb'
-import type { ScoreObject } from '../../types'
+import { type ScoreObject } from '../../types'
 import { scoresToRanking } from '../../utils'
 import { FirstPastThePost } from '../first-past-the-post'
 

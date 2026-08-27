@@ -1,4 +1,4 @@
-import type { Vertex } from './vertex'
+import { type Vertex } from './vertex'
 
 export class VertexStack {
   private readonly _vertices: Vertex[] = []

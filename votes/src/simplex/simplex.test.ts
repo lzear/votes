@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-
 import { productVectM } from '../test/matrix'
 import { findNashEquilibrium } from './find-nash-equilibrium'
 

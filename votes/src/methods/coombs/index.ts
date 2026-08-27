@@ -1,7 +1,7 @@
 import { difference, mapValues } from 'lodash-es'
 import { type QE } from '../../classes/round-ballot-method'
 import { TbEliminateLast } from '../../classes/round-ballot-method-tb'
-import type { Ballot, ScoreObject } from '../../types'
+import { type Ballot, type ScoreObject } from '../../types'
 import { scoresToRanking } from '../../utils'
 import { config } from '../../utils/config'
 import { AbsoluteMajority } from '../absolute-majority'

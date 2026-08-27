@@ -1,5 +1,5 @@
 import { sum } from 'lodash-es'
-import type { QE } from '../../classes/round-ballot-method'
+import { type QE } from '../../classes/round-ballot-method'
 import { RoundBallotMethodTb } from '../../classes/round-ballot-method-tb'
 import { config } from '../../utils/config'
 import { Borda } from '../borda'

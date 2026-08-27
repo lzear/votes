@@ -4,7 +4,7 @@ import { Copeland } from './methods/copeland'
 import { FirstPastThePost } from './methods/first-past-the-post'
 import { InstantRunoff } from './methods/instant-runoff'
 import { RandomCandidates } from './methods/random-candidates'
-import type { Ballot } from './types'
+import { type Ballot } from './types'
 import { matrixFromBallots } from './utils'
 import {
   iterateRanking,

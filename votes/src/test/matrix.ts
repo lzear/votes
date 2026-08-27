@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-
 import { range } from 'lodash-es'
 
 const product = (a: number[][], b: number[][]): number[][] => {

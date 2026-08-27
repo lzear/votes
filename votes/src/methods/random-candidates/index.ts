@@ -1,5 +1,5 @@
 import { RandomMethod } from '../../classes/random-method'
-import type { ScoreObject } from '../../types'
+import { type ScoreObject } from '../../types'
 import { scoresAny } from '../../utils/scores-zero'
 import { shuffleArray } from '../../utils/shuffle-array'
 

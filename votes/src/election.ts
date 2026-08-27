@@ -1,6 +1,6 @@
-import type { Ranker } from './classes/method'
-import type { Round } from './classes/round-ballot-method'
-import type { ScoreObject } from './types'
+import { type Ranker } from './classes/method'
+import { type Round } from './classes/round-ballot-method'
+import { type ScoreObject } from './types'
 import {
   applyRankingAsTiebreaker,
   iterateRanking,

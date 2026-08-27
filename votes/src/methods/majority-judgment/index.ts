@@ -2,7 +2,7 @@
 
 import { mapValues, pick, sum, zipObject } from 'lodash-es'
 import { Method } from '../../classes/method'
-import type { Ballot, Matrix, ScoreObject } from '../../types'
+import { type Ballot, type Matrix, type ScoreObject } from '../../types'
 import { matrixFromBallots, scoresToRanking } from '../../utils'
 import { config } from '../../utils/config'
 
