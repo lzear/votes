@@ -26,6 +26,6 @@ jobs:
       - run: yarn install --immutable
       - run: yarn build
       - run: yarn changeset version --snapshot beta
-      - run: yarn changeset publish --tag beta --no-git-tag
+      - run: npm publish --workspace=votes --access public --provenance --tag beta
         env:
           NPM_CONFIG_PROVENANCE: 'true'
