@@ -20,6 +20,7 @@
     "changeset": "changeset",
     "fix:prettier": "prettier --write \"**/*.*\"",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "housekeep": "yarn forge update && yarn test run -u && yarn qa",
     "lint": "eslint .",
     "qa": "yarn install --immutable && yarn build && concurrently -g 'yarn typecheck' 'yarn lint' 'yarn test' 'yarn workspaces foreach -A run build-docs' 'yarn forge check'",
     "release": "changeset publish",
