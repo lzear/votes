@@ -31,10 +31,10 @@ jobs:
       - run: yarn install --immutable
       - run: yarn build
       - id: changesets
-        uses: changesets/action@v1
+        uses: changesets/action@v2
         with:
-          version: yarn changeset version
-          createGithubReleases: false
+          version-script: yarn changeset version
+          create-github-releases: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - if: steps.changesets.outputs.hasChangesets == 'false'
