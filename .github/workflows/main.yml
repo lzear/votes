@@ -41,3 +41,23 @@ jobs:
         run: npm publish --workspace=votes --access public --provenance
         env:
           NPM_CONFIG_PROVENANCE: 'true'
+
+  release-beta:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/beta'
+    needs: ci
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+      - run: corepack enable
+      - run: yarn install --immutable
+      - run: yarn build
+      - run: yarn changeset version --snapshot beta
+      - run: npm publish --workspace=votes --access public --provenance --tag beta
+        env:
+          NPM_CONFIG_PROVENANCE: 'true'
