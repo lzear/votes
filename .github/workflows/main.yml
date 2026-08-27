@@ -12,7 +12,7 @@ jobs:
       CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
   release:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && contains(fromJSON('["refs/heads/main", "refs/heads/beta"]'), github.ref)
     needs: ci
     runs-on: ubuntu-latest
     permissions:
@@ -30,34 +30,25 @@ jobs:
       - run: corepack enable
       - run: yarn install --immutable
       - run: yarn build
-      - id: changesets
+
+      # main: version PR via changesets, publish to `latest` once merged
+      - if: github.ref == 'refs/heads/main'
+        id: changesets
         uses: changesets/action@v2
         with:
           version-script: yarn changeset version
           create-github-releases: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - if: steps.changesets.outputs.hasChangesets == 'false'
+      - if: github.ref == 'refs/heads/main' && steps.changesets.outputs.hasChangesets == 'false'
         run: npm publish --workspace=votes --access public --provenance
         env:
           NPM_CONFIG_PROVENANCE: 'true'
 
-  release-beta:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/beta'
-    needs: ci
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-          registry-url: 'https://registry.npmjs.org'
-      - run: corepack enable
-      - run: yarn install --immutable
-      - run: yarn build
-      - run: yarn changeset version --snapshot beta
-      - run: npm publish --workspace=votes --access public --provenance --tag beta
+      # beta: snapshot publish on every push, no PR, no git tag
+      - if: github.ref == 'refs/heads/beta'
+        run: yarn changeset version --snapshot beta
+      - if: github.ref == 'refs/heads/beta'
+        run: npm publish --workspace=votes --access public --provenance --tag beta
         env:
           NPM_CONFIG_PROVENANCE: 'true'
