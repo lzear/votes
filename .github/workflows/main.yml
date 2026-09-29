@@ -75,7 +75,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ needs.version.outputs.tag }}
 
-  # stages a snapshot on every push to beta, no PR, no git tag
+  # stages a snapshot on every push to beta, no PR, no git tag. Its own
+  # dist-tag keeps it off `beta`/`rc`, which changesets pre mode publishes
   beta:
     if: github.event_name == 'push' && github.ref == 'refs/heads/beta'
     needs: ci
@@ -93,5 +94,5 @@ jobs:
       - run: corepack enable
       - run: yarn install --immutable
       - run: yarn build
-      - run: yarn changeset version --snapshot beta
-      - run: npm stage publish --workspace=votes --access public --tag beta
+      - run: yarn changeset version --snapshot snapshot
+      - run: npm stage publish --workspace=votes --access public --tag snapshot
