@@ -5,50 +5,93 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   ci:
     uses: ./.github/workflows/ci.yml
     secrets:
       CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
-  release:
-    if: github.event_name == 'push' && contains(fromJSON('["refs/heads/main", "refs/heads/beta"]'), github.ref)
+  # opens the "Version Packages" PR while changesets are pending
+  version:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: ci
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
-      id-token: write
+    outputs:
+      tag: ${{ steps.release.outputs.tag }}
     steps:
+      # persist-credentials stays on: changesets/action pushes the
+      # "Version Packages" branch with the checked-out credentials
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-          registry-url: 'https://registry.npmjs.org'
       - run: corepack enable
       - run: yarn install --immutable
-      - run: yarn build
-
-      # main: version PR via changesets, publish to `latest` once merged
-      - if: github.ref == 'refs/heads/main'
-        id: changesets
+      - id: changesets
         uses: changesets/action@v2
         with:
           version-script: yarn changeset version
-          create-github-releases: false
+      # nothing pending and no release yet for this version: publish it
+      - id: release
+        if: steps.changesets.outputs.hasChangesets == 'false'
+        run: |
+          tag="votes@$(jq -r .version votes/package.json)"
+          gh release view "$tag" > /dev/null 2>&1 || echo "tag=$tag" >> "$GITHUB_OUTPUT"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - if: github.ref == 'refs/heads/main' && steps.changesets.outputs.hasChangesets == 'false'
-        run: npm publish --workspace=votes --access public --provenance
-        env:
-          NPM_CONFIG_PROVENANCE: 'true'
+          GH_TOKEN: ${{ github.token }}
 
-      # beta: snapshot publish on every push, no PR, no git tag
-      - if: github.ref == 'refs/heads/beta'
-        run: yarn changeset version --snapshot beta
-      - if: github.ref == 'refs/heads/beta'
-        run: npm publish --workspace=votes --access public --provenance --tag beta
+  # stages on npm (approve with 2FA), then creates the GitHub release, whose
+  # tag marks the version as done
+  publish:
+    needs: version
+    if: needs.version.outputs.tag
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: corepack enable
+      - run: yarn install --immutable
+      - run: yarn build
+      - run: npm stage publish --workspace=votes --access public
+      - run: |
+          awk '/^## /{n++} n==1' votes/CHANGELOG.md | tail -n +2 > "$RUNNER_TEMP/notes.md"
+          gh release create "$TAG" --target "$GITHUB_SHA" --notes-file "$RUNNER_TEMP/notes.md"
         env:
-          NPM_CONFIG_PROVENANCE: 'true'
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.version.outputs.tag }}
+
+  # stages a snapshot on every push to beta, no PR, no git tag
+  beta:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/beta'
+    needs: ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: corepack enable
+      - run: yarn install --immutable
+      - run: yarn build
+      - run: yarn changeset version --snapshot beta
+      - run: npm stage publish --workspace=votes --access public --tag beta

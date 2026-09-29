@@ -1,0 +1,10 @@
+rules:
+  unpinned-uses:
+    config:
+      policies:
+        '*': hash-pin
+  artipacked:
+    # the release checkout must keep credentials: changesets/action
+    # pushes the "Version Packages" branch with them
+    ignore:
+      - main.yml
