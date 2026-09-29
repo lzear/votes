@@ -8,14 +8,20 @@ on:
 jobs:
   size:
     runs-on: ubuntu-latest
+    # compressed-size-action comments the size diff on the PR
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '24'
       - run: corepack enable
       - run: yarn install --immutable
       - run: yarn workspace votes build
-      - uses: preactjs/compressed-size-action@v2
+      - uses: preactjs/compressed-size-action@e2bfc4b346d78f9a3c7e8a2e22bcbd285a25fafa # v2.0.1
         with:
           pattern: '**/dist/**/*.{mjs,js}'
