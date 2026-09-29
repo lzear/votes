@@ -24,11 +24,9 @@ jobs:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           persist-credentials: false
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+      - uses: lzear/forge/actions/setup@16f6053e02114b66447b5b415d39ac2f0b0f78a0 # main
         with:
-          node-version: '24'
-      - run: corepack enable
-      - run: yarn install --immutable
+          cache: ''
       - run: yarn workspace votes run build-docs
       - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
       - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
