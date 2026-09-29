@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   ci:
-    uses: ./.github/workflows/ci.yml
+    uses: lzear/forge/.github/workflows/ci.yml@16f6053e02114b66447b5b415d39ac2f0b0f78a0 # main
     secrets:
       CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
