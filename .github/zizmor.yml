@@ -7,4 +7,4 @@ rules:
     # the release checkout must keep credentials: changesets/action
     # pushes the "Version Packages" branch with them
     ignore:
-      - main.yml
+      - release.yml

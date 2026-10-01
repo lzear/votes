@@ -8625,7 +8625,6 @@ __metadata:
   dependencies:
     "@changesets/cli": "npm:^3"
     "@commitlint/cli": "npm:^21"
-    "@commitlint/config-conventional": "npm:^21"
     "@lzear/configs": "npm:^4"
     "@lzear/forge": "npm:^4"
     "@types/node": "npm:^26"

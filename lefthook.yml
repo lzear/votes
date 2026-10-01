@@ -1,3 +1,7 @@
+# ~/.lefthookrc puts the toolchain on PATH: hooks run under /bin/sh, which reads
+# no shell config, so a GUI git client has no yarn. Missing file is ignored.
+rc: $HOME/.lefthookrc
+
 commit-msg:
   commands:
     commitlint:
