@@ -24,23 +24,15 @@
       }
     }
   },
-  "directories": {
-    "doc": "docs",
-    "test": "test"
-  },
   "sideEffects": false,
   "engines": {
     "node": ">=22"
   },
   "scripts": {
-    "prebuild": "rimraf dist",
     "build": "tsup",
-    "build-docs": "yarn typedoc",
-    "release": "yarn run build",
+    "build-docs": "typedoc src/index.ts --tsconfig tsconfig.typedoc.json",
     "test": "vitest",
-    "test-prod": "yarn run test && yarn run build",
-    "typecheck": "tsc --noEmit",
-    "typedoc": "npx typedoc src/index.ts --tsconfig tsconfig.typedoc.json"
+    "typecheck": "tsc --noEmit"
   },
   "files": [
     "dist",
@@ -55,7 +47,6 @@
     "@lzear/forge": "^4",
     "@types/node": "^26",
     "@vitest/coverage-v8": "^5",
-    "rimraf": "^6",
     "tsup": "^8",
     "typedoc": "^0.28",
     "vite": "^8",
