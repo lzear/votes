@@ -259,4 +259,23 @@ describe(BottomTwoRunoff, () => {
     const restricted = b2r.restrict(['a', 'b', 'c']) as typeof b2r
     expect(restricted.computeRounds()).toStrictEqual(b2r.computeRounds())
   })
+
+  it('does not depend on candidate order', () => {
+    const ballots = ['bdac', 'abdc', 'bcda', 'abdc'].map((order) => ({
+      ranking: order.split('').map((c) => [c]),
+      weight: 1,
+    }))
+    const rankings = new Set(
+      [0, 1, 2, 3].map((shift) => {
+        const candidates = ['a', 'b', 'c', 'd'].map(
+          (_c, i, all) => all[(i + shift) % 4]!,
+        )
+        const ranking = new BottomTwoRunoff({ candidates, ballots }).ranking()
+        return JSON.stringify(
+          ranking.map((tier) => tier.toSorted((x, y) => x.localeCompare(y))),
+        )
+      }),
+    )
+    expect(rankings.size).toBe(1)
+  })
 })
