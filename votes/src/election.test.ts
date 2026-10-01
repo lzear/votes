@@ -1,4 +1,5 @@
 import {
+  AbsoluteMajority,
   Baldwin,
   Borda,
   Copeland,
@@ -61,6 +62,19 @@ describe('Election', () => {
     })
     const ranking = election.ranking()
     expect(ranking[0]).toStrictEqual(['a'])
+  })
+
+  it("uses each ranker's own ranking", () => {
+    // No majority: a leads on first choices but must not be ranked first.
+    const ballots = [
+      { ranking: [['a'], ['b'], ['c']], weight: 2 },
+      { ranking: [['b'], ['c'], ['a']], weight: 2 },
+      { ranking: [['c'], ['b'], ['a']], weight: 1 },
+    ]
+    const ranker = new AbsoluteMajority({ ballots, candidates })
+    expect(new Election({ rankers: [ranker] }).ranking()).toStrictEqual([
+      ['a', 'b', 'c'],
+    ])
   })
 
   it('keeps candidates a fallback ranker does not rank', () => {
