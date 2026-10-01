@@ -206,4 +206,15 @@ describe(MajorityJudgment, () => {
       }
     `)
   })
+
+  it('grades a candidate once per ballot', () => {
+    const mj = new MajorityJudgment({
+      candidates: ['a', 'b'],
+      ballots: [{ ranking: [['a'], ['a', 'b']], weight: 1 }],
+    })
+    expect(mj.judgements()).toStrictEqual({
+      a: [1, 0, 0, 0, 0, 0],
+      b: [0, 1, 0, 0, 0, 0],
+    })
+  })
 })

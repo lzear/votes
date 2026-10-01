@@ -1,11 +1,7 @@
 import { type Ranker } from './classes/method'
 import { type Round } from './classes/round-ballot-method'
 import { type ScoreObject } from './types'
-import {
-  applyRankingAsTiebreaker,
-  iterateRanking,
-  scoresToRanking,
-} from './utils'
+import { applyRankingAsTiebreaker, iterateRanking } from './utils'
 
 export interface StepResult<C extends string> {
   // Constructor name of the ranker that produced this step.
@@ -40,12 +36,12 @@ const computeFor = <C extends string>(
     return { ranking: instance.ranking(), rounds }
   }
 
-  if (!isRandomInstance(instance) && typeof instance.scores === 'function') {
-    const scores = instance.scores()
-    return { ranking: scoresToRanking(scores), scores }
-  }
-
-  return { ranking: instance.ranking() }
+  // The ranker's own ranking, which need not follow its scores: an absolute
+  // majority ranks no one first without a majority.
+  const ranking = instance.ranking()
+  return !isRandomInstance(instance) && typeof instance.scores === 'function'
+    ? { ranking, scores: instance.scores() }
+    : { ranking }
 }
 
 /**

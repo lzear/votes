@@ -25,9 +25,11 @@ export class AbsoluteMajority<C extends string> extends BallotScoreMethod<C> {
     const topRank = scoresToRanking(fptpScores)[0] ?? []
     const top = topRank.length === 1 ? topRank[0] : undefined
 
-    return top !== undefined &&
+    const tiers =
+      top !== undefined &&
       fptpScores[top] > totalBallotsWeight(this.ballots) / 2
-      ? [[top], this.candidates.filter((c) => c !== top)]
-      : [this.candidates]
+        ? [[top], this.candidates.filter((c) => c !== top)]
+        : [this.candidates]
+    return tiers.filter((tier) => tier.length > 0)
   }
 }

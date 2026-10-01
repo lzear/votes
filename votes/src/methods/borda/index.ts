@@ -22,7 +22,7 @@ const computeScores = <C extends string>(
 }
 
 /**
- * For each voter, every candidate is given a number of points which equals the number of candidates ranked lower in the voter's preference.
+ * Each voter gives n points to their first choice, n − 1 to the next, down to 1 for the last. Tied candidates share the average of the places they cover.
  *
  * #### Wikipedia: [Borda count](https://en.wikipedia.org/wiki/Borda_count)
  */

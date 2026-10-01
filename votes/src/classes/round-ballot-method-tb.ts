@@ -1,5 +1,6 @@
 import { type Ballot, type Matrix, type ScoreObject } from '../types'
-import { matrixFromBallots, normalizeRanking } from '../utils'
+import { matrixFromBallots } from '../utils'
+import { completeRanking } from '../utils/normalize'
 import {
   type QE,
   RoundBallotMethod,
@@ -29,14 +30,10 @@ type CandidatesCtor<C extends string> = new (input: { candidates: C[] }) => {
 export type AnyCtor<C extends string> =
   BallotCtor<C> | MatrixCtor<C> | CandidatesCtor<C>
 
-// Extracts extra constructor props beyond the base shape
-export type PropsOf<T> = T extends { needsMatrix: true }
-  ? unknown
-  : T extends new (input: infer P) => unknown
-    ? 'ballots' extends keyof P
-      ? Omit<P, 'ballots' | 'candidates'>
-      : Omit<P, 'candidates'>
-    : unknown
+// Constructor props beyond those the tiebreaker supplies itself
+export type PropsOf<T> = T extends new (input: infer P) => unknown
+  ? Omit<P, 'array' | 'ballots' | 'candidates'>
+  : unknown
 
 export type TbEntry<C extends string, T extends AnyCtor<C> = AnyCtor<C>> =
   T | readonly [T, PropsOf<T> & TbMeta]
@@ -89,9 +86,10 @@ const entryToEntry = <C extends string>(
 
     let method: { ranking(): C[][]; scores?(): Partial<Record<C, number>> }
     if (Ctor.needsMatrix === true)
-      method = new (Ctor as unknown as MatrixCtor<C>)(
-        matrixFromBallots(ballots, candidates),
-      )
+      method = new (Ctor as unknown as MatrixCtor<C>)({
+        ...matrixFromBallots(ballots, candidates),
+        ...extra,
+      })
     else if (Ctor.needsBallot === true)
       // The ctor normalizes ballots against `candidates` itself; forwarding
       // unrankedLast (instead of pre-normalizing here) keeps the host method's
@@ -109,9 +107,8 @@ const entryToEntry = <C extends string>(
         ...extra,
       })
 
-    const ranking = full
-      ? normalizeRanking(method.ranking(), tied)
-      : method.ranking()
+    // A tied candidate the tiebreaker does not rank stays, tied last.
+    const ranking = completeRanking(method.ranking(), tied)
     const scores =
       typeof method.scores === 'function' ? method.scores() : undefined
 
@@ -145,9 +142,17 @@ export abstract class RoundBallotMethodTb<
     unrankedLast?: boolean
   }) {
     super(input)
-    this.tbEntries = (input.tieBreakers ?? []).map((e) =>
-      entryToEntry(e, this.unrankedLast),
-    )
+    this.tbEntries = [
+      ...this.builtInTieBreakers(),
+      ...(input.tieBreakers ?? []),
+    ].map((e) => entryToEntry(e, this.unrankedLast))
+  }
+
+  /**
+   * Tiebreakers the method applies before the caller's.
+   */
+  protected builtInTieBreakers(): TbEntry<C>[] {
+    return []
   }
 
   /**

@@ -3,7 +3,6 @@
 import { groupBy, range } from 'lodash-es'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import { type Matrix, type ScoreObject } from '../../types'
-import { subMatrix } from '../../utils/make-matrix'
 import { scoresAny } from '../../utils/scores-zero'
 import { type Edge, generateAcyclicGraph } from './generate-acyclic-graph'
 
@@ -22,20 +21,14 @@ const computeFromMatrix = <C extends string>(
   matrix: Matrix<C>,
   edgeSorter: ((a: Edge, b: Edge) => number) | undefined,
 ): ScoreObject<C> => {
-  const allEdges: Edge[] = matrix.array.flatMap(
-    (row, from) =>
-      row
-        .map((value, to) =>
-          to !== from && value > 0
-            ? {
-                from,
-                to,
-                value,
-                total: value + (matrix.array[to]?.[from] ?? 0),
-              }
-            : null,
-        )
-        .filter(Boolean) as Edge[],
+  // Pairwise wins only: a defeat would close a cycle with its own win.
+  const allEdges: Edge[] = matrix.array.flatMap((row, from) =>
+    row.flatMap((value, to) => {
+      const against = matrix.array[to]![from]!
+      return value > against
+        ? [{ from, to, value, total: value + against }]
+        : []
+    }),
   )
   const edgesGroups = groupBy(allEdges, 'value')
   const groups = Object.keys(edgesGroups)
@@ -102,12 +95,5 @@ export class RankedPairs<C extends string> extends MatrixScoreMethod<C> {
 
   public scores(): ScoreObject<C> {
     return computeFromMatrix(this.matrix, this.edgeSorter)
-  }
-
-  public restrict<D extends C>(candidates: D[]): RankedPairs<D> {
-    return new RankedPairs({
-      ...subMatrix(this.matrix, candidates),
-      ...(this.edgeSorter && { edgeSorter: this.edgeSorter }),
-    })
   }
 }

@@ -23,8 +23,7 @@ const makeJudgement = <C extends string>(
   for (const ballot of ballots)
     for (const [rankIdx, rank] of ballot.ranking.entries())
       for (const can of rank)
-        if (candidates.includes(can))
-          judgements[can][Math.min(rankIdx, 5)]! += ballot.weight
+        judgements[can][Math.min(rankIdx, 5)]! += ballot.weight
 
   return judgements
 }
@@ -76,19 +75,30 @@ const tieBreak = <C extends string>(judgements: Judgements<C>): C[][] => {
 }
 
 export class MajorityJudgment<C extends string> extends Method<C> {
+  public static readonly needsBallot = true
   private _judgements: Judgements<C> | undefined
   private _matrix?: Matrix<C>
-  // BallotMethod strips empty tiers; store raw ballots preserving them for grade computation
+  // Ballots keep their empty tiers, unlike BallotMethod's: a tier's index is
+  // its grade.
   private readonly gradeBallots: Ballot<C>[]
 
   constructor(i: { ballots: Ballot<C>[]; candidates: C[] }) {
     super(i.candidates)
-    this.gradeBallots = i.ballots.map((b) => ({
-      ...b,
-      ranking: b.ranking.map((rank) =>
-        rank.filter((c) => this.candidates.includes(c)),
-      ),
-    }))
+    const candidates = new Set(this.candidates)
+    this.gradeBallots = i.ballots.map((b) => {
+      // A candidate gets one grade per ballot, its best.
+      const graded = new Set<C>()
+      return {
+        ...b,
+        ranking: b.ranking.map((rank) =>
+          rank.filter((c) => {
+            if (!candidates.has(c) || graded.has(c)) return false
+            graded.add(c)
+            return true
+          }),
+        ),
+      }
+    })
   }
 
   public judgements(): Judgements<C> {
@@ -106,12 +116,7 @@ export class MajorityJudgment<C extends string> extends Method<C> {
 
   public restrict<D extends C>(candidates: D[]): Method<D> {
     return new MajorityJudgment({
-      ballots: this.gradeBallots.map((b) => ({
-        ...b,
-        ranking: b.ranking.map(
-          (rank) => rank.filter((c) => (candidates as C[]).includes(c)) as D[],
-        ),
-      })),
+      ballots: this.gradeBallots as Ballot<D>[],
       candidates,
     })
   }

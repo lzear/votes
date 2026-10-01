@@ -23,6 +23,14 @@ describe('sanity check', () => {
       if ('scores' in election) expect(election.scores()).toStrictEqual({})
     },
   )
+  it.each(Object.values(VotingSystem))('single candidate %s', (system) => {
+    const ballots = [{ ranking: [['a']], weight: 1 }]
+    const election = new methods[system]({
+      ballots,
+      ...matrixFromBallots(ballots, ['a']),
+    })
+    expect(election.ranking()).toStrictEqual([['a']])
+  })
   it.each(Object.values(VotingSystem))(
     'empty ballot list %s (ranking)',
     (system) => {

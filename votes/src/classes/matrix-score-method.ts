@@ -12,10 +12,14 @@ export abstract class MatrixScoreMethod<C extends string>
 {
   public static readonly needsMatrix = true
   private readonly _matrix: Matrix<C>
+  // The subclass's own constructor options (Minimax's variant, …), which
+  // restrict() passes back.
+  private readonly options: object
 
-  constructor(i: Matrix<C>) {
-    super(i.candidates)
-    this._matrix = { array: i.array, candidates: i.candidates }
+  constructor({ array, candidates, ...options }: Matrix<C>) {
+    super(candidates)
+    this._matrix = { array, candidates }
+    this.options = options
   }
 
   get matrix(): Matrix<C> {
@@ -24,6 +28,9 @@ export abstract class MatrixScoreMethod<C extends string>
 
   restrict<D extends C>(candidates: D[]): MatrixScoreMethod<D> {
     type Ctor = new (matrix: Matrix<D>) => MatrixScoreMethod<D>
-    return new (this.constructor as Ctor)(subMatrix(this.matrix, candidates))
+    return new (this.constructor as Ctor)({
+      ...this.options,
+      ...subMatrix(this.matrix, candidates),
+    })
   }
 }

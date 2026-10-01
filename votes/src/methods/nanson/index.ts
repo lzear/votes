@@ -31,9 +31,18 @@ export class Nanson<C extends string> extends RoundBallotMethodTb<
       (c) => scores[c] <= avg + config.EPSILON,
     )
 
-    // All equal scores → eliminate everyone as one group (complete tie)
-    return qualified.length === 0
-      ? { eliminated: candidates, qualified: [], scores, info }
-      : { qualified, eliminated, scores, info }
+    if (qualified.length > 0) return { qualified, eliminated, scores, info }
+
+    // Everyone is at the average: a complete tie, left to the tiebreakers.
+    const tied = this.resolvePending(candidates)
+    return {
+      qualified: tied.qualified,
+      eliminated: tied.eliminated,
+      scores,
+      info,
+      ...(tied.tieBreakSteps.length > 0 && {
+        tieBreakSteps: tied.tieBreakSteps,
+      }),
+    }
   }
 }

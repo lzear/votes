@@ -4,13 +4,14 @@ import {
   tb,
   type TbEntry,
 } from '../../classes/round-ballot-method-tb'
-import { type Ballot, type ScoreObject } from '../../types'
+import { type ScoreObject } from '../../types'
 import { FirstPastThePost } from '../first-past-the-post'
 
 /**
  * Each round:
  * 1. Rank remaining candidates by FPTP (first-choice votes).
- * 2. Take the bottom-2 candidates from that ranking.
+ * 2. Take the bottom-2 candidates from that ranking, or all of those tied
+ *    with them.
  * 3. Eliminate whichever of the two loses a head-to-head FPTP matchup.
  *
  * The head-to-head step in (3) is implemented by prepending
@@ -21,16 +22,8 @@ import { FirstPastThePost } from '../first-past-the-post'
  * #### Electowiki: [Bottom-Two-Runoff IRV](https://electowiki.org/wiki/Bottom-Two-Runoff_IRV)
  */
 export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
-  constructor(input: {
-    ballots: Ballot<C>[]
-    candidates: C[]
-    tieBreakers?: TbEntry<C>[]
-    unrankedLast?: boolean
-  }) {
-    super({
-      ...input,
-      tieBreakers: [tb(FirstPastThePost), ...(input.tieBreakers ?? [])],
-    })
+  protected builtInTieBreakers(): TbEntry<C>[] {
+    return [tb(FirstPastThePost)]
   }
 
   protected round(candidates: C[]): QE<C> {
@@ -47,14 +40,10 @@ export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
     if (last.length === candidates.length)
       return { qualified: [], eliminated: candidates, scores }
 
-    // Build the bottom-2 pair. When more than 2 candidates share the last tier
-    // (all unresolvable by FPTP even on the restricted subset), the first 2 by
-    // array order are used — this is an edge case with no canonical resolution.
-    const secondLast = ranked.at(-2) ?? []
-    const pending: C[] =
-      last.length >= 2
-        ? last.slice(0, 2)
-        : [...last, ...secondLast.slice(0, 2 - last.length)]
+    // The bottom two, or everyone tied with them: picking two of a tie by list
+    // order would make the result depend on the order candidates are given in.
+    const pending =
+      last.length >= 2 ? last : [...last, ...(ranked.at(-2) ?? [])]
 
     const pendingSet = new Set(pending)
     const mainQualified = candidates.filter((c) => !pendingSet.has(c))
