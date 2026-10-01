@@ -7,6 +7,7 @@ import {
   FirstPastThePost,
   InstantRunoff,
   Kemeny,
+  MajorityJudgment,
   MaximalLotteries,
   Minimax,
   MinimaxVariant,
@@ -183,6 +184,15 @@ describe('tieBreakers', () => {
       candidates: tieCandidates,
       ballots: tieBallots,
       tieBreakers: [Borda],
+    })
+    expect(irv.computeRounds()[0]?.roundResult.eliminated).toStrictEqual(['c'])
+  })
+
+  it('takes MajorityJudgment as a tiebreaker', () => {
+    const irv = new InstantRunoff({
+      candidates: tieCandidates,
+      ballots: tieBallots,
+      tieBreakers: [MajorityJudgment],
     })
     expect(irv.computeRounds()[0]?.roundResult.eliminated).toStrictEqual(['c'])
   })

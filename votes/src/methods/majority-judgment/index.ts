@@ -76,6 +76,7 @@ const tieBreak = <C extends string>(judgements: Judgements<C>): C[][] => {
 }
 
 export class MajorityJudgment<C extends string> extends Method<C> {
+  public static readonly needsBallot = true
   private _judgements: Judgements<C> | undefined
   private _matrix?: Matrix<C>
   // BallotMethod strips empty tiers; store raw ballots preserving them for grade computation

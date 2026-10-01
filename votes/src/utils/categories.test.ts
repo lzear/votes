@@ -1,6 +1,5 @@
 /* eslint-disable vitest/no-conditional-expect */
 import { type MethodCtor, methods } from '../methods'
-import { MajorityJudgment } from '../methods/majority-judgment'
 import { RandomCandidates } from '../methods/random-candidates'
 import { VotingSystem } from '../types'
 import {
@@ -13,7 +12,7 @@ import {
 } from './categories'
 
 describe('systems categoris', () => {
-  const specialCases = new Set<MethodCtor>([RandomCandidates, MajorityJudgment])
+  const specialCases = new Set<MethodCtor>([RandomCandidates])
   it.each(Object.values(VotingSystem))(
     'needs ballots xor matrix (%s)',
     (system) => {
@@ -81,6 +80,7 @@ describe('systems categoris', () => {
         "COOMBS",
         "FIRST_PAST_THE_POST",
         "INSTANT_RUNOFF",
+        "MAJORITY_JUDGEMENT",
         "NANSON",
         "RANDOM_DICTATOR",
         "TWO_ROUND_RUNOFF",
