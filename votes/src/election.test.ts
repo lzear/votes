@@ -63,6 +63,16 @@ describe('Election', () => {
     expect(ranking[0]).toStrictEqual(['a'])
   })
 
+  it('keeps candidates a fallback ranker does not rank', () => {
+    const election = new Election({
+      rankers: [
+        new Borda({ ballots: tieBallots, candidates }),
+        { ranking: (): ABC[][] => [['b']] },
+      ],
+    })
+    expect(election.ranking()).toStrictEqual([['a'], ['b'], ['c']])
+  })
+
   it('stops early when no ties remain', () => {
     const sentinel = {
       ranking: (): ABC[][] => {

@@ -1,12 +1,17 @@
 import { pick } from 'lodash-es'
 import { config } from './config'
+import { completeRanking } from './normalize'
 
 export const applyRankingAsTiebreaker = <C extends string>(
   fallbackRanking: C[][],
   before: C[][],
 ): C[][] => {
   const scores: Record<string, number> = {}
-  for (const [i, tier] of fallbackRanking.entries())
+  // Candidates the fallback does not rank stay, tied below those it does.
+  for (const [i, tier] of completeRanking(
+    fallbackRanking,
+    before.flat(),
+  ).entries())
     for (const c of tier) scores[c] = -i
   return before.flatMap((tier) => scoresToRanking(pick(scores, tier)))
 }

@@ -9,6 +9,7 @@ import {
   Kemeny,
   MaximalLotteries,
   Minimax,
+  MinimaxVariant,
   Nanson,
   RandomCandidates,
   RandomizedCondorcet,
@@ -184,6 +185,54 @@ describe('tieBreakers', () => {
       tieBreakers: [Borda],
     })
     expect(irv.computeRounds()[0]?.roundResult.eliminated).toStrictEqual(['c'])
+  })
+
+  it('keeps tied candidates a tiebreaker does not rank', () => {
+    // Ranks only the first candidate it is given.
+    class FirstOnly {
+      private readonly first: ABCD[]
+      constructor({ candidates }: { candidates: ABCD[] }) {
+        this.first = candidates.slice(0, 1)
+      }
+
+      ranking(): ABCD[][] {
+        return [this.first]
+      }
+    }
+    const irv = new InstantRunoff({
+      candidates: tieCandidates,
+      ballots: tieBallots,
+      tieBreakers: [FirstOnly],
+    })
+    expect(irv.computeRounds()[0]?.roundResult).toMatchObject({
+      qualified: ['d', 'a', 'b'],
+      eliminated: ['c'],
+    })
+  })
+
+  it('passes options to matrix tiebreakers', () => {
+    const ballots: { ranking: ABCD[][]; weight: number }[] = [
+      { ranking: [['d'], ['b'], ['c']], weight: 1 },
+      { ranking: [['d'], ['c'], ['b'], ['a']], weight: 1 },
+      { ranking: [['a'], ['b']], weight: 1 },
+    ]
+    const irv = (variant: MinimaxVariant) =>
+      new InstantRunoff({
+        candidates: tieCandidates,
+        ballots,
+        tieBreakers: [tb(Minimax, { full: true, variant })],
+      }).ranking()
+    expect(irv(MinimaxVariant.Margins)).toStrictEqual([
+      ['d'],
+      ['a'],
+      ['b'],
+      ['c'],
+    ])
+    expect(irv(MinimaxVariant.PairwiseOpposition)).toStrictEqual([
+      ['d'],
+      ['a'],
+      ['b', 'c'],
+    ])
   })
 
   it("forwards the host's unrankedLast setting into ballot tiebreakers", () => {
