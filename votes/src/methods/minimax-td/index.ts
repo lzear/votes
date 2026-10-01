@@ -32,6 +32,8 @@ const computeScores = <C extends string>(
  * 1. If there are multiple members of the Smith set, using Margins [Minimax method](https://en.wikipedia.org/wiki/Minimax_Condorcet_method), the candidate in the Smith set with the lowest 'worst pairwise defeat' (which can be negative, equivalent to the lowest 'worst pairwise victory' if there are no defeats) is the winner. See examples below...
  * 1. Remove the winner and repeat the process to find each successive place (2nd, 3rd, etc)
  *
+ * `ranking()` stops at step 4: it orders the Smith set and ties everyone outside it last. `iteratedRanking()` runs step 5.
+ *
  * #### Example 1:
  *
  * A, B, and C are the members of the Smith set.
