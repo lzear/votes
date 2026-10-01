@@ -188,6 +188,23 @@ describe('tieBreakers', () => {
     expect(irv.computeRounds()[0]?.roundResult.eliminated).toStrictEqual(['c'])
   })
 
+  it('Nanson breaks a complete tie with its tieBreakers', () => {
+    // A Condorcet cycle: every Borda score equals the average.
+    const nanson = new Nanson({
+      candidates: ['a', 'b', 'c'],
+      ballots: [
+        { ranking: [['a'], ['b'], ['c']], weight: 1 },
+        { ranking: [['b'], ['c'], ['a']], weight: 1 },
+        { ranking: [['c'], ['a'], ['b']], weight: 1 },
+      ],
+      tieBreakers: [tb(RandomCandidates, { rng: () => 0 })],
+    })
+    expect(nanson.computeRounds()[0]?.roundResult).toMatchObject({
+      qualified: ['b', 'c'],
+      eliminated: ['a'],
+    })
+  })
+
   it('takes MajorityJudgment as a tiebreaker', () => {
     const irv = new InstantRunoff({
       candidates: tieCandidates,
