@@ -8,7 +8,6 @@ Performance and packaging improvements:
   candidates with a `Set` (was O(ballots × candidates²)).
 - New `pairwiseMatrix` utility; Copeland and Schulze share it.
 - Simplify Ranked pairs winner detection (removes dead score bookkeeping).
-- `package.json` `exports` now declares explicit `types` conditions and exposes
-  `./package.json`.
-- Remove the `utils.Edge` re-export; use `RankedPairsEdge` from the package
-  root instead.
+- `package.json` `exports` now declares explicit `types` conditions.
+- Remove the `utils.Edge` re-export; use `RankedPairsEdge` from the package root
+  instead.

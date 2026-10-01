@@ -1,4 +1,3 @@
-import { difference, mapValues } from 'lodash-es'
 import { type QE } from '../../classes/round-ballot-method'
 import { TbEliminateLast } from '../../classes/round-ballot-method-tb'
 import { type Ballot, type ScoreObject } from '../../types'
@@ -34,7 +33,9 @@ export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {
       ballots: reverseBallots(ballots),
       candidates,
     }).scores()
-    const scores = mapValues(reversedScores, (s) => -s) as ScoreObject<C>
+    const scores = Object.fromEntries(
+      Object.entries<number>(reversedScores).map(([c, s]) => [c, -s]),
+    ) as ScoreObject<C>
     return { ranking: scoresToRanking(scores, config.EPSILON), scores }
   }
 
@@ -53,7 +54,7 @@ export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {
     if (amRanking[0]?.length === 1) {
       const qualified = amRanking[0]
       return {
-        eliminated: difference(candidates, qualified),
+        eliminated: candidates.filter((c) => !qualified.includes(c)),
         qualified,
         scores: am.scores(),
         info: { resolution: 'majority' },

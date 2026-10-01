@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { range, zipObject } from 'lodash-es'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import { type Matrix, type ScoreObject } from '../../types'
+import { sum } from '../../utils/sum'
 
 const rankingPenalty = (ranking: number[], matrix: number[][]) => {
   let p = 0
@@ -51,7 +51,7 @@ const nextPermutation = (arr: number[]): number[] | false => {
 const computeScores = <C extends string>(matrix: Matrix<C>): ScoreObject<C> => {
   let bestPermutations: number[][] = []
   let bestScore = Infinity
-  let p: number[] | false = range(matrix.candidates.length)
+  let p: number[] | false = matrix.candidates.keys().toArray()
   while (p) {
     const s = rankingPenalty(p, matrix.array)
     if (s === bestScore) bestPermutations.push(p)
@@ -61,12 +61,12 @@ const computeScores = <C extends string>(matrix: Matrix<C>): ScoreObject<C> => {
     }
     p = nextPermutation(p)
   }
-  const sumIdx = matrix.candidates.map((_c, cIdx) =>
-    bestPermutations
-      .map((perm) => perm.indexOf(cIdx))
-      .reduce((a, v) => a + v, 0),
-  )
-  return zipObject(matrix.candidates, sumIdx) as ScoreObject<C>
+  return Object.fromEntries(
+    matrix.candidates.map((c, cIdx) => [
+      c,
+      sum(bestPermutations.map((perm) => perm.indexOf(cIdx))),
+    ]),
+  ) as ScoreObject<C>
 }
 
 /**

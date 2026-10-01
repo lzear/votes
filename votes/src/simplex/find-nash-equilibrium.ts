@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { sum } from '../utils/sum'
+
 type SkewSymmetricMatrix = number[][]
 
 const isZero = (matrix: number[][]): boolean => {
@@ -8,10 +10,10 @@ const isZero = (matrix: number[][]): boolean => {
 
 const normalizeVector = (vector: number[]): number[] => {
   const positive = vector.map((v) => Math.max(v, 0))
-  const sum = positive.reduce((acc, cur) => acc + cur, 0)
-  return sum === 0
+  const total = sum(positive)
+  return total === 0
     ? vector.map(() => 1 / vector.length)
-    : positive.map((v) => v / sum)
+    : positive.map((v) => v / total)
 }
 
 const initTableau = (n: number, cols: number, A: number[][]): number[][] => {

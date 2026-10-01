@@ -24,42 +24,31 @@
       }
     }
   },
-  "directories": {
-    "doc": "docs",
-    "test": "test"
-  },
   "sideEffects": false,
   "engines": {
     "node": ">=22"
   },
   "scripts": {
-    "prebuild": "rimraf dist",
     "build": "tsup",
-    "build-docs": "yarn typedoc",
-    "release": "yarn run build",
+    "build-docs": "typedoc src/index.ts --tsconfig tsconfig.typedoc.json",
     "test": "vitest",
-    "test-prod": "yarn run test && yarn run build",
-    "typecheck": "tsc --noEmit",
-    "typedoc": "npx typedoc src/index.ts --tsconfig tsconfig.typedoc.json"
+    "typecheck": "yarn run -T tsc --noEmit"
   },
   "files": [
     "dist",
-    "src"
+    "src",
+    "!src/**/*.test.ts",
+    "!src/test"
   ],
   "keywords": [
     "condorcet",
     "voting-systems",
     "elections"
   ],
-  "dependencies": {
-    "lodash-es": "^4"
-  },
   "devDependencies": {
     "@lzear/forge": "^4",
-    "@types/lodash-es": "^4",
     "@types/node": "^26",
     "@vitest/coverage-v8": "^5",
-    "rimraf": "^6",
     "tsup": "^8",
     "typedoc": "^0.28",
     "vite": "^8",

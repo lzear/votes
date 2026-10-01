@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { groupBy, range } from 'lodash-es'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import { type Matrix, type ScoreObject } from '../../types'
 import { scoresAny } from '../../utils/scores-zero'
@@ -30,10 +29,9 @@ const computeFromMatrix = <C extends string>(
         : []
     }),
   )
-  const edgesGroups = groupBy(allEdges, 'value')
-  const groups = Object.keys(edgesGroups)
-    .toSorted((a, b) => Number(b) - Number(a))
-    .map((value) => edgesGroups[value]!)
+  const groups = [...new Set(allEdges.map((e) => e.value))]
+    .toSorted((a, b) => b - a)
+    .map((value) => allEdges.filter((e) => e.value === value))
 
   let acyclicGraph: Edge[] = []
   for (const edgesToAdd of groups) {
@@ -48,9 +46,10 @@ const computeFromMatrix = <C extends string>(
   }
 
   // Sources of the acyclic graph (no incoming locked edge) win this iteration
-  const winnersIdx = range(matrix.candidates.length).filter((key) =>
-    acyclicGraph.every(({ to }) => to !== key),
-  )
+  const winnersIdx = matrix.candidates
+    .keys()
+    .filter((key) => acyclicGraph.every(({ to }) => to !== key))
+    .toArray()
   if (winnersIdx.length === 0 || winnersIdx.length === matrix.candidates.length)
     return scoresAny(matrix.candidates, 1)
   const nextResults = computeFromMatrix(

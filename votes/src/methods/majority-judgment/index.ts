@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { mapValues, pick, sum, zipObject } from 'lodash-es'
 import { Method } from '../../classes/method'
 import { type Ballot, type Matrix, type ScoreObject } from '../../types'
 import { matrixFromBallots, scoresToRanking } from '../../utils'
 import { config } from '../../utils/config'
+import { sum } from '../../utils/sum'
 
 export type Judgements<C extends string> = Record<
   C,
@@ -15,9 +15,8 @@ const makeJudgement = <C extends string>(
   candidates: C[],
   ballots: Ballot<C>[],
 ): Judgements<C> => {
-  const judgements = zipObject(
-    candidates,
-    candidates.map(() => [0, 0, 0, 0, 0, 0]),
+  const judgements = Object.fromEntries(
+    candidates.map((c) => [c, [0, 0, 0, 0, 0, 0]]),
   ) as Judgements<C>
 
   for (const ballot of ballots)
@@ -64,13 +63,16 @@ const tieBreak = <C extends string>(judgements: Judgements<C>): C[][] => {
   return ranking.flatMap((cs) => {
     const median = medians[cs[0]!]
     if (median === -1 || !Number.isSafeInteger(median)) return [cs]
-    const j = pick(judgements, cs)
-    const minGroup = Math.min(...cs.map((c) => j[c][median]!))
+    const minGroup = Math.min(...cs.map((c) => judgements[c][median]!))
     if (minGroup <= 0) return [cs]
-    const j2 = mapValues(j, (jc) =>
-      Object.assign([], jc, { [median]: jc[median]! - minGroup }),
+    return tieBreak(
+      Object.fromEntries(
+        cs.map((c) => {
+          const jc = judgements[c]
+          return [c, jc.with(median, jc[median]! - minGroup)]
+        }),
+      ) as Judgements<C>,
     )
-    return tieBreak(j2)
   })
 }
 

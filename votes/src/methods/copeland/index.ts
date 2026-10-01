@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { zipObject } from 'lodash-es'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import { type Matrix, type ScoreObject } from '../../types'
 import { pairwiseMatrix } from '../../utils/make-matrix'
+import { sum } from '../../utils/sum'
 
 const computeFromMatrix = <C extends string>(
   matrix: Matrix<C>,
@@ -12,9 +12,9 @@ const computeFromMatrix = <C extends string>(
     (i, j) => (Math.sign(matrix.array[i]![j]! - matrix.array[j]![i]!) + 1) / 2,
   )
 
-  const scores = p.map((m) => m.reduce((acc, cur) => acc + cur, 0))
-
-  return zipObject(matrix.candidates, scores) as ScoreObject<C>
+  return Object.fromEntries(
+    matrix.candidates.map((c, i) => [c, sum(p[i]!)]),
+  ) as ScoreObject<C>
 }
 
 export class Copeland<C extends string> extends MatrixScoreMethod<C> {
