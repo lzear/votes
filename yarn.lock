@@ -1421,9 +1421,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lzear/configs@npm:4.5.0":
-  version: 4.5.0
-  resolution: "@lzear/configs@npm:4.5.0"
+"@lzear/configs@npm:4.5.1, @lzear/configs@npm:^4":
+  version: 4.5.1
+  resolution: "@lzear/configs@npm:4.5.1"
   dependencies:
     "@commitlint/config-conventional": "npm:^21"
     "@commitlint/types": "npm:^21"
@@ -1448,13 +1448,13 @@ __metadata:
     lzear-changelog: src/changelog.mjs
     lzear-publish: src/publish.mjs
     lzear-sync-jsr: src/sync-jsr.mjs
-  checksum: 10c0/445c1de1f13a95b1dfb2b98aca5b0641590aadab2f54394f21de56bd0a840a99abdfdca3fe9a963b68717521de1068d1baadedc881a4834c768a1ac910af158e
+  checksum: 10c0/795820bb3ac544a362ebcac001875b30ac53f9804b4ceb07bc13161ac762a7ea6635c1e7d8ec5a99c230c1a983c87151b09db9dee181a94d4e42346428d8c2a8
   languageName: node
   linkType: hard
 
-"@lzear/eslint-config@npm:4.5.0":
-  version: 4.5.0
-  resolution: "@lzear/eslint-config@npm:4.5.0"
+"@lzear/eslint-config@npm:4.5.1":
+  version: 4.5.1
+  resolution: "@lzear/eslint-config@npm:4.5.1"
   dependencies:
     "@eslint-community/eslint-plugin-eslint-comments": "npm:^4"
     "@eslint/js": "npm:^10"
@@ -1487,18 +1487,18 @@ __metadata:
     typescript-eslint: "npm:^8"
   peerDependencies:
     eslint: ^10
-  checksum: 10c0/d3a03bafb5fc9c2bd9625226ead5f66445610e57af2fa43ad1087bf007eaab7094807d97b58605be53f018190a3978e299c198f82fd988db690bc76943be1661
+  checksum: 10c0/15a83321078e75da59afbd12a41a2076b0c506cb2aeabdac65def32e824d2ce9ed472b644cdbfb88d29c41775464e84b4bf705498733879ef9e3b3408215f722
   languageName: node
   linkType: hard
 
 "@lzear/forge@npm:^4":
-  version: 4.5.0
-  resolution: "@lzear/forge@npm:4.5.0"
+  version: 4.5.1
+  resolution: "@lzear/forge@npm:4.5.1"
   dependencies:
     "@clack/prompts": "npm:^1"
-    "@lzear/configs": "npm:4.5.0"
-    "@lzear/eslint-config": "npm:4.5.0"
-    "@lzear/repo-lint": "npm:4.5.0"
+    "@lzear/configs": "npm:4.5.1"
+    "@lzear/eslint-config": "npm:4.5.1"
+    "@lzear/repo-lint": "npm:4.5.1"
     commander: "npm:^15"
     picocolors: "npm:^1"
   peerDependencies:
@@ -1520,13 +1520,13 @@ __metadata:
       optional: true
   bin:
     forge: dist/bin.js
-  checksum: 10c0/ea54571a85d45d51c9ecb00fda1fcc0b6eacecc27bc4c6defae7053700bff541712fa67513fb86049d665ee5b29b6938eaaa479bde7e4083ae89d63b7f5aacf3
+  checksum: 10c0/2c44d96a1cdb4ffa28fa33693dc8c0f362ab82888544482656eae72ac3ff50aff5312b36d227e1c0bbaeeb5b22fead1f637974c4b8a93319a6f9711c0b3b9cb4
   languageName: node
   linkType: hard
 
-"@lzear/repo-lint@npm:4.5.0":
-  version: 4.5.0
-  resolution: "@lzear/repo-lint@npm:4.5.0"
+"@lzear/repo-lint@npm:4.5.1":
+  version: 4.5.1
+  resolution: "@lzear/repo-lint@npm:4.5.1"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.18"
     fallow: "npm:^3"
@@ -1536,7 +1536,7 @@ __metadata:
     sherif: "npm:^1"
   bin:
     repo-lint: dist/bin.js
-  checksum: 10c0/3383b96dcd24a442f1475c43369e179c15fcc74b1c40282af35bd95a21bab4c07eff605d9b96db1572e05b8bc5e9212980a90d4dedc2140cb107f01cca9a68c7
+  checksum: 10c0/9b0021d178a8b14caa6b7afc02b8b208a0e8914c98571f7f2f50449f53b28ff2d461931718c04fe551d65e93696387e3c1b8490bcff76051628072727c72b8c3
   languageName: node
   linkType: hard
 
@@ -8626,6 +8626,7 @@ __metadata:
     "@changesets/cli": "npm:^3"
     "@commitlint/cli": "npm:^21"
     "@commitlint/config-conventional": "npm:^21"
+    "@lzear/configs": "npm:^4"
     "@lzear/forge": "npm:^4"
     "@types/node": "npm:^26"
     "@typescript/native": "npm:typescript@^7.0.2"

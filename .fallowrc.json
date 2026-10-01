@@ -2,7 +2,9 @@
   "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
   "ignoreDependencies": [
     // provides the tsc bin
-    "@typescript/native"
+    "@typescript/native",
+    // provides the lzear-publish bin to the forge release workflow
+    "@lzear/configs"
   ],
   // published library: its class members are API for external consumers
   "publicPackages": ["votes"]

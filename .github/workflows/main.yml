@@ -10,89 +10,17 @@ permissions:
 
 jobs:
   ci:
-    uses: lzear/forge/.github/workflows/ci.yml@16f6053e02114b66447b5b415d39ac2f0b0f78a0 # main
+    uses: lzear/forge/.github/workflows/ci.yml@6996b9b74d43075c98841b25c3c0962d9ed495f4 # v4.5.1
     secrets:
       CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
-  # opens the "Version Packages" PR while changesets are pending
-  version:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  release:
+    if: github.event_name == 'push'
     needs: ci
-    runs-on: ubuntu-latest
+    uses: lzear/forge/.github/workflows/release.yml@6996b9b74d43075c98841b25c3c0962d9ed495f4 # v4.5.1
     permissions:
       contents: write
       pull-requests: write
-    outputs:
-      tag: ${{ steps.release.outputs.tag }}
-    steps:
-      # persist-credentials stays on: changesets/action pushes the
-      # "Version Packages" branch with the checked-out credentials
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
-        with:
-          node-version: '24'
-      - run: corepack enable
-      - run: yarn install --immutable
-      - id: changesets
-        uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
-        with:
-          version-script: yarn changeset version
-      # nothing pending and no release yet for this version: publish it
-      - id: release
-        if: steps.changesets.outputs.hasChangesets == 'false'
-        run: |
-          tag="votes@$(jq -r .version votes/package.json)"
-          gh release view "$tag" > /dev/null 2>&1 || echo "tag=$tag" >> "$GITHUB_OUTPUT"
-        env:
-          GH_TOKEN: ${{ github.token }}
-
-  # stages on npm (approve with 2FA), then creates the GitHub release, whose
-  # tag marks the version as done
-  publish:
-    needs: version
-    if: needs.version.outputs.tag
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
       id-token: write
-    steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
-        with:
-          node-version: '24'
-      - run: corepack enable
-      - run: yarn install --immutable
-      - run: yarn build
-      - run: npm stage publish --workspace=votes --access public
-      - run: |
-          awk '/^## /{n++} n==1' votes/CHANGELOG.md | tail -n +2 > "$RUNNER_TEMP/notes.md"
-          gh release create "$TAG" --target "$GITHUB_SHA" --notes-file "$RUNNER_TEMP/notes.md"
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TAG: ${{ needs.version.outputs.tag }}
-
-  # stages a snapshot on every push to beta, no PR, no git tag. Its own
-  # dist-tag keeps it off `beta`/`rc`, which changesets pre mode publishes
-  beta:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/beta'
-    needs: ci
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
-        with:
-          node-version: '24'
-      - run: corepack enable
-      - run: yarn install --immutable
-      - run: yarn build
-      - run: yarn changeset version --snapshot snapshot
-      - run: npm stage publish --workspace=votes --access public --tag snapshot
+    with:
+      snapshot-branch: beta

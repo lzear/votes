@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           persist-credentials: false
-      - uses: lzear/forge/actions/setup@16f6053e02114b66447b5b415d39ac2f0b0f78a0 # main
+      - uses: lzear/forge/actions/setup@6996b9b74d43075c98841b25c3c0962d9ed495f4 # v4.5.1
         with:
           cache: ''
       - run: yarn workspace votes run build-docs
