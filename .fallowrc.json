@@ -3,5 +3,7 @@
   "ignoreDependencies": [
     // provides the tsc bin
     "@typescript/native"
-  ]
+  ],
+  // published library: its class members are API for external consumers
+  "publicPackages": ["votes"]
 }
