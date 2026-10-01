@@ -1,40 +1,34 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-
-import { mapValues, omit, sum } from 'lodash-es'
 import { type Matrix, type ScoreObject } from '../types'
 import { subMatrix } from '../utils/make-matrix'
 import { shuffleArray } from '../utils/shuffle-array'
+import { sum } from '../utils/sum'
 import { type Matrixer } from './matrix-score-method'
 import { RandomMethod } from './random-method'
 import { type Scorer } from './score-method'
 
+// Draws candidates one at a time, each with probability proportional to its
+// score among those not yet drawn.
 const randomRankingFromScores = <C extends string>(
-  scoreObject: ScoreObject<C>,
+  scores: ScoreObject<C>,
   random: () => number,
 ): C[] => {
-  const candidates = Object.keys(scoreObject) as C[]
-  if (candidates.length < 2) return candidates
+  const left = Object.keys(scores) as C[]
+  const ranking: C[] = []
+  while (left.length > 1) {
+    const total = sum(left.map((c) => scores[c]))
+    if (total <= 0) return [...ranking, ...shuffleArray(left, random)]
 
-  const sumScores = sum(Object.values(scoreObject))
-
-  if (sumScores <= 0) return shuffleArray(candidates, random)
-
-  const normalizedScoreObject = mapValues(scoreObject, (s) => s / sumScores)
-
-  const pickAt = random()
-  let w = 0
-
-  for (const candidate of candidates) {
-    w += normalizedScoreObject[candidate]
-    if (w >= pickAt)
-      return [
-        candidate,
-        ...randomRankingFromScores(omit(scoreObject, candidate), random),
-      ]
+    // `>`, or a score of 0 is drawn when `random()` gives 0. Unnormalized,
+    // so `w` ends at exactly `total`.
+    const pickAt = random() * total
+    let w = 0
+    const i = left.findIndex((c) => {
+      w += scores[c]
+      return w > pickAt
+    })
+    ranking.push(...left.splice(i === -1 ? -1 : i, 1))
   }
-
-  const last = candidates.at(-1)!
-  return [last, ...randomRankingFromScores(omit(scoreObject, last), random)]
+  return [...ranking, ...left]
 }
 
 export abstract class RandomMatrixMethod<C extends string>

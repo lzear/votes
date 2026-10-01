@@ -1,45 +1,43 @@
 import { type QE } from '../../classes/round-ballot-method'
 import {
   RoundBallotMethodTb,
-  tb,
-  type TbEntry,
+  type TiebreakerEntry,
 } from '../../classes/round-ballot-method-tb'
-import { type Ballot, type ScoreObject } from '../../types'
-import { FirstPastThePost } from '../first-past-the-post'
+import { scoresToRanking } from '../../utils'
+import { firstChoices } from '../first-past-the-post/iterate-first-choices'
 
 /**
  * Each round:
  * 1. Rank remaining candidates by FPTP (first-choice votes).
- * 2. Take the bottom-2 candidates from that ranking.
+ * 2. Take the bottom-2 candidates from that ranking, or all of those tied
+ *    with them.
  * 3. Eliminate whichever of the two loses a head-to-head FPTP matchup.
  *
- * The head-to-head step in (3) is implemented by prepending
- * `tb(FirstPastThePost)` to the tieBreakers array — so it will always appear
- * as the first entry in `tieBreakSteps`. Any additional `tieBreakers` you
- * supply are applied after FPTP if the head-to-head itself ends in a tie.
+ * The head-to-head step in (3) is a built-in `FirstPastThePost` tiebreaker,
+ * so it always appears as the first entry in `tieBreakSteps`. Any
+ * `tieBreakers` you supply apply after it if the head-to-head ends in a tie.
  *
  * #### Electowiki: [Bottom-Two-Runoff IRV](https://electowiki.org/wiki/Bottom-Two-Runoff_IRV)
  */
 export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
-  constructor(input: {
-    ballots: Ballot<C>[]
-    candidates: C[]
-    tieBreakers?: TbEntry<C>[]
-    unrankedLast?: boolean
-  }) {
-    super({
-      ...input,
-      tieBreakers: [tb(FirstPastThePost), ...(input.tieBreakers ?? [])],
-    })
+  protected builtInTieBreakers(): TiebreakerEntry<C>[] {
+    // First choices on the ballots as they are: a FirstPastThePost would
+    // re-normalize them every round.
+    const fn = (tied: C[]) => {
+      const scores = firstChoices(this.ballots, tied)
+      return { ranking: scoresToRanking(scores), scores }
+    }
+    return [{ name: 'FirstPastThePost', fn }]
   }
 
   protected round(candidates: C[]): QE<C> {
-    const fptp = new FirstPastThePost({
-      ballots: this.ballotsFor(candidates),
-      candidates,
-    })
-    const ranked = fptp.deTie()
-    const scores: ScoreObject<C> = fptp.scores()
+    const scores = firstChoices(this.ballots, candidates)
+    // Ties split by first choices among the tied.
+    const ranked = scoresToRanking(scores).flatMap((tier) =>
+      tier.length <= 1
+        ? [tier]
+        : scoresToRanking(firstChoices(this.ballots, tier)),
+    )
 
     const last = ranked.at(-1) ?? []
 
@@ -47,14 +45,10 @@ export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
     if (last.length === candidates.length)
       return { qualified: [], eliminated: candidates, scores }
 
-    // Build the bottom-2 pair. When more than 2 candidates share the last tier
-    // (all unresolvable by FPTP even on the restricted subset), the first 2 by
-    // array order are used — this is an edge case with no canonical resolution.
-    const secondLast = ranked.at(-2) ?? []
-    const pending: C[] =
-      last.length >= 2
-        ? last.slice(0, 2)
-        : [...last, ...secondLast.slice(0, 2 - last.length)]
+    // The bottom two, or everyone tied with them: picking two of a tie by list
+    // order would make the result depend on the order candidates are given in.
+    const pending =
+      last.length >= 2 ? last : [...last, ...(ranked.at(-2) ?? [])]
 
     const pendingSet = new Set(pending)
     const mainQualified = candidates.filter((c) => !pendingSet.has(c))

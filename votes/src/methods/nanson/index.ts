@@ -1,8 +1,8 @@
-import { sum } from 'lodash-es'
 import { type QE } from '../../classes/round-ballot-method'
 import { RoundBallotMethodTb } from '../../classes/round-ballot-method-tb'
 import { config } from '../../utils/config'
-import { Borda } from '../borda'
+import { sum } from '../../utils/sum'
+import { bordaScores } from '../borda'
 
 // Round-level detail specific to Nanson: the Borda-score cutoff used to eliminate candidates.
 export interface NansonInfo {
@@ -17,12 +17,8 @@ export class Nanson<C extends string> extends RoundBallotMethodTb<
   NansonInfo
 > {
   protected round(candidates: C[]): QE<C, NansonInfo> {
-    const scores = new Borda({
-      candidates,
-      ballots: this.ballots,
-      unrankedLast: this.unrankedLast,
-    }).scores()
-    const values = Object.values(scores)
+    const scores = bordaScores(this.ballots, candidates)
+    const values = Object.values<number>(scores)
     const avg = sum(values) / values.length
     const info = { average: avg }
 
@@ -31,9 +27,18 @@ export class Nanson<C extends string> extends RoundBallotMethodTb<
       (c) => scores[c] <= avg + config.EPSILON,
     )
 
-    // All equal scores → eliminate everyone as one group (complete tie)
-    return qualified.length === 0
-      ? { eliminated: candidates, qualified: [], scores, info }
-      : { qualified, eliminated, scores, info }
+    if (qualified.length > 0) return { qualified, eliminated, scores, info }
+
+    // Everyone is at the average: a complete tie, left to the tiebreakers.
+    const tied = this.resolvePending(candidates)
+    return {
+      qualified: tied.qualified,
+      eliminated: tied.eliminated,
+      scores,
+      info,
+      ...(tied.tieBreakSteps.length > 0 && {
+        tieBreakSteps: tied.tieBreakSteps,
+      }),
+    }
   }
 }

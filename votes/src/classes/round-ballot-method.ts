@@ -34,13 +34,7 @@ export interface Round<C extends string, I = undefined> {
   finished: boolean
   idx: number
   candidates: C[]
-  roundResult: {
-    eliminated: C[]
-    qualified: C[]
-    scores: ScoreObject<C>
-    tieBreakSteps?: TieBreakStep<C>[]
-    info?: I
-  }
+  roundResult: QE<C, I>
 }
 
 /**

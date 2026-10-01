@@ -1,4 +1,3 @@
-import { zipObject } from 'lodash-es'
 import { RandomMatrixMethod } from '../../classes/random-matrix-method'
 import { findNashEquilibrium } from '../../simplex/find-nash-equilibrium'
 import { type Matrix, type ScoreObject } from '../../types'
@@ -15,7 +14,7 @@ export const lotteryFromAntisymmetric = <C extends string>(
 
   return {
     ...scoresZero(matrix.candidates),
-    ...zipObject(condorset.candidates, solution),
+    ...Object.fromEntries(condorset.candidates.map((c, i) => [c, solution[i]])),
   }
 }
 

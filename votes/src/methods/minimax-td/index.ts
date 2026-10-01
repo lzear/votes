@@ -1,4 +1,3 @@
-import { pick } from 'lodash-es'
 import { type Matrix, type ScoreObject } from '../../types'
 import { findSmithSet, scoresAny } from '../../utils'
 import { Minimax, type MinimaxVariant } from '../minimax'
@@ -11,10 +10,10 @@ const computeScores = <C extends string>(
   const minimax = new Minimax({ ...matrix, variant, excludeTies })
   const smithSet = findSmithSet(matrix)
   const minimaxScores = minimax.scores()
-  const smithSetScores = pick(minimaxScores, smithSet.candidates)
-  const smithSetScoresMin = Math.min(
-    ...Object.values(smithSetScores as Record<string, number>),
+  const smithSetScores = Object.fromEntries(
+    smithSet.candidates.map((c) => [c, minimaxScores[c]]),
   )
+  const smithSetScoresMin = Math.min(...Object.values(smithSetScores))
   return {
     // give all non-Smith-set candidates a score worse than the worst of the Smith set
     ...scoresAny(matrix.candidates, Math.min(smithSetScoresMin, 0) * 2 - 1),
@@ -31,6 +30,8 @@ const computeScores = <C extends string>(
  * 1. If there is one member of the Smith set, that is the winner.
  * 1. If there are multiple members of the Smith set, using Margins [Minimax method](https://en.wikipedia.org/wiki/Minimax_Condorcet_method), the candidate in the Smith set with the lowest 'worst pairwise defeat' (which can be negative, equivalent to the lowest 'worst pairwise victory' if there are no defeats) is the winner. See examples below...
  * 1. Remove the winner and repeat the process to find each successive place (2nd, 3rd, etc)
+ *
+ * `ranking()` stops at step 4: it orders the Smith set and ties everyone outside it last. `iteratedRanking()` runs step 5.
  *
  * #### Example 1:
  *

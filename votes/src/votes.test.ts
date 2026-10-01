@@ -7,8 +7,10 @@ import {
   FirstPastThePost,
   InstantRunoff,
   Kemeny,
+  MajorityJudgment,
   MaximalLotteries,
   Minimax,
+  MinimaxVariant,
   Nanson,
   RandomCandidates,
   RandomizedCondorcet,
@@ -86,7 +88,7 @@ describe('Test all methods', () => {
   it('votes with two-round runoff', () => {
     expect(
       new TwoRoundRunoff({ candidates: abcde, ballots: balinski }).ranking(),
-    ).toStrictEqual([['e'], ['a'], ['d', 'b', 'c']])
+    ).toStrictEqual([['e'], ['a'], ['b', 'c', 'd']])
   })
   it('votes with copeland', () => {
     expect(
@@ -110,6 +112,16 @@ describe('Test all methods', () => {
       e: 1,
     })
   })
+  it('averages kemeny scores over the best orders', () => {
+    const cycle = [
+      { ranking: [['a'], ['b'], ['c']], weight: 1 },
+      { ranking: [['b'], ['c'], ['a']], weight: 1 },
+      { ranking: [['c'], ['a'], ['b']], weight: 1 },
+    ]
+    expect(
+      new Kemeny(matrixFromBallots(cycle, ['a', 'b', 'c'])).scores(),
+    ).toStrictEqual({ a: 1, b: 1, c: 1 })
+  })
   it('votes with randomizedCondorcet', () => {
     expect(
       new RandomizedCondorcet(matrixFromBallots(sW, abcde)).scores(),
@@ -129,6 +141,16 @@ describe('Test all methods', () => {
       d: 0,
       e: 4,
     })
+  })
+  it('ties Schulze candidates neither of whom beats the other', () => {
+    // Nobody beats a or b on beatpaths; b beats c.
+    const ballots = [
+      { ranking: [['a'], ['b'], ['c']], weight: 1 },
+      { ranking: [['b'], ['c'], ['a']], weight: 1 },
+    ]
+    expect(
+      new Schulze(matrixFromBallots(ballots, ['a', 'b', 'c'])).ranking(),
+    ).toStrictEqual([['a', 'b'], ['c']])
   })
   it('votes with minimax', () => {
     expect(new Minimax(matrixFromBallots(sW, abcde)).scores()).toStrictEqual({
@@ -186,6 +208,94 @@ describe('tieBreakers', () => {
     expect(irv.computeRounds()[0]?.roundResult.eliminated).toStrictEqual(['c'])
   })
 
+  it('Nanson breaks a complete tie with its tieBreakers', () => {
+    // A Condorcet cycle: every Borda score equals the average.
+    const nanson = new Nanson({
+      candidates: ['a', 'b', 'c'],
+      ballots: [
+        { ranking: [['a'], ['b'], ['c']], weight: 1 },
+        { ranking: [['b'], ['c'], ['a']], weight: 1 },
+        { ranking: [['c'], ['a'], ['b']], weight: 1 },
+      ],
+      tieBreakers: [tb(RandomCandidates, { rng: () => 0 })],
+    })
+    expect(nanson.computeRounds()[0]?.roundResult).toMatchObject({
+      qualified: ['b', 'c'],
+      eliminated: ['a'],
+    })
+  })
+
+  it('takes MajorityJudgment as a tiebreaker', () => {
+    const irv = new InstantRunoff({
+      candidates: tieCandidates,
+      ballots: tieBallots,
+      tieBreakers: [MajorityJudgment],
+    })
+    expect(irv.computeRounds()[0]?.roundResult.eliminated).toStrictEqual(['c'])
+  })
+
+  it('keeps tied candidates a tiebreaker does not rank', () => {
+    // Ranks only the first candidate it is given.
+    class FirstOnly {
+      private readonly first: ABCD[]
+      constructor({ candidates }: { candidates: ABCD[] }) {
+        this.first = candidates.slice(0, 1)
+      }
+
+      ranking(): ABCD[][] {
+        return [this.first]
+      }
+    }
+    const irv = new InstantRunoff({
+      candidates: tieCandidates,
+      ballots: tieBallots,
+      tieBreakers: [FirstOnly],
+    })
+    expect(irv.computeRounds()[0]?.roundResult).toMatchObject({
+      qualified: ['d', 'a', 'b'],
+      eliminated: ['c'],
+    })
+  })
+
+  it('keeps tieBreakers on restrict', () => {
+    const irv = new InstantRunoff({
+      candidates: tieCandidates,
+      ballots: tieBallots,
+      tieBreakers: [Borda],
+    })
+    // Restricted to {a, b, c}, b and c tie on first choices; Borda splits them.
+    expect(irv.restrict(['a', 'b', 'c']).ranking()).toStrictEqual([
+      ['a'],
+      ['b'],
+      ['c'],
+    ])
+  })
+
+  it('passes options to matrix tiebreakers', () => {
+    const ballots: { ranking: ABCD[][]; weight: number }[] = [
+      { ranking: [['d'], ['b'], ['c']], weight: 1 },
+      { ranking: [['d'], ['c'], ['b'], ['a']], weight: 1 },
+      { ranking: [['a'], ['b']], weight: 1 },
+    ]
+    const irv = (variant: MinimaxVariant) =>
+      new InstantRunoff({
+        candidates: tieCandidates,
+        ballots,
+        tieBreakers: [tb(Minimax, { full: true, variant })],
+      }).ranking()
+    expect(irv(MinimaxVariant.Margins)).toStrictEqual([
+      ['d'],
+      ['a'],
+      ['b'],
+      ['c'],
+    ])
+    expect(irv(MinimaxVariant.PairwiseOpposition)).toStrictEqual([
+      ['d'],
+      ['a'],
+      ['b', 'c'],
+    ])
+  })
+
   it("forwards the host's unrankedLast setting into ballot tiebreakers", () => {
     // First choices: a=1, b=1, c=2 → a and b tie for elimination.
     const ballots = [
@@ -206,6 +316,33 @@ describe('tieBreakers', () => {
     const expressed = new InstantRunoff({ ...base, unrankedLast: false })
     expect(expressed.computeRounds()[0]?.roundResult.eliminated).toStrictEqual([
       'b',
+    ])
+  })
+
+  it("forwards the host's unrankedLast setting into matrix tiebreakers", () => {
+    const ballots = [
+      { ranking: [['a']], weight: 1 },
+      { ranking: [['b'], ['a']], weight: 1 },
+      { ranking: [['c']], weight: 2 },
+    ]
+    const base = {
+      candidates: ['a', 'b', 'c'],
+      ballots,
+      tieBreakers: [Copeland],
+    }
+    // Default: a beats b on the a-only ballot, b beats a on the other.
+    expect(
+      new InstantRunoff(base).computeRounds()[0]?.roundResult.eliminated,
+    ).toStrictEqual(['a', 'b'])
+    // Expressed-only: the a-only ballot says nothing about b.
+    const expressed = new InstantRunoff({ ...base, unrankedLast: false })
+    expect(expressed.computeRounds()[0]?.roundResult.eliminated).toStrictEqual([
+      'a',
+    ])
+    expect(expressed.matrix.array).toStrictEqual([
+      [0, 0, 0],
+      [1, 0, 0],
+      [0, 0, 0],
     ])
   })
 

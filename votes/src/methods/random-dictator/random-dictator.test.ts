@@ -103,4 +103,26 @@ describe(RandomDictator, () => {
     }).ranking()
     expect(result).toStrictEqual([['b'], ['a']])
   })
+
+  it('ranks the candidates the picked ballot leaves out last', () => {
+    expect(
+      vote([{ ranking: [], weight: 1 }], ['a', 'b'], 'aaa').ranking(),
+    ).toStrictEqual([['a', 'b']])
+    expect(
+      new RandomDictator({
+        ballots: [{ ranking: [['a']], weight: 1 }],
+        candidates: ['a', 'b', 'c'],
+        unrankedLast: false,
+      }).ranking(),
+    ).toStrictEqual([['a'], ['b', 'c']])
+  })
+
+  it('keeps its rng on restrict', () => {
+    const rng = rngGenerator('restrict')
+    expect(
+      new RandomDictator({ ballots: [], candidates: ['a', 'b'], rng }).restrict(
+        ['a'],
+      ),
+    ).toMatchObject({ rng })
+  })
 })

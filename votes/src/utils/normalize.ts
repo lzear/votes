@@ -1,5 +1,5 @@
-import { difference, intersection, isEqual } from 'lodash-es'
 import { type Ballot } from '../types'
+import { sum } from './sum'
 
 /**
  * Returns true if the 2 ballots are equivalent. The order of the candidates inside a rank is irrelevant. Reflexive check.
@@ -8,7 +8,7 @@ import { type Ballot } from '../types'
  * @param b - second ballot
  */
 export const isBallotEqual = (a: string[][], b: string[][]): boolean =>
-  isEqual(canonizeRanking(a), canonizeRanking(b))
+  JSON.stringify(canonizeRanking(a)) === JSON.stringify(canonizeRanking(b))
 
 export const canonizeRanking = <C extends string>(ranking: C[][]): C[][] =>
   ranking
@@ -60,14 +60,14 @@ export const toWeightedBallots = <C extends string>(
   mergeEquivalentBallots(ballots.map((ranking) => ({ ranking, weight: 1 })))
 
 export const checkDuplicatedCandidate = (ranking: string[][]): void => {
-  const seen: string[] = []
+  const seen = new Set<string>()
   for (const rank of ranking) {
-    const inter = intersection(seen, rank)
-    if (inter.length > 0)
+    const repeated = rank.filter((c) => seen.has(c))
+    if (repeated.length > 0)
       throw new Error(
-        `Some candidates are present multiple times: ${inter.join(', ')}`,
+        `Some candidates are present multiple times: ${repeated.join(', ')}`,
       )
-    seen.push(...rank)
+    for (const c of rank) seen.add(c)
   }
 }
 
@@ -80,13 +80,13 @@ export const removeDuplicatedCandidates = <C extends string>(
   ranking: C[][],
 ): C[][] => {
   const result: C[][] = []
-  const usedCandidates: C[] = []
+  const used = new Set<C>()
   for (const cur of ranking) {
-    const unique = difference([...new Set(cur)], usedCandidates)
+    const unique = [...new Set(cur).difference(used)]
     if (unique.length === 0) continue
 
     result.push(unique)
-    usedCandidates.push(...unique)
+    for (const c of unique) used.add(c)
   }
   return result
 }
@@ -118,8 +118,37 @@ export const removeInvalidCandidates = <C extends string>(
 export const normalizeRanking = <C extends string>(
   ranking: string[][],
   candidates: C[],
-): C[][] =>
-  removeDuplicatedCandidates(removeInvalidCandidates(ranking, candidates))
+): C[][] => withUnranked(ranking, candidates)[0]
+
+// The normalized ranking, and the candidates it leaves out. One pass: both
+// run on every ballot, every round.
+const withUnranked = <C extends string>(
+  ranking: string[][],
+  candidates: C[],
+): [C[][], C[]] => {
+  const left = new Set<string>(candidates)
+  const ranked: C[][] = []
+  for (const rank of ranking) {
+    if (left.size === 0) break
+    const kept = rank.filter((c): c is C => left.delete(c))
+    if (kept.length > 0) ranked.push(kept)
+  }
+  return [ranked, [...left] as C[]]
+}
+
+const appendTier = <C extends string>(ranking: C[][], tier: C[]): C[][] =>
+  tier.length > 0 ? [...ranking, tier] : ranking
+
+/**
+ * {@link normalizeRanking}, with every candidate it leaves out tied last.
+ *
+ * @param ranking - ranking to complete
+ * @param candidates - official candidates
+ */
+export const completeRanking = <C extends string>(
+  ranking: string[][],
+  candidates: C[],
+): C[][] => appendTier(...withUnranked(ranking, candidates))
 
 /**
  * Prevents cheating!
@@ -133,14 +162,14 @@ export const normalizeBallot = <C extends string, B extends Ballot<C>>(
   candidates: string[],
   appendUnranked = true,
 ): B => {
-  const ranking = normalizeRanking(ballot.ranking, candidates) as C[][]
-  if (appendUnranked && ranking.length > 0) {
-    const ranked = new Set(ranking.flat())
-    const unranked = (candidates as C[]).filter((c) => !ranked.has(c))
-    if (unranked.length > 0)
-      return { ...ballot, ranking: [...ranking, unranked] }
+  const [ranking, unranked] = withUnranked(ballot.ranking, candidates as C[])
+  return {
+    ...ballot,
+    ranking:
+      appendUnranked && ranking.length > 0
+        ? appendTier(ranking, unranked)
+        : ranking,
   }
-  return { ...ballot, ranking }
 }
 
 /**
@@ -167,4 +196,4 @@ export const normalizeBallots = <C extends string, B extends Ballot<C>>(
 
 export const totalBallotsWeight = <C extends string>(
   ballots: Ballot<C>[],
-): number => ballots.reduce((acc, ballot) => acc + ballot.weight, 0)
+): number => sum(ballots.map((ballot) => ballot.weight))

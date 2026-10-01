@@ -24,13 +24,23 @@ const floydWarshall = (p: number[][], n: number): void => {
   for (let i = 0; i < n; i++) relaxThrough(p, n, i)
 }
 
+// Ranks in layers: the candidates no one beats on beatpaths, then those no one
+// left beats, and so on. Counting wins instead would split candidates neither
+// of whom beats the other. A candidate scores the number ranked below it,
+// which is its win count when there are no ties.
 const scoresFromStrengths = <C extends string>(
   candidates: C[],
   p: number[][],
 ): ScoreObject<C> => {
   const s = {} as ScoreObject<C>
-  for (const [k, c] of candidates.entries())
-    s[c] = p[k]!.filter((v, k2) => v > p[k2]![k]!).length
+  let left = candidates.keys().toArray()
+  while (left.length > 0) {
+    const unbeaten = left.filter((i) =>
+      left.every((j) => p[j]![i]! <= p[i]![j]!),
+    )
+    left = left.filter((i) => !unbeaten.includes(i))
+    for (const i of unbeaten) s[candidates[i]!] = left.length
+  }
   return s
 }
 

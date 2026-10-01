@@ -1,3 +1,4 @@
+import { matrixFromBallots } from '../../utils/make-matrix'
 import { byTotalParticipation, RankedPairs } from '.'
 
 const example1 = [
@@ -23,6 +24,30 @@ const example3 = [
 ]
 
 const candidates = ['a', 'b', 'c', 'd', 'e']
+
+const example4 = [
+  [0, 1, -1, -1, -1, -1, 1, -1, 1],
+  [-1, 0, -1, 1, -1, -1, -1, 1, -1],
+  [1, 1, 0, 1, -1, 0, 1, -1, 0],
+  [1, -1, -1, 0, -1, -1, 0, -1, 0],
+  [1, 1, 1, 1, 0, -1, 1, -1, 1],
+  [1, 1, 0, 1, 1, 0, 0, -1, 1],
+  [-1, 1, -1, 0, -1, 0, 0, -1, -1],
+  [1, -1, 1, 1, 1, 1, 1, 0, 1],
+  [-1, 1, 0, 0, -1, -1, 1, -1, 0],
+]
+
+const candidates4 = [
+  'bwLvxwn4',
+  'Bi8rD2kq',
+  'XuHBc1ME',
+  'xhAvdxz2',
+  'MBDuJLcU',
+  'aBlNHn78L',
+  'hNtQKVPG',
+  'KXxHiFYK',
+  'aAWfQstO',
+]
 
 describe('ranked pairs', () => {
   it('works with "simple" example', () => {
@@ -61,42 +86,39 @@ describe('ranked pairs', () => {
     })
   })
   it('completes computation in decent time', () => {
+    // Every win has the same strength and every candidate sits on one cycle,
+    // so no edge can be locked: a full tie.
     expect(
-      new RankedPairs({
-        array: [
-          [0, 1, -1, -1, -1, -1, 1, -1, 1],
-          [-1, 0, -1, 1, -1, -1, -1, 1, -1],
-          [1, 1, 0, 1, -1, 0, 1, -1, 0],
-          [1, -1, -1, 0, -1, -1, 0, -1, 0],
-          [1, 1, 1, 1, 0, -1, 1, -1, 1],
-          [1, 1, 0, 1, 1, 0, 0, -1, 1],
-          [-1, 1, -1, 0, -1, 0, 0, -1, -1],
-          [1, -1, 1, 1, 1, 1, 1, 0, 1],
-          [-1, 1, 0, 0, -1, -1, 1, -1, 0],
-        ],
-        candidates: [
-          'bwLvxwn4',
-          'Bi8rD2kq',
-          'XuHBc1ME',
-          'xhAvdxz2',
-          'MBDuJLcU',
-          'aBlNHn78L',
-          'hNtQKVPG',
-          'KXxHiFYK',
-          'aAWfQstO',
-        ],
-      }).scores(),
-    ).toEqual({
-      aAWfQstO: 3,
-      aBlNHn78L: 4,
-      Bi8rD2kq: 1,
-      KXxHiFYK: 4,
-      MBDuJLcU: 4,
-      XuHBc1ME: 4,
-      bwLvxwn4: 4,
-      hNtQKVPG: 2,
-      xhAvdxz2: 4,
-    })
+      new RankedPairs({ array: example4, candidates: candidates4 }).scores(),
+    ).toEqual(Object.fromEntries(candidates4.map((c) => [c, 1])))
+  })
+
+  it('ranks a Condorcet winner first', () => {
+    // c beats a and b 3-1; a and b tie 2-2.
+    const ballots = [
+      { ranking: [['c'], ['b'], ['a']], weight: 2 },
+      { ranking: [['a'], ['b'], ['c']], weight: 1 },
+      { ranking: [['c'], ['a'], ['b']], weight: 1 },
+    ]
+    expect(
+      new RankedPairs(matrixFromBallots(ballots, ['a', 'b', 'c'])).ranking(),
+    ).toStrictEqual([['c'], ['a', 'b']])
+  })
+
+  it('does not depend on candidate order', () => {
+    const rankings = new Set(
+      candidates4.map((_c, shift) => {
+        const order = candidates4.map((_c, i) => (i + shift) % 9)
+        const ranking = new RankedPairs({
+          array: order.map((i) => order.map((j) => example4[i]![j]!)),
+          candidates: order.map((i) => candidates4[i]!),
+        }).ranking()
+        return JSON.stringify(
+          ranking.map((tier) => tier.toSorted((a, b) => a.localeCompare(b))),
+        )
+      }),
+    )
+    expect(rankings.size).toBe(1)
   })
 
   describe('equal-strength edges forming a cycle', () => {
@@ -127,8 +149,8 @@ describe('ranked pairs', () => {
       //   c-a pair: 4+3=7  ← locked first by byTotalParticipation
       //   a-b pair: 4+2=6  ← locked second
       //   b-c pair: 4+1=5  ← skipped (would close cycle c→a→b→c)
-      // Simultaneous: simple 3-cycle → all lowlinks equal → none locked → lower-value
-      // edges determine result → b wins. Sequential: c→a then a→b locked → c wins.
+      // Simultaneous: the 3-cycle locks nothing → full tie.
+      // Sequential: c→a then a→b locked → c wins.
       const rawCounts = {
         array: [
           [0, 4, 3], // a→b:4 (total 6), a→c:3 (total 7)
@@ -138,11 +160,8 @@ describe('ranked pairs', () => {
         candidates: ['a', 'b', 'c'],
       }
 
-      // simultaneous: 3-cycle locked simultaneously → none kept → b wins via lower edges
       expect(new RankedPairs(rawCounts).ranking()).toStrictEqual([
-        ['b'],
-        ['c'],
-        ['a'],
+        ['a', 'b', 'c'],
       ])
 
       // sequential byTotalParticipation: c→a(7) then a→b(6) locked, b→c skipped → c wins
@@ -151,6 +170,13 @@ describe('ranked pairs', () => {
           ...rawCounts,
           edgeSorter: byTotalParticipation,
         }).ranking(),
+      ).toStrictEqual([['c'], ['a'], ['b']])
+
+      // restrict() keeps the sorter
+      expect(
+        new RankedPairs({ ...rawCounts, edgeSorter: byTotalParticipation })
+          .restrict(['a', 'b', 'c'])
+          .ranking(),
       ).toStrictEqual([['c'], ['a'], ['b']])
     })
   })
@@ -169,18 +195,14 @@ describe('ranked pairs', () => {
       candidates: ['🐸', '🐷', '🦁', '🐻', '🐭', '🐌', '🪰'],
     }
 
-    expect(() => new RankedPairs(rawCounts).scores()).not.toThrow()
-    // Can't find any candidate with zero incoming edges in the locked graph
-    // built from this malformed input — falls back to a full tie rather than
-    // hanging, since no shrink-and-recurse step is possible.
-    expect(new RankedPairs(rawCounts).scores()).toStrictEqual({
-      '🐸': 1,
-      '🐷': 1,
-      '🦁': 1,
-      '🐻': 1,
-      '🐭': 1,
-      '🐌': 1,
-      '🪰': 1,
-    })
+    expect(new RankedPairs(rawCounts).ranking()).toStrictEqual([
+      ['🐷'],
+      ['🦁'],
+      ['🐸'],
+      ['🐭'],
+      ['🐻'],
+      ['🐌'],
+      ['🪰'],
+    ])
   })
 })

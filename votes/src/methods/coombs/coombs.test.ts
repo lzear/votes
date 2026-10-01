@@ -38,6 +38,24 @@ describe(Coombs, () => {
     expect(coombs.ranking()[0]).toContain('sucre sel')
   })
 
+  it('takes no last choice from a partial ballot with unrankedLast: false', () => {
+    const coombs = new Coombs({
+      candidates: ['A', 'B', 'C'],
+      ballots: [
+        { ranking: [['A']], weight: 3 },
+        { ranking: [['B'], ['A'], ['C']], weight: 2 },
+        { ranking: [['C'], ['A'], ['B']], weight: 2 },
+      ],
+      unrankedLast: false,
+    })
+    expect(coombs.computeRounds()[0]?.roundResult.scores).toStrictEqual({
+      A: -0,
+      B: -2,
+      C: -2,
+    })
+    expect(coombs.ranking()).toStrictEqual([['A'], ['B', 'C']])
+  })
+
   it('works with the complex test', () => {
     const coombs = new Coombs(condorcetMess)
 

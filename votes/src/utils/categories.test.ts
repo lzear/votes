@@ -1,6 +1,5 @@
 /* eslint-disable vitest/no-conditional-expect */
 import { type MethodCtor, methods } from '../methods'
-import { MajorityJudgment } from '../methods/majority-judgment'
 import { RandomCandidates } from '../methods/random-candidates'
 import { VotingSystem } from '../types'
 import {
@@ -13,7 +12,7 @@ import {
 } from './categories'
 
 describe('systems categoris', () => {
-  const specialCases = new Set<MethodCtor>([RandomCandidates, MajorityJudgment])
+  const specialCases = new Set<MethodCtor>([RandomCandidates])
   it.each(Object.values(VotingSystem))(
     'needs ballots xor matrix (%s)',
     (system) => {
@@ -47,8 +46,8 @@ describe('systems categoris', () => {
   it('has correct categories', () => {
     const systems = Object.values(VotingSystem)
     const randomSystems = systems.filter((system) => isRandomSystem(system))
-    const matrixSystems = systems.filter((system) => isBallotSystem(system))
-    const ballotSystems = systems.filter((system) => isMatrixSystem(system))
+    const ballotSystems = systems.filter((system) => isBallotSystem(system))
+    const matrixSystems = systems.filter((system) => isMatrixSystem(system))
 
     expect(randomSystems).toMatchInlineSnapshot(`
       [
@@ -60,21 +59,6 @@ describe('systems categoris', () => {
     `)
     expect(matrixSystems).toMatchInlineSnapshot(`
       [
-        "APPROBATION",
-        "ABSOLUTE_MAJORITY",
-        "BALDWIN",
-        "BORDA",
-        "BOTTOM_TWO_RUNOFF",
-        "COOMBS",
-        "FIRST_PAST_THE_POST",
-        "INSTANT_RUNOFF",
-        "NANSON",
-        "RANDOM_DICTATOR",
-        "TWO_ROUND_RUNOFF",
-      ]
-    `)
-    expect(ballotSystems).toMatchInlineSnapshot(`
-      [
         "COPELAND",
         "KEMENY",
         "MAXIMAL_LOTTERIES",
@@ -84,6 +68,22 @@ describe('systems categoris', () => {
         "RANKED_PAIRS",
         "SCHULZE",
         "SMITH",
+      ]
+    `)
+    expect(ballotSystems).toMatchInlineSnapshot(`
+      [
+        "APPROBATION",
+        "ABSOLUTE_MAJORITY",
+        "BALDWIN",
+        "BORDA",
+        "BOTTOM_TWO_RUNOFF",
+        "COOMBS",
+        "FIRST_PAST_THE_POST",
+        "INSTANT_RUNOFF",
+        "MAJORITY_JUDGEMENT",
+        "NANSON",
+        "RANDOM_DICTATOR",
+        "TWO_ROUND_RUNOFF",
       ]
     `)
   })

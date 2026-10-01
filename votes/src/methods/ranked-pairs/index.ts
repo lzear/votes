@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { groupBy, range } from 'lodash-es'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import { type Matrix, type ScoreObject } from '../../types'
-import { subMatrix } from '../../utils/make-matrix'
 import { scoresAny } from '../../utils/scores-zero'
 import { type Edge, generateAcyclicGraph } from './generate-acyclic-graph'
 
@@ -22,25 +20,18 @@ const computeFromMatrix = <C extends string>(
   matrix: Matrix<C>,
   edgeSorter: ((a: Edge, b: Edge) => number) | undefined,
 ): ScoreObject<C> => {
-  const allEdges: Edge[] = matrix.array.flatMap(
-    (row, from) =>
-      row
-        .map((value, to) =>
-          to !== from && value > 0
-            ? {
-                from,
-                to,
-                value,
-                total: value + (matrix.array[to]?.[from] ?? 0),
-              }
-            : null,
-        )
-        .filter(Boolean) as Edge[],
+  // Pairwise wins only: a defeat would close a cycle with its own win.
+  const allEdges: Edge[] = matrix.array.flatMap((row, from) =>
+    row.flatMap((value, to) => {
+      const against = matrix.array[to]![from]!
+      return value > against
+        ? [{ from, to, value, total: value + against }]
+        : []
+    }),
   )
-  const edgesGroups = groupBy(allEdges, 'value')
-  const groups = Object.keys(edgesGroups)
-    .toSorted((a, b) => Number(b) - Number(a))
-    .map((value) => edgesGroups[value]!)
+  const groups = [...new Set(allEdges.map((e) => e.value))]
+    .toSorted((a, b) => b - a)
+    .map((value) => allEdges.filter((e) => e.value === value))
 
   let acyclicGraph: Edge[] = []
   for (const edgesToAdd of groups) {
@@ -55,9 +46,10 @@ const computeFromMatrix = <C extends string>(
   }
 
   // Sources of the acyclic graph (no incoming locked edge) win this iteration
-  const winnersIdx = range(matrix.candidates.length).filter((key) =>
-    acyclicGraph.every(({ to }) => to !== key),
-  )
+  const winnersIdx = matrix.candidates
+    .keys()
+    .filter((key) => acyclicGraph.every(({ to }) => to !== key))
+    .toArray()
   if (winnersIdx.length === 0 || winnersIdx.length === matrix.candidates.length)
     return scoresAny(matrix.candidates, 1)
   const nextResults = computeFromMatrix(
@@ -102,12 +94,5 @@ export class RankedPairs<C extends string> extends MatrixScoreMethod<C> {
 
   public scores(): ScoreObject<C> {
     return computeFromMatrix(this.matrix, this.edgeSorter)
-  }
-
-  public restrict<D extends C>(candidates: D[]): RankedPairs<D> {
-    return new RankedPairs({
-      ...subMatrix(this.matrix, candidates),
-      ...(this.edgeSorter && { edgeSorter: this.edgeSorter }),
-    })
   }
 }

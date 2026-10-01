@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { RandomBallotMethod } from '../../classes/random-ballot-method'
 import { type Ballot } from '../../types'
-import { normalizeRanking, totalBallotsWeight } from '../../utils'
+import { totalBallotsWeight } from '../../utils'
+import { completeRanking } from '../../utils/normalize'
 
 const pickBallotIdx = <C extends string>(
   ballots: Ballot<C>[],
@@ -26,7 +27,7 @@ const rank = <C extends string>(
 
   const ratio = rng()
   const idx = pickBallotIdx(ballots, ratio)
-  return normalizeRanking(ballots[idx]!.ranking, candidates)
+  return completeRanking(ballots[idx]!.ranking, candidates)
 }
 
 export class RandomDictator<C extends string> extends RandomBallotMethod<C> {

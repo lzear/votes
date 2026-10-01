@@ -9,10 +9,17 @@ export abstract class BallotMethod<C extends string>
 {
   public static readonly needsBallot = true
   private _matrix?: Matrix<C>
+  // The subclass's own constructor options (tieBreakers, rng, …), which
+  // restrict() passes back.
+  private readonly options: object
   protected readonly ballots: Ballot<C>[]
   protected readonly unrankedLast: boolean
 
-  constructor(c: {
+  constructor({
+    ballots,
+    candidates,
+    ...options
+  }: {
     ballots: Ballot<C>[]
     candidates: C[]
     /**
@@ -24,25 +31,21 @@ export abstract class BallotMethod<C extends string>
      */
     unrankedLast?: boolean
   }) {
-    super(c.candidates)
-    this.unrankedLast = c.unrankedLast ?? true
-    this.ballots = normalizeBallots(c.ballots, c.candidates, this.unrankedLast)
-  }
-
-  /**
-   * The stored ballots re-normalized against a subset of candidates,
-   * honoring this method's `unrankedLast` setting. Round-based methods use
-   * this to restrict ballots to the candidates still in the running.
-   */
-  protected ballotsFor(candidates: C[]): Ballot<C>[] {
-    return normalizeBallots(this.ballots, candidates, this.unrankedLast)
+    super(candidates)
+    this.options = options
+    this.unrankedLast = options.unrankedLast ?? true
+    this.ballots = normalizeBallots(ballots, candidates, this.unrankedLast)
   }
 
   /**
    * Return a matrix of duels from all the ballots
    */
   get matrix(): Matrix<C> {
-    this._matrix ??= matrixFromBallots(this.ballots, this.candidates)
+    this._matrix ??= matrixFromBallots(
+      this.ballots,
+      this.candidates,
+      this.unrankedLast,
+    )
     return this._matrix
   }
 
@@ -55,12 +58,11 @@ export abstract class BallotMethod<C extends string>
     type Ctor = new (input: {
       ballots: Ballot<D>[]
       candidates: D[]
-      unrankedLast?: boolean
     }) => BallotMethod<D>
     return new (this.constructor as Ctor)({
+      ...this.options,
       ballots: normalizeBallots(this.ballots as Ballot<D>[], candidates, false),
       candidates,
-      unrankedLast: this.unrankedLast,
     })
   }
 }

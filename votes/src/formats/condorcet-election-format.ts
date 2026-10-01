@@ -72,14 +72,14 @@ const stripQuantifierAndWeight = (
   let line = rawLine
 
   let quantifier = 1
-  const quantifierMatch = / \* (\d+(?:\.\d+)?)$/.exec(line)
+  const quantifierMatch = /\*\s*(\d+(?:\.\d+)?)$/.exec(line)
   if (quantifierMatch?.[1]) {
     quantifier = Number(quantifierMatch[1])
     line = line.slice(0, line.length - quantifierMatch[0].length).trim()
   }
 
   let voteWeight = 1
-  const weightMatch = / \^(\d+(?:\.\d+)?)$/.exec(line)
+  const weightMatch = /\^\s*(\d+(?:\.\d+)?)$/.exec(line)
   if (weightMatch?.[1]) {
     voteWeight = Number(weightMatch[1])
     line = line.slice(0, line.length - weightMatch[0].length).trim()
@@ -174,10 +174,19 @@ const stripImplicitRank = <C extends string>(
     : ranking
 }
 
+// Characters the format reserves, and the null byte it forbids.
+const RESERVED = /[>=;,#/*^\0]/
+
 export const stringifyCondorcetElectionFormat = <C extends string>(
   { candidates, ballots }: ParsedCondorcetElection<C>,
   { implicitRanking = true }: { implicitRanking?: boolean } = {},
 ): string => {
+  for (const name of [
+    ...candidates,
+    ...ballots.flatMap((b) => b.ranking.flat()),
+  ])
+    if (RESERVED.test(name))
+      throw new Error(`Candidate "${name}" has a reserved character`)
   const lines = [
     `#/Candidates: ${candidates.join('; ')}`,
     `#/Implicit Ranking: ${String(implicitRanking)}`,
