@@ -96,10 +96,12 @@ describe(MajorityJudgment, () => {
     expect(a.ranking()).toMatchInlineSnapshot(`
       [
         [
-          "a",
-          "b",
           "c",
           "d",
+        ],
+        [
+          "a",
+          "b",
         ],
       ]
     `)
@@ -151,21 +153,25 @@ describe(MajorityJudgment, () => {
     })
     expect(a.medians()).toMatchInlineSnapshot(`
       {
-        "a": 2,
-        "b": 2.5,
-        "c": 2,
-        "d": 2.5,
+        "a": 4,
+        "b": 5,
+        "c": 3,
+        "d": 3,
       }
     `)
     expect(a.ranking()).toMatchInlineSnapshot(`
       [
         [
-          "a",
           "c",
         ],
         [
-          "b",
           "d",
+        ],
+        [
+          "a",
+        ],
+        [
+          "b",
         ],
       ]
     `)
@@ -205,6 +211,25 @@ describe(MajorityJudgment, () => {
         ],
       }
     `)
+  })
+
+  it('breaks ties by majority value', () => {
+    // Grades a: 3 4 5 0 3, b: 0 5 1 3 5, c: 0 4 3 4 2. All three have majority
+    // grade 3. One 3 taken away: b drops to 5, a and c to 4. One 4 taken away:
+    // c comes back to 2, a only to 3.
+    const grades = {
+      a: [3, 4, 5, 0, 3],
+      b: [0, 5, 1, 3, 5],
+      c: [0, 4, 3, 4, 2],
+    }
+    const ballots = [0, 1, 2, 3, 4].map((voter) => {
+      const ranking: string[][] = [[], [], [], [], [], []]
+      for (const [c, g] of Object.entries(grades)) ranking[g[voter]!]!.push(c)
+      return { ranking, weight: 1 }
+    })
+    expect(
+      new MajorityJudgment({ candidates: ['a', 'b', 'c'], ballots }).ranking(),
+    ).toStrictEqual([['c'], ['a'], ['b']])
   })
 
   it('grades a candidate once per ballot', () => {

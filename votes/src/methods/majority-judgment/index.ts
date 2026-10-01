@@ -2,7 +2,7 @@
 
 import { Method } from '../../classes/method'
 import { type Ballot, type Matrix, type ScoreObject } from '../../types'
-import { matrixFromBallots, scoresToRanking } from '../../utils'
+import { matrixFromBallots } from '../../utils'
 import { config } from '../../utils/config'
 import { sum } from '../../utils/sum'
 
@@ -27,53 +27,53 @@ const makeJudgement = <C extends string>(
   return judgements
 }
 
-export const getMedian = (arr: number[]): number => {
-  const sumWeights = sum(arr)
-
-  let s = 0
-  let i = 0
-  let prevI = 0
-  let med = 0
-  for (const j of arr) {
-    const prevS = s
-    s += j
-    i++
-    if (j > 0 && Math.abs(prevS * 2 - sumWeights) < sumWeights * config.EPSILON)
-      med = (prevI + i) / 2
-    else if (s > sumWeights / 2) med = i
-    else {
-      if (j > 0) prevI = i
-      continue
-    }
-    break
-  }
-  return med - 1
+/**
+ * The majority grade: the best grade a majority awards, i.e. the first whose
+ * running total passes half the votes. With an even split that is the worse of
+ * the two middle grades. -1 without votes.
+ */
+export const getMedian = (judgement: number[]): number => {
+  const half = sum(judgement) / 2
+  let total = 0
+  return judgement.findIndex((w) => (total += w) > half + config.EPSILON)
 }
 
-const getMedians = <C extends string>(judgements: Judgements<C>) => {
-  const candidates = Object.keys(judgements) as C[]
-  const medians = {} as Record<C, number>
-  for (const c of candidates) medians[c] = getMedian(judgements[c])
-  return medians
-}
-
-const tieBreak = <C extends string>(judgements: Judgements<C>): C[][] => {
-  const medians = getMedians(judgements)
-  const ranking = scoresToRanking(medians)
-  return ranking.flatMap((cs) => {
-    const median = medians[cs[0]!]
-    if (median === -1 || !Number.isSafeInteger(median)) return [cs]
-    const minGroup = Math.min(...cs.map((c) => judgements[c][median]!))
-    if (minGroup <= 0) return [cs]
-    return tieBreak(
-      Object.fromEntries(
-        cs.map((c) => {
-          const jc = judgements[c]
-          return [c, jc.with(median, jc[median]! - minGroup)]
-        }),
-      ) as Judgements<C>,
+/**
+ * Balinski–Laraki's majority value: the majority grade, then the majority
+ * grade once one vote at that grade is taken away, and so on, as runs of
+ * [grade, votes it lasts].
+ */
+const majorityValue = (judgement: number[]): [number, number][] => {
+  const w = [...judgement]
+  const runs: [number, number][] = []
+  for (let g = getMedian(w); g !== -1; g = getMedian(w)) {
+    const better = sum(w.slice(0, g))
+    const worse = sum(w.slice(g + 1))
+    // Votes that can go before the majority grade worsens, or improves.
+    const lasts = Math.min(
+      better + w[g]! - worse,
+      w[g]! + worse - better + 1,
+      w[g]!,
     )
-  })
+    runs.push([g, lasts])
+    w[g]! -= lasts
+  }
+  return runs
+}
+
+// Lexicographic, better grade first; running out of votes counts as worst.
+const compareValues = (a: [number, number][], b: [number, number][]) => {
+  let [i, j] = [0, 0]
+  let [leftA, leftB] = [a[0]?.[1] ?? 0, b[0]?.[1] ?? 0]
+  while (i < a.length && j < b.length) {
+    if (a[i]![0] !== b[j]![0]) return a[i]![0] - b[j]![0]
+    const step = Math.min(leftA, leftB)
+    leftA -= step
+    leftB -= step
+    if (leftA <= 0) leftA = a[++i]?.[1] ?? 0
+    if (leftB <= 0) leftB = b[++j]?.[1] ?? 0
+  }
+  return (i < a.length ? 0 : 1) - (j < b.length ? 0 : 1)
 }
 
 export class MajorityJudgment<C extends string> extends Method<C> {
@@ -109,11 +109,26 @@ export class MajorityJudgment<C extends string> extends Method<C> {
   }
 
   public medians(): ScoreObject<C> {
-    return getMedians(this.judgements())
+    const judgements = this.judgements()
+    return Object.fromEntries(
+      this.candidates.map((c) => [c, getMedian(judgements[c])]),
+    ) as ScoreObject<C>
   }
 
   public ranking(): C[][] {
-    return tieBreak(this.judgements()).toReversed()
+    const judgements = this.judgements()
+    const values = new Map(
+      this.candidates.map((c) => [c, majorityValue(judgements[c])]),
+    )
+    const compare = (a: C, b: C) =>
+      compareValues(values.get(a)!, values.get(b)!)
+    const tiers: C[][] = []
+    for (const c of this.candidates.toSorted(compare)) {
+      const last = tiers.at(-1)
+      if (last && compare(last[0]!, c) === 0) last.push(c)
+      else tiers.push([c])
+    }
+    return tiers
   }
 
   public restrict<D extends C>(candidates: D[]): Method<D> {
