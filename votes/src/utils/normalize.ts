@@ -121,6 +121,27 @@ export const normalizeRanking = <C extends string>(
 ): C[][] =>
   removeDuplicatedCandidates(removeInvalidCandidates(ranking, candidates))
 
+// `ranking` with the candidates it leaves out appended as one last tier.
+const withUnranked = <C extends string>(
+  ranking: C[][],
+  candidates: C[],
+): C[][] => {
+  const ranked = new Set(ranking.flat())
+  const unranked = candidates.filter((c) => !ranked.has(c))
+  return unranked.length > 0 ? [...ranking, unranked] : ranking
+}
+
+/**
+ * {@link normalizeRanking}, with every candidate it leaves out tied last.
+ *
+ * @param ranking - ranking to complete
+ * @param candidates - official candidates
+ */
+export const completeRanking = <C extends string>(
+  ranking: string[][],
+  candidates: C[],
+): C[][] => withUnranked(normalizeRanking(ranking, candidates), candidates)
+
 /**
  * Prevents cheating!
  *
@@ -134,13 +155,9 @@ export const normalizeBallot = <C extends string, B extends Ballot<C>>(
   appendUnranked = true,
 ): B => {
   const ranking = normalizeRanking(ballot.ranking, candidates) as C[][]
-  if (appendUnranked && ranking.length > 0) {
-    const ranked = new Set(ranking.flat())
-    const unranked = (candidates as C[]).filter((c) => !ranked.has(c))
-    if (unranked.length > 0)
-      return { ...ballot, ranking: [...ranking, unranked] }
-  }
-  return { ...ballot, ranking }
+  return appendUnranked && ranking.length > 0
+    ? { ...ballot, ranking: withUnranked(ranking, candidates as C[]) }
+    : { ...ballot, ranking }
 }
 
 /**
