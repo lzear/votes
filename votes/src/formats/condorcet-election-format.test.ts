@@ -79,6 +79,19 @@ Alice > Bob ^3 * 2`
     ])
   })
 
+  it('reads * and ^ without the spaces around them', () => {
+    const input = `#/Candidates: Alice; Bob
+#/Weight Allowed: true
+
+Alice > Bob ^3 *2
+Alice>Bob^3*2`
+    const result = parseCondorcetElectionFormat(input)
+    expect(result.ballots).toEqual([
+      { ranking: [['Alice'], ['Bob']], weight: 6 },
+      { ranking: [['Alice'], ['Bob']], weight: 6 },
+    ])
+  })
+
   it('ignores weight when not allowed', () => {
     const input = `#/Candidates: Alice; Bob
 #/Weight Allowed: false
@@ -227,6 +240,26 @@ describe('stringifyCondorcetElectionFormat', () => {
     expect(result).toBe(
       '#/Candidates: Alice; Bob; Charlie\n#/Implicit Ranking: false\n\nAlice > Bob > Charlie',
     )
+  })
+
+  it('rejects reserved characters in names', () => {
+    for (const name of [
+      'A > B',
+      'A=B',
+      'A; B',
+      'A, B',
+      'A#',
+      'A/B',
+      'A*',
+      'A^2',
+      'A\0',
+    ])
+      expect(() =>
+        stringifyCondorcetElectionFormat({
+          candidates: ['Z'],
+          ballots: [{ ranking: [[name]], weight: 1 }],
+        }),
+      ).toThrow(name)
   })
 
   it('writes quantifier when weight > 1', () => {

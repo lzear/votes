@@ -1,7 +1,7 @@
 import { TbEliminateLast } from '../../classes/round-ballot-method-tb'
 import { type ScoreObject } from '../../types'
 import { scoresToRanking } from '../../utils'
-import { Borda } from '../borda'
+import { bordaScores } from '../borda'
 
 /**
  * Iterative {@link Borda | Borda count} in which, each round, candidates scoring the lowest score are eliminated.
@@ -11,11 +11,7 @@ export class Baldwin<C extends string> extends TbEliminateLast<C> {
     ranking: C[][]
     scores: ScoreObject<C>
   } {
-    const scores = new Borda({
-      candidates,
-      ballots: this.ballots,
-      unrankedLast: this.unrankedLast,
-    }).scores()
+    const scores = bordaScores(this.ballots, candidates)
     return { ranking: scoresToRanking(scores), scores }
   }
 }

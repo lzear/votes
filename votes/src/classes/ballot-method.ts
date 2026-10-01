@@ -38,19 +38,14 @@ export abstract class BallotMethod<C extends string>
   }
 
   /**
-   * The stored ballots re-normalized against a subset of candidates,
-   * honoring this method's `unrankedLast` setting. Round-based methods use
-   * this to restrict ballots to the candidates still in the running.
-   */
-  protected ballotsFor(candidates: C[]): Ballot<C>[] {
-    return normalizeBallots(this.ballots, candidates, this.unrankedLast)
-  }
-
-  /**
    * Return a matrix of duels from all the ballots
    */
   get matrix(): Matrix<C> {
-    this._matrix ??= matrixFromBallots(this.ballots, this.candidates)
+    this._matrix ??= matrixFromBallots(
+      this.ballots,
+      this.candidates,
+      this.unrankedLast,
+    )
     return this._matrix
   }
 

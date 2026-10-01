@@ -2,15 +2,18 @@ import { BallotScoreMethod } from '../../classes/ballot-score-method'
 import { type Ballot, type ScoreObject } from '../../types'
 import { scoresZero } from '../../utils'
 
-// Ballots arrive already normalized by the BallotMethod constructor.
-const computeScores = <C extends string>(
-  candidates: C[],
+// Skips candidates out of `candidates`, so ballots normalized against a
+// superset of them work as they are.
+export const bordaScores = <C extends string>(
   ballots: Ballot<C>[],
+  candidates: C[],
 ): ScoreObject<C> => {
   const scores = scoresZero(candidates)
+  const running = new Set(candidates)
   for (const ballot of ballots) {
     let voteValue = candidates.length
-    for (const candidatesAtRank of ballot.ranking) {
+    for (const rank of ballot.ranking) {
+      const candidatesAtRank = rank.filter((c) => running.has(c))
       const value = voteValue - (candidatesAtRank.length - 1) / 2
       for (const candidate of candidatesAtRank)
         scores[candidate] += value * ballot.weight
@@ -28,6 +31,6 @@ const computeScores = <C extends string>(
  */
 export class Borda<C extends string> extends BallotScoreMethod<C> {
   public scores(): ScoreObject<C> {
-    return computeScores(this.candidates, this.ballots)
+    return bordaScores(this.ballots, this.candidates)
   }
 }

@@ -16,9 +16,17 @@ export const pairwiseMatrix = (
   return array
 }
 
+/**
+ * Pairwise matrix: `array[i][j]` is the weight of ballots ranking candidate
+ * `i` above candidate `j`.
+ *
+ * @param unrankedLast - whether a ballot ranks the candidates it leaves out
+ * below the others (default true). Pass false to count only what it ranks.
+ */
 export const matrixFromBallots = <C extends string>(
   ballots: Ballot<C>[],
   candidates: C[],
+  unrankedLast = true,
 ): Matrix<C> => {
   const array = zeros(candidates.length)
   const candidateIdx = new Map(candidates.map((c, i) => [c, i]))
@@ -28,7 +36,9 @@ export const matrixFromBallots = <C extends string>(
         .map((c) => candidateIdx.get(c))
         .filter((i): i is number => i !== undefined),
     )
-    const rankedLower = new Set(candidates.keys())
+    const rankedLower = new Set(
+      unrankedLast ? candidates.keys() : rIndex.flat(),
+    )
     for (const rank of rIndex) {
       for (const i of rank) rankedLower.delete(i)
       for (const w of rank)

@@ -118,18 +118,26 @@ export const removeInvalidCandidates = <C extends string>(
 export const normalizeRanking = <C extends string>(
   ranking: string[][],
   candidates: C[],
-): C[][] =>
-  removeDuplicatedCandidates(removeInvalidCandidates(ranking, candidates))
+): C[][] => withUnranked(ranking, candidates)[0]
 
-// `ranking` with the candidates it leaves out appended as one last tier.
+// The normalized ranking, and the candidates it leaves out. One pass: both
+// run on every ballot, every round.
 const withUnranked = <C extends string>(
-  ranking: C[][],
+  ranking: string[][],
   candidates: C[],
-): C[][] => {
-  const ranked = new Set(ranking.flat())
-  const unranked = candidates.filter((c) => !ranked.has(c))
-  return unranked.length > 0 ? [...ranking, unranked] : ranking
+): [C[][], C[]] => {
+  const left = new Set<string>(candidates)
+  const ranked: C[][] = []
+  for (const rank of ranking) {
+    if (left.size === 0) break
+    const kept = rank.filter((c): c is C => left.delete(c))
+    if (kept.length > 0) ranked.push(kept)
+  }
+  return [ranked, [...left] as C[]]
 }
+
+const appendTier = <C extends string>(ranking: C[][], tier: C[]): C[][] =>
+  tier.length > 0 ? [...ranking, tier] : ranking
 
 /**
  * {@link normalizeRanking}, with every candidate it leaves out tied last.
@@ -140,7 +148,7 @@ const withUnranked = <C extends string>(
 export const completeRanking = <C extends string>(
   ranking: string[][],
   candidates: C[],
-): C[][] => withUnranked(normalizeRanking(ranking, candidates), candidates)
+): C[][] => appendTier(...withUnranked(ranking, candidates))
 
 /**
  * Prevents cheating!
@@ -154,10 +162,14 @@ export const normalizeBallot = <C extends string, B extends Ballot<C>>(
   candidates: string[],
   appendUnranked = true,
 ): B => {
-  const ranking = normalizeRanking(ballot.ranking, candidates) as C[][]
-  return appendUnranked && ranking.length > 0
-    ? { ...ballot, ranking: withUnranked(ranking, candidates as C[]) }
-    : { ...ballot, ranking }
+  const [ranking, unranked] = withUnranked(ballot.ranking, candidates as C[])
+  return {
+    ...ballot,
+    ranking:
+      appendUnranked && ranking.length > 0
+        ? appendTier(ranking, unranked)
+        : ranking,
+  }
 }
 
 /**

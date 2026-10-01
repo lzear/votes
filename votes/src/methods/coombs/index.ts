@@ -1,13 +1,23 @@
 import { type QE } from '../../classes/round-ballot-method'
 import { TbEliminateLast } from '../../classes/round-ballot-method-tb'
 import { type Ballot, type ScoreObject } from '../../types'
-import { scoresToRanking } from '../../utils'
+import { scoresToRanking, totalBallotsWeight } from '../../utils'
 import { config } from '../../utils/config'
-import { AbsoluteMajority } from '../absolute-majority'
-import { FirstPastThePost } from '../first-past-the-post'
+import { majorityWinner } from '../absolute-majority'
+import { firstChoices } from '../first-past-the-post/iterate-first-choices'
 
 const reverseBallots = <C extends string>(ballots: Ballot<C>[]): Ballot<C>[] =>
   ballots.map((ballot) => ({ ...ballot, ranking: ballot.ranking.toReversed() }))
+
+const ranksAll = <C extends string>(
+  { ranking }: Ballot<C>,
+  candidates: Set<C>,
+): boolean => {
+  let ranked = 0
+  for (const rank of ranking)
+    for (const c of rank) if (candidates.has(c)) ranked++
+  return ranked === candidates.size
+}
 
 /**
  * Round-level detail specific to Coombs: how this round was resolved.
@@ -28,11 +38,13 @@ export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {
     ranking: C[][]
     scores: ScoreObject<C>
   } {
-    const ballots = this.ballotsFor(candidates)
-    const reversedScores = new FirstPastThePost({
-      ballots: reverseBallots(ballots),
-      candidates,
-    }).scores()
+    // Only a ballot that ranks everyone left has a last choice; with
+    // unrankedLast, any ballot that ranks someone does.
+    const running = new Set(candidates)
+    const complete = this.unrankedLast
+      ? this.ballots
+      : this.ballots.filter((b) => ranksAll(b, running))
+    const reversedScores = firstChoices(reverseBallots(complete), candidates)
     const scores = Object.fromEntries(
       Object.entries<number>(reversedScores).map(([c, s]) => [c, -s]),
     ) as ScoreObject<C>
@@ -48,18 +60,15 @@ export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {
         info: { resolution: 'elimination' },
       }
 
-    const ballots = this.ballotsFor(candidates)
-    const am = new AbsoluteMajority({ candidates, ballots })
-    const amRanking = am.ranking()
-    if (amRanking[0]?.length === 1) {
-      const qualified = amRanking[0]
+    const scores = firstChoices(this.ballots, candidates)
+    const winner = majorityWinner(scores, totalBallotsWeight(this.ballots))
+    if (winner !== undefined)
       return {
-        eliminated: candidates.filter((c) => !qualified.includes(c)),
-        qualified,
-        scores: am.scores(),
+        eliminated: candidates.filter((c) => c !== winner),
+        qualified: [winner],
+        scores,
         info: { resolution: 'majority' },
       }
-    }
 
     return {
       ...super.round(candidates, idx),

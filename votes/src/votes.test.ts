@@ -112,6 +112,16 @@ describe('Test all methods', () => {
       e: 1,
     })
   })
+  it('averages kemeny scores over the best orders', () => {
+    const cycle = [
+      { ranking: [['a'], ['b'], ['c']], weight: 1 },
+      { ranking: [['b'], ['c'], ['a']], weight: 1 },
+      { ranking: [['c'], ['a'], ['b']], weight: 1 },
+    ]
+    expect(
+      new Kemeny(matrixFromBallots(cycle, ['a', 'b', 'c'])).scores(),
+    ).toStrictEqual({ a: 1, b: 1, c: 1 })
+  })
   it('votes with randomizedCondorcet', () => {
     expect(
       new RandomizedCondorcet(matrixFromBallots(sW, abcde)).scores(),
@@ -131,6 +141,16 @@ describe('Test all methods', () => {
       d: 0,
       e: 4,
     })
+  })
+  it('ties Schulze candidates neither of whom beats the other', () => {
+    // Nobody beats a or b on beatpaths; b beats c.
+    const ballots = [
+      { ranking: [['a'], ['b'], ['c']], weight: 1 },
+      { ranking: [['b'], ['c'], ['a']], weight: 1 },
+    ]
+    expect(
+      new Schulze(matrixFromBallots(ballots, ['a', 'b', 'c'])).ranking(),
+    ).toStrictEqual([['a', 'b'], ['c']])
   })
   it('votes with minimax', () => {
     expect(new Minimax(matrixFromBallots(sW, abcde)).scores()).toStrictEqual({
@@ -296,6 +316,33 @@ describe('tieBreakers', () => {
     const expressed = new InstantRunoff({ ...base, unrankedLast: false })
     expect(expressed.computeRounds()[0]?.roundResult.eliminated).toStrictEqual([
       'b',
+    ])
+  })
+
+  it("forwards the host's unrankedLast setting into matrix tiebreakers", () => {
+    const ballots = [
+      { ranking: [['a']], weight: 1 },
+      { ranking: [['b'], ['a']], weight: 1 },
+      { ranking: [['c']], weight: 2 },
+    ]
+    const base = {
+      candidates: ['a', 'b', 'c'],
+      ballots,
+      tieBreakers: [Copeland],
+    }
+    // Default: a beats b on the a-only ballot, b beats a on the other.
+    expect(
+      new InstantRunoff(base).computeRounds()[0]?.roundResult.eliminated,
+    ).toStrictEqual(['a', 'b'])
+    // Expressed-only: the a-only ballot says nothing about b.
+    const expressed = new InstantRunoff({ ...base, unrankedLast: false })
+    expect(expressed.computeRounds()[0]?.roundResult.eliminated).toStrictEqual([
+      'a',
+    ])
+    expect(expressed.matrix.array).toStrictEqual([
+      [0, 0, 0],
+      [1, 0, 0],
+      [0, 0, 0],
     ])
   })
 
