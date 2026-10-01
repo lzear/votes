@@ -32,9 +32,8 @@ export class Nanson<C extends string> extends RoundBallotMethodTb<
     )
 
     // All equal scores → eliminate everyone as one group (complete tie)
-    if (qualified.length === 0)
-      return { eliminated: candidates, qualified: [], scores, info }
-
-    return { qualified, eliminated, scores, info }
+    return qualified.length === 0
+      ? { eliminated: candidates, qualified: [], scores, info }
+      : { qualified, eliminated, scores, info }
   }
 }

@@ -168,12 +168,10 @@ const stripImplicitRank = <C extends string>(
   const lastRank = ranking.at(-1)!
   const ranked = new Set(ranking.slice(0, -1).flat())
   const missing = candidates.filter((c) => !ranked.has(c))
-  if (
-    missing.length === lastRank.length &&
+  return missing.length === lastRank.length &&
     missing.every((c) => lastRank.includes(c))
-  )
-    return ranking.slice(0, -1)
-  return ranking
+    ? ranking.slice(0, -1)
+    : ranking
 }
 
 export const stringifyCondorcetElectionFormat = <C extends string>(

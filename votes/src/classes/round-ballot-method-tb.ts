@@ -31,12 +31,12 @@ export type AnyCtor<C extends string> =
 
 // Extracts extra constructor props beyond the base shape
 export type PropsOf<T> = T extends { needsMatrix: true }
-  ? Record<never, never>
+  ? unknown
   : T extends new (input: infer P) => unknown
     ? 'ballots' extends keyof P
       ? Omit<P, 'ballots' | 'candidates'>
       : Omit<P, 'candidates'>
-    : Record<never, never>
+    : unknown
 
 export type TbEntry<C extends string, T extends AnyCtor<C> = AnyCtor<C>> =
   T | readonly [T, PropsOf<T> & TbMeta]
@@ -118,14 +118,14 @@ const entryToEntry = <C extends string>(
     const result = (r: C[][]): TiebreakerResult<C> =>
       scores === undefined ? { ranking: r } : { ranking: r, scores }
 
-    if (!isStable) return result(ranking)
-
     return result(
-      ranking.flatMap((tier) =>
-        tier.length <= 1 || tier.length === tied.length
-          ? [tier]
-          : run(tier, ballots, allCandidates).ranking,
-      ),
+      isStable
+        ? ranking.flatMap((tier) =>
+            tier.length <= 1 || tier.length === tied.length
+              ? [tier]
+              : run(tier, ballots, allCandidates).ranking,
+          )
+        : ranking,
     )
   }
 
@@ -178,10 +178,10 @@ export abstract class RoundBallotMethodTb<
         resolved: upper,
         remaining: last,
       })
-      if (last.length < current.length) {
-        promoted.push(...upper)
-        current = last
-      }
+      if (last.length >= current.length) continue
+
+      promoted.push(...upper)
+      current = last
     }
 
     return { qualified: promoted, eliminated: current, tieBreakSteps }

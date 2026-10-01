@@ -83,10 +83,10 @@ export const removeDuplicatedCandidates = <C extends string>(
   const usedCandidates: C[] = []
   for (const cur of ranking) {
     const unique = difference([...new Set(cur)], usedCandidates)
-    if (unique.length > 0) {
-      result.push(unique)
-      usedCandidates.push(...unique)
-    }
+    if (unique.length === 0) continue
+
+    result.push(unique)
+    usedCandidates.push(...unique)
   }
   return result
 }
