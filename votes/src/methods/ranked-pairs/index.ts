@@ -22,20 +22,14 @@ const computeFromMatrix = <C extends string>(
   matrix: Matrix<C>,
   edgeSorter: ((a: Edge, b: Edge) => number) | undefined,
 ): ScoreObject<C> => {
-  const allEdges: Edge[] = matrix.array.flatMap(
-    (row, from) =>
-      row
-        .map((value, to) =>
-          to !== from && value > 0
-            ? {
-                from,
-                to,
-                value,
-                total: value + (matrix.array[to]?.[from] ?? 0),
-              }
-            : null,
-        )
-        .filter(Boolean) as Edge[],
+  // Pairwise wins only: a defeat would close a cycle with its own win.
+  const allEdges: Edge[] = matrix.array.flatMap((row, from) =>
+    row.flatMap((value, to) => {
+      const against = matrix.array[to]![from]!
+      return value > against
+        ? [{ from, to, value, total: value + against }]
+        : []
+    }),
   )
   const edgesGroups = groupBy(allEdges, 'value')
   const groups = Object.keys(edgesGroups)
