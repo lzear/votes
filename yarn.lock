@@ -2025,22 +2025,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash-es@npm:^4":
-  version: 4.17.12
-  resolution: "@types/lodash-es@npm:4.17.12"
-  dependencies:
-    "@types/lodash": "npm:*"
-  checksum: 10c0/5d12d2cede07f07ab067541371ed1b838a33edb3c35cb81b73284e93c6fd0c4bbeaefee984e69294bffb53f62d7272c5d679fdba8e595ff71e11d00f2601dde0
-  languageName: node
-  linkType: hard
-
-"@types/lodash@npm:*":
-  version: 4.17.25
-  resolution: "@types/lodash@npm:4.17.25"
-  checksum: 10c0/ca2049f16bf527e04d6e27702e3912a484faaff587de77a5c58e0d243b9292a655e1d7f7e5bdf2ffdf49a76da10673097f8dd4901990679058d47ccd99051877
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:^26, @types/node@npm:^26.4.0":
   version: 26.6.3
   resolution: "@types/node@npm:26.6.3"
@@ -5855,13 +5839,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash-es@npm:^4":
-  version: 4.18.1
-  resolution: "lodash-es@npm:4.18.1"
-  checksum: 10c0/35d4dcf87ef07f8d090f409447575800108057e360b445f590d0d25d09e3d1e33a163d2fc100d4d072b0f901d5e2fc533cd7c4bfd8eeb38a06abec693823c8b8
-  languageName: node
-  linkType: hard
-
 "lodash.merge@npm:^4.6.2":
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
@@ -8130,10 +8107,8 @@ __metadata:
   resolution: "votes@workspace:votes"
   dependencies:
     "@lzear/forge": "npm:^4"
-    "@types/lodash-es": "npm:^4"
     "@types/node": "npm:^26"
     "@vitest/coverage-v8": "npm:^5"
-    lodash-es: "npm:^4"
     rimraf: "npm:^6"
     tsup: "npm:^8"
     typedoc: "npm:^0.28"

@@ -51,12 +51,8 @@
     "voting-systems",
     "elections"
   ],
-  "dependencies": {
-    "lodash-es": "^4"
-  },
   "devDependencies": {
     "@lzear/forge": "^4",
-    "@types/lodash-es": "^4",
     "@types/node": "^26",
     "@vitest/coverage-v8": "^5",
     "rimraf": "^6",
