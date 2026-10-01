@@ -132,6 +132,16 @@ describe('Test all methods', () => {
       e: 4,
     })
   })
+  it('ties Schulze candidates neither of whom beats the other', () => {
+    // Nobody beats a or b on beatpaths; b beats c.
+    const ballots = [
+      { ranking: [['a'], ['b'], ['c']], weight: 1 },
+      { ranking: [['b'], ['c'], ['a']], weight: 1 },
+    ]
+    expect(
+      new Schulze(matrixFromBallots(ballots, ['a', 'b', 'c'])).ranking(),
+    ).toStrictEqual([['a', 'b'], ['c']])
+  })
   it('votes with minimax', () => {
     expect(new Minimax(matrixFromBallots(sW, abcde)).scores()).toStrictEqual({
       a: -5,
