@@ -116,4 +116,13 @@ describe(RandomDictator, () => {
       }).ranking(),
     ).toStrictEqual([['a'], ['b', 'c']])
   })
+
+  it('keeps its rng on restrict', () => {
+    const rng = rngGenerator('restrict')
+    expect(
+      new RandomDictator({ ballots: [], candidates: ['a', 'b'], rng }).restrict(
+        ['a'],
+      ),
+    ).toMatchObject({ rng })
+  })
 })

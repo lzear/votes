@@ -142,9 +142,17 @@ export abstract class RoundBallotMethodTb<
     unrankedLast?: boolean
   }) {
     super(input)
-    this.tbEntries = (input.tieBreakers ?? []).map((e) =>
-      entryToEntry(e, this.unrankedLast),
-    )
+    this.tbEntries = [
+      ...this.builtInTieBreakers(),
+      ...(input.tieBreakers ?? []),
+    ].map((e) => entryToEntry(e, this.unrankedLast))
+  }
+
+  /**
+   * Tiebreakers the method applies before the caller's.
+   */
+  protected builtInTieBreakers(): TbEntry<C>[] {
+    return []
   }
 
   /**

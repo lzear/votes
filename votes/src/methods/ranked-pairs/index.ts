@@ -3,7 +3,6 @@
 import { groupBy, range } from 'lodash-es'
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import { type Matrix, type ScoreObject } from '../../types'
-import { subMatrix } from '../../utils/make-matrix'
 import { scoresAny } from '../../utils/scores-zero'
 import { type Edge, generateAcyclicGraph } from './generate-acyclic-graph'
 
@@ -96,12 +95,5 @@ export class RankedPairs<C extends string> extends MatrixScoreMethod<C> {
 
   public scores(): ScoreObject<C> {
     return computeFromMatrix(this.matrix, this.edgeSorter)
-  }
-
-  public restrict<D extends C>(candidates: D[]): RankedPairs<D> {
-    return new RankedPairs({
-      ...subMatrix(this.matrix, candidates),
-      ...(this.edgeSorter && { edgeSorter: this.edgeSorter }),
-    })
   }
 }

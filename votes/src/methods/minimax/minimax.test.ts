@@ -1,6 +1,7 @@
 import { abcde, balinski } from '../../test/test-utils'
 import { matrixFromBallots } from '../../utils'
-import { Minimax } from '.'
+import { MinimaxTD } from '../minimax-td'
+import { Minimax, MinimaxVariant } from '.'
 
 describe(Minimax, () => {
   it('scores', () => {
@@ -115,5 +116,20 @@ describe(Minimax, () => {
       candidates: ['a', 'b', 'c', 'd', 'e'],
     })
     expect(election.matrix).toStrictEqual(election.matrix)
+  })
+
+  it('keeps its options on restrict', () => {
+    for (const Ctor of [Minimax, MinimaxTD]) {
+      const restricted = new Ctor({
+        ...matrixFromBallots(balinski, abcde),
+        variant: MinimaxVariant.WinningVotes,
+        excludeTies: true,
+      }).restrict(['a', 'b', 'c'])
+      expect(restricted).toBeInstanceOf(Ctor)
+      expect(restricted).toMatchObject({
+        minimaxVariant: MinimaxVariant.WinningVotes,
+        excludeTies: true,
+      })
+    }
   })
 })

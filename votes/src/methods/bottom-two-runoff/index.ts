@@ -4,7 +4,7 @@ import {
   tb,
   type TbEntry,
 } from '../../classes/round-ballot-method-tb'
-import { type Ballot, type ScoreObject } from '../../types'
+import { type ScoreObject } from '../../types'
 import { FirstPastThePost } from '../first-past-the-post'
 
 /**
@@ -21,16 +21,8 @@ import { FirstPastThePost } from '../first-past-the-post'
  * #### Electowiki: [Bottom-Two-Runoff IRV](https://electowiki.org/wiki/Bottom-Two-Runoff_IRV)
  */
 export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
-  constructor(input: {
-    ballots: Ballot<C>[]
-    candidates: C[]
-    tieBreakers?: TbEntry<C>[]
-    unrankedLast?: boolean
-  }) {
-    super({
-      ...input,
-      tieBreakers: [tb(FirstPastThePost), ...(input.tieBreakers ?? [])],
-    })
+  protected builtInTieBreakers(): TbEntry<C>[] {
+    return [tb(FirstPastThePost)]
   }
 
   protected round(candidates: C[]): QE<C> {

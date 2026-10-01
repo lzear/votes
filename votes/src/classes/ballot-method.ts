@@ -9,10 +9,17 @@ export abstract class BallotMethod<C extends string>
 {
   public static readonly needsBallot = true
   private _matrix?: Matrix<C>
+  // The subclass's own constructor options (tieBreakers, rng, …), which
+  // restrict() passes back.
+  private readonly options: object
   protected readonly ballots: Ballot<C>[]
   protected readonly unrankedLast: boolean
 
-  constructor(c: {
+  constructor({
+    ballots,
+    candidates,
+    ...options
+  }: {
     ballots: Ballot<C>[]
     candidates: C[]
     /**
@@ -24,9 +31,10 @@ export abstract class BallotMethod<C extends string>
      */
     unrankedLast?: boolean
   }) {
-    super(c.candidates)
-    this.unrankedLast = c.unrankedLast ?? true
-    this.ballots = normalizeBallots(c.ballots, c.candidates, this.unrankedLast)
+    super(candidates)
+    this.options = options
+    this.unrankedLast = options.unrankedLast ?? true
+    this.ballots = normalizeBallots(ballots, candidates, this.unrankedLast)
   }
 
   /**
@@ -55,12 +63,11 @@ export abstract class BallotMethod<C extends string>
     type Ctor = new (input: {
       ballots: Ballot<D>[]
       candidates: D[]
-      unrankedLast?: boolean
     }) => BallotMethod<D>
     return new (this.constructor as Ctor)({
+      ...this.options,
       ballots: normalizeBallots(this.ballots as Ballot<D>[], candidates, false),
       candidates,
-      unrankedLast: this.unrankedLast,
     })
   }
 }

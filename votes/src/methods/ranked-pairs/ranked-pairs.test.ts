@@ -171,6 +171,13 @@ describe('ranked pairs', () => {
           edgeSorter: byTotalParticipation,
         }).ranking(),
       ).toStrictEqual([['c'], ['a'], ['b']])
+
+      // restrict() keeps the sorter
+      expect(
+        new RankedPairs({ ...rawCounts, edgeSorter: byTotalParticipation })
+          .restrict(['a', 'b', 'c'])
+          .ranking(),
+      ).toStrictEqual([['c'], ['a'], ['b']])
     })
   })
 

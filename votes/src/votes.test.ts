@@ -210,6 +210,20 @@ describe('tieBreakers', () => {
     })
   })
 
+  it('keeps tieBreakers on restrict', () => {
+    const irv = new InstantRunoff({
+      candidates: tieCandidates,
+      ballots: tieBallots,
+      tieBreakers: [Borda],
+    })
+    // Restricted to {a, b, c}, b and c tie on first choices; Borda splits them.
+    expect(irv.restrict(['a', 'b', 'c']).ranking()).toStrictEqual([
+      ['a'],
+      ['b'],
+      ['c'],
+    ])
+  })
+
   it('passes options to matrix tiebreakers', () => {
     const ballots: { ranking: ABCD[][]; weight: number }[] = [
       { ranking: [['d'], ['b'], ['c']], weight: 1 },
