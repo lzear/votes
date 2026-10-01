@@ -47,8 +47,8 @@ describe('systems categoris', () => {
   it('has correct categories', () => {
     const systems = Object.values(VotingSystem)
     const randomSystems = systems.filter((system) => isRandomSystem(system))
-    const matrixSystems = systems.filter((system) => isBallotSystem(system))
-    const ballotSystems = systems.filter((system) => isMatrixSystem(system))
+    const ballotSystems = systems.filter((system) => isBallotSystem(system))
+    const matrixSystems = systems.filter((system) => isMatrixSystem(system))
 
     expect(randomSystems).toMatchInlineSnapshot(`
       [
@@ -59,6 +59,19 @@ describe('systems categoris', () => {
       ]
     `)
     expect(matrixSystems).toMatchInlineSnapshot(`
+      [
+        "COPELAND",
+        "KEMENY",
+        "MAXIMAL_LOTTERIES",
+        "MINIMAX",
+        "MINIMAX_TD",
+        "RANDOMIZED_CONDORCET",
+        "RANKED_PAIRS",
+        "SCHULZE",
+        "SMITH",
+      ]
+    `)
+    expect(ballotSystems).toMatchInlineSnapshot(`
       [
         "APPROBATION",
         "ABSOLUTE_MAJORITY",
@@ -71,19 +84,6 @@ describe('systems categoris', () => {
         "NANSON",
         "RANDOM_DICTATOR",
         "TWO_ROUND_RUNOFF",
-      ]
-    `)
-    expect(ballotSystems).toMatchInlineSnapshot(`
-      [
-        "COPELAND",
-        "KEMENY",
-        "MAXIMAL_LOTTERIES",
-        "MINIMAX",
-        "MINIMAX_TD",
-        "RANDOMIZED_CONDORCET",
-        "RANKED_PAIRS",
-        "SCHULZE",
-        "SMITH",
       ]
     `)
   })
