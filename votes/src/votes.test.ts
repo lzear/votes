@@ -85,6 +85,16 @@ describe('Test all methods', () => {
       new Nanson({ candidates: abcde, ballots: balinski }).ranking(),
     ).toStrictEqual([['c'], ['b'], ['a', 'd', 'e']])
   })
+  it('keeps the Condorcet winner of partial ballots (Baldwin, Nanson)', () => {
+    // b beats a and c; ranking c alone says nothing about pairs.
+    const input = {
+      candidates: ['a', 'b', 'c'],
+      ballots: [{ ranking: [['c']] }, { ranking: [['b'], ['c', 'a']] }],
+      unrankedLast: false,
+    }
+    expect(new Baldwin(input).ranking()[0]).toStrictEqual(['b'])
+    expect(new Nanson(input).ranking()[0]).toStrictEqual(['b'])
+  })
   it('votes with two-round runoff', () => {
     expect(
       new TwoRoundRunoff({ candidates: abcde, ballots: balinski }).ranking(),

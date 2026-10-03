@@ -197,6 +197,9 @@ re-run itself on a subset of candidates.
 
 `Approval` approves the candidates in each ballot's first tier.
 
+`Baldwin` and `Nanson` take Borda scores from the pairwise matrix: the same as
+`Borda`'s when ballots rank everyone, and a Condorcet winner always wins.
+
 ⚠️ `Kemeny` runs in O(n·2ⁿ) time and memory — slow beyond ~20 candidates.
 
 `BottomTwoRunoff` always prepends `tb(FirstPastThePost)` to `tieBreakers` — that

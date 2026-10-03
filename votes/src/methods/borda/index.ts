@@ -1,6 +1,8 @@
 import { BallotScoreMethod } from '../../classes/ballot-score-method'
-import { type Ballot, type ScoreObject } from '../../types'
-import { scoresZero, weightOf } from '../../utils'
+import { type Ballot, type Matrix, type ScoreObject } from '../../types'
+import { scoresZero, totalBallotsWeight, weightOf } from '../../utils'
+import { makeAntisymmetric, subMatrix } from '../../utils/make-matrix'
+import { sum } from '../../utils/sum'
 
 // Skips candidates out of `candidates`, so ballots normalized against a
 // superset of them work as they are.
@@ -23,6 +25,30 @@ export const bordaScores = <C extends string>(
     }
   }
   return scores
+}
+
+/**
+ * Borda scores from the pairwise matrix: half of each candidate's margins
+ * over the others, plus (n + 1) / 2 per ballot ranking any of them. The same
+ * as {@link bordaScores} when ballots rank everyone, and a Condorcet winner
+ * always scores highest even when they don't.
+ */
+export const matrixBordaScores = <C extends string>(
+  matrix: Matrix<C>,
+  ballots: Ballot<C>[],
+  candidates: C[],
+): ScoreObject<C> => {
+  const running = new Set(candidates)
+  const voters = totalBallotsWeight(
+    ballots.filter((b) => b.ranking.some((t) => t.some((c) => running.has(c)))),
+  )
+  const { array } = makeAntisymmetric(subMatrix(matrix, candidates))
+  return Object.fromEntries(
+    candidates.map((c, i) => [
+      c,
+      (voters * (candidates.length + 1) + sum(array[i] ?? [])) / 2,
+    ]),
+  ) as ScoreObject<C>
 }
 
 /**
