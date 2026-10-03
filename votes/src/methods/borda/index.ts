@@ -31,7 +31,7 @@ export const bordaScores = <C extends string>(
  * Borda scores from the pairwise matrix: half of each candidate's margins
  * over the others, plus (n + 1) / 2 per ballot ranking any of them. The same
  * as {@link bordaScores} when ballots rank everyone, and a Condorcet winner
- * always scores highest even when they don't.
+ * always scores above average even when they don't.
  */
 export const matrixBordaScores = <C extends string>(
   matrix: Matrix<C>,
