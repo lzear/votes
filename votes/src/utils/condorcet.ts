@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { type Matrix } from '../types'
-import { makeAntisymmetric } from './make-matrix'
+import { type Matrix, type Profile } from '../types'
+import { makeAntisymmetric, toMatrix } from './make-matrix'
 
 export const findSmithSet = <C extends string>(
   _matrix: Matrix<C>,
@@ -32,3 +32,8 @@ export const findSmithSet = <C extends string>(
     candidates: candidates.filter((_c, k) => dominatingList[k]),
   }
 }
+
+// The smallest set of candidates who each beat everyone outside it.
+export const smithSet = <C extends string>(
+  input: Matrix<C> | Profile<C>,
+): C[] => findSmithSet(toMatrix(input)).candidates

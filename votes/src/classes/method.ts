@@ -1,7 +1,5 @@
 import { type Profile, type Round, type ScoreObject } from '../types'
-import { normalizeRanking } from '../utils'
 import { iterateRanking } from '../utils/iterate-ranking'
-import { canonizeRanking } from '../utils/normalize'
 
 export interface Ranker<C extends string> {
   ranking(): C[][]
@@ -34,19 +32,11 @@ export abstract class Method<C extends string> implements Ranker<C> {
    */
   public abstract ranking(): C[][]
 
-  public canonicalRanking(): C[][] {
-    return canonizeRanking(this.ranking())
-  }
-
   /**
    * Return a new instance of the same method restricted to a subset of
    * candidates.
    */
   public abstract restrict<D extends C>(candidates: D[]): Method<D>
-
-  public restrictRanking<D extends C>(candidates: D[]): D[][] {
-    return normalizeRanking(this.ranking(), candidates)
-  }
 
   /**
    * Ranking built by repeated wins instead of the method's own full ranking:

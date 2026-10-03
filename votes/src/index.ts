@@ -40,6 +40,13 @@ export type {
   TieBreakStep,
 } from './types'
 export { VotingSystem } from './types'
-export * as utils from './utils'
-export { matrixFromBallots } from './utils/make-matrix'
-export { rngGenerator } from './utils/rng-generator'
+export {
+  groupBallots,
+  makeAntisymmetric,
+  matrixFromBallots,
+  normalizeBallots,
+  rngGenerator,
+  scoresToRanking,
+  smithSet,
+  toWeightedBallots,
+} from './utils'
