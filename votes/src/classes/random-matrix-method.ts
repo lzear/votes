@@ -18,11 +18,13 @@ const randomRankingFromScores = <C extends string>(
     const total = sum(left.map((c) => scores[c]))
     if (total <= 0) return [...ranking, ...shuffleArray(left, random)]
 
-    const pickAt = random()
+    // `>`, or a score of 0 is drawn when `random()` gives 0. Unnormalized,
+    // so `w` ends at exactly `total`.
+    const pickAt = random() * total
     let w = 0
     const i = left.findIndex((c) => {
-      w += scores[c] / total
-      return w >= pickAt
+      w += scores[c]
+      return w > pickAt
     })
     ranking.push(...left.splice(i === -1 ? -1 : i, 1))
   }

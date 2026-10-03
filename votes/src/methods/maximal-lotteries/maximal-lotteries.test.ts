@@ -63,6 +63,19 @@ describe('maximal lotteries', () => {
       e: closeTo(7 / 11, 6),
     })
   })
+
+  it('never draws a candidate of probability 0', () => {
+    const lottery = new MaximalLotteries({
+      array: [
+        [0, 0, 1],
+        [1, 0, 1],
+        [0, 0, 0],
+      ],
+      candidates: ['a', 'b', 'c'],
+      rng: () => 0,
+    })
+    expect(lottery.ranking()[0]).toStrictEqual(['b'])
+  })
 })
 
 describe('pivot', () => {
