@@ -54,7 +54,7 @@ type TiebreakerFn<C extends string> = (
   allCandidates: C[],
 ) => TiebreakerResult<C>
 
-interface TiebreakerEntry<C extends string> {
+export interface TiebreakerEntry<C extends string> {
   name: string
   fn: TiebreakerFn<C>
 }
@@ -144,14 +144,16 @@ export abstract class RoundBallotMethodTb<
     super(input)
     this.tbEntries = [
       ...this.builtInTieBreakers(),
-      ...(input.tieBreakers ?? []),
-    ].map((e) => entryToEntry(e, this.unrankedLast))
+      ...(input.tieBreakers ?? []).map((e) =>
+        entryToEntry(e, this.unrankedLast),
+      ),
+    ]
   }
 
   /**
    * Tiebreakers the method applies before the caller's.
    */
-  protected builtInTieBreakers(): TbEntry<C>[] {
+  protected builtInTieBreakers(): TiebreakerEntry<C>[] {
     return []
   }
 

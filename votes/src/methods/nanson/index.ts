@@ -2,7 +2,7 @@ import { type QE } from '../../classes/round-ballot-method'
 import { RoundBallotMethodTb } from '../../classes/round-ballot-method-tb'
 import { config } from '../../utils/config'
 import { sum } from '../../utils/sum'
-import { Borda } from '../borda'
+import { bordaScores } from '../borda'
 
 // Round-level detail specific to Nanson: the Borda-score cutoff used to eliminate candidates.
 export interface NansonInfo {
@@ -17,11 +17,7 @@ export class Nanson<C extends string> extends RoundBallotMethodTb<
   NansonInfo
 > {
   protected round(candidates: C[]): QE<C, NansonInfo> {
-    const scores = new Borda({
-      candidates,
-      ballots: this.ballots,
-      unrankedLast: this.unrankedLast,
-    }).scores()
+    const scores = bordaScores(this.ballots, candidates)
     const values = Object.values<number>(scores)
     const avg = sum(values) / values.length
     const info = { average: avg }
