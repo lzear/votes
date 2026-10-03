@@ -57,10 +57,10 @@ describe('matrixes', () => {
     })
     expect(subMatrix(m, ['b', 'a'])).toStrictEqual({
       array: [
-        [0, 33],
-        [67, 0],
+        [0, 67],
+        [33, 0],
       ],
-      candidates: ['a', 'b'],
+      candidates: ['b', 'a'],
     })
   })
   it('throws when making submatrix from missing candidates', () => {
