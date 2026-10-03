@@ -8,5 +8,7 @@ export default defineConfig({
   target: 'esnext',
   dts: true,
   minify: true,
+  // Tie-break traces and election steps report class names.
+  keepNames: true,
   globalName: 'votes',
 })
