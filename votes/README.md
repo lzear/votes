@@ -222,14 +222,17 @@ new Borda({ candidates, ballots }).deTie()
 ## Utilities
 
 ```typescript
-import { matrixFromBallots, rngGenerator } from 'votes'
-
-// Build a pairwise matrix from ballots
-const matrix = matrixFromBallots(ballots, candidates)
-
-// Seeded RNG for reproducible random methods
-const rng = rngGenerator('my-seed')
-new RandomCandidates({ candidates, rng })
+matrixFromBallots(ballots, candidates) // array[i][j]: weight ranking i above j
+makeAntisymmetric(matrix) // margins: array[i][j] - array[j][i]
+smithSet({ candidates, ballots }) // smallest set beating everyone outside it
+toWeightedBallots([
+  [['a'], ['b']],
+  [['a'], ['b']],
+]) // one ballot per ranking
+groupBallots(ballots) // equal ballots merged, heaviest first
+normalizeBallots(ballots, candidates) // unknown and repeated candidates dropped
+scoresToRanking({ a: 2, b: 1 }) // [['a'], ['b']]
+rngGenerator('my-seed') // seeded RNG for random methods' `rng`
 ```
 
 ## Condorcet election format

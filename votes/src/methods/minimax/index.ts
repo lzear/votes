@@ -40,7 +40,6 @@ const computeScores = <C extends string>(
  * #### Wikipedia: [Minimax Condorcet method](https://en.wikipedia.org/wiki/Minimax_Condorcet_method)
  */
 export class Minimax<C extends string> extends MatrixScoreMethod<C> {
-  public static readonly Variants = MinimaxVariant
   public readonly minimaxVariant: MinimaxVariant
   public readonly excludeTies: boolean
 

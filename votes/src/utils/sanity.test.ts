@@ -3,6 +3,7 @@
 import { type Ballot, methods, VotingSystem } from '..'
 import { abcde, dummyProfile, dummyProfile10 } from '../test/test-utils'
 import { matrixFromBallots } from './make-matrix'
+import { canonizeRanking } from './normalize'
 
 type ABC = 'a' | 'b' | 'c'
 
@@ -17,7 +18,7 @@ describe('sanity check', () => {
         ballots: [],
         candidates: [],
       })
-      expect(election.canonicalRanking()).toStrictEqual([])
+      expect(canonizeRanking(election.ranking())).toStrictEqual([])
       if ('scores' in election) expect(election.scores()).toStrictEqual({})
     },
   )
@@ -58,7 +59,7 @@ describe('sanity check', () => {
         ballots: [{ ranking: [['a'], ['b'], ['c']], weight: 1 }],
         candidates: [],
       })
-      expect(election.canonicalRanking()).toStrictEqual([])
+      expect(canonizeRanking(election.ranking())).toStrictEqual([])
     },
   )
   it.each(Object.values(VotingSystem))(
@@ -92,7 +93,7 @@ describe('sanity check', () => {
       const candidates = ['a', 'b', 'c', 'd']
 
       const election = new methods[system]({ ballots, candidates })
-      expect(election.canonicalRanking()[0]).toStrictEqual(
+      expect(canonizeRanking(election.ranking())[0]).toStrictEqual(
         system === VotingSystem.AbsoluteMajority
           ? ['a', 'b', 'c', 'd']
           : ['a', 'd'],

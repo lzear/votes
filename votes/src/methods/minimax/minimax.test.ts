@@ -18,7 +18,7 @@ describe(Minimax, () => {
   it('scores with variants', () => {
     const election1 = new Minimax({
       ...matrixFromBallots(balinski, abcde),
-      variant: Minimax.Variants.WinningVotes,
+      variant: MinimaxVariant.WinningVotes,
     })
     expect(election1.scores()).toStrictEqual({
       a: -67,
@@ -29,7 +29,7 @@ describe(Minimax, () => {
     })
     const election2 = new Minimax({
       ...matrixFromBallots(balinski, abcde),
-      variant: Minimax.Variants.Margins,
+      variant: MinimaxVariant.Margins,
     })
     expect(election2.scores()).toStrictEqual({
       a: -34,
@@ -40,7 +40,7 @@ describe(Minimax, () => {
     })
     const election3 = new Minimax({
       ...matrixFromBallots(balinski, abcde),
-      variant: Minimax.Variants.PairwiseOpposition,
+      variant: MinimaxVariant.PairwiseOpposition,
     })
     expect(election3.scores()).toStrictEqual({
       a: -67,
@@ -65,7 +65,7 @@ describe(Minimax, () => {
   it('ranks the same for all variants with Balinski', () => {
     const election1 = new Minimax({
       ...matrixFromBallots(balinski, abcde),
-      variant: Minimax.Variants.WinningVotes,
+      variant: MinimaxVariant.WinningVotes,
     })
     expect(election1.ranking()).toStrictEqual([
       ['c'],
@@ -76,7 +76,7 @@ describe(Minimax, () => {
     ])
     const election2 = new Minimax({
       ...matrixFromBallots(balinski, abcde),
-      variant: Minimax.Variants.Margins,
+      variant: MinimaxVariant.Margins,
     })
     expect(election2.ranking()).toStrictEqual([
       ['c'],
@@ -87,7 +87,7 @@ describe(Minimax, () => {
     ])
     const election3 = new Minimax({
       ...matrixFromBallots(balinski, abcde),
-      variant: Minimax.Variants.PairwiseOpposition,
+      variant: MinimaxVariant.PairwiseOpposition,
     })
     expect(election3.ranking()).toStrictEqual([
       ['c'],
