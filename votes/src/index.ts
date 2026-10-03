@@ -1,7 +1,7 @@
 export type { Ranker } from './classes/method'
 export type { Round, TieBreakStep } from './classes/round-ballot-method'
 export { tb, type TbEntry } from './classes/round-ballot-method-tb'
-export type { StepResult } from './election'
+export type { ElectionResult, StepResult } from './election'
 export { Election } from './election'
 export {
   parseCondorcetElectionFormat,
