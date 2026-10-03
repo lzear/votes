@@ -207,9 +207,8 @@ FPTP step is the head-to-head runoff mechanism, not a fallback. It will appear
 as the first entry in `tieBreakSteps`. User-supplied `tieBreakers` fire after it
 only if the head-to-head itself ties.
 
-`MaximalLotteries`, `RandomizedCondorcet` and `RandomCandidates` expose
-`probabilities()`, each candidate's chance to win, instead of `scores()`. Random
-methods draw their ranking once per instance.
+Random methods expose `probabilities()`, each candidate's chance to win, instead
+of `scores()`. Random methods draw their ranking once per instance.
 
 `Schulze` also exposes `strengths()` — the beatpath strength matrix its scores
 derive from.

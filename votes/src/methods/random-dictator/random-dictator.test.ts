@@ -117,6 +117,30 @@ describe(RandomDictator, () => {
     ).toStrictEqual([['a'], ['b', 'c']])
   })
 
+  it('gives each candidate its chance to top the drawn ballot', () => {
+    const dictator = new RandomDictator({
+      candidates: ['a', 'b', 'c'],
+      ballots: [
+        { ranking: [['a'], ['b']], weight: 3 },
+        { ranking: [['b', 'c']], weight: 1 },
+      ],
+    })
+    expect(dictator.probabilities()).toStrictEqual({
+      a: 0.75,
+      b: 0.125,
+      c: 0.125,
+    })
+  })
+
+  it('ties everyone without weight to draw from', () => {
+    const dictator = new RandomDictator({
+      candidates: ['a', 'b'],
+      ballots: [{ ranking: [['a']], weight: 0 }],
+    })
+    expect(dictator.ranking()).toStrictEqual([['a', 'b']])
+    expect(dictator.probabilities()).toStrictEqual({ a: 0.5, b: 0.5 })
+  })
+
   it('keeps its rng on restrict', () => {
     const rng = rngGenerator('restrict')
     expect(

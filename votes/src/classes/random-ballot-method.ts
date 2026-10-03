@@ -1,4 +1,4 @@
-import { type Profile } from '../types'
+import { type Profile, type ScoreObject } from '../types'
 import { BallotMethod } from './ballot-method'
 import { type Ranker } from './method'
 
@@ -16,6 +16,9 @@ export abstract class RandomBallotMethod<C extends string>
 
     this.rng = i.rng ?? Math.random
   }
+
+  // Each candidate's chance to win.
+  public abstract probabilities(): ScoreObject<C>
 
   // Drawn once: every call returns the same ranking.
   public ranking(): C[][] {
