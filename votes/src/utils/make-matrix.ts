@@ -68,27 +68,22 @@ export const makeAntisymmetric = <C extends string>(
   candidates: matrix.candidates,
 })
 
+// The matrix of `selected` alone, in their order.
 export const subMatrix = <C extends string, S extends C>(
   matrix: Matrix<C>,
-  selectedCandidates: S[],
+  selected: S[],
 ): Matrix<S> => {
-  const selectedIdxs = new Set(
-    selectedCandidates.map((selectedCandidate) => {
-      const idx = matrix.candidates.indexOf(selectedCandidate)
-      if (idx === -1)
-        throw new Error(
-          `Selected candidates should be in the matrix. "${selectedCandidate}" is missing.`,
-        )
-      return idx
-    }),
-  )
-
+  const candidates = [...new Set(selected)]
+  const idx = candidates.map((c) => {
+    const i = matrix.candidates.indexOf(c)
+    if (i === -1)
+      throw new Error(
+        `Selected candidates should be in the matrix. "${c}" is missing.`,
+      )
+    return i
+  })
   return {
-    array: matrix.array
-      .filter((_row, rowIdx) => selectedIdxs.has(rowIdx))
-      .map((row) => row.filter((_col, colIdx) => selectedIdxs.has(colIdx))),
-    candidates: matrix.candidates.filter((c): c is S =>
-      (selectedCandidates as C[]).includes(c),
-    ),
+    array: idx.map((i) => idx.map((j) => matrix.array[i]![j]!)),
+    candidates,
   }
 }
