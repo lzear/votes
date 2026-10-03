@@ -266,4 +266,35 @@ describe(MajorityJudgment, () => {
         }),
     ).toThrow(RangeError)
   })
+
+  it('gives the worst grade to those a ballot leaves out', () => {
+    const input = {
+      candidates: ['a', 'b'],
+      ballots: [
+        { ranking: [['a'], ['b']], weight: 1 },
+        { ranking: [[], ['b']], weight: 99 },
+        { ranking: [], weight: 5 },
+      ],
+    }
+    const mj = new MajorityJudgment(input)
+    expect(mj.judgements()).toStrictEqual({
+      a: [1, 0, 0, 0, 0, 99],
+      b: [0, 100, 0, 0, 0, 0],
+    })
+    expect(mj.ranking()).toStrictEqual([['b'], ['a']])
+    expect(mj.restrict(['a']).judgements()).toStrictEqual({
+      a: [1, 0, 0, 0, 0, 99],
+    })
+    expect(mj.matrix.array).toStrictEqual([
+      [0, 1],
+      [99, 0],
+    ])
+
+    const given = new MajorityJudgment({ ...input, unrankedLast: false })
+    expect(given.ranking()).toStrictEqual([['a'], ['b']])
+    expect(given.matrix.array).toStrictEqual([
+      [0, 1],
+      [0, 0],
+    ])
+  })
 })

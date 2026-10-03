@@ -81,6 +81,7 @@ export class MajorityJudgment<C extends string> extends Method<C> {
   // Ballots keep their empty tiers, unlike BallotMethod's: a tier's index is
   // its grade.
   private readonly gradeBallots: Ballot<C>[]
+  private readonly unrankedLast: boolean
   public readonly grades: number
 
   constructor(i: {
@@ -91,12 +92,18 @@ export class MajorityJudgment<C extends string> extends Method<C> {
      * grade.
      */
     grades?: number
+    /**
+     * Whether a ballot that grades someone gives the candidates it leaves out
+     * the worst grade (default true). Pass false to count only given grades.
+     */
+    unrankedLast?: boolean
   }) {
     super(i.candidates)
     this.grades = i.grades ?? 6
+    this.unrankedLast = i.unrankedLast ?? true
     this.gradeBallots = i.ballots.map((b) => {
       // A candidate gets one grade per ballot, its best.
-      const left = new Set<string>(this.candidates)
+      const left = new Set(this.candidates)
       const ranking = b.ranking.map((rank) =>
         rank.filter((c) => left.delete(c)),
       )
@@ -105,6 +112,11 @@ export class MajorityJudgment<C extends string> extends Method<C> {
         throw new RangeError(
           `Grade ${worst + 1} given, but there are ${this.grades} grades`,
         )
+      // Those it leaves out get the worst grade, unless it grades no one.
+      if (worst !== -1 && left.size > 0 && this.unrankedLast) {
+        while (ranking.length < this.grades) ranking.push([])
+        ranking[this.grades - 1]!.push(...left)
+      }
       return { ...b, ranking }
     })
   }
@@ -141,16 +153,21 @@ export class MajorityJudgment<C extends string> extends Method<C> {
     return tiers
   }
 
-  public restrict<D extends C>(candidates: D[]): Method<D> {
+  public restrict<D extends C>(candidates: D[]): MajorityJudgment<D> {
     return new MajorityJudgment({
       ballots: this.gradeBallots as Ballot<D>[],
       candidates,
       grades: this.grades,
+      unrankedLast: this.unrankedLast,
     })
   }
 
   get matrix(): Matrix<C> {
-    this._matrix ??= matrixFromBallots(this.gradeBallots, this.candidates)
+    this._matrix ??= matrixFromBallots(
+      this.gradeBallots,
+      this.candidates,
+      this.unrankedLast,
+    )
     return this._matrix
   }
 }
