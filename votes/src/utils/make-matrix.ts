@@ -40,8 +40,9 @@ export const matrixFromBallots = <C extends string>(
       unrankedLast ? candidates.keys() : rIndex.flat(),
     )
     for (const rank of rIndex) {
-      for (const i of rank) rankedLower.delete(i)
-      for (const w of rank)
+      // A candidate listed twice counts at its first rank only.
+      const winners = rank.filter((i) => rankedLower.delete(i))
+      for (const w of winners)
         for (const l of rankedLower) array[w]![l]! += ranking.weight
     }
   }
