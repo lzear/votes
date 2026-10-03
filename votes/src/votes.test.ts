@@ -1,5 +1,5 @@
 import {
-  Approbation,
+  Approval,
   Baldwin,
   Borda,
   Coombs,
@@ -32,9 +32,9 @@ const tieBallots = [
 ] as { ranking: ABCD[][]; weight: number }[]
 
 describe('Test all methods', () => {
-  it('votes with approbation', () => {
+  it('votes with approval', () => {
     expect(
-      new Approbation({ candidates: abcde, ballots: balinski }).scores(),
+      new Approval({ candidates: abcde, ballots: balinski }).scores(),
     ).toStrictEqual({
       a: 33,
       b: 16,

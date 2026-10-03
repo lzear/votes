@@ -9,7 +9,7 @@ export {
 } from './formats/condorcet-election-format'
 export { type Methods, methods } from './methods'
 export { AbsoluteMajority } from './methods/absolute-majority'
-export { Approbation } from './methods/approbation'
+export { Approval } from './methods/approval'
 export { Baldwin } from './methods/baldwin'
 export { Borda } from './methods/borda'
 export { BottomTwoRunoff } from './methods/bottom-two-runoff'
