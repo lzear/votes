@@ -173,7 +173,7 @@ re-run itself on a subset of candidates.
 | Method               | Class                 | Input             |
 | -------------------- | --------------------- | ----------------- |
 | Absolute majority    | `AbsoluteMajority`    | ballots           |
-| Approval voting      | `Approbation`         | ballots           |
+| Approval voting      | `Approval`            | ballots           |
 | Baldwin method       | `Baldwin`             | ballots           |
 | Borda count          | `Borda`               | ballots           |
 | Bottom-two-runoff    | `BottomTwoRunoff`     | ballots           |
@@ -194,6 +194,8 @@ re-run itself on a subset of candidates.
 | Schulze method       | `Schulze`             | ballots or matrix |
 | Smith's method       | `Smith`               | ballots or matrix |
 | Two-round runoff     | `TwoRoundRunoff`      | ballots           |
+
+`Approval` approves the candidates in each ballot's first tier.
 
 ⚠️ `Kemeny` runs in O(n·2ⁿ) time and memory — slow beyond ~20 candidates.
 

@@ -59,7 +59,7 @@ export interface Round<C extends string, I = undefined> extends QE<C, I> {
 }
 
 export const VotingSystem = {
-  Approbation: 'APPROBATION',
+  Approval: 'APPROVAL',
   AbsoluteMajority: 'ABSOLUTE_MAJORITY',
   Baldwin: 'BALDWIN',
   Borda: 'BORDA',

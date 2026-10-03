@@ -1,7 +1,7 @@
-import { Approbation } from '.'
+import { Approval } from '.'
 
 it('skips empty votes', () => {
-  const a = new Approbation({
+  const a = new Approval({
     candidates: ['a'],
     ballots: [{ weight: 1, ranking: [] }],
   })
