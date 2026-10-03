@@ -1,4 +1,5 @@
 import { type Ranker } from './classes/method'
+import { tb } from './classes/tiebreaker'
 import { Election } from './election'
 import { Borda } from './methods/borda'
 import { Copeland } from './methods/copeland'
@@ -78,13 +79,12 @@ describe('iteratedRanking', () => {
       { ranking: [['c'], ['b'], ['a']], weight: 2 },
     ]
     const election = new Election({
-      rankers: [
-        new Borda({ candidates: abc, ballots }),
-        new FirstPastThePost({ candidates: abc, ballots }),
-      ],
+      candidates: abc,
+      ballots,
+      methods: [Borda, tb(FirstPastThePost, { full: true })],
     })
 
-    // Regular: FPTP breaks the a/c tie in favor of a (3 firsts vs 2).
+    // Regular: FPTP on everyone breaks the a/c tie for a (3 firsts vs 2).
     expect(election.ranking()).toStrictEqual([['b'], ['a'], ['c']])
     // Iterated: the restricted Borda re-run puts c ahead of a.
     expect(election.iteratedRanking()).toStrictEqual([['b'], ['c'], ['a']])

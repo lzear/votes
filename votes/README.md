@@ -125,27 +125,27 @@ Some methods add method-specific detail as `roundResult.info`: `Coombs` reports
 whether a round was resolved by majority or elimination (`CoombsInfo`), `Nanson`
 reports the Borda average used as elimination cutoff (`NansonInfo`).
 
-## Election: chaining rankers
+## Election: chaining methods
 
-`Election` chains pre-built ranker instances. The first provides the primary
-ranking; subsequent rankers refine any remaining ties.
+`Election` chains methods on one input. The first ranks the candidates; each
+next one re-ranks the tiers still tied, taking the same entries and `tb()`
+options as `tieBreakers`.
 
 ```typescript
-import { Election, InstantRunoff, Schulze, tb, Copeland } from 'votes'
+import { Election, InstantRunoff, RandomCandidates, Schulze, tb } from 'votes'
 
 const election = new Election({
-  rankers: [
-    new InstantRunoff({ candidates, ballots, tieBreakers: [tb(Copeland)] }),
-    new Schulze({ candidates, ballots }),
-  ],
+  candidates,
+  ballots,
+  methods: [InstantRunoff, Schulze, tb(RandomCandidates, { rng })],
 })
 
 election.ranking() // final ranking after all tie-breaking
 election.result() // { ranking, steps: StepResult[] }
 ```
 
-Each `StepResult` records `rankerName`, `before`, `after`, and optionally
-`rounds` / `scores` from that step.
+Each `StepResult` records `name`, `before`, `after`, and `runs`: the method's
+ranking of each tied tier, with its `scores` or `rounds`.
 
 ## Iterated ranking
 
@@ -160,7 +160,7 @@ const irv = new InstantRunoff({ candidates, ballots })
 irv.ranking() // losers ordered by elimination time
 irv.iteratedRanking() // 2nd place = winner of a re-run without the winner
 
-new Election({ rankers }).iteratedRanking() // re-runs the whole chain per place
+new Election({ candidates, ballots, methods }).iteratedRanking() // re-runs the chain per place
 ```
 
 Under the hood it uses `restrict(candidates)`, which every method exposes to
