@@ -35,11 +35,11 @@ export const antiPluralityScores = <C extends string>(
 }
 
 /**
- * Each voter votes against their last choice, and the fewest votes against
- * wins. Scores are minus those votes.
- *
- * #### Wikipedia: [Anti-plurality voting](https://en.wikipedia.org/wiki/Anti-plurality_voting)
- */
+Each voter votes against their last choice, and the fewest votes against
+wins. Scores are minus those votes.
+
+#### Wikipedia: [Anti-plurality voting](https://en.wikipedia.org/wiki/Anti-plurality_voting)
+*/
 export class AntiPlurality<C extends string> extends BallotScoreMethod<C> {
   public static readonly label = 'AntiPlurality'
 

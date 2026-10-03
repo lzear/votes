@@ -1,13 +1,18 @@
 # ~/.lefthookrc puts the toolchain on PATH: hooks run under /bin/sh, which reads
-# no shell config, so a GUI git client has no yarn. Missing file is ignored.
+# no shell config, so a GUI git client has no node. Missing file is ignored.
 rc: $HOME/.lefthookrc
 
-commit-msg:
-  commands:
-    commitlint:
-      run: yarn commitlint --edit {1}
-
+# Bins by path, so one file serves every package manager: lefthook doesn't put
+# node_modules/.bin on PATH.
 pre-commit:
-  commands:
-    lint-staged:
-      run: yarn lint-staged
+  jobs:
+    # lefthook hides unstaged hunks while it fixes and restages
+    - name: eslint
+      glob: '*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,json}'
+      run: node_modules/.bin/eslint --fix --no-warn-ignored {staged_files}
+      stage_fixed: true
+
+commit-msg:
+  jobs:
+    - name: commitlint
+      run: node_modules/.bin/commitlint --edit {1}

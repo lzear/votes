@@ -24,8 +24,8 @@ const mulberry32 = (a: number) => () => {
 }
 
 /**
- * A seeded random number generator, for random methods' `rng`.
- */
+A seeded random number generator, for random methods' `rng`.
+*/
 export const rngGenerator: (seedStr: string) => () => number = (
   seedStr: string,
 ) => mulberry32(xmur3(seedStr)())

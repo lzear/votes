@@ -19,13 +19,13 @@ export const pairwiseMatrix = (
 }
 
 /**
- * Pairwise matrix: `array[i][j]` is the weight of ballots ranking candidate
- * `i` above candidate `j`, rounded to the 1e-6 tie tolerance so that
- * fractional weights tie as they should (0.4 + 0.2 floats above 0.6).
- *
- * @param unrankedLast - whether a ballot ranks the candidates it leaves out
- * below the others (default true). Pass false to count only what it ranks.
- */
+Pairwise matrix: `array[i][j]` is the weight of ballots ranking candidate
+`i` above candidate `j`, rounded to the 1e-6 tie tolerance so that
+fractional weights tie as they should (0.4 + 0.2 floats above 0.6).
+
+@param unrankedLast - whether a ballot ranks the candidates it leaves out
+below the others (default true). Pass false to count only what it ranks.
+*/
 export const matrixFromBallots = <C extends string>(
   ballots: readonly Ballot<C>[],
   _candidates: readonly C[],
@@ -86,8 +86,8 @@ export const toMatrix = <C extends string>(
 }
 
 /**
- * Margins: `array[i][j] - array[j][i]`.
- */
+Margins: `array[i][j] - array[j][i]`.
+*/
 export const makeAntisymmetric = <C extends string>(
   matrix: Matrix<C>,
 ): Matrix<C> => ({

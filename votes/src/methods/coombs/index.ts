@@ -8,19 +8,19 @@ import { antiPluralityScores } from '../anti-plurality'
 import { firstChoices } from '../first-past-the-post/iterate-first-choices'
 
 /**
- * Round-level detail specific to Coombs: how this round was resolved.
- * Normally a round eliminates whoever has the most last-place votes, but it
- * resolves by outright majority instead as soon as a candidate has an
- * absolute majority of first choices — which can happen on the very last
- * round, so this can't be inferred from round position alone.
- */
+Round-level detail specific to Coombs: how this round was resolved.
+Normally a round eliminates whoever has the most last-place votes, but it
+resolves by outright majority instead as soon as a candidate has an
+absolute majority of first choices — which can happen on the very last
+round, so this can't be inferred from round position alone.
+*/
 export type CoombsInfo = {
   resolution: 'majority' | 'elimination'
 }
 
 /**
- * #### Wikipedia: [Coombs' method](https://en.wikipedia.org/wiki/Coombs%27_method)
- */
+#### Wikipedia: [Coombs' method](https://en.wikipedia.org/wiki/Coombs%27_method)
+*/
 export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {
   public static readonly label = 'Coombs'
 

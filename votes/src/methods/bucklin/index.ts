@@ -28,12 +28,12 @@ const placedWithin = <C extends string>(
 }
 
 /**
- * Adds each voter's next choice to the count until someone has an absolute
- * majority, then the most votes wins. Scores are that last count, a tier
- * across its cut counting for its share of places within.
- *
- * #### Wikipedia: [Bucklin voting](https://en.wikipedia.org/wiki/Bucklin_voting)
- */
+Adds each voter's next choice to the count until someone has an absolute
+majority, then the most votes wins. Scores are that last count, a tier
+across its cut counting for its share of places within.
+
+#### Wikipedia: [Bucklin voting](https://en.wikipedia.org/wiki/Bucklin_voting)
+*/
 export class Bucklin<C extends string> extends BallotScoreMethod<C> {
   public static readonly label = 'Bucklin'
 

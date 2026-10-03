@@ -4,8 +4,8 @@ import { scoresAny } from '../../utils/scores-zero'
 import { shuffleArray } from '../../utils/shuffle-array'
 
 /**
- * Pick a candidate at random, regardless of the ballots
- */
+Pick a candidate at random, regardless of the ballots
+*/
 export class RandomCandidates<C extends string> extends RandomMethod<C> {
   public static readonly label = 'RandomCandidates'
 

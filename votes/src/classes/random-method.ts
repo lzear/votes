@@ -2,8 +2,8 @@ import type { Profile, ScoreObject } from '../types'
 import { Method } from './method'
 
 /**
- * Voting method that involves some randomness in the computation in the winners.
- */
+Voting method that involves some randomness in the computation in the winners.
+*/
 export abstract class RandomMethod<C extends string> extends Method<C> {
   public static override readonly isRandom = true
 

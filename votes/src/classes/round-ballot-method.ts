@@ -3,17 +3,17 @@ import { BallotMethod } from './ballot-method'
 import type { Ranker } from './method'
 
 /**
- * A round, and with `open`, the tie the tiebreakers leave when its order
- * decides the outcome: one of it goes out next, but nothing says which.
- */
+A round, and with `open`, the tie the tiebreakers leave when its order
+decides the outcome: one of it goes out next, but nothing says which.
+*/
 export type Step<C extends string, I> = QE<C, I> & { open?: C[] }
 
 // Races to try at most when finding who wins in some order of breaking ties.
 const MAX_RACES = 10_000
 
 /**
- * Voting system in which candidates are iteratively eliminated.
- */
+Voting system in which candidates are iteratively eliminated.
+*/
 export abstract class RoundBallotMethod<C extends string, I = undefined>
   extends BallotMethod<C>
   implements Ranker<C>
@@ -26,10 +26,10 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
   protected exploring = false
 
   /**
-   * Who wins from `race`, one of `open` going out next, in some order of
-   * breaking the ties left; or all of `race` past `MAX_RACES` races. Twins
-   * win alike, so results hold one of each.
-   */
+  Who wins from `race`, one of `open` going out next, in some order of
+  breaking the ties left; or all of `race` past `MAX_RACES` races. Twins
+  win alike, so results hold one of each.
+  */
   private possibleWinners(race: C[], open: C[]): C[] {
     const memo = new Map<string, ReadonlySet<C>>()
     let budget = MAX_RACES
@@ -65,9 +65,9 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
   }
 
   /**
-   * The first of `c`'s twins: those every ballot ranks alike, whom every
-   * count treats alike.
-   */
+  The first of `c`'s twins: those every ballot ranks alike, whom every
+  count treats alike.
+  */
   protected twin(c: C): C {
     if (!this._twins) {
       const first = new Map<string, C>()
@@ -142,8 +142,8 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
   protected abstract round(candidates: C[], index: number): Step<C, I>
 
   /**
-   * The candidate who wins from `race` whatever order ties break in, if
-   * known.
-   */
+  The candidate who wins from `race` whatever order ties break in, if
+  known.
+  */
   protected abstract sureWinner(race: C[]): C | undefined
 }

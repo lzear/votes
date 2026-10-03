@@ -44,8 +44,8 @@ const computeScores = <C extends string>(
   ) as ScoreObject<C>
 
 /**
- * #### Wikipedia: [Minimax Condorcet method](https://en.wikipedia.org/wiki/Minimax_Condorcet_method)
- */
+#### Wikipedia: [Minimax Condorcet method](https://en.wikipedia.org/wiki/Minimax_Condorcet_method)
+*/
 export class Minimax<C extends string> extends MatrixScoreMethod<C> {
   public static readonly label: string = 'Minimax'
 

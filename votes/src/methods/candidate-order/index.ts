@@ -2,10 +2,10 @@ import { Method } from '../../classes/method'
 import type { Profile } from '../../types'
 
 /**
- * Ranks the candidates in the order given, regardless of the ballots: a
- * deterministic last resort, like the ballot position or alphabetical order
- * some election laws break ties with.
- */
+Ranks the candidates in the order given, regardless of the ballots: a
+deterministic last resort, like the ballot position or alphabetical order
+some election laws break ties with.
+*/
 export class CandidateOrder<C extends string> extends Method<C> {
   public static readonly label = 'CandidateOrder'
 

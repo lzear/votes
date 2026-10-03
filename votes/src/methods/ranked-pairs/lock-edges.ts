@@ -5,16 +5,16 @@ export type Edge = {
   to: number
   value: number
   /**
-   * Total voters expressing a preference between these two candidates.
-   */
+  Total voters expressing a preference between these two candidates.
+  */
   total: number
 }
 
 /**
- * Locks each group of edges in turn, dropping an edge that lies on a cycle of
- * the locked edges plus its whole group. Returns the candidates, out of `n`,
- * that a locked edge points to.
- */
+Locks each group of edges in turn, dropping an edge that lies on a cycle of
+the locked edges plus its whole group. Returns the candidates, out of `n`,
+that a locked edge points to.
+*/
 export const lockEdges = (n: number, groups: Edge[][]): Set<number> => {
   // One bitset row per candidate: the candidates it reaches.
   const words = Math.ceil(n / 32)

@@ -3,44 +3,44 @@ import { completeRanking } from '../utils/normalize'
 import type { MethodCtor, Ranker } from './method'
 
 /**
- * `Method.with()` options beyond the constructor's.
- *
- * @inline
- */
+`Method.with()` options beyond the constructor's.
+
+@inline
+*/
 export type EntryOptions = {
   /**
-   * Which candidates the method ranks a tie among: the tied ones
-   * (`'restricted'`, default), everyone (`'full'`), or the tied ones, then
-   * those of each tie that leaves, until none splits (`'recursive'`).
-   */
+  Which candidates the method ranks a tie among: the tied ones
+  (`'restricted'`, default), everyone (`'full'`), or the tied ones, then
+  those of each tie that leaves, until none splits (`'recursive'`).
+  */
   mode?: 'restricted' | 'full' | 'recursive'
   /**
-   * Name in traces (`TieBreakStep.name`, `StepResult.name`) instead of the
-   * method's `label`.
-   */
+  Name in traces (`TieBreakStep.name`, `StepResult.name`) instead of the
+  method's `label`.
+  */
   label?: string
 }
 
 /**
- * Constructor props beyond those the election supplies itself.
- */
+Constructor props beyond those the election supplies itself.
+*/
 export type PropsOf<T> = T extends new (input: infer P) => unknown
   ? Omit<P, keyof Profile<string> | 'array' | 'tieBreakers'>
   : unknown
 
 /**
- * An `Election` method: its class, or `Class.with(options)`.
- */
+An `Election` method: its class, or `Class.with(options)`.
+*/
 export type ElectionMethod<
   C extends string,
   T extends MethodCtor<C> = MethodCtor<C>,
 > = T | readonly [T, PropsOf<T> & EntryOptions]
 
 /**
- * A ranking of tied candidates, and what the method behind it reports.
- *
- * @inline
- */
+A ranking of tied candidates, and what the method behind it reports.
+
+@inline
+*/
 export type Run<C extends string> = {
   ranking: C[][]
   scores?: ScoreObject<C>

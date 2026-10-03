@@ -4,11 +4,11 @@ import { findSmithSet } from '../../utils'
 import { bordaScores } from '../borda'
 
 /**
- * The Condorcet winner, or else the Borda winner. The others rank by Borda
- * score, which `scores()` returns.
- *
- * #### Wikipedia: [Black's method](https://en.wikipedia.org/wiki/Black%27s_method)
- */
+The Condorcet winner, or else the Borda winner. The others rank by Borda
+score, which `scores()` returns.
+
+#### Wikipedia: [Black's method](https://en.wikipedia.org/wiki/Black%27s_method)
+*/
 export class Black<C extends string> extends BallotScoreMethod<C> {
   public static readonly label = 'Black'
 

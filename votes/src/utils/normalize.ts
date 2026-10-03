@@ -33,8 +33,8 @@ const mergeEquivalentBallots = <C extends string, B extends Ballot<C>>(
 }
 
 /**
- * Merges ballots with the same tiers, summing weights, heaviest first.
- */
+Merges ballots with the same tiers, summing weights, heaviest first.
+*/
 export const groupBallots = <C extends string, B extends Ballot<C>>(
   ballots: readonly B[],
 ): B[] =>
@@ -43,18 +43,18 @@ export const groupBallots = <C extends string, B extends Ballot<C>>(
     .toSorted((a, b) => weightOf(b) - weightOf(a))
 
 /**
- * Ballots from rankings, the same ones merged into one weighted ballot.
- */
+Ballots from rankings, the same ones merged into one weighted ballot.
+*/
 export const toWeightedBallots = <C extends string>(
   ballots: readonly C[][][],
 ): Ballot<C>[] =>
   mergeEquivalentBallots(ballots.map((ranking) => ({ ranking, weight: 1 })))
 
 /**
- * Remove candidates that are duplicated inside a ranking. Prevents cheating!
- *
- * @param ranking - input ranking
- */
+Remove candidates that are duplicated inside a ranking. Prevents cheating!
+
+@param ranking - input ranking
+*/
 export const removeDuplicatedCandidates = <C extends string>(
   ranking: C[][],
 ): C[][] => {
@@ -71,11 +71,11 @@ export const removeDuplicatedCandidates = <C extends string>(
 }
 
 /**
- * Remove candidates in `ranking` that don't exist in `candidates`. Prevents cheating!
- *
- * @param ranking - ranking to check
- * @param candidates - official candidates
- */
+Remove candidates in `ranking` that don't exist in `candidates`. Prevents cheating!
+
+@param ranking - ranking to check
+@param candidates - official candidates
+*/
 export const removeInvalidCandidates = <C extends string>(
   ranking: string[][],
   candidates: readonly C[],
@@ -108,19 +108,19 @@ const appendTier = <C extends string>(ranking: C[][], tier: C[]): C[][] =>
   tier.length > 0 ? [...ranking, tier] : ranking
 
 /**
- * `ranking` with only `candidates`, each once, and those it leaves out tied
- * last.
- */
+`ranking` with only `candidates`, each once, and those it leaves out tied
+last.
+*/
 export const completeRanking = <C extends string>(
   ranking: string[][],
   candidates: readonly C[],
 ): C[][] => appendTier(...withUnranked(ranking, candidates))
 
 /**
- * Keeps only `candidates` in each ballot, each at its first rank. With
- * `appendUnranked` (default true), a ballot that ranks anyone also ranks the
- * rest, tied last.
- */
+Keeps only `candidates` in each ballot, each at its first rank. With
+`appendUnranked` (default true), a ballot that ranks anyone also ranks the
+rest, tied last.
+*/
 export const normalizeBallots = <C extends string, B extends Ballot<C>>(
   ballots: readonly B[],
   candidates: readonly C[],

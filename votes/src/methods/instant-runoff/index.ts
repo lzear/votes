@@ -6,8 +6,8 @@ import { sum } from '../../utils/sum'
 import { firstChoices } from '../first-past-the-post/iterate-first-choices'
 
 /**
- * #### Wikipedia: [Instant-runoff voting](https://en.wikipedia.org/wiki/Instant-runoff_voting)
- */
+#### Wikipedia: [Instant-runoff voting](https://en.wikipedia.org/wiki/Instant-runoff_voting)
+*/
 export class InstantRunoff<C extends string> extends TbEliminateLast<C> {
   public static readonly label = 'InstantRunoff'
 

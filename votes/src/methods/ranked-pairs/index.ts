@@ -6,13 +6,13 @@ import { scoresAny } from '../../utils/scores-zero'
 import { type Edge, lockEdges } from './lock-edges'
 
 /**
- * Tiebreaker for equal-strength pairs: prefer the pair where more voters
- * expressed a preference (higher total participation). Meaningful only when the
- * matrix comes from `matrixFromBallots` (raw counts). With antisymmetric
- * matrices, `total = value + (-value) = 0` for every edge — all pairs compare
- * equal, so the group falls back to simultaneous processing and ties are
- * preserved.
- */
+Tiebreaker for equal-strength pairs: prefer the pair where more voters
+expressed a preference (higher total participation). Meaningful only when the
+matrix comes from `matrixFromBallots` (raw counts). With antisymmetric
+matrices, `total = value + (-value) = 0` for every edge — all pairs compare
+equal, so the group falls back to simultaneous processing and ties are
+preserved.
+*/
 export const byTotalParticipation = (a: Edge, b: Edge): number =>
   b.total - a.total
 
@@ -70,18 +70,18 @@ const computeFromMatrix = <C extends string>(
 }
 
 /**
- * By default, equal-strength pairs are locked simultaneously: if they would
- * form a cycle among themselves, none are locked (most neutral outcome).
- *
- * Pass `edgeSorter` to lock equal-strength pairs in its order instead, like
- * canonical Tideman; pairs it cannot tell apart still lock simultaneously.
- * `byTotalParticipation` (exported from this module) is a ready-made sorter
- * that prefers pairs where more voters expressed a preference.
- *
- * The `Edge` type passed to the sorter has `{ from, to, value, total }`.
- *
- * #### Wikipedia: [Ranked pairs](https://en.wikipedia.org/wiki/Ranked_pairs)
- */
+By default, equal-strength pairs are locked simultaneously: if they would
+form a cycle among themselves, none are locked (most neutral outcome).
+
+Pass `edgeSorter` to lock equal-strength pairs in its order instead, like
+canonical Tideman; pairs it cannot tell apart still lock simultaneously.
+`byTotalParticipation` (exported from this module) is a ready-made sorter
+that prefers pairs where more voters expressed a preference.
+
+The `Edge` type passed to the sorter has `{ from, to, value, total }`.
+
+#### Wikipedia: [Ranked pairs](https://en.wikipedia.org/wiki/Ranked_pairs)
+*/
 export class RankedPairs<C extends string> extends MatrixScoreMethod<C> {
   public static readonly label = 'RankedPairs'
 

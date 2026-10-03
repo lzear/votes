@@ -13,13 +13,13 @@ type Cut<C extends string> = {
 }
 
 /**
- * The two candidates with the most first choices go to a runoff, unless one of
- * them already has an absolute majority. A tie at the cut that the tiebreakers
- * cannot break sends everyone in it through, and the count then stops on those
- * who win the runoff of some pair breaking it gives.
- *
- * #### Wikipedia: [Two-round system](https://en.wikipedia.org/wiki/Two-round_system)
- */
+The two candidates with the most first choices go to a runoff, unless one of
+them already has an absolute majority. A tie at the cut that the tiebreakers
+cannot break sends everyone in it through, and the count then stops on those
+who win the runoff of some pair breaking it gives.
+
+#### Wikipedia: [Two-round system](https://en.wikipedia.org/wiki/Two-round_system)
+*/
 export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
   public static readonly label = 'TwoRoundRunoff'
 

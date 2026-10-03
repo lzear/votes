@@ -13,8 +13,8 @@ const computeScores = <C extends string>(matrix: Matrix<C>): ScoreObject<C> => {
 }
 
 /**
- * #### Wikipedia: [Smith's method](https://en.wikipedia.org/wiki/Smith_set#Smith's_method)
- */
+#### Wikipedia: [Smith's method](https://en.wikipedia.org/wiki/Smith_set#Smith's_method)
+*/
 export class Smith<C extends string> extends MatrixScoreMethod<C> {
   public static readonly label = 'Smith'
 

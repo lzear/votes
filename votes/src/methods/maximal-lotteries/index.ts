@@ -27,11 +27,11 @@ export const lotteryFromAntisymmetric = <C extends string>(
 }
 
 /**
- * When several lotteries are maximal, returns one, the same whatever the
- * candidate order.
- *
- * #### Wikipedia: [Maximal lotteries](https://en.wikipedia.org/wiki/Maximal_lotteries)
- */
+When several lotteries are maximal, returns one, the same whatever the
+candidate order.
+
+#### Wikipedia: [Maximal lotteries](https://en.wikipedia.org/wiki/Maximal_lotteries)
+*/
 export class MaximalLotteries<C extends string> extends RandomMatrixMethod<C> {
   public static readonly label = 'MaximalLotteries'
 

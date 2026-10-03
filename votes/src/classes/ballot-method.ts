@@ -30,8 +30,8 @@ export abstract class BallotMethod<C extends string>
   }
 
   /**
-   * Return a matrix of duels from all the ballots
-   */
+  Return a matrix of duels from all the ballots
+  */
   get matrix(): Matrix<C> {
     this._matrix ??= matrixFromBallots(
       this.ballots,
@@ -42,10 +42,10 @@ export abstract class BallotMethod<C extends string>
   }
 
   /**
-   * Return a new instance of the same method restricted to a subset of candidates.
-   * Ballots are filtered to remove candidates not in the subset; unranked candidates
-   * are NOT appended (preserves only opinions voters expressed).
-   */
+  Return a new instance of the same method restricted to a subset of candidates.
+  Ballots are filtered to remove candidates not in the subset; unranked candidates
+  are NOT appended (preserves only opinions voters expressed).
+  */
   restrict(candidates: readonly C[]): this {
     type Ctor = new (input: Profile<C>) => this
     return new (this.constructor as Ctor)({

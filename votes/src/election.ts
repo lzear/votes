@@ -10,14 +10,14 @@ import { iterateRanking } from './utils'
 
 export type StepResult<C extends string> = {
   /**
-   * The method's label: its `with()` option, or its class's.
-   */
+  The method's label: its `with()` option, or its class's.
+  */
   name: string
   before: C[][]
   after: C[][]
   /**
-   * The method's run on each tier it ranked.
-   */
+  The method's run on each tier it ranked.
+  */
   runs: (Run<C> & { candidates: C[] })[]
 }
 
@@ -34,19 +34,19 @@ export type ElectionInput<C extends string> = Profile<C> & {
 }
 
 /**
- * Chains methods: the first ranks the candidates, each next one re-ranks the
- * tiers still tied. A round method breaks its round ties with the methods
- * after it.
- *
- * @example
- * ```ts
- * new Election({
- *   candidates,
- *   ballots,
- *   methods: [InstantRunoff, Schulze, RandomCandidates.with({ rng })],
- * })
- * ```
- */
+Chains methods: the first ranks the candidates, each next one re-ranks the
+tiers still tied. A round method breaks its round ties with the methods
+after it.
+
+@example
+```ts
+new Election({
+  candidates,
+  ballots,
+  methods: [InstantRunoff, Schulze, RandomCandidates.with({ rng })],
+})
+```
+*/
 export class Election<C extends string> implements Ranker<C> {
   private readonly input: ElectionInput<C>
   private candidates: C[]
@@ -99,10 +99,10 @@ export class Election<C extends string> implements Ranker<C> {
   }
 
   /**
-   * Ranking built by repeated wins: run the full election, record the
-   * winning tier, then re-run the whole election restricted to the remaining
-   * candidates for the next place, and so on. See `Method#iteratedRanking`.
-   */
+  Ranking built by repeated wins: run the full election, record the
+  winning tier, then re-run the whole election restricted to the remaining
+  candidates for the next place, and so on. See `Method#iteratedRanking`.
+  */
   iteratedRanking(): C[][] {
     return iterateRanking(this)
   }

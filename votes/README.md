@@ -71,8 +71,8 @@ import {
   Election,
   InstantRunoff,
   RandomCandidates,
-  Schulze,
   rngGenerator,
+  Schulze,
 } from 'votes'
 
 const election = new Election({

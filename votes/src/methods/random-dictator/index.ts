@@ -59,11 +59,11 @@ const winChances = <C extends string>(
 }
 
 /**
- * Ranks as a ballot drawn at random by weight, breaking its ties with the next
- * drawn and so on: `Dictator` on ballots in random order.
- *
- * #### Wikipedia: [Random ballot](https://en.wikipedia.org/wiki/Random_ballot)
- */
+Ranks as a ballot drawn at random by weight, breaking its ties with the next
+drawn and so on: `Dictator` on ballots in random order.
+
+#### Wikipedia: [Random ballot](https://en.wikipedia.org/wiki/Random_ballot)
+*/
 export class RandomDictator<C extends string> extends RandomBallotMethod<C> {
   public static readonly label = 'RandomDictator'
 

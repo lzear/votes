@@ -35,12 +35,12 @@ export const serialRanking = <C extends string>(
 }
 
 /**
- * Ranks as the first ballot, breaking its ties with the next, and so on: a
- * deterministic last resort, or a serial dictatorship.
- * `RandomDictator` with `rng: () => 0` ranks the same.
- *
- * #### Wikipedia: [Dictatorship mechanism](https://en.wikipedia.org/wiki/Dictatorship_mechanism)
- */
+Ranks as the first ballot, breaking its ties with the next, and so on: a
+deterministic last resort, or a serial dictatorship.
+`RandomDictator` with `rng: () => 0` ranks the same.
+
+#### Wikipedia: [Dictatorship mechanism](https://en.wikipedia.org/wiki/Dictatorship_mechanism)
+*/
 export class Dictator<C extends string> extends BallotMethod<C> {
   public static readonly label = 'Dictator'
 

@@ -18,10 +18,10 @@ const computeFromMatrix = <C extends string>(
 }
 
 /**
- * Scores each candidate's pairwise wins, a tie counting half.
- *
- * #### Wikipedia: [Copeland's method](https://en.wikipedia.org/wiki/Copeland%27s_method)
- */
+Scores each candidate's pairwise wins, a tie counting half.
+
+#### Wikipedia: [Copeland's method](https://en.wikipedia.org/wiki/Copeland%27s_method)
+*/
 export class Copeland<C extends string> extends MatrixScoreMethod<C> {
   public static readonly label = 'Copeland'
 

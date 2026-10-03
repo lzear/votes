@@ -7,8 +7,8 @@ import { config } from '../../utils/config'
 import { sum } from '../../utils/sum'
 
 /**
- * Votes per grade, best grade first.
- */
+Votes per grade, best grade first.
+*/
 export type Judgements<C extends string> = Record<C, number[]>
 
 const makeJudgement = <C extends string>(
@@ -28,10 +28,10 @@ const makeJudgement = <C extends string>(
 }
 
 /**
- * The majority grade: the best grade a majority awards, i.e. the first whose
- * running total passes half the votes. With an even split that is the worse of
- * the two middle grades. -1 without votes.
- */
+The majority grade: the best grade a majority awards, i.e. the first whose
+running total passes half the votes. With an even split that is the worse of
+the two middle grades. -1 without votes.
+*/
 export const getMedian = (judgement: number[]): number => {
   const half = sum(judgement) / 2
   let total = 0
@@ -39,10 +39,10 @@ export const getMedian = (judgement: number[]): number => {
 }
 
 /**
- * Balinski–Laraki's majority value: the majority grade, then the majority
- * grade once one vote at that grade is taken away, and so on, as runs of
- * [grade, votes it lasts].
- */
+Balinski–Laraki's majority value: the majority grade, then the majority
+grade once one vote at that grade is taken away, and so on, as runs of
+[grade, votes it lasts].
+*/
 const majorityValue = (judgement: number[]): [number, number][] => {
   const w = [...judgement]
   const runs: [number, number][] = []
@@ -77,10 +77,10 @@ const compareValues = (a: [number, number][], b: [number, number][]) => {
 }
 
 /**
- * Ranks by majority grade, ties broken by Balinski–Laraki's majority value.
- *
- * #### Wikipedia: [Majority judgment](https://en.wikipedia.org/wiki/Majority_judgment)
- */
+Ranks by majority grade, ties broken by Balinski–Laraki's majority value.
+
+#### Wikipedia: [Majority judgment](https://en.wikipedia.org/wiki/Majority_judgment)
+*/
 export class MajorityJudgment<C extends string> extends Method<C> {
   public static readonly label = 'MajorityJudgment'
 
@@ -97,19 +97,19 @@ export class MajorityJudgment<C extends string> extends Method<C> {
     ballots: readonly Ballot<C>[]
     candidates: readonly C[]
     /**
-     * Number of grades, best first (default 6). A ballot tier's index is its
-     * grade.
-     */
+    Number of grades, best first (default 6). A ballot tier's index is its
+    grade.
+    */
     grades?: number
     /**
-     * Whether a ballot that grades someone gives the candidates it leaves out
-     * the worst grade (default true). Pass false to count only given grades.
-     */
+    Whether a ballot that grades someone gives the candidates it leaves out
+    the worst grade (default true). Pass false to count only given grades.
+    */
     unrankedLast?: boolean
     /**
-     * Whether a ballot that grades no one gives everyone the worst grade too,
-     * with `unrankedLast` (default false).
-     */
+    Whether a ballot that grades no one gives everyone the worst grade too,
+    with `unrankedLast` (default false).
+    */
     countBlank?: boolean
   }) {
     super(i.candidates)

@@ -7,8 +7,8 @@ export type Scorer<C extends string> = {
 } & Ranker<C>
 
 /**
- * Voting method that ranks candidates by score, highest first.
- */
+Voting method that ranks candidates by score, highest first.
+*/
 export abstract class ScoreMethod<C extends string>
   extends Method<C>
   implements Scorer<C>

@@ -147,8 +147,8 @@ const deriveCandidates = <C extends string>(ballots: Ballot<C>[]): C[] => {
 }
 
 /**
- * Reads the [Condorcet election format](https://github.com/CondorcetVote/CondorcetElectionFormat).
- */
+Reads the [Condorcet election format](https://github.com/CondorcetVote/CondorcetElectionFormat).
+*/
 export const parseCondorcetElectionFormat = <C extends string = string>(
   input: string,
 ): ParsedCondorcetElection<C> => {
@@ -188,8 +188,8 @@ const stripImplicitRank = <C extends string>(
 const UNWRITABLE = /[>=;,#/*^\0\n\r]|\|\||^\s|\s$|^$/
 
 /**
- * Writes the [Condorcet election format](https://github.com/CondorcetVote/CondorcetElectionFormat).
- */
+Writes the [Condorcet election format](https://github.com/CondorcetVote/CondorcetElectionFormat).
+*/
 export const stringifyCondorcetElectionFormat = <C extends string>(
   { candidates, ballots }: Pick<Profile<C>, 'candidates' | 'ballots'>,
   { implicitRanking = true }: { implicitRanking?: boolean } = {},

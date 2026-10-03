@@ -28,11 +28,11 @@ export const bordaScores = <C extends string>(
 }
 
 /**
- * Borda scores from the pairwise matrix: half of each candidate's margins
- * over the others, plus (n + 1) / 2 per ballot ranking any of them. The same
- * as {@link bordaScores} when ballots rank everyone, and a Condorcet winner
- * always scores above average even when they don't.
- */
+Borda scores from the pairwise matrix: half of each candidate's margins
+over the others, plus (n + 1) / 2 per ballot ranking any of them. The same
+as {@link bordaScores} when ballots rank everyone, and a Condorcet winner
+always scores above average even when they don't.
+*/
 export const matrixBordaScores = <C extends string>(
   matrix: Matrix<C>,
   ballots: Ballot<C>[],
@@ -49,10 +49,10 @@ export const matrixBordaScores = <C extends string>(
 }
 
 /**
- * Each voter gives n points to their first choice, n − 1 to the next, down to 1 for the last. Tied candidates share the average of the places they cover.
- *
- * #### Wikipedia: [Borda count](https://en.wikipedia.org/wiki/Borda_count)
- */
+Each voter gives n points to their first choice, n − 1 to the next, down to 1 for the last. Tied candidates share the average of the places they cover.
+
+#### Wikipedia: [Borda count](https://en.wikipedia.org/wiki/Borda_count)
+*/
 export class Borda<C extends string> extends BallotScoreMethod<C> {
   public static readonly label = 'Borda'
 

@@ -81,12 +81,12 @@ const computeScores = <C extends string>({
 }
 
 /**
- * Scores are how many candidates each one ranks above, averaged over the
- * best orders. Runs in O(n·2ⁿ) time and memory: slow beyond ~20 candidates,
- * and throws beyond 30.
- *
- * #### Wikipedia: [Kemeny–Young method](https://en.wikipedia.org/wiki/Kemeny%E2%80%93Young_method)
- */
+Scores are how many candidates each one ranks above, averaged over the
+best orders. Runs in O(n·2ⁿ) time and memory: slow beyond ~20 candidates,
+and throws beyond 30.
+
+#### Wikipedia: [Kemeny–Young method](https://en.wikipedia.org/wiki/Kemeny%E2%80%93Young_method)
+*/
 export class Kemeny<C extends string> extends MatrixScoreMethod<C> {
   public static readonly label = 'Kemeny'
 

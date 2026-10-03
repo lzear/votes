@@ -14,10 +14,10 @@ export abstract class RoundBallotMethodTb<
   constructor(
     input: Profile<C> & {
       /**
-       * Set by `Election`: the methods after this one.
-       *
-       * @internal
-       */
+      Set by `Election`: the methods after this one.
+      
+      @internal
+      */
       tieBreakers?: readonly MethodTiebreaker<C>[]
     },
   ) {
@@ -34,17 +34,17 @@ export abstract class RoundBallotMethodTb<
   }
 
   /**
-   * Tiebreakers the method applies before the caller's.
-   */
+  Tiebreakers the method applies before the caller's.
+  */
   protected builtInTieBreakers(): Tiebreaker<C>[] {
     return []
   }
 
   /**
-   * Apply tiebreakers sequentially to a set of tied candidates.
-   * Returns qualified survivors, eliminated losers, and a trace of each step.
-   * If unresolvable, all pending are returned as eliminated.
-   */
+  Apply tiebreakers sequentially to a set of tied candidates.
+  Returns qualified survivors, eliminated losers, and a trace of each step.
+  If unresolvable, all pending are returned as eliminated.
+  */
   protected resolvePending(pending: C[]): {
     qualified: C[]
     eliminated: C[]
@@ -79,9 +79,9 @@ export abstract class RoundBallotMethodTb<
   }
 
   /**
-   * Those one of whom the method puts out of `race` next, after its
-   * tiebreakers: by default, anyone.
-   */
+  Those one of whom the method puts out of `race` next, after its
+  tiebreakers: by default, anyone.
+  */
   protected nextOut(race: C[]): C[] {
     return race
   }
@@ -95,9 +95,9 @@ export abstract class RoundBallotMethodTb<
   }
 
   /**
-   * Whether putting `group` out of `race` at once ends where every order of
-   * putting it out one at a time does.
-   */
+  Whether putting `group` out of `race` at once ends where every order of
+  putting it out one at a time does.
+  */
   protected canEliminateTogether(group: C[], race: C[]): boolean {
     if (this.exploring) return false
     const others = race.filter((c) => !group.includes(c))
@@ -118,8 +118,8 @@ export abstract class RoundBallotMethodTb<
   }
 
   /**
-   * `group`, a tie the tiebreakers leave, as open when its order matters.
-   */
+  `group`, a tie the tiebreakers leave, as open when its order matters.
+  */
   protected openTie(group: C[], race: C[]): { open?: C[] } {
     return group.length > 1 &&
       (group.length === race.length || !this.canEliminateTogether(group, race))
@@ -133,11 +133,11 @@ export abstract class RoundBallotMethodTb<
 const MAX_ORDERS = 256
 
 /**
- * Each round: rank candidates, eliminate the last-tier candidate(s).
- * Tiebreakers are applied when multiple candidates share the last tier; a tie
- * they leave goes out at once if no order of it changes the outcome, else
- * the count stops on those who win in some order.
- */
+Each round: rank candidates, eliminate the last-tier candidate(s).
+Tiebreakers are applied when multiple candidates share the last tier; a tie
+they leave goes out at once if no order of it changes the outcome, else
+the count stops on those who win in some order.
+*/
 export abstract class TbEliminateLast<
   C extends string,
   I = undefined,

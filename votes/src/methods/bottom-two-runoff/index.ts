@@ -5,19 +5,19 @@ import { scoresToRanking } from '../../utils'
 import { firstChoices } from '../first-past-the-post/iterate-first-choices'
 
 /**
- * Each round:
- * 1. Rank remaining candidates by FPTP (first-choice votes).
- * 2. Take the bottom-2 candidates from that ranking, or all of those tied
- *    with them.
- * 3. Eliminate whichever of the two loses a head-to-head FPTP matchup.
- *
- * The head-to-head step in (3) is a built-in `FirstPastThePost` tiebreaker,
- * so it always appears as the first entry in `tieBreakSteps`. In an
- * `Election`, the methods after it apply only if the head-to-head ends in a
- * tie.
- *
- * #### Electowiki: [Bottom-Two-Runoff IRV](https://electowiki.org/wiki/Bottom-Two-Runoff_IRV)
- */
+Each round:
+1. Rank remaining candidates by FPTP (first-choice votes).
+2. Take the bottom-2 candidates from that ranking, or all of those tied
+   with them.
+3. Eliminate whichever of the two loses a head-to-head FPTP matchup.
+
+The head-to-head step in (3) is a built-in `FirstPastThePost` tiebreaker,
+so it always appears as the first entry in `tieBreakSteps`. In an
+`Election`, the methods after it apply only if the head-to-head ends in a
+tie.
+
+#### Electowiki: [Bottom-Two-Runoff IRV](https://electowiki.org/wiki/Bottom-Two-Runoff_IRV)
+*/
 export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
   public static readonly label = 'BottomTwoRunoff'
 

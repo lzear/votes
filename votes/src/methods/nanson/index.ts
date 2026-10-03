@@ -5,19 +5,19 @@ import { sum } from '../../utils/sum'
 import { matrixBordaScores } from '../borda'
 
 /**
- * Round-level detail specific to Nanson: the Borda-score cutoff used to eliminate candidates.
- */
+Round-level detail specific to Nanson: the Borda-score cutoff used to eliminate candidates.
+*/
 export type NansonInfo = {
   average: number
 }
 
 /**
- * Each round eliminates the candidates whose Borda score is at most the
- * average. Scores come from the pairwise matrix, so a Condorcet winner always
- * wins.
- *
- * #### Wikipedia: [Nanson's method](https://en.wikipedia.org/wiki/Nanson%27s_method)
- */
+Each round eliminates the candidates whose Borda score is at most the
+average. Scores come from the pairwise matrix, so a Condorcet winner always
+wins.
+
+#### Wikipedia: [Nanson's method](https://en.wikipedia.org/wiki/Nanson%27s_method)
+*/
 export class Nanson<C extends string> extends RoundBallotMethodTb<
   C,
   NansonInfo
