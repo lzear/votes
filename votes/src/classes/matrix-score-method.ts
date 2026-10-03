@@ -10,7 +10,7 @@ export abstract class MatrixScoreMethod<C extends string>
   extends ScoreMethod<C>
   implements Scorer<C>, Matrixer<C>
 {
-  public static readonly needsMatrix = true
+  public static override readonly needsMatrix = true
   private readonly _matrix: Matrix<C>
   // The subclass's own constructor options (Minimax's variant, …), which
   // restrict() passes back.

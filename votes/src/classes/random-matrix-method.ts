@@ -35,7 +35,7 @@ export abstract class RandomMatrixMethod<C extends string>
   extends RandomMethod<C>
   implements Scorer<C>, Matrixer<C>
 {
-  public static readonly needsMatrix = true
+  public static override readonly needsMatrix = true
 
   private readonly _matrix: Matrix<C>
 
@@ -52,13 +52,15 @@ export abstract class RandomMatrixMethod<C extends string>
     return this._matrix
   }
 
-  public abstract scores(): ScoreObject<C>
+  public abstract override scores(): ScoreObject<C>
 
   public ranking(): C[][] {
     return randomRankingFromScores(this.scores(), this.rng).map((c) => [c])
   }
 
-  public restrict<D extends C>(candidates: D[]): RandomMatrixMethod<D> {
+  public override restrict<D extends C>(
+    candidates: D[],
+  ): RandomMatrixMethod<D> {
     type Ctor = new (
       i: Matrix<D> & { rng?: () => number },
     ) => RandomMatrixMethod<D>
