@@ -2,6 +2,6 @@
 'votes': major
 ---
 
-`Ranker` declares `restrict()` and optional `scores()`, `rounds()`,
-`probabilities()`; `computeRounds()` is `rounds()`; random methods,
-`RandomDictator` included, report `probabilities()` instead of `scores()`.
+`computeRounds()` is `rounds()`; random methods, `RandomDictator` included,
+report `probabilities()` instead of `scores()`. New `Ranker` type for any
+method.
