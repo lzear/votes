@@ -1,5 +1,75 @@
 # votes
 
+## 4.0.0
+
+### Major Changes
+
+- 22e91ec: `VotingSystem` and `MinimaxVariant` are `as const` objects, no longer
+  enums.
+- af1be8f: Refactor everything. New API. Main changes:
+
+  - Remove external dependency `javascript-lp-solver`.
+  - Implement tie-breaking mechanism.
+  - New `Election` class to chain rankers together.
+  - New `unrankedLast` option on ballot methods: by default unranked candidates
+    join a ballot as one tied bottom tier; pass `false` to score only expressed
+    preferences.
+  - Round-based methods report per-round details: scores, tie-break steps, and
+    method-specific `info` (`CoombsInfo`, `NansonInfo`).
+  - Round-method `ranking()` now includes the winners tier.
+  - New `Schulze#strengths()` exposing the beatpath strength matrix.
+  - New `iteratedRanking()` on all methods and `Election`: fill each place by
+    re-running the full method without the already-placed candidates, instead of
+    using the method's own full ranking. `restrict()` is now public, and the
+    `iterateRanking` helper is exported under `utils`.
+  - Ranked pairs: fix infinite recursion on raw win-count matrices with wide
+    ties.
+
+### Minor Changes
+
+- a2bd9c4: Export the `ElectionResult` type.
+- 2b48088: Majority judgment takes a `grades` option (default 6) and throws on a
+  grade past it.
+- 0003fb4: Majority judgment gives the worst grade to candidates a ballot leaves
+  out, unless `unrankedLast: false`.
+
+### Patch Changes
+
+- f80a831: The Condorcet format parser reads `*` and `^` without spaces around
+  them.
+- f80a831: The Condorcet format writer throws on names with reserved characters.
+- 9d02893: Coombs with `unrankedLast: false` takes last choices only from
+  ballots that rank everyone left.
+- 4ba635c: Random dictator ranks the candidates its ballot leaves out last.
+- 864b7fc: Drop the lodash-es dependency.
+- 7b4c5d5: Faster bottom-two runoff head-to-head.
+- 7b4c5d5: Faster Baldwin and Nanson.
+- 7b4c5d5: Faster instant runoff, Coombs and bottom-two runoff.
+- 5de37cf: Normalize ballots in one pass.
+- 6fbf324: Kemeny runs in O(n·2ⁿ), not O(n!), and averages scores over its best
+  orders.
+- 0275d8e: Maximal lotteries and randomized Condorcet never draw a candidate of
+  probability 0.
+- 6eed0be: Performance and packaging improvements:
+
+  - `matrixFromBallots` now indexes candidates with a `Map` and tracks unranked
+    candidates with a `Set` (was O(ballots × candidates²)).
+  - New `pairwiseMatrix` utility; Copeland and Schulze share it.
+  - Simplify Ranked pairs winner detection (removes dead score bookkeeping).
+  - `package.json` `exports` now declares explicit `types` conditions.
+  - Remove the `utils.Edge` re-export; use `RankedPairsEdge` from the package
+    root instead.
+
+- 8bc6ea1: Pairwise matrices honor `unrankedLast: false`.
+- 3812fd3: Majority judgment follows Balinski–Laraki: lower median, ties broken
+  by majority value.
+- e740336: Majority judgment grades a candidate once per ballot.
+- 81be7a3: Stop publishing test files.
+- 0a7b044: Ranked pairs no longer locks pairwise defeats.
+- 0ac9082: Schulze ties candidates neither of whom beats the other.
+- 422b5cf: Scores within the tie tolerance, or both infinite, tie whatever the
+  candidate order.
+
 ## 3.0.0
 
 ### Major Changes
