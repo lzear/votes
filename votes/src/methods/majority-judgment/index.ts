@@ -75,7 +75,7 @@ const compareValues = (a: [number, number][], b: [number, number][]) => {
 }
 
 export class MajorityJudgment<C extends string> extends Method<C> {
-  public static readonly needsBallot = true
+  public static override readonly needsBallot = true
   private _judgements: Judgements<C> | undefined
   private _matrix?: Matrix<C>
   // Ballots keep their empty tiers, unlike BallotMethod's: a tier's index is

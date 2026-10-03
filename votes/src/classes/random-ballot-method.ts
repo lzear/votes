@@ -6,7 +6,7 @@ export abstract class RandomBallotMethod<C extends string>
   extends BallotMethod<C>
   implements Ranker<C>
 {
-  public static readonly isRandom = true
+  public static override readonly isRandom = true
 
   protected readonly rng: () => number
 
@@ -21,5 +21,5 @@ export abstract class RandomBallotMethod<C extends string>
     this.rng = i.rng ?? Math.random
   }
 
-  public abstract ranking(): C[][]
+  public abstract override ranking(): C[][]
 }

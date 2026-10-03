@@ -18,7 +18,7 @@ export class AbsoluteMajority<C extends string> extends BallotScoreMethod<C> {
     return firstChoices(this.ballots, this.candidates)
   }
 
-  public ranking(): C[][] {
+  public override ranking(): C[][] {
     const top = majorityWinner(this.scores(), totalBallotsWeight(this.ballots))
     const tiers =
       top === undefined

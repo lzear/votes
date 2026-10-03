@@ -2,11 +2,13 @@
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import { type Matrix, type ScoreObject } from '../../types'
 
-export enum MinimaxVariant {
-  WinningVotes = 'WINNING_VOTES',
-  Margins = 'MARGINS',
-  PairwiseOpposition = 'PAIRWISE_OPPOSITION',
-}
+export const MinimaxVariant = {
+  WinningVotes: 'WINNING_VOTES',
+  Margins: 'MARGINS',
+  PairwiseOpposition: 'PAIRWISE_OPPOSITION',
+} as const
+export type MinimaxVariant =
+  (typeof MinimaxVariant)[keyof typeof MinimaxVariant]
 
 const scoreXY = {
   [MinimaxVariant.Margins]: (xOverY: number, yOverX: number) => xOverY - yOverX, // default
