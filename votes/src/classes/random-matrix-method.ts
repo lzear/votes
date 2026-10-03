@@ -48,7 +48,7 @@ export abstract class RandomMatrixMethod<C extends string>
 
   public abstract override probabilities(): ScoreObject<C>
 
-  public ranking(): C[][] {
+  protected draw(): C[][] {
     return randomRankingFromScores(this.probabilities(), this.rng).map((c) => [
       c,
     ])

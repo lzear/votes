@@ -7,6 +7,7 @@ import { Method } from './method'
 export abstract class RandomMethod<C extends string> extends Method<C> {
   public static override readonly isRandom = true
 
+  private _ranking?: C[][]
   protected readonly rng: () => number
 
   constructor(
@@ -23,7 +24,13 @@ export abstract class RandomMethod<C extends string> extends Method<C> {
   // Each candidate's chance to win.
   public abstract probabilities(): ScoreObject<C>
 
-  public abstract override ranking(): C[][]
+  // Drawn once: every call returns the same ranking.
+  public ranking(): C[][] {
+    this._ranking ??= this.draw()
+    return this._ranking
+  }
+
+  protected abstract draw(): C[][]
 
   restrict<D extends C>(candidates: D[]): Method<D> {
     type Ctor = new (i: {

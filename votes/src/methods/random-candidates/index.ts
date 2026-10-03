@@ -7,7 +7,7 @@ import { shuffleArray } from '../../utils/shuffle-array'
  * Pick a candidate at random, regardless of the ballots
  */
 export class RandomCandidates<C extends string> extends RandomMethod<C> {
-  public ranking(): C[][] {
+  protected draw(): C[][] {
     return shuffleArray(this.candidates, this.rng).map((c) => [c])
   }
 
