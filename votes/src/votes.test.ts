@@ -112,6 +112,16 @@ describe('Test all methods', () => {
       e: 1,
     })
   })
+  it('averages kemeny scores over the best orders', () => {
+    const cycle = [
+      { ranking: [['a'], ['b'], ['c']], weight: 1 },
+      { ranking: [['b'], ['c'], ['a']], weight: 1 },
+      { ranking: [['c'], ['a'], ['b']], weight: 1 },
+    ]
+    expect(
+      new Kemeny(matrixFromBallots(cycle, ['a', 'b', 'c'])).scores(),
+    ).toStrictEqual({ a: 1, b: 1, c: 1 })
+  })
   it('votes with randomizedCondorcet', () => {
     expect(
       new RandomizedCondorcet(matrixFromBallots(sW, abcde)).scores(),

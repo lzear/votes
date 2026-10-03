@@ -201,7 +201,7 @@ re-run itself on a subset of candidates.
 | Smith's method       | `Smith`               | matrix           |
 | Two-round runoff     | `TwoRoundRunoff`      | ballots          |
 
-⚠️ `Kemeny` runs in O(n!) time — impractical beyond ~8 candidates.
+⚠️ `Kemeny` runs in O(n·2ⁿ) time and memory — slow beyond ~20 candidates.
 
 Matrix-input methods take the output of
 `matrixFromBallots(ballots, candidates)`.
