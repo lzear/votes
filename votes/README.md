@@ -87,11 +87,12 @@ new InstantRunoff({
 
 ### `tb(Ctor, opts?)` options
 
-| Option         | Default | Description                                                                                                                           |
-| -------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `full`         | `false` | Run the tiebreaker on all candidates instead of the tied subset. Useful when a method's relative ranking is more meaningful globally. |
-| `stable`       | `false` | After one pass, recurse into any remaining sub-ties until no further progress can be made.                                            |
-| Any other prop | —       | Passed through to the method constructor (e.g. `rng` for random methods).                                                             |
+| Option         | Default    | Description                                                                                         |
+| -------------- | ---------- | --------------------------------------------------------------------------------------------------- |
+| `full`         | `false`    | Rank the tie by the method's ranking of all candidates instead of re-running it on the tied subset. |
+| `stable`       | `false`    | After one pass, recurse into any remaining sub-ties until no further progress can be made.          |
+| `label`        | class name | Name in traces (`tbName`, `StepResult.name`).                                                       |
+| Any other prop | —          | Passed through to the method constructor (e.g. `rng` for random methods).                           |
 
 ### Round trace
 

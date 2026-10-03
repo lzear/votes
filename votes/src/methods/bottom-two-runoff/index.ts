@@ -1,7 +1,5 @@
-import {
-  RoundBallotMethodTb,
-  type TiebreakerEntry,
-} from '../../classes/round-ballot-method-tb'
+import { RoundBallotMethodTb } from '../../classes/round-ballot-method-tb'
+import { type Tiebreaker } from '../../classes/tiebreaker'
 import { type QE } from '../../types'
 import { scoresToRanking } from '../../utils'
 import { firstChoices } from '../first-past-the-post/iterate-first-choices'
@@ -20,14 +18,14 @@ import { firstChoices } from '../first-past-the-post/iterate-first-choices'
  * #### Electowiki: [Bottom-Two-Runoff IRV](https://electowiki.org/wiki/Bottom-Two-Runoff_IRV)
  */
 export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
-  protected override builtInTieBreakers(): TiebreakerEntry<C>[] {
+  protected override builtInTieBreakers(): Tiebreaker<C>[] {
     // First choices on the ballots as they are: a FirstPastThePost would
     // re-normalize them every round.
-    const fn = (tied: C[]) => {
+    const run = (tied: C[]) => {
       const scores = firstChoices(this.ballots, tied)
       return { ranking: scoresToRanking(scores), scores }
     }
-    return [{ name: 'FirstPastThePost', fn }]
+    return [{ name: 'FirstPastThePost', run }]
   }
 
   protected round(candidates: C[]): QE<C> {

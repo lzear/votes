@@ -1,4 +1,4 @@
-import { tb } from '../../classes/round-ballot-method-tb'
+import { tb } from '../../classes/tiebreaker'
 import { RandomCandidates } from '../random-candidates'
 import { BottomTwoRunoff } from '.'
 

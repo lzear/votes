@@ -1,113 +1,34 @@
 import {
-  type Ballot,
   type Profile,
   type QE,
   type ScoreObject,
   type TieBreakStep,
 } from '../types'
-import { completeRanking } from '../utils/normalize'
-import { type MethodCtor } from './method'
 import { RoundBallotMethod } from './round-ballot-method'
-
-export interface TbMeta {
-  full?: boolean
-  stable?: boolean
-  label?: string
-}
-
-// Constructor props beyond those the tiebreaker supplies itself
-export type PropsOf<T> = T extends new (input: infer P) => unknown
-  ? Omit<P, 'array' | 'ballots' | 'candidates'>
-  : unknown
-
-export type TbEntry<C extends string, T extends MethodCtor<C> = MethodCtor<C>> =
-  T | readonly [T, PropsOf<T> & TbMeta]
-
-export const tb = <C extends string, T extends MethodCtor<C>>(
-  ctor: T,
-  opts?: PropsOf<T> & TbMeta,
-): TbEntry<C, NoInfer<T>> =>
-  opts === undefined ? ctor : ([ctor, opts] as const)
-
-interface TiebreakerResult<C extends string> {
-  ranking: C[][]
-  scores?: Partial<Record<C, number>>
-}
-
-type TiebreakerFn<C extends string> = (
-  tied: C[],
-  ballots: Ballot<C>[],
-  allCandidates: C[],
-) => TiebreakerResult<C>
-
-export interface TiebreakerEntry<C extends string> {
-  name: string
-  fn: TiebreakerFn<C>
-}
-
-const entryToEntry = <C extends string>(
-  entry: TbEntry<C>,
-  unrankedLast: boolean,
-): TiebreakerEntry<C> => {
-  const Ctor = (Array.isArray(entry) ? entry[0] : entry) as MethodCtor<C>
-  const allOpts = (Array.isArray(entry) ? entry[1] : {}) as TbMeta &
-    Record<string, unknown>
-
-  const { full = false, stable: isStable = false, label, ...extra } = allOpts
-  const name = label ?? Ctor.name
-
-  const run = (
-    tied: C[],
-    ballots: Ballot<C>[],
-    allCandidates: C[],
-  ): TiebreakerResult<C> => {
-    const candidates = full ? allCandidates : tied
-
-    // Forwarding unrankedLast keeps the host method's setting: the ctor
-    // would otherwise re-append unranked candidates with its default of true.
-    const method = new Ctor({ ballots, candidates, unrankedLast, ...extra })
-
-    // A tied candidate the tiebreaker does not rank stays, tied last.
-    const ranking = completeRanking(method.ranking(), tied)
-    const scores = method.scores?.()
-
-    const result = (r: C[][]): TiebreakerResult<C> =>
-      scores === undefined ? { ranking: r } : { ranking: r, scores }
-
-    return result(
-      isStable
-        ? ranking.flatMap((tier) =>
-            tier.length <= 1 || tier.length === tied.length
-              ? [tier]
-              : run(tier, ballots, allCandidates).ranking,
-          )
-        : ranking,
-    )
-  }
-
-  return { name, fn: run }
-}
+import { type TbEntry, type Tiebreaker, tiebreaker } from './tiebreaker'
 
 export abstract class RoundBallotMethodTb<
   C extends string,
   I = undefined,
 > extends RoundBallotMethod<C, I> {
-  private readonly tbEntries: TiebreakerEntry<C>[]
+  private readonly tiebreakers: Tiebreaker<C>[]
 
   constructor(input: Profile<C> & { tieBreakers?: TbEntry<C>[] }) {
     super(input)
-    this.tbEntries = [
+    // The input's own ballots: normalized ones lose majority judgment's
+    // empty grades.
+    const { candidates, ballots } = input
+    const profile = { candidates, ballots, unrankedLast: this.unrankedLast }
+    this.tiebreakers = [
       ...this.builtInTieBreakers(),
-      ...(input.tieBreakers ?? []).map((e) =>
-        entryToEntry(e, this.unrankedLast),
-      ),
+      ...(input.tieBreakers ?? []).map((e) => tiebreaker(e, profile)),
     ]
   }
 
   /**
    * Tiebreakers the method applies before the caller's.
    */
-  protected builtInTieBreakers(): TiebreakerEntry<C>[] {
+  protected builtInTieBreakers(): Tiebreaker<C>[] {
     return []
   }
 
@@ -125,9 +46,9 @@ export abstract class RoundBallotMethodTb<
     const promoted: C[] = []
     const tieBreakSteps: TieBreakStep<C>[] = []
 
-    for (const [tbIndex, { name: tbName, fn }] of this.tbEntries.entries()) {
+    for (const [tbIndex, { name: tbName, run }] of this.tiebreakers.entries()) {
       if (current.length <= 1) break
-      const { ranking, scores } = fn(current, this.ballots, this.candidates)
+      const { ranking, scores } = run(current)
       const last = ranking.at(-1) ?? []
       const upper = ranking.slice(0, -1).flat()
       tieBreakSteps.push({
