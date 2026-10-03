@@ -242,4 +242,28 @@ describe(MajorityJudgment, () => {
       b: [0, 1, 0, 0, 0, 0],
     })
   })
+
+  it('takes any number of grades', () => {
+    const mj = new MajorityJudgment({
+      candidates: ['a', 'b'],
+      ballots: [{ ranking: [[], [], [], [], [], ['a'], [], ['b']], weight: 1 }],
+      grades: 8,
+    })
+    expect(mj.judgements()).toStrictEqual({
+      a: [0, 0, 0, 0, 0, 1, 0, 0],
+      b: [0, 0, 0, 0, 0, 0, 0, 1],
+    })
+    expect(mj.ranking()).toStrictEqual([['a'], ['b']])
+    expect(mj.restrict(['a'])).toMatchObject({ grades: 8 })
+  })
+
+  it('throws on a grade past the last', () => {
+    expect(
+      () =>
+        new MajorityJudgment({
+          candidates: ['a'],
+          ballots: [{ ranking: [[], [], [], [], [], [], ['a']], weight: 1 }],
+        }),
+    ).toThrow(RangeError)
+  })
 })

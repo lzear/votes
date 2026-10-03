@@ -176,30 +176,30 @@ re-run itself on a subset of candidates.
 
 ## Voting systems
 
-| Method               | Class                 | Input              |
-| -------------------- | --------------------- | ------------------ |
-| Absolute majority    | `AbsoluteMajority`    | ballots            |
-| Approval voting      | `Approbation`         | ballots            |
-| Baldwin method       | `Baldwin`             | ballots            |
-| Borda count          | `Borda`               | ballots            |
-| Bottom-two-runoff    | `BottomTwoRunoff`     | ballots            |
-| Coombs' method       | `Coombs`              | ballots            |
-| Copeland's method    | `Copeland`            | matrix             |
-| First-past-the-post  | `FirstPastThePost`    | ballots            |
-| Instant-runoff (IRV) | `InstantRunoff`       | ballots            |
-| Kemeny–Young ⚠️      | `Kemeny`              | matrix             |
-| Majority judgment    | `MajorityJudgment`    | ballots (6 grades) |
-| Maximal lotteries    | `MaximalLotteries`    | matrix             |
-| Minimax Condorcet    | `Minimax`             | matrix             |
-| Minimax-TD           | `MinimaxTD`           | matrix             |
-| Nanson method        | `Nanson`              | ballots            |
-| Random candidate     | `RandomCandidates`    | —                  |
-| Random dictator      | `RandomDictator`      | ballots            |
-| Randomized Condorcet | `RandomizedCondorcet` | matrix             |
-| Ranked pairs         | `RankedPairs`         | matrix             |
-| Schulze method       | `Schulze`             | matrix             |
-| Smith's method       | `Smith`               | matrix             |
-| Two-round runoff     | `TwoRoundRunoff`      | ballots            |
+| Method               | Class                 | Input            |
+| -------------------- | --------------------- | ---------------- |
+| Absolute majority    | `AbsoluteMajority`    | ballots          |
+| Approval voting      | `Approbation`         | ballots          |
+| Baldwin method       | `Baldwin`             | ballots          |
+| Borda count          | `Borda`               | ballots          |
+| Bottom-two-runoff    | `BottomTwoRunoff`     | ballots          |
+| Coombs' method       | `Coombs`              | ballots          |
+| Copeland's method    | `Copeland`            | matrix           |
+| First-past-the-post  | `FirstPastThePost`    | ballots          |
+| Instant-runoff (IRV) | `InstantRunoff`       | ballots          |
+| Kemeny–Young ⚠️      | `Kemeny`              | matrix           |
+| Majority judgment    | `MajorityJudgment`    | ballots (grades) |
+| Maximal lotteries    | `MaximalLotteries`    | matrix           |
+| Minimax Condorcet    | `Minimax`             | matrix           |
+| Minimax-TD           | `MinimaxTD`           | matrix           |
+| Nanson method        | `Nanson`              | ballots          |
+| Random candidate     | `RandomCandidates`    | —                |
+| Random dictator      | `RandomDictator`      | ballots          |
+| Randomized Condorcet | `RandomizedCondorcet` | matrix           |
+| Ranked pairs         | `RankedPairs`         | matrix           |
+| Schulze method       | `Schulze`             | matrix           |
+| Smith's method       | `Smith`               | matrix           |
+| Two-round runoff     | `TwoRoundRunoff`      | ballots          |
 
 ⚠️ `Kemeny` runs in O(n!) time — impractical beyond ~8 candidates.
 

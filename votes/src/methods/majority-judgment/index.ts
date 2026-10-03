@@ -6,23 +6,21 @@ import { matrixFromBallots } from '../../utils'
 import { config } from '../../utils/config'
 import { sum } from '../../utils/sum'
 
-export type Judgements<C extends string> = Record<
-  C,
-  [number, number, number, number, number, number]
->
+// Votes per grade, best grade first.
+export type Judgements<C extends string> = Record<C, number[]>
 
 const makeJudgement = <C extends string>(
   candidates: C[],
   ballots: Ballot<C>[],
+  grades: number,
 ): Judgements<C> => {
   const judgements = Object.fromEntries(
-    candidates.map((c) => [c, [0, 0, 0, 0, 0, 0]]),
+    candidates.map((c) => [c, Array.from({ length: grades }, () => 0)]),
   ) as Judgements<C>
 
   for (const ballot of ballots)
-    for (const [rankIdx, rank] of ballot.ranking.entries())
-      for (const can of rank)
-        judgements[can][Math.min(rankIdx, 5)]! += ballot.weight
+    for (const [grade, rank] of ballot.ranking.entries())
+      for (const can of rank) judgements[can][grade]! += ballot.weight
 
   return judgements
 }
@@ -83,28 +81,40 @@ export class MajorityJudgment<C extends string> extends Method<C> {
   // Ballots keep their empty tiers, unlike BallotMethod's: a tier's index is
   // its grade.
   private readonly gradeBallots: Ballot<C>[]
+  public readonly grades: number
 
-  constructor(i: { ballots: Ballot<C>[]; candidates: C[] }) {
+  constructor(i: {
+    ballots: Ballot<C>[]
+    candidates: C[]
+    /**
+     * Number of grades, best first (default 6). A ballot tier's index is its
+     * grade.
+     */
+    grades?: number
+  }) {
     super(i.candidates)
-    const candidates = new Set(this.candidates)
+    this.grades = i.grades ?? 6
     this.gradeBallots = i.ballots.map((b) => {
       // A candidate gets one grade per ballot, its best.
-      const graded = new Set<C>()
-      return {
-        ...b,
-        ranking: b.ranking.map((rank) =>
-          rank.filter((c) => {
-            if (!candidates.has(c) || graded.has(c)) return false
-            graded.add(c)
-            return true
-          }),
-        ),
-      }
+      const left = new Set<string>(this.candidates)
+      const ranking = b.ranking.map((rank) =>
+        rank.filter((c) => left.delete(c)),
+      )
+      const worst = ranking.findLastIndex((rank) => rank.length > 0)
+      if (worst >= this.grades)
+        throw new RangeError(
+          `Grade ${worst + 1} given, but there are ${this.grades} grades`,
+        )
+      return { ...b, ranking }
     })
   }
 
   public judgements(): Judgements<C> {
-    this._judgements ??= makeJudgement(this.candidates, this.gradeBallots)
+    this._judgements ??= makeJudgement(
+      this.candidates,
+      this.gradeBallots,
+      this.grades,
+    )
     return this._judgements
   }
 
@@ -135,6 +145,7 @@ export class MajorityJudgment<C extends string> extends Method<C> {
     return new MajorityJudgment({
       ballots: this.gradeBallots as Ballot<D>[],
       candidates,
+      grades: this.grades,
     })
   }
 
