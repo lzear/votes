@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { type Ballot, type Matrix } from '../types'
+import { type Ballot, type Matrix, type Profile } from '../types'
 
 const zeros = (n: number): number[][] =>
   Array.from({ length: n }, () => Array.from({ length: n }, () => 0))
@@ -48,6 +48,14 @@ export const matrixFromBallots = <C extends string>(
   }
   return { array, candidates }
 }
+
+// The matrix `input` is, or the one its ballots make.
+export const toMatrix = <C extends string>(
+  input: Matrix<C> | Profile<C>,
+): Matrix<C> =>
+  'array' in input
+    ? { array: input.array, candidates: input.candidates }
+    : matrixFromBallots(input.ballots, input.candidates, input.unrankedLast)
 
 export const makeAntisymmetric = <C extends string>(
   matrix: Matrix<C>,

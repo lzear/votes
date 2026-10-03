@@ -1,4 +1,4 @@
-import { type ScoreObject } from '../types'
+import { type Profile, type ScoreObject } from '../types'
 import { Method } from './method'
 import { type Scorer } from './score-method'
 
@@ -13,7 +13,12 @@ export abstract class RandomMethod<C extends string>
 
   protected readonly rng: () => number
 
-  constructor(i: { candidates: C[]; rng?: (() => number) | undefined }) {
+  constructor(
+    i: Partial<Profile<C>> & {
+      candidates: C[]
+      rng?: (() => number) | undefined
+    },
+  ) {
     super(i.candidates)
 
     this.rng = i.rng ?? Math.random

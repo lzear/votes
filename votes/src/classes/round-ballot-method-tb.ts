@@ -1,6 +1,6 @@
-import { type Ballot, type Matrix, type ScoreObject } from '../types'
-import { matrixFromBallots } from '../utils'
+import { type Ballot, type Profile, type ScoreObject } from '../types'
 import { completeRanking } from '../utils/normalize'
+import { type MethodCtor, type Ranker } from './method'
 import {
   type QE,
   RoundBallotMethod,
@@ -13,35 +13,19 @@ export interface TbMeta {
   label?: string
 }
 
-type BallotCtor<C extends string> = new (input: {
-  ballots: Ballot<C>[]
-  candidates: C[]
-  unrankedLast?: boolean
-}) => { ranking(): C[][] }
-
-type MatrixCtor<C extends string> = new (matrix: Matrix<C>) => {
-  ranking(): C[][]
-}
-
-type CandidatesCtor<C extends string> = new (input: { candidates: C[] }) => {
-  ranking(): C[][]
-}
-
-export type AnyCtor<C extends string> =
-  BallotCtor<C> | MatrixCtor<C> | CandidatesCtor<C>
-
 // Constructor props beyond those the tiebreaker supplies itself
 export type PropsOf<T> = T extends new (input: infer P) => unknown
   ? Omit<P, 'array' | 'ballots' | 'candidates'>
   : unknown
 
-export type TbEntry<C extends string, T extends AnyCtor<C> = AnyCtor<C>> =
+export type TbEntry<C extends string, T extends MethodCtor<C> = MethodCtor<C>> =
   T | readonly [T, PropsOf<T> & TbMeta]
 
-export const tb = <C extends string, T extends AnyCtor<C>>(
+export const tb = <C extends string, T extends MethodCtor<C>>(
   ctor: T,
   opts?: PropsOf<T> & TbMeta,
-): TbEntry<C, T> => (opts === undefined ? ctor : ([ctor, opts] as const))
+): TbEntry<C, NoInfer<T>> =>
+  opts === undefined ? ctor : ([ctor, opts] as const)
 
 interface TiebreakerResult<C extends string> {
   ranking: C[][]
@@ -59,18 +43,11 @@ export interface TiebreakerEntry<C extends string> {
   fn: TiebreakerFn<C>
 }
 
-type AnyCtorWithStatics<C extends string> = AnyCtor<C> & {
-  needsMatrix?: boolean
-  needsBallot?: boolean
-}
-
 const entryToEntry = <C extends string>(
   entry: TbEntry<C>,
   unrankedLast: boolean,
 ): TiebreakerEntry<C> => {
-  const Ctor = (
-    Array.isArray(entry) ? entry[0] : entry
-  ) as AnyCtorWithStatics<C>
+  const Ctor = (Array.isArray(entry) ? entry[0] : entry) as MethodCtor<C>
   const allOpts = (Array.isArray(entry) ? entry[1] : {}) as TbMeta &
     Record<string, unknown>
 
@@ -84,28 +61,10 @@ const entryToEntry = <C extends string>(
   ): TiebreakerResult<C> => {
     const candidates = full ? allCandidates : tied
 
-    let method: { ranking(): C[][]; scores?(): Partial<Record<C, number>> }
-    if (Ctor.needsMatrix === true)
-      method = new (Ctor as unknown as MatrixCtor<C>)({
-        ...matrixFromBallots(ballots, candidates, unrankedLast),
-        ...extra,
-      })
-    else if (Ctor.needsBallot === true)
-      // The ctor normalizes ballots against `candidates` itself; forwarding
-      // unrankedLast (instead of pre-normalizing here) keeps the host method's
-      // setting honored — the ctor would otherwise re-append unranked
-      // candidates with its default of true.
-      method = new (Ctor as unknown as BallotCtor<C>)({
-        ballots,
-        candidates,
-        unrankedLast,
-        ...extra,
-      })
-    else
-      method = new (Ctor as unknown as CandidatesCtor<C>)({
-        candidates,
-        ...extra,
-      })
+    // Forwarding unrankedLast keeps the host method's setting: the ctor
+    // would otherwise re-append unranked candidates with its default of true.
+    const method: Ranker<C> & { scores?(): Partial<Record<C, number>> } =
+      new Ctor({ ballots, candidates, unrankedLast, ...extra })
 
     // A tied candidate the tiebreaker does not rank stays, tied last.
     const ranking = completeRanking(method.ranking(), tied)
@@ -135,12 +94,7 @@ export abstract class RoundBallotMethodTb<
 > extends RoundBallotMethod<C, I> {
   private readonly tbEntries: TiebreakerEntry<C>[]
 
-  constructor(input: {
-    ballots: Ballot<C>[]
-    candidates: C[]
-    tieBreakers?: TbEntry<C>[]
-    unrankedLast?: boolean
-  }) {
+  constructor(input: Profile<C> & { tieBreakers?: TbEntry<C>[] }) {
     super(input)
     this.tbEntries = [
       ...this.builtInTieBreakers(),

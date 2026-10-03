@@ -2,7 +2,6 @@
 
 import { type Ballot, methods, VotingSystem } from '..'
 import { abcde, dummyProfile, dummyProfile10 } from '../test/test-utils'
-import { isRandomSystem } from './categories'
 import { matrixFromBallots } from './make-matrix'
 
 type ABC = 'a' | 'b' | 'c'
@@ -15,7 +14,6 @@ describe('sanity check', () => {
 
       const Method = methods[system]
       const election = new Method({
-        array: [],
         ballots: [],
         candidates: [],
       })
@@ -25,24 +23,17 @@ describe('sanity check', () => {
   )
   it.each(Object.values(VotingSystem))('single candidate %s', (system) => {
     const ballots = [{ ranking: [['a']], weight: 1 }]
-    const election = new methods[system]({
-      ballots,
-      ...matrixFromBallots(ballots, ['a']),
-    })
+    const election = new methods[system]({ ballots, candidates: ['a'] })
     expect(election.ranking()).toStrictEqual([['a']])
   })
   it.each(Object.values(VotingSystem))(
     'empty ballot list %s (ranking)',
     (system) => {
-      if (isRandomSystem(system)) return
+      if (methods[system].isRandom) return
 
       const candidates = ['a', 'b', 'c']
       const ballots: Ballot<ABC>[] = []
-      const matrix = matrixFromBallots(ballots, candidates)
-      const election = new methods[system]({
-        ballots,
-        ...matrix,
-      })
+      const election = new methods[system]({ ballots, candidates })
       expect(election.ranking()).toStrictEqual([['a', 'b', 'c']])
     },
   )
@@ -51,11 +42,7 @@ describe('sanity check', () => {
     (system) => {
       const candidates: ABC[] = ['a', 'b', 'c']
       const ballots: Ballot<ABC>[] = []
-      const matrix = matrixFromBallots(ballots, candidates)
-      const election = new methods[system]({
-        ballots,
-        ...matrix,
-      })
+      const election = new methods[system]({ ballots, candidates })
       if (!('scores' in election)) return
 
       expect(election.scores().a).toBeCloseTo(election.scores().b, 6)
@@ -68,7 +55,6 @@ describe('sanity check', () => {
       if (system === VotingSystem.RandomCandidates) return
 
       const election = new methods[system]({
-        array: [],
         ballots: [{ ranking: [['a'], ['b'], ['c']], weight: 1 }],
         candidates: [],
       })
@@ -79,7 +65,6 @@ describe('sanity check', () => {
     'empty candidates list %s (scores)',
     (system) => {
       const election = new methods[system]({
-        array: [],
         ballots: [{ ranking: [['a'], ['b'], ['c']], weight: 1 }],
         candidates: [],
       })
@@ -94,27 +79,19 @@ describe('sanity check', () => {
       const ballots = [{ ranking: [['a'], ['b'], ['c']], weight: 1 }]
       const candidates = ['a', 'b', 'c']
 
-      const matrix = matrixFromBallots(ballots, candidates)
-      const election = new methods[system]({
-        ballots,
-        ...matrix,
-      })
+      const election = new methods[system]({ ballots, candidates })
       expect(election.ranking()[0]).toStrictEqual(['a'])
     },
   )
   it.each(Object.values(VotingSystem))(
     'gets the 2 winners from 1 ballot (%s)',
     (system) => {
-      if (isRandomSystem(system)) return
+      if (methods[system].isRandom) return
 
       const ballots = [{ ranking: [['a', 'd'], ['b'], ['c']], weight: 1 }]
       const candidates = ['a', 'b', 'c', 'd']
 
-      const matrix = matrixFromBallots(ballots, candidates)
-      const election = new methods[system]({
-        ballots,
-        ...matrix,
-      })
+      const election = new methods[system]({ ballots, candidates })
       expect(election.canonicalRanking()[0]).toStrictEqual(
         system === VotingSystem.AbsoluteMajority
           ? ['a', 'b', 'c', 'd']
@@ -126,7 +103,7 @@ describe('sanity check', () => {
     'gets the condorcet cycle %s (ranking)',
     (system) => {
       // Exclude randomized
-      if (isRandomSystem(system)) return
+      if (methods[system].isRandom) return
 
       const candidates = ['a', 'b', 'c']
       const ballots = [
@@ -135,11 +112,7 @@ describe('sanity check', () => {
         { ranking: [['c'], ['a'], ['b']], weight: 1 },
       ]
 
-      const matrix = matrixFromBallots(ballots, candidates)
-      const election = new methods[system]({
-        ballots,
-        ...matrix,
-      })
+      const election = new methods[system]({ ballots, candidates })
 
       expect(election.ranking()[0]).toStrictEqual(['a', 'b', 'c'])
     },
@@ -154,11 +127,7 @@ describe('sanity check', () => {
         { ranking: [['c'], ['a'], ['b']], weight: 1 },
       ]
 
-      const matrix = matrixFromBallots(ballots, candidates)
-      const election = new methods[system]({
-        ballots,
-        ...matrix,
-      })
+      const election = new methods[system]({ ballots, candidates })
 
       if (!('scores' in election)) return
 
@@ -167,28 +136,20 @@ describe('sanity check', () => {
     },
   )
   it.each(Object.values(VotingSystem))('dummyProfile %s', (system) => {
-    if (isRandomSystem(system)) return
+    if (methods[system].isRandom) return
 
     const candidates = abcde
     const ballots = dummyProfile
-    const matrix = matrixFromBallots(ballots, candidates)
-    const election = new methods[system]({
-      ballots,
-      ...matrix,
-    })
+    const election = new methods[system]({ ballots, candidates })
     expect(election.ranking()[0]).toStrictEqual(['a'])
   })
 
   it.each(Object.values(VotingSystem))('dummyProfile10 (%s)', (system) => {
-    if (isRandomSystem(system)) return
+    if (methods[system].isRandom) return
 
     const candidates = abcde
     const ballots = dummyProfile10
-    const matrix = matrixFromBallots(ballots, candidates)
-    const election = new methods[system]({
-      ballots,
-      ...matrix,
-    })
+    const election = new methods[system]({ ballots, candidates })
     expect(election.ranking()[0]).toStrictEqual(['a'])
   })
   it.each(Object.values(VotingSystem))('gets matrix (%s)', (system) => {
@@ -200,11 +161,9 @@ describe('sanity check', () => {
 
     const candidates = abcde
     const ballots = dummyProfile10
-    const matrix = matrixFromBallots(ballots, candidates)
-    const election = new methods[system]({
-      ballots,
-      ...matrix,
-    })
-    expect(election.matrix).toStrictEqual(matrix)
+    const election = new methods[system]({ ballots, candidates })
+    expect(election.matrix).toStrictEqual(
+      matrixFromBallots(ballots, candidates),
+    )
   })
 })

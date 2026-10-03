@@ -346,6 +346,20 @@ describe('tieBreakers', () => {
     ])
   })
 
+  it('builds matrix methods from ballots, honoring unrankedLast', () => {
+    const ballots = [
+      { ranking: [['a']], weight: 1 },
+      { ranking: [['b'], ['a']], weight: 1 },
+    ]
+    const candidates = ['a', 'b', 'c']
+    expect(new Copeland({ candidates, ballots }).matrix).toStrictEqual(
+      matrixFromBallots(ballots, candidates),
+    )
+    expect(
+      new Copeland({ candidates, ballots, unrankedLast: false }).matrix,
+    ).toStrictEqual(matrixFromBallots(ballots, candidates, false))
+  })
+
   it('Baldwin with empty tieBreakers eliminates all tied-last candidates', () => {
     const ballots = [
       { ranking: [['a'], ['b'], ['c']], weight: 2 },
@@ -419,7 +433,7 @@ describe('tb() tiebreaker API', () => {
     expect(irv.computeRounds()[0]?.roundResult.eliminated).toStrictEqual(['c'])
   })
 
-  it('matrix method (Copeland) auto-detected via needsMatrix', () => {
+  it('matrix method (Copeland) as a tiebreaker', () => {
     // Copeland restricted to [b,c]: b beats c (3 voters) vs c beats b (2 voters) → b=1 win
     const irv = new InstantRunoff({
       candidates: candidates3,
