@@ -9,6 +9,16 @@ import { firstChoices } from '../first-past-the-post/iterate-first-choices'
 const reverseBallots = <C extends string>(ballots: Ballot<C>[]): Ballot<C>[] =>
   ballots.map((ballot) => ({ ...ballot, ranking: ballot.ranking.toReversed() }))
 
+const ranksAll = <C extends string>(
+  { ranking }: Ballot<C>,
+  candidates: Set<C>,
+): boolean => {
+  let ranked = 0
+  for (const rank of ranking)
+    for (const c of rank) if (candidates.has(c)) ranked++
+  return ranked === candidates.size
+}
+
 /**
  * Round-level detail specific to Coombs: how this round was resolved.
  * Normally a round eliminates whoever has the most last-place votes, but it
@@ -28,10 +38,13 @@ export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {
     ranking: C[][]
     scores: ScoreObject<C>
   } {
-    const reversedScores = firstChoices(
-      reverseBallots(this.ballots),
-      candidates,
-    )
+    // Only a ballot that ranks everyone left has a last choice; with
+    // unrankedLast, any ballot that ranks someone does.
+    const running = new Set(candidates)
+    const complete = this.unrankedLast
+      ? this.ballots
+      : this.ballots.filter((b) => ranksAll(b, running))
+    const reversedScores = firstChoices(reverseBallots(complete), candidates)
     const scores = Object.fromEntries(
       Object.entries<number>(reversedScores).map(([c, s]) => [c, -s]),
     ) as ScoreObject<C>
