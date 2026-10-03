@@ -104,3 +104,19 @@ describe('iteratedRanking', () => {
     expect(iterateRanking(empty)).toStrictEqual([])
   })
 })
+
+describe('deTie', () => {
+  it('re-ranks each tie until none splits further (Borda)', () => {
+    const borda = new Borda({
+      candidates: ['a', 'b', 'c', 'd'],
+      ballots: [
+        { ranking: [['d'], ['a']], weight: 2 },
+        { ranking: [['d'], ['b'], ['a'], ['c']], weight: 3 },
+        { ranking: [['c']], weight: 3 },
+      ],
+    })
+    // a, b and c tie; among them, a and b; between them, b wins.
+    expect(borda.ranking()).toStrictEqual([['d'], ['a', 'b', 'c']])
+    expect(borda.deTie()).toStrictEqual([['d'], ['b'], ['a'], ['c']])
+  })
+})

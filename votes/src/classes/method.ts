@@ -51,9 +51,15 @@ export abstract class Method<C extends string> implements Ranker<C> {
     return iterateRanking(this)
   }
 
+  /**
+   * The ranking, each tie re-ranked by the method restricted to it, until no
+   * tie splits further.
+   */
   public deTie(): C[][] {
-    return this.ranking().flatMap((r) =>
-      r.length <= 1 ? [r] : this.restrict(r).ranking(),
+    return this.ranking().flatMap((tier) =>
+      tier.length <= 1 || tier.length === this.candidates.length
+        ? [tier]
+        : this.restrict(tier).deTie(),
     )
   }
 }

@@ -208,7 +208,7 @@ as the first entry in `tieBreakSteps`. User-supplied `tieBreakers` fire after it
 only if the head-to-head itself ties.
 
 Random methods expose `probabilities()`, each candidate's chance to win, instead
-of `scores()`. Random methods draw their ranking once per instance.
+of `scores()`, and draw their ranking once per instance.
 
 `Schulze` also exposes `strengths()` — the beatpath strength matrix its scores
 derive from.
@@ -222,7 +222,7 @@ re-running the same method on each tied subset:
 
 ```typescript
 new Borda({ candidates, ballots }).deTie()
-// same as ranking() but each tied tier is re-ranked with Borda on that subset
+// ranking(), each tie re-ranked by Borda on it, until no tie splits further
 ```
 
 ## Utilities
