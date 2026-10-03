@@ -50,7 +50,7 @@ export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {
     return { ranking: scoresToRanking(scores, config.EPSILON), scores }
   }
 
-  protected override round(candidates: C[], idx: number): QE<C, CoombsInfo> {
+  protected override round(candidates: C[], index: number): QE<C, CoombsInfo> {
     if (candidates.length < 2)
       return {
         eliminated: candidates,
@@ -70,7 +70,7 @@ export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {
       }
 
     return {
-      ...super.round(candidates, idx),
+      ...super.round(candidates, index),
       info: { resolution: 'elimination' },
     }
   }
