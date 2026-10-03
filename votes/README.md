@@ -47,6 +47,10 @@ Candidates a ballot leaves unranked join it as one tied bottom tier by default;
 pass `unrankedLast: false` to score only expressed preferences (unranked
 candidates then earn nothing from that ballot).
 
+Every method takes this same `{ candidates, ballots, unrankedLast }` input.
+Matrix methods (see the table below) also take a pairwise matrix
+`{ candidates, array }`, such as `matrixFromBallots(ballots, candidates)`.
+
 ## Tiebreakers
 
 Round-based methods (`InstantRunoff`, `Baldwin`, `Coombs`, `Nanson`,
@@ -89,10 +93,6 @@ new InstantRunoff({
 | `stable`       | `false` | After one pass, recurse into any remaining sub-ties until no further progress can be made.                                            |
 | Any other prop | —       | Passed through to the method constructor (e.g. `rng` for random methods).                                                             |
 
-Method type is auto-detected: matrix methods (`Copeland`, `Schulze`, …) receive
-a pairwise matrix; ballot methods receive the filtered ballots; candidates-only
-methods (`RandomCandidates`) receive just the candidate list.
-
 ### Round trace
 
 `computeRounds()` returns detailed per-round results:
@@ -130,19 +130,12 @@ reports the Borda average used as elimination cutoff (`NansonInfo`).
 ranking; subsequent rankers refine any remaining ties.
 
 ```typescript
-import {
-  Election,
-  InstantRunoff,
-  Schulze,
-  matrixFromBallots,
-  tb,
-  Copeland,
-} from 'votes'
+import { Election, InstantRunoff, Schulze, tb, Copeland } from 'votes'
 
 const election = new Election({
   rankers: [
     new InstantRunoff({ candidates, ballots, tieBreakers: [tb(Copeland)] }),
-    new Schulze(matrixFromBallots(ballots, candidates)),
+    new Schulze({ candidates, ballots }),
   ],
 })
 
@@ -174,35 +167,32 @@ re-run itself on a subset of candidates.
 
 ## Voting systems
 
-| Method               | Class                 | Input            |
-| -------------------- | --------------------- | ---------------- |
-| Absolute majority    | `AbsoluteMajority`    | ballots          |
-| Approval voting      | `Approbation`         | ballots          |
-| Baldwin method       | `Baldwin`             | ballots          |
-| Borda count          | `Borda`               | ballots          |
-| Bottom-two-runoff    | `BottomTwoRunoff`     | ballots          |
-| Coombs' method       | `Coombs`              | ballots          |
-| Copeland's method    | `Copeland`            | matrix           |
-| First-past-the-post  | `FirstPastThePost`    | ballots          |
-| Instant-runoff (IRV) | `InstantRunoff`       | ballots          |
-| Kemeny–Young ⚠️      | `Kemeny`              | matrix           |
-| Majority judgment    | `MajorityJudgment`    | ballots (grades) |
-| Maximal lotteries    | `MaximalLotteries`    | matrix           |
-| Minimax Condorcet    | `Minimax`             | matrix           |
-| Minimax-TD           | `MinimaxTD`           | matrix           |
-| Nanson method        | `Nanson`              | ballots          |
-| Random candidate     | `RandomCandidates`    | —                |
-| Random dictator      | `RandomDictator`      | ballots          |
-| Randomized Condorcet | `RandomizedCondorcet` | matrix           |
-| Ranked pairs         | `RankedPairs`         | matrix           |
-| Schulze method       | `Schulze`             | matrix           |
-| Smith's method       | `Smith`               | matrix           |
-| Two-round runoff     | `TwoRoundRunoff`      | ballots          |
+| Method               | Class                 | Input             |
+| -------------------- | --------------------- | ----------------- |
+| Absolute majority    | `AbsoluteMajority`    | ballots           |
+| Approval voting      | `Approbation`         | ballots           |
+| Baldwin method       | `Baldwin`             | ballots           |
+| Borda count          | `Borda`               | ballots           |
+| Bottom-two-runoff    | `BottomTwoRunoff`     | ballots           |
+| Coombs' method       | `Coombs`              | ballots           |
+| Copeland's method    | `Copeland`            | ballots or matrix |
+| First-past-the-post  | `FirstPastThePost`    | ballots           |
+| Instant-runoff (IRV) | `InstantRunoff`       | ballots           |
+| Kemeny–Young ⚠️      | `Kemeny`              | ballots or matrix |
+| Majority judgment    | `MajorityJudgment`    | ballots as grades |
+| Maximal lotteries    | `MaximalLotteries`    | ballots or matrix |
+| Minimax Condorcet    | `Minimax`             | ballots or matrix |
+| Minimax-TD           | `MinimaxTD`           | ballots or matrix |
+| Nanson method        | `Nanson`              | ballots           |
+| Random candidate     | `RandomCandidates`    | —                 |
+| Random dictator      | `RandomDictator`      | ballots           |
+| Randomized Condorcet | `RandomizedCondorcet` | ballots or matrix |
+| Ranked pairs         | `RankedPairs`         | ballots or matrix |
+| Schulze method       | `Schulze`             | ballots or matrix |
+| Smith's method       | `Smith`               | ballots or matrix |
+| Two-round runoff     | `TwoRoundRunoff`      | ballots           |
 
 ⚠️ `Kemeny` runs in O(n·2ⁿ) time and memory — slow beyond ~20 candidates.
-
-Matrix-input methods take the output of
-`matrixFromBallots(ballots, candidates)`.
 
 `BottomTwoRunoff` always prepends `tb(FirstPastThePost)` to `tieBreakers` — that
 FPTP step is the head-to-head runoff mechanism, not a fallback. It will appear

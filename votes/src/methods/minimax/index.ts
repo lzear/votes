@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
-import { type Matrix, type ScoreObject } from '../../types'
+import { type Matrix, type Profile, type ScoreObject } from '../../types'
 
 export const MinimaxVariant = {
   WinningVotes: 'WINNING_VOTES',
@@ -45,7 +45,10 @@ export class Minimax<C extends string> extends MatrixScoreMethod<C> {
   public readonly excludeTies: boolean
 
   constructor(
-    i: Matrix<C> & { variant?: MinimaxVariant; excludeTies?: boolean },
+    i: (Matrix<C> | Profile<C>) & {
+      variant?: MinimaxVariant
+      excludeTies?: boolean
+    },
   ) {
     super(i)
     this.minimaxVariant = i.variant ?? MinimaxVariant.Margins

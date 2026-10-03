@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
-import { type Matrix, type ScoreObject } from '../../types'
+import { type Matrix, type Profile, type ScoreObject } from '../../types'
 import { scoresAny } from '../../utils/scores-zero'
 import { type Edge, generateAcyclicGraph } from './generate-acyclic-graph'
 
@@ -87,7 +87,11 @@ const computeFromMatrix = <C extends string>(
 export class RankedPairs<C extends string> extends MatrixScoreMethod<C> {
   private readonly edgeSorter: ((a: Edge, b: Edge) => number) | undefined
 
-  constructor(i: Matrix<C> & { edgeSorter?: (a: Edge, b: Edge) => number }) {
+  constructor(
+    i: (Matrix<C> | Profile<C>) & {
+      edgeSorter?: (a: Edge, b: Edge) => number
+    },
+  ) {
     super(i)
     this.edgeSorter = i.edgeSorter
   }

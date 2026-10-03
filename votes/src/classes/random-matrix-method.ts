@@ -1,5 +1,5 @@
-import { type Matrix, type ScoreObject } from '../types'
-import { subMatrix } from '../utils/make-matrix'
+import { type Matrix, type Profile, type ScoreObject } from '../types'
+import { subMatrix, toMatrix } from '../utils/make-matrix'
 import { shuffleArray } from '../utils/shuffle-array'
 import { sum } from '../utils/sum'
 import { type Matrixer } from './matrix-score-method'
@@ -35,17 +35,12 @@ export abstract class RandomMatrixMethod<C extends string>
   extends RandomMethod<C>
   implements Scorer<C>, Matrixer<C>
 {
-  public static override readonly needsMatrix = true
-
   private readonly _matrix: Matrix<C>
 
-  constructor(i: Matrix<C> & { rng?: () => number }) {
+  constructor(i: (Matrix<C> | Profile<C>) & { rng?: () => number }) {
     super(i)
 
-    this._matrix = {
-      array: i.array,
-      candidates: i.candidates,
-    }
+    this._matrix = toMatrix(i)
   }
 
   get matrix(): Matrix<C> {

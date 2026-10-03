@@ -1,3 +1,4 @@
+import { type Profile } from '../types'
 import { normalizeRanking } from '../utils'
 import { iterateRanking } from '../utils/iterate-ranking'
 import { canonizeRanking } from '../utils/normalize'
@@ -6,9 +7,10 @@ export interface Ranker<C extends string> {
   ranking(): C[][]
 }
 
+// Every method takes the same input.
+export type MethodCtor<C extends string> = new (input: Profile<C>) => Ranker<C>
+
 export abstract class Method<C extends string> implements Ranker<C> {
-  public static readonly needsMatrix: boolean = false
-  public static readonly needsBallot: boolean = false
   public static readonly isRandom: boolean = false
   public readonly candidates: C[]
 

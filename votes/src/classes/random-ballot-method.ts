@@ -1,4 +1,4 @@
-import { type Ballot } from '../types'
+import { type Profile } from '../types'
 import { BallotMethod } from './ballot-method'
 import { type Ranker } from './method'
 
@@ -10,12 +10,7 @@ export abstract class RandomBallotMethod<C extends string>
 
   protected readonly rng: () => number
 
-  constructor(i: {
-    candidates: C[]
-    ballots: Ballot<C>[]
-    rng?: undefined | (() => number)
-    unrankedLast?: boolean
-  }) {
+  constructor(i: Profile<C> & { rng?: undefined | (() => number) }) {
     super(i)
 
     this.rng = i.rng ?? Math.random
