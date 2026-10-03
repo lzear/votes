@@ -153,6 +153,24 @@ describe('sanity check', () => {
     const election = new methods[system]({ ballots, candidates })
     expect(election.ranking()[0]).toStrictEqual(['a'])
   })
+  it.each(Object.values(VotingSystem).filter((s) => !methods[s].isRandom))(
+    'counts a ballot without weight once (%s)',
+    (system) => {
+      const ranked = [
+        [['a'], ['b'], ['c']],
+        [['b'], ['c'], ['a']],
+        [['c'], ['a'], ['b']],
+        [['a'], ['c'], ['b']],
+      ]
+      const run = (ballots: Ballot<ABC>[]) =>
+        new methods[system]({ ballots, candidates: ['a', 'b', 'c'] }).ranking()
+      expect(
+        run(ranked.map((ranking) => ({ ranking })) as Ballot<ABC>[]),
+      ).toStrictEqual(
+        run(ranked.map((ranking) => ({ ranking, weight: 1 })) as Ballot<ABC>[]),
+      )
+    },
+  )
   it.each(Object.values(VotingSystem).filter((s) => methods[s].isRandom))(
     'draws once (%s)',
     (system) => {

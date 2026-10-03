@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import { type Ballot, type Matrix, type Profile } from '../types'
+import { weightOf } from './normalize'
 
 const zeros = (n: number): number[][] =>
   Array.from({ length: n }, () => Array.from({ length: n }, () => 0))
@@ -36,6 +37,7 @@ export const matrixFromBallots = <C extends string>(
         .map((c) => candidateIdx.get(c))
         .filter((i): i is number => i !== undefined),
     )
+    const weight = weightOf(ranking)
     const rankedLower = new Set(
       unrankedLast ? candidates.keys() : rIndex.flat(),
     )
@@ -43,7 +45,7 @@ export const matrixFromBallots = <C extends string>(
       // A candidate listed twice counts at its first rank only.
       const winners = rank.filter((i) => rankedLower.delete(i))
       for (const w of winners)
-        for (const l of rankedLower) array[w]![l]! += ranking.weight
+        for (const l of rankedLower) array[w]![l]! += weight
     }
   }
   return { array, candidates }

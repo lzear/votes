@@ -1,5 +1,5 @@
 import { type Ballot, type ScoreObject } from '../../types'
-import { scoresZero } from '../../utils'
+import { scoresZero, weightOf } from '../../utils'
 
 // A ballot votes for its first tier with any of `candidates`, so ballots
 // normalized against a superset of them work as they are.
@@ -17,7 +17,7 @@ export const iterateFirstChoices = <C extends string>(
         .map((rank) => rank.filter((c) => running.has(c)))
         .find((rank) => rank.length > 0) ?? []
     for (const candidate of votes)
-      result[candidate] += computeBallotScore(votes) * ballot.weight
+      result[candidate] += computeBallotScore(votes) * weightOf(ballot)
   }
   return result
 }

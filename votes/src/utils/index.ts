@@ -8,6 +8,7 @@ export {
   removeInvalidCandidates,
   totalBallotsWeight,
   toWeightedBallots,
+  weightOf,
 } from './normalize'
 export { rngGenerator } from './rng-generator'
 export { scoresToRanking } from './scores'

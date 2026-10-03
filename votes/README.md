@@ -42,10 +42,10 @@ borda.ranking()
 ```
 
 A ballot ranks candidates in tiers: `[['Bear', 'Sheep'], ['Lion']]` means Bear
-and Sheep tied first, Lion last. `weight` is how many voters cast that ballot.
-Candidates a ballot leaves unranked join it as one tied bottom tier by default;
-pass `unrankedLast: false` to score only expressed preferences (unranked
-candidates then earn nothing from that ballot).
+and Sheep tied first, Lion last. `weight` is how many voters cast that ballot
+(default 1). Candidates a ballot leaves unranked join it as one tied bottom tier
+by default; pass `unrankedLast: false` to score only expressed preferences
+(unranked candidates then earn nothing from that ballot).
 
 Every method takes this same `{ candidates, ballots, unrankedLast }` input.
 Matrix methods (see the table below) also take a pairwise matrix
