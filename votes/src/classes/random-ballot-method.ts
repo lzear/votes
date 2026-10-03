@@ -8,6 +8,7 @@ export abstract class RandomBallotMethod<C extends string>
 {
   public static override readonly isRandom = true
 
+  private _ranking?: C[][]
   protected readonly rng: () => number
 
   constructor(i: Profile<C> & { rng?: undefined | (() => number) }) {
@@ -16,5 +17,11 @@ export abstract class RandomBallotMethod<C extends string>
     this.rng = i.rng ?? Math.random
   }
 
-  public abstract override ranking(): C[][]
+  // Drawn once: every call returns the same ranking.
+  public ranking(): C[][] {
+    this._ranking ??= this.draw()
+    return this._ranking
+  }
+
+  protected abstract draw(): C[][]
 }

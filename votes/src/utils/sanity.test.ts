@@ -152,6 +152,14 @@ describe('sanity check', () => {
     const election = new methods[system]({ ballots, candidates })
     expect(election.ranking()[0]).toStrictEqual(['a'])
   })
+  it.each(Object.values(VotingSystem).filter((s) => methods[s].isRandom))(
+    'draws once (%s)',
+    (system) => {
+      const input = { ballots: dummyProfile10, candidates: abcde }
+      const method = new methods[system](input)
+      expect(method.ranking()).toBe(method.ranking())
+    },
+  )
   it.each(Object.values(VotingSystem))('gets matrix (%s)', (system) => {
     if (
       system === VotingSystem.MajorityJudgment ||

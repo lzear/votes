@@ -31,7 +31,7 @@ const rank = <C extends string>(
 }
 
 export class RandomDictator<C extends string> extends RandomBallotMethod<C> {
-  public ranking(): C[][] {
+  protected draw(): C[][] {
     return rank(this.candidates, this.ballots, this.rng)
   }
 }
