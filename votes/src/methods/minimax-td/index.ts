@@ -68,7 +68,7 @@ const computeScores = <C extends string>(
  * A has the lowest "worst pairwise victory" against all the candidates, therefore A is the winner.
  */
 export class MinimaxTD<C extends string> extends Minimax<C> {
-  public scores(): ScoreObject<C> {
+  public override scores(): ScoreObject<C> {
     return computeScores(this.matrix, this.minimaxVariant, this.excludeTies)
   }
 }

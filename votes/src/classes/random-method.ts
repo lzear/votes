@@ -9,7 +9,7 @@ export abstract class RandomMethod<C extends string>
   extends Method<C>
   implements Scorer<C>
 {
-  public static readonly isRandom = true
+  public static override readonly isRandom = true
 
   protected readonly rng: () => number
 
@@ -21,7 +21,7 @@ export abstract class RandomMethod<C extends string>
 
   public abstract scores(): ScoreObject<C>
 
-  public abstract ranking(): C[][]
+  public abstract override ranking(): C[][]
 
   restrict<D extends C>(candidates: D[]): Method<D> {
     type Ctor = new (i: {

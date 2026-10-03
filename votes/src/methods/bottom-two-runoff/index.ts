@@ -20,7 +20,7 @@ import { firstChoices } from '../first-past-the-post/iterate-first-choices'
  * #### Electowiki: [Bottom-Two-Runoff IRV](https://electowiki.org/wiki/Bottom-Two-Runoff_IRV)
  */
 export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
-  protected builtInTieBreakers(): TiebreakerEntry<C>[] {
+  protected override builtInTieBreakers(): TiebreakerEntry<C>[] {
     // First choices on the ballots as they are: a FirstPastThePost would
     // re-normalize them every round.
     const fn = (tied: C[]) => {

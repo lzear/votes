@@ -7,7 +7,7 @@ export abstract class BallotMethod<C extends string>
   extends Method<C>
   implements Ranker<C>, Matrixer<C>
 {
-  public static readonly needsBallot = true
+  public static override readonly needsBallot = true
   private _matrix?: Matrix<C>
   // The subclass's own constructor options (tieBreakers, rng, …), which
   // restrict() passes back.
