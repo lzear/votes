@@ -118,6 +118,19 @@ describe(Minimax, () => {
     expect(election.matrix).toStrictEqual(election.matrix)
   })
 
+  it('ties candidates with only excluded ties', () => {
+    const matrix = {
+      candidates: ['a', 'b'],
+      array: [
+        [0, 1],
+        [1, 0],
+      ],
+    }
+    expect(
+      new Minimax({ ...matrix, excludeTies: true }).ranking(),
+    ).toStrictEqual([['a', 'b']])
+  })
+
   it('keeps its options on restrict', () => {
     for (const Ctor of [Minimax, MinimaxTD]) {
       const restricted = new Ctor({
