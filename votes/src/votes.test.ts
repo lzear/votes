@@ -343,6 +343,20 @@ describe('tieBreakers', () => {
     ])
   })
 
+  it('keeps the grades of a majority judgment tiebreaker', () => {
+    // Tiers are grades: a gets 0 and 1, b gets 3 and 0. Ranked, they tie.
+    const ballots = [
+      { ranking: [['a'], [], [], ['b']], weight: 1 },
+      { ranking: [['b'], ['a']], weight: 1 },
+    ]
+    const irv = new InstantRunoff({
+      candidates: ['a', 'b'],
+      ballots,
+      tieBreakers: [MajorityJudgment],
+    })
+    expect(irv.ranking()).toStrictEqual([['a'], ['b']])
+  })
+
   it('builds matrix methods from ballots, honoring unrankedLast', () => {
     const ballots = [
       { ranking: [['a']], weight: 1 },

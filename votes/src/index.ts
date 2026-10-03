@@ -1,5 +1,5 @@
 export type { MethodCtor, Ranker } from './classes/method'
-export { tb, type TbEntry } from './classes/round-ballot-method-tb'
+export { tb, type TbEntry } from './classes/tiebreaker'
 export type { ElectionResult, StepResult } from './election'
 export { Election } from './election'
 export {
