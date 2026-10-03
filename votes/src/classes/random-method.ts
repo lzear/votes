@@ -1,14 +1,10 @@
 import { type Profile, type ScoreObject } from '../types'
 import { Method } from './method'
-import { type Scorer } from './score-method'
 
 /**
  * Voting method that involves some randomness in the computation in the winners.
  */
-export abstract class RandomMethod<C extends string>
-  extends Method<C>
-  implements Scorer<C>
-{
+export abstract class RandomMethod<C extends string> extends Method<C> {
   public static override readonly isRandom = true
 
   protected readonly rng: () => number
@@ -24,7 +20,8 @@ export abstract class RandomMethod<C extends string>
     this.rng = i.rng ?? Math.random
   }
 
-  public abstract scores(): ScoreObject<C>
+  // Each candidate's chance to win.
+  public abstract probabilities(): ScoreObject<C>
 
   public abstract override ranking(): C[][]
 

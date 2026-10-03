@@ -1,11 +1,13 @@
-import { type Ballot, type Profile, type ScoreObject } from '../types'
-import { completeRanking } from '../utils/normalize'
-import { type MethodCtor, type Ranker } from './method'
 import {
+  type Ballot,
+  type Profile,
   type QE,
-  RoundBallotMethod,
+  type ScoreObject,
   type TieBreakStep,
-} from './round-ballot-method'
+} from '../types'
+import { completeRanking } from '../utils/normalize'
+import { type MethodCtor } from './method'
+import { RoundBallotMethod } from './round-ballot-method'
 
 export interface TbMeta {
   full?: boolean
@@ -63,13 +65,11 @@ const entryToEntry = <C extends string>(
 
     // Forwarding unrankedLast keeps the host method's setting: the ctor
     // would otherwise re-append unranked candidates with its default of true.
-    const method: Ranker<C> & { scores?(): Partial<Record<C, number>> } =
-      new Ctor({ ballots, candidates, unrankedLast, ...extra })
+    const method = new Ctor({ ballots, candidates, unrankedLast, ...extra })
 
     // A tied candidate the tiebreaker does not rank stays, tied last.
     const ranking = completeRanking(method.ranking(), tied)
-    const scores =
-      typeof method.scores === 'function' ? method.scores() : undefined
+    const scores = method.scores?.()
 
     const result = (r: C[][]): TiebreakerResult<C> =>
       scores === undefined ? { ranking: r } : { ranking: r, scores }

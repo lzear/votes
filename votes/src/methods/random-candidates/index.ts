@@ -11,7 +11,7 @@ export class RandomCandidates<C extends string> extends RandomMethod<C> {
     return shuffleArray(this.candidates, this.rng).map((c) => [c])
   }
 
-  public scores(): ScoreObject<C> {
+  public probabilities(): ScoreObject<C> {
     return scoresAny(this.candidates, 1 / this.candidates.length)
   }
 }

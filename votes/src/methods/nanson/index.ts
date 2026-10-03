@@ -1,5 +1,5 @@
-import { type QE } from '../../classes/round-ballot-method'
 import { RoundBallotMethodTb } from '../../classes/round-ballot-method-tb'
+import { type QE } from '../../types'
 import { config } from '../../utils/config'
 import { sum } from '../../utils/sum'
 import { bordaScores } from '../borda'

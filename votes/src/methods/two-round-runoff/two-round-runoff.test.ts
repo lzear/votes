@@ -32,7 +32,7 @@ describe(TwoRoundRunoff, () => {
       tieBreakers: [Borda],
     })
 
-    const rounds = trr.computeRounds()
+    const rounds = trr.rounds()
     // Borda on the restricted {b, c} ballots promotes b.
     expect(rounds[0]?.roundResult.qualified).toStrictEqual(['a', 'b'])
     expect(rounds[0]?.roundResult.tieBreakSteps?.[0]?.tbName).toBe('Borda')
@@ -52,7 +52,7 @@ describe(TwoRoundRunoff, () => {
       candidates: ['a', 'b', 'c', 'd'],
       ballots,
     })
-    expect(trr.computeRounds()[0]?.roundResult.qualified).toStrictEqual([
+    expect(trr.rounds()[0]?.roundResult.qualified).toStrictEqual([
       'a',
       'b',
       'c',
@@ -72,10 +72,7 @@ describe(TwoRoundRunoff, () => {
       ballots,
       tieBreakers: [Borda],
     })
-    expect(trr.computeRounds()[0]?.roundResult.qualified).toStrictEqual([
-      'a',
-      'b',
-    ])
+    expect(trr.rounds()[0]?.roundResult.qualified).toStrictEqual(['a', 'b'])
   })
 
   it('eliminates everyone on out-of-range round index (safety fallback)', () => {

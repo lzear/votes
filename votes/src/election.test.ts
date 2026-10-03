@@ -1,11 +1,13 @@
 import {
   AbsoluteMajority,
   Baldwin,
+  type Ballot,
   Borda,
   Copeland,
   Election,
   matrixFromBallots,
   RandomCandidates,
+  type Ranker,
   rngGenerator,
 } from '.'
 
@@ -13,7 +15,7 @@ type ABC = 'a' | 'b' | 'c'
 const candidates: ABC[] = ['a', 'b', 'c']
 
 // a wins clearly; b and c tie (equal borda scores from these ballots)
-const tieBallots = [
+const tieBallots: Ballot<ABC>[] = [
   { ranking: [['a'], ['b'], ['c']], weight: 2 },
   { ranking: [['a'], ['c'], ['b']], weight: 2 },
 ]
@@ -78,20 +80,22 @@ describe('Election', () => {
   })
 
   it('keeps candidates a fallback ranker does not rank', () => {
+    const partial: Ranker<ABC> = {
+      ranking: () => [['b']],
+      restrict: () => partial,
+    }
     const election = new Election({
-      rankers: [
-        new Borda({ ballots: tieBallots, candidates }),
-        { ranking: (): ABC[][] => [['b']] },
-      ],
+      rankers: [new Borda({ ballots: tieBallots, candidates }), partial],
     })
     expect(election.ranking()).toStrictEqual([['a'], ['b'], ['c']])
   })
 
   it('stops early when no ties remain', () => {
-    const sentinel = {
-      ranking: (): ABC[][] => {
+    const sentinel: Ranker<ABC> = {
+      ranking: () => {
         throw new Error('should not be called')
       },
+      restrict: () => sentinel,
     }
     const election = new Election({
       rankers: [

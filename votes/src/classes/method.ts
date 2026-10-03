@@ -1,10 +1,18 @@
-import { type Profile } from '../types'
+import { type Profile, type Round, type ScoreObject } from '../types'
 import { normalizeRanking } from '../utils'
 import { iterateRanking } from '../utils/iterate-ranking'
 import { canonizeRanking } from '../utils/normalize'
 
 export interface Ranker<C extends string> {
   ranking(): C[][]
+  // The same ranker on a subset of its candidates.
+  restrict(candidates: C[]): Ranker<C>
+  // Points behind the ranking, for methods that score.
+  scores?(): ScoreObject<C>
+  // Each round, for methods that eliminate.
+  rounds?(): Round<C, unknown>[]
+  // Each candidate's chance to win, for random methods.
+  probabilities?(): ScoreObject<C>
 }
 
 // Every method takes the same input.

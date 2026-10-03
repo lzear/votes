@@ -41,7 +41,7 @@ describe('randomized condorcet', () => {
       candidates: ['a', 'b', 'c'],
       rng: rngGenerator('1f8y'),
     })
-    expect(election.scores()).toEqual({
+    expect(election.probabilities()).toEqual({
       a: closeTo(1 / 3, 6),
       b: closeTo(1 / 3, 6),
       c: closeTo(1 / 3, 6),
@@ -54,7 +54,7 @@ describe('randomized condorcet', () => {
       candidates,
       rng: rngGenerator('1f8y'),
     })
-    expect(election.scores()).toEqual({
+    expect(election.probabilities()).toEqual({
       a: 0,
       b: closeTo(1 / 3, 6),
       c: closeTo(1 / 3, 6),
@@ -75,7 +75,7 @@ describe('randomized condorcet', () => {
       candidates: ['a', 'b', 'c', 'd', 'e'],
       rng: rngGenerator('1f8y'),
     })
-    expect(election.scores()).toEqual({
+    expect(election.probabilities()).toEqual({
       a: closeTo(1 / 3, 6),
       b: 0,
       c: closeTo(1 / 3, 6),
@@ -96,7 +96,7 @@ describe('randomized condorcet', () => {
       candidates,
       rng: rngGenerator('1f8y'),
     })
-    expect(election.scores()).toEqual({
+    expect(election.probabilities()).toEqual({
       a: closeTo(1 / 3, 6),
       b: closeTo(1 / 9, 6),
       c: closeTo(1 / 9, 6),

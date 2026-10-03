@@ -1,8 +1,8 @@
-import { type QE } from '../../classes/round-ballot-method'
 import {
   RoundBallotMethodTb,
   type TiebreakerEntry,
 } from '../../classes/round-ballot-method-tb'
+import { type QE } from '../../types'
 import { scoresToRanking } from '../../utils'
 import { firstChoices } from '../first-past-the-post/iterate-first-choices'
 
