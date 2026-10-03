@@ -69,7 +69,7 @@ export const VotingSystem = {
   FirstPastThePost: 'FIRST_PAST_THE_POST',
   Kemeny: 'KEMENY',
   InstantRunoff: 'INSTANT_RUNOFF',
-  MajorityJudgment: 'MAJORITY_JUDGEMENT',
+  MajorityJudgment: 'MAJORITY_JUDGMENT',
   MaximalLotteries: 'MAXIMAL_LOTTERIES',
   Minimax: 'MINIMAX',
   MinimaxTD: 'MINIMAX_TD',
