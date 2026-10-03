@@ -193,7 +193,7 @@ export const stringifyCondorcetElectionFormat = <C extends string>(
     '',
   ]
 
-  for (const { ranking, weight } of ballots) {
+  for (const { ranking, weight = 1 } of ballots) {
     const r = implicitRanking ? stripImplicitRank(ranking, candidates) : ranking
     const rankStr = r.length === 0 ? '/EMPTY_RANKING/' : serializeRanking(r)
     lines.push(weight === 1 ? rankStr : `${rankStr} * ${weight}`)

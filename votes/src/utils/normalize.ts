@@ -1,6 +1,9 @@
 import { type Ballot } from '../types'
 import { sum } from './sum'
 
+export const weightOf = <C extends string>({ weight = 1 }: Ballot<C>): number =>
+  weight
+
 export const canonizeRanking = <C extends string>(ranking: C[][]): C[][] =>
   ranking
     .map((rank) => rank.toSorted((a, b) => a.localeCompare(b)))
@@ -16,7 +19,10 @@ const mergeEquivalentBallots = <C extends string, B extends Ballot<C>>(
     const key = JSON.stringify(canonizeRanking(ballot.ranking))
     const match = byRanking.get(key)
     if (match)
-      byRanking.set(key, { ...match, weight: match.weight + ballot.weight })
+      byRanking.set(key, {
+        ...match,
+        weight: weightOf(match) + weightOf(ballot),
+      })
     else byRanking.set(key, ballot)
   }
   return byRanking.values().toArray()
@@ -29,8 +35,8 @@ export const groupBallots = <C extends string, B extends Ballot<C>>(
   ballots: B[],
 ): B[] =>
   mergeEquivalentBallots(ballots)
-    .filter((b) => b.weight > 0)
-    .toSorted((a, b) => b.weight - a.weight)
+    .filter((b) => weightOf(b) > 0)
+    .toSorted((a, b) => weightOf(b) - weightOf(a))
 
 export const toWeightedBallots = <C extends string>(
   ballots: C[][][],
@@ -126,4 +132,4 @@ export const normalizeBallots = <C extends string, B extends Ballot<C>>(
 
 export const totalBallotsWeight = <C extends string>(
   ballots: Ballot<C>[],
-): number => sum(ballots.map((ballot) => ballot.weight))
+): number => sum(ballots.map((ballot) => weightOf(ballot)))

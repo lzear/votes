@@ -2,7 +2,7 @@
 
 import { Method } from '../../classes/method'
 import { type Ballot, type Matrix, type ScoreObject } from '../../types'
-import { matrixFromBallots } from '../../utils'
+import { matrixFromBallots, weightOf } from '../../utils'
 import { config } from '../../utils/config'
 import { sum } from '../../utils/sum'
 
@@ -20,7 +20,7 @@ const makeJudgement = <C extends string>(
 
   for (const ballot of ballots)
     for (const [grade, rank] of ballot.ranking.entries())
-      for (const can of rank) judgements[can][grade]! += ballot.weight
+      for (const can of rank) judgements[can][grade]! += weightOf(ballot)
 
   return judgements
 }

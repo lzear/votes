@@ -1,6 +1,7 @@
 export interface Ballot<C extends string> {
   ranking: C[][]
-  weight: number
+  // How many voters cast it (default 1).
+  weight?: number
 }
 
 export interface Matrix<C extends string> {
