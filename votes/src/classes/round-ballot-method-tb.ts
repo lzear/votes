@@ -87,7 +87,7 @@ const entryToEntry = <C extends string>(
     let method: { ranking(): C[][]; scores?(): Partial<Record<C, number>> }
     if (Ctor.needsMatrix === true)
       method = new (Ctor as unknown as MatrixCtor<C>)({
-        ...matrixFromBallots(ballots, candidates),
+        ...matrixFromBallots(ballots, candidates, unrankedLast),
         ...extra,
       })
     else if (Ctor.needsBallot === true)

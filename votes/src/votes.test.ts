@@ -309,6 +309,33 @@ describe('tieBreakers', () => {
     ])
   })
 
+  it("forwards the host's unrankedLast setting into matrix tiebreakers", () => {
+    const ballots = [
+      { ranking: [['a']], weight: 1 },
+      { ranking: [['b'], ['a']], weight: 1 },
+      { ranking: [['c']], weight: 2 },
+    ]
+    const base = {
+      candidates: ['a', 'b', 'c'],
+      ballots,
+      tieBreakers: [Copeland],
+    }
+    // Default: a beats b on the a-only ballot, b beats a on the other.
+    expect(
+      new InstantRunoff(base).computeRounds()[0]?.roundResult.eliminated,
+    ).toStrictEqual(['a', 'b'])
+    // Expressed-only: the a-only ballot says nothing about b.
+    const expressed = new InstantRunoff({ ...base, unrankedLast: false })
+    expect(expressed.computeRounds()[0]?.roundResult.eliminated).toStrictEqual([
+      'a',
+    ])
+    expect(expressed.matrix.array).toStrictEqual([
+      [0, 0, 0],
+      [1, 0, 0],
+      [0, 0, 0],
+    ])
+  })
+
   it('Baldwin with empty tieBreakers eliminates all tied-last candidates', () => {
     const ballots = [
       { ranking: [['a'], ['b'], ['c']], weight: 2 },

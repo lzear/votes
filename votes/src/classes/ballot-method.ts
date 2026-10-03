@@ -41,7 +41,11 @@ export abstract class BallotMethod<C extends string>
    * Return a matrix of duels from all the ballots
    */
   get matrix(): Matrix<C> {
-    this._matrix ??= matrixFromBallots(this.ballots, this.candidates)
+    this._matrix ??= matrixFromBallots(
+      this.ballots,
+      this.candidates,
+      this.unrankedLast,
+    )
     return this._matrix
   }
 
