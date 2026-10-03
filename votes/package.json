@@ -32,7 +32,7 @@
     "build": "tsup",
     "build-docs": "typedoc src/index.ts --tsconfig tsconfig.typedoc.json",
     "test": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "yarn run -T tsc --noEmit"
   },
   "files": [
     "dist",
