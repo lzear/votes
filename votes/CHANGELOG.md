@@ -1,5 +1,101 @@
 # votes
 
+## 4.0.0
+
+### Major Changes
+
+- beb56e1: `Approbation` is `Approval` (`VotingSystem.Approval`, `'APPROVAL'`).
+- 92fa0a3: Drop the `utils` namespace, `canonicalRanking()`, `restrictRanking()`
+  and `Minimax.Variants`; export `matrixFromBallots`, `makeAntisymmetric`,
+  `smithSet`, `normalizeBallots`, `groupBallots`, `toWeightedBallots` and
+  `scoresToRanking` at the top level.
+- bd7a33c: `Election` takes `{ candidates, ballots, methods }` and re-ranks each
+  tied tier; `tb(X, { full: true })` ranks by everyone. Steps report `name` and
+  per-tier `runs`.
+- 8157fa9: Rounds are flat (`roundResult` fields moved up, `idx` is `index`, no
+  `finished`); tie-break steps use `index`, `name` and `candidates`.
+- 581b460: `VotingSystem.MajorityJudgment` is `'MAJORITY_JUDGMENT'`.
+- 2a866b6: `VotingSystem` and `MinimaxVariant` are `as const` objects, no longer
+  enums.
+- fecaa69: Refactor everything. New API. Main changes:
+
+  - Remove external dependency `javascript-lp-solver`.
+  - Implement tie-breaking mechanism.
+  - New `Election` class to chain rankers together.
+  - New `unrankedLast` option on ballot methods: by default unranked candidates
+    join a ballot as one tied bottom tier; pass `false` to score only expressed
+    preferences.
+  - Round-based methods report per-round details: scores, tie-break steps, and
+    method-specific `info` (`CoombsInfo`, `NansonInfo`).
+  - Round-method `ranking()` now includes the winners tier.
+  - New `Schulze#strengths()` exposing the beatpath strength matrix.
+  - New `iteratedRanking()` on all methods and `Election`: fill each place by
+    re-running the full method without the already-placed candidates, instead of
+    using the method's own full ranking. `restrict()` is now public, and the
+    `iterateRanking` helper is exported under `utils`.
+  - Ranked pairs: fix infinite recursion on raw win-count matrices with wide
+    ties.
+
+- b7153da: `Ranker` declares `restrict()` and optional `scores()`, `rounds()`,
+  `probabilities()`; `computeRounds()` is `rounds()`; random methods' `scores()`
+  is `probabilities()`.
+- b4809da: Every method takes `{ candidates, ballots, unrankedLast }`; matrix
+  methods also take a matrix. `needsMatrix`, `needsBallot` and the category
+  helpers are gone.
+
+### Minor Changes
+
+- a13f30c: Export the `ElectionResult` type.
+- a13f30c: Majority judgment takes a `grades` option (default 6) and throws on a
+  grade past it.
+- a13f30c: Majority judgment gives the worst grade to candidates a ballot leaves
+  out, unless `unrankedLast: false`.
+- 7caa55c: A ballot's `weight` is optional, 1 by default.
+
+### Patch Changes
+
+- a13f30c: The Condorcet format parser reads `*` and `^` without spaces around
+  them.
+- a13f30c: The Condorcet format writer throws on names with reserved characters.
+- a13f30c: Coombs with `unrankedLast: false` takes last choices only from
+  ballots that rank everyone left.
+- 13f3072: Random dictator ranks the candidates its ballot leaves out last.
+- 7ab50d1: Random methods draw their ranking once per instance.
+- 3997536: Drop the lodash-es dependency.
+- a13f30c: Faster bottom-two runoff head-to-head.
+- a13f30c: Faster Baldwin and Nanson.
+- a13f30c: Faster instant runoff, Coombs and bottom-two runoff.
+- a13f30c: Normalize ballots in one pass.
+- cb8cfe6: Tie-break steps and election steps report real class names, not
+  minified ones.
+- a13f30c: Kemeny runs in O(n·2ⁿ), not O(n!), and averages scores over its best
+  orders.
+- a13f30c: Maximal lotteries and randomized Condorcet never draw a candidate of
+  probability 0.
+- 661bf71: Performance and packaging improvements:
+
+  - `matrixFromBallots` now indexes candidates with a `Map` and tracks unranked
+    candidates with a `Set` (was O(ballots × candidates²)).
+  - New `pairwiseMatrix` utility; Copeland and Schulze share it.
+  - Simplify Ranked pairs winner detection (removes dead score bookkeeping).
+  - `package.json` `exports` now declares explicit `types` conditions.
+  - Remove the `utils.Edge` re-export; use `RankedPairsEdge` from the package
+    root instead.
+
+- 7039030: `matrixFromBallots` counts a candidate listed twice once.
+- a13f30c: Pairwise matrices honor `unrankedLast: false`.
+- a13f30c: Majority judgment follows Balinski–Laraki: lower median, ties broken
+  by majority value.
+- 13f3072: Majority judgment grades a candidate once per ballot.
+- b87af2e: Majority judgment as a tiebreaker keeps empty grade tiers.
+- 3997536: Stop publishing test files.
+- 13f3072: Ranked pairs no longer locks pairwise defeats.
+- a13f30c: Schulze ties candidates neither of whom beats the other.
+- a13f30c: Scores within the tie tolerance, or both infinite, tie whatever the
+  candidate order.
+- a27bb7f: Ship the README.
+- 773be2e: Matrix methods' `restrict()` keeps the given candidate order.
+
 ## 3.0.0
 
 ### Major Changes
