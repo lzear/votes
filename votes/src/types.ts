@@ -26,13 +26,13 @@ export type ScoreObject<C extends string> = Record<C, number>
 
 // Trace of one tiebreaker's work within a round.
 export interface TieBreakStep<C extends string> {
-  // Position in the tieBreakers array (0-based).
-  tbIndex: number
-  // Constructor name of the tiebreaker method.
-  tbName: string
+  // Position among the method's tiebreakers, built-in ones first.
+  index: number
+  // The tiebreaker's label, or its class name.
+  name: string
   // Candidates that were tied going into this step.
-  input: C[]
-  // Full ranking produced by the tiebreaker on `input`.
+  candidates: C[]
+  // Full ranking produced by the tiebreaker on `candidates`.
   ranking: C[][]
   // Scores produced by the tiebreaker (when the method supports scores()).
   scores?: Partial<Record<C, number>>
@@ -51,11 +51,10 @@ export interface QE<C extends string, I = undefined> {
   info?: I
 }
 
-export interface Round<C extends string, I = undefined> {
-  finished: boolean
-  idx: number
+export interface Round<C extends string, I = undefined> extends QE<C, I> {
+  index: number
+  // Candidates still in the race.
   candidates: C[]
-  roundResult: QE<C, I>
 }
 
 export const VotingSystem = {

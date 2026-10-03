@@ -48,7 +48,7 @@ describe(Coombs, () => {
       ],
       unrankedLast: false,
     })
-    expect(coombs.rounds()[0]?.roundResult.scores).toStrictEqual({
+    expect(coombs.rounds()[0]?.scores).toStrictEqual({
       A: -0,
       B: -2,
       C: -2,
@@ -84,28 +84,25 @@ describe(Coombs, () => {
             "🐻",
             "🐭",
           ],
-          "finished": false,
-          "idx": 0,
-          "roundResult": {
-            "eliminated": [
-              "🐻",
-            ],
-            "info": {
-              "resolution": "elimination",
-            },
-            "qualified": [
-              "🦁",
-              "🐸",
-              "🐷",
-              "🐭",
-            ],
-            "scores": {
-              "🐭": -14.5,
-              "🐷": -14.5,
-              "🐸": -12,
-              "🐻": -24,
-              "🦁": -3,
-            },
+          "eliminated": [
+            "🐻",
+          ],
+          "index": 0,
+          "info": {
+            "resolution": "elimination",
+          },
+          "qualified": [
+            "🦁",
+            "🐸",
+            "🐷",
+            "🐭",
+          ],
+          "scores": {
+            "🐭": -14.5,
+            "🐷": -14.5,
+            "🐸": -12,
+            "🐻": -24,
+            "🦁": -3,
           },
         },
         {
@@ -115,26 +112,23 @@ describe(Coombs, () => {
             "🐷",
             "🐭",
           ],
-          "finished": true,
-          "idx": 1,
-          "roundResult": {
-            "eliminated": [
-              "🦁",
-              "🐸",
-              "🐷",
-            ],
-            "info": {
-              "resolution": "majority",
-            },
-            "qualified": [
-              "🐭",
-            ],
-            "scores": {
-              "🐭": 35.5,
-              "🐷": 16.5,
-              "🐸": 5,
-              "🦁": 11,
-            },
+          "eliminated": [
+            "🦁",
+            "🐸",
+            "🐷",
+          ],
+          "index": 1,
+          "info": {
+            "resolution": "majority",
+          },
+          "qualified": [
+            "🐭",
+          ],
+          "scores": {
+            "🐭": 35.5,
+            "🐷": 16.5,
+            "🐸": 5,
+            "🦁": 11,
           },
         },
       ]

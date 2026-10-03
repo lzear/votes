@@ -105,25 +105,27 @@ const rounds = new InstantRunoff({
   tieBreakers: [Borda],
 }).rounds()
 
-rounds[0].roundResult
+rounds[0]
 // {
-//   scores:   { a: 5, b: 3, c: 3 },
-//   qualified: ['a'],
+//   index: 0,
+//   candidates: ['a', 'b', 'c'],
+//   scores: { a: 5, b: 3, c: 3 },
+//   qualified: ['a', 'b'],
 //   eliminated: ['c'],          // resolved by tiebreaker
 //   tieBreakSteps: [{
-//     tbIndex: 0,               // first tiebreaker
-//     tbName: 'Borda',
-//     input: ['b', 'c'],        // tied candidates
-//     ranking: [['b'], ['c']], // tiebreaker's verdict
+//     index: 0,                 // first tiebreaker
+//     name: 'Borda',
+//     candidates: ['b', 'c'],   // tied candidates
+//     ranking: [['b'], ['c']],  // tiebreaker's verdict
 //     resolved: ['b'],          // promoted out of tie
 //     remaining: ['c'],         // eliminated
 //   }]
 // }
 ```
 
-Some methods add method-specific detail as `roundResult.info`: `Coombs` reports
-whether a round was resolved by majority or elimination (`CoombsInfo`), `Nanson`
-reports the Borda average used as elimination cutoff (`NansonInfo`).
+Some methods add method-specific detail as `info`: `Coombs` reports whether a
+round was resolved by majority or elimination (`CoombsInfo`), `Nanson` reports
+the Borda average used as elimination cutoff (`NansonInfo`).
 
 ## Election: chaining methods
 

@@ -45,16 +45,16 @@ export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
     }
   }
 
-  protected round(candidates: C[], idx: number): QE<C> {
+  protected round(candidates: C[], index: number): QE<C> {
     // A runoff that ended in a tie, after eliminating those below it.
-    if (idx > 1)
+    if (index > 1)
       return {
         qualified: [],
         eliminated: candidates,
         scores: this.roundScoresZero(candidates),
       }
 
-    if (idx === 1) {
+    if (index === 1) {
       const runoff = this.top(candidates, 1)
       // Tied all the way: no later round can separate them.
       return runoff.qualified.length === candidates.length

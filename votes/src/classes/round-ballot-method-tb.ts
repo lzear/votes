@@ -46,15 +46,15 @@ export abstract class RoundBallotMethodTb<
     const promoted: C[] = []
     const tieBreakSteps: TieBreakStep<C>[] = []
 
-    for (const [tbIndex, { name: tbName, run }] of this.tiebreakers.entries()) {
+    for (const [index, { name, run }] of this.tiebreakers.entries()) {
       if (current.length <= 1) break
       const { ranking, scores } = run(current)
       const last = ranking.at(-1) ?? []
       const upper = ranking.slice(0, -1).flat()
       tieBreakSteps.push({
-        tbIndex,
-        tbName,
-        input: current,
+        index,
+        name,
+        candidates: current,
         ranking,
         ...(scores !== undefined && { scores }),
         resolved: upper,
@@ -80,10 +80,10 @@ export abstract class TbEliminateLast<
 > extends RoundBallotMethodTb<C, I> {
   protected abstract oneRound(
     candidates: C[],
-    idx: number,
+    index: number,
   ): { ranking: C[][]; scores: ScoreObject<C> }
 
-  protected round(candidates: C[], idx: number): QE<C, I> {
+  protected round(candidates: C[], index: number): QE<C, I> {
     if (candidates.length < 2)
       return {
         qualified: [],
@@ -91,7 +91,7 @@ export abstract class TbEliminateLast<
         scores: this.roundScoresZero(candidates),
       }
 
-    const { ranking, scores } = this.oneRound(candidates, idx)
+    const { ranking, scores } = this.oneRound(candidates, index)
     const qualified = ranking.slice(0, -1).flat()
     const lastTier = ranking.at(-1) ?? []
 

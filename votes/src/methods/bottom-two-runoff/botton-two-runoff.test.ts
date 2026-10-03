@@ -32,54 +32,51 @@ describe(BottomTwoRunoff, () => {
             "🔏",
             "🎽",
           ],
-          "finished": false,
-          "idx": 0,
-          "roundResult": {
-            "eliminated": [
-              "🔏",
-            ],
-            "qualified": [
-              "😡",
-              "🤡",
-              "🎽",
-              "🤥",
-            ],
-            "scores": {
-              "🎽": 0,
-              "🔏": 0,
-              "😡": 3,
-              "🤡": 0,
-              "🤥": 0,
-            },
-            "tieBreakSteps": [
-              {
-                "input": [
-                  "🤥",
-                  "🔏",
-                ],
-                "ranking": [
-                  [
-                    "🤥",
-                  ],
-                  [
-                    "🔏",
-                  ],
-                ],
-                "remaining": [
-                  "🔏",
-                ],
-                "resolved": [
-                  "🤥",
-                ],
-                "scores": {
-                  "🔏": 0,
-                  "🤥": 3,
-                },
-                "tbIndex": 0,
-                "tbName": "FirstPastThePost",
-              },
-            ],
+          "eliminated": [
+            "🔏",
+          ],
+          "index": 0,
+          "qualified": [
+            "😡",
+            "🤡",
+            "🎽",
+            "🤥",
+          ],
+          "scores": {
+            "🎽": 0,
+            "🔏": 0,
+            "😡": 3,
+            "🤡": 0,
+            "🤥": 0,
           },
+          "tieBreakSteps": [
+            {
+              "candidates": [
+                "🤥",
+                "🔏",
+              ],
+              "index": 0,
+              "name": "FirstPastThePost",
+              "ranking": [
+                [
+                  "🤥",
+                ],
+                [
+                  "🔏",
+                ],
+              ],
+              "remaining": [
+                "🔏",
+              ],
+              "resolved": [
+                "🤥",
+              ],
+              "scores": {
+                "🔏": 0,
+                "🤥": 3,
+              },
+            },
+          ],
         },
         {
           "candidates": [
@@ -88,52 +85,49 @@ describe(BottomTwoRunoff, () => {
             "🎽",
             "🤥",
           ],
-          "finished": false,
-          "idx": 1,
-          "roundResult": {
-            "eliminated": [
-              "🤥",
-            ],
-            "qualified": [
-              "😡",
-              "🎽",
-              "🤡",
-            ],
-            "scores": {
-              "🎽": 0,
-              "😡": 3,
-              "🤡": 0,
-              "🤥": 0,
-            },
-            "tieBreakSteps": [
-              {
-                "input": [
-                  "🤥",
-                  "🤡",
-                ],
-                "ranking": [
-                  [
-                    "🤡",
-                  ],
-                  [
-                    "🤥",
-                  ],
-                ],
-                "remaining": [
-                  "🤥",
-                ],
-                "resolved": [
-                  "🤡",
-                ],
-                "scores": {
-                  "🤡": 3,
-                  "🤥": 0,
-                },
-                "tbIndex": 0,
-                "tbName": "FirstPastThePost",
-              },
-            ],
+          "eliminated": [
+            "🤥",
+          ],
+          "index": 1,
+          "qualified": [
+            "😡",
+            "🎽",
+            "🤡",
+          ],
+          "scores": {
+            "🎽": 0,
+            "😡": 3,
+            "🤡": 0,
+            "🤥": 0,
           },
+          "tieBreakSteps": [
+            {
+              "candidates": [
+                "🤥",
+                "🤡",
+              ],
+              "index": 0,
+              "name": "FirstPastThePost",
+              "ranking": [
+                [
+                  "🤡",
+                ],
+                [
+                  "🤥",
+                ],
+              ],
+              "remaining": [
+                "🤥",
+              ],
+              "resolved": [
+                "🤡",
+              ],
+              "scores": {
+                "🤡": 3,
+                "🤥": 0,
+              },
+            },
+          ],
         },
         {
           "candidates": [
@@ -141,98 +135,92 @@ describe(BottomTwoRunoff, () => {
             "🎽",
             "🤡",
           ],
-          "finished": false,
-          "idx": 2,
-          "roundResult": {
-            "eliminated": [
-              "🤡",
-            ],
-            "qualified": [
-              "😡",
-              "🎽",
-            ],
-            "scores": {
-              "🎽": 0,
-              "😡": 3,
-              "🤡": 0,
-            },
-            "tieBreakSteps": [
-              {
-                "input": [
-                  "🤡",
-                  "🎽",
-                ],
-                "ranking": [
-                  [
-                    "🎽",
-                  ],
-                  [
-                    "🤡",
-                  ],
-                ],
-                "remaining": [
-                  "🤡",
-                ],
-                "resolved": [
-                  "🎽",
-                ],
-                "scores": {
-                  "🎽": 2,
-                  "🤡": 1,
-                },
-                "tbIndex": 0,
-                "tbName": "FirstPastThePost",
-              },
-            ],
+          "eliminated": [
+            "🤡",
+          ],
+          "index": 2,
+          "qualified": [
+            "😡",
+            "🎽",
+          ],
+          "scores": {
+            "🎽": 0,
+            "😡": 3,
+            "🤡": 0,
           },
+          "tieBreakSteps": [
+            {
+              "candidates": [
+                "🤡",
+                "🎽",
+              ],
+              "index": 0,
+              "name": "FirstPastThePost",
+              "ranking": [
+                [
+                  "🎽",
+                ],
+                [
+                  "🤡",
+                ],
+              ],
+              "remaining": [
+                "🤡",
+              ],
+              "resolved": [
+                "🎽",
+              ],
+              "scores": {
+                "🎽": 2,
+                "🤡": 1,
+              },
+            },
+          ],
         },
         {
           "candidates": [
             "😡",
             "🎽",
           ],
-          "finished": true,
-          "idx": 3,
-          "roundResult": {
-            "eliminated": [
-              "🎽",
-            ],
-            "qualified": [
-              "😡",
-            ],
-            "scores": {
-              "🎽": 0,
-              "😡": 3,
-            },
-            "tieBreakSteps": [
-              {
-                "input": [
-                  "🎽",
-                  "😡",
-                ],
-                "ranking": [
-                  [
-                    "😡",
-                  ],
-                  [
-                    "🎽",
-                  ],
-                ],
-                "remaining": [
-                  "🎽",
-                ],
-                "resolved": [
-                  "😡",
-                ],
-                "scores": {
-                  "🎽": 0,
-                  "😡": 3,
-                },
-                "tbIndex": 0,
-                "tbName": "FirstPastThePost",
-              },
-            ],
+          "eliminated": [
+            "🎽",
+          ],
+          "index": 3,
+          "qualified": [
+            "😡",
+          ],
+          "scores": {
+            "🎽": 0,
+            "😡": 3,
           },
+          "tieBreakSteps": [
+            {
+              "candidates": [
+                "🎽",
+                "😡",
+              ],
+              "index": 0,
+              "name": "FirstPastThePost",
+              "ranking": [
+                [
+                  "😡",
+                ],
+                [
+                  "🎽",
+                ],
+              ],
+              "remaining": [
+                "🎽",
+              ],
+              "resolved": [
+                "😡",
+              ],
+              "scores": {
+                "🎽": 0,
+                "😡": 3,
+              },
+            },
+          ],
         },
       ]
     `)
@@ -252,7 +240,7 @@ describe(BottomTwoRunoff, () => {
       tieBreakers: [tb(RandomCandidates, { rng: () => 0 })],
     })
     expect(
-      b2r.rounds()[0]?.roundResult.tieBreakSteps?.map(({ tbName }) => tbName),
+      b2r.rounds()[0]?.tieBreakSteps?.map(({ name }) => name),
     ).toStrictEqual(['FirstPastThePost', 'RandomCandidates'])
     const restricted = b2r.restrict(['a', 'b', 'c']) as typeof b2r
     expect(restricted.rounds()).toStrictEqual(b2r.rounds())

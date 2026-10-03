@@ -34,8 +34,8 @@ describe(TwoRoundRunoff, () => {
 
     const rounds = trr.rounds()
     // Borda on the restricted {b, c} ballots promotes b.
-    expect(rounds[0]?.roundResult.qualified).toStrictEqual(['a', 'b'])
-    expect(rounds[0]?.roundResult.tieBreakSteps?.[0]?.tbName).toBe('Borda')
+    expect(rounds[0]?.qualified).toStrictEqual(['a', 'b'])
+    expect(rounds[0]?.tieBreakSteps?.[0]?.name).toBe('Borda')
     // Runoff: c-voters transfer to b — b overtakes a 6 to 5.
     expect(trr.ranking()).toStrictEqual([['b'], ['a'], ['c', 'd']])
   })
@@ -52,11 +52,7 @@ describe(TwoRoundRunoff, () => {
       candidates: ['a', 'b', 'c', 'd'],
       ballots,
     })
-    expect(trr.rounds()[0]?.roundResult.qualified).toStrictEqual([
-      'a',
-      'b',
-      'c',
-    ])
+    expect(trr.rounds()[0]?.qualified).toStrictEqual(['a', 'b', 'c'])
     expect(trr.ranking()).toStrictEqual([['a', 'b', 'c'], ['d']])
   })
 
@@ -72,13 +68,13 @@ describe(TwoRoundRunoff, () => {
       ballots,
       tieBreakers: [Borda],
     })
-    expect(trr.rounds()[0]?.roundResult.qualified).toStrictEqual(['a', 'b'])
+    expect(trr.rounds()[0]?.qualified).toStrictEqual(['a', 'b'])
   })
 
   it('eliminates everyone on out-of-range round index (safety fallback)', () => {
     class Exposed<C extends string> extends TwoRoundRunoff<C> {
-      public roundAt(candidates: C[], idx: number) {
-        return this.round(candidates, idx)
+      public roundAt(candidates: C[], index: number) {
+        return this.round(candidates, index)
       }
     }
     const exposed = new Exposed({

@@ -193,7 +193,7 @@ describe('tieBreakers', () => {
       ballots: tieBallots,
       tieBreakers: [],
     })
-    expect(irv.rounds()[0]?.roundResult.eliminated).toStrictEqual(['b', 'c'])
+    expect(irv.rounds()[0]?.eliminated).toStrictEqual(['b', 'c'])
   })
 
   it('InstantRunoff with custom tieBreakers chain eliminates one tied-last candidate', () => {
@@ -202,7 +202,7 @@ describe('tieBreakers', () => {
       ballots: tieBallots,
       tieBreakers: [Borda],
     })
-    expect(irv.rounds()[0]?.roundResult.eliminated).toStrictEqual(['c'])
+    expect(irv.rounds()[0]?.eliminated).toStrictEqual(['c'])
   })
 
   it('Nanson breaks a complete tie with its tieBreakers', () => {
@@ -216,7 +216,7 @@ describe('tieBreakers', () => {
       ],
       tieBreakers: [tb(RandomCandidates, { rng: () => 0 })],
     })
-    expect(nanson.rounds()[0]?.roundResult).toMatchObject({
+    expect(nanson.rounds()[0]).toMatchObject({
       qualified: ['b', 'c'],
       eliminated: ['a'],
     })
@@ -228,7 +228,7 @@ describe('tieBreakers', () => {
       ballots: tieBallots,
       tieBreakers: [MajorityJudgment],
     })
-    expect(irv.rounds()[0]?.roundResult.eliminated).toStrictEqual(['c'])
+    expect(irv.rounds()[0]?.eliminated).toStrictEqual(['c'])
   })
 
   it('keeps tied candidates a tiebreaker does not rank', () => {
@@ -252,7 +252,7 @@ describe('tieBreakers', () => {
       ballots: tieBallots,
       tieBreakers: [FirstOnly],
     })
-    expect(irv.rounds()[0]?.roundResult).toMatchObject({
+    expect(irv.rounds()[0]).toMatchObject({
       qualified: ['d', 'a', 'b'],
       eliminated: ['c'],
     })
@@ -308,14 +308,11 @@ describe('tieBreakers', () => {
     // Default (unranked appended): Borda on {a, b} ties 6–6 → unresolved,
     // both eliminated together.
     const appended = new InstantRunoff(base)
-    expect(appended.rounds()[0]?.roundResult.eliminated).toStrictEqual([
-      'a',
-      'b',
-    ])
+    expect(appended.rounds()[0]?.eliminated).toStrictEqual(['a', 'b'])
     // Expressed-only: the a-only and c-only ballots give b nothing → Borda
     // scores a=3, b=2 → b alone eliminated.
     const expressed = new InstantRunoff({ ...base, unrankedLast: false })
-    expect(expressed.rounds()[0]?.roundResult.eliminated).toStrictEqual(['b'])
+    expect(expressed.rounds()[0]?.eliminated).toStrictEqual(['b'])
   })
 
   it("forwards the host's unrankedLast setting into matrix tiebreakers", () => {
@@ -330,12 +327,13 @@ describe('tieBreakers', () => {
       tieBreakers: [Copeland],
     }
     // Default: a beats b on the a-only ballot, b beats a on the other.
-    expect(
-      new InstantRunoff(base).rounds()[0]?.roundResult.eliminated,
-    ).toStrictEqual(['a', 'b'])
+    expect(new InstantRunoff(base).rounds()[0]?.eliminated).toStrictEqual([
+      'a',
+      'b',
+    ])
     // Expressed-only: the a-only ballot says nothing about b.
     const expressed = new InstantRunoff({ ...base, unrankedLast: false })
-    expect(expressed.rounds()[0]?.roundResult.eliminated).toStrictEqual(['a'])
+    expect(expressed.rounds()[0]?.eliminated).toStrictEqual(['a'])
     expect(expressed.matrix.array).toStrictEqual([
       [0, 0, 0],
       [1, 0, 0],
@@ -381,10 +379,7 @@ describe('tieBreakers', () => {
       ballots,
       tieBreakers: [],
     })
-    expect(baldwin.rounds()[0]?.roundResult.eliminated).toStrictEqual([
-      'b',
-      'c',
-    ])
+    expect(baldwin.rounds()[0]?.eliminated).toStrictEqual(['b', 'c'])
   })
 
   it('Baldwin with custom tieBreakers chain eliminates one tied-last candidate', () => {
@@ -397,10 +392,7 @@ describe('tieBreakers', () => {
       ballots,
       tieBreakers: [Borda],
     })
-    expect(baldwin.rounds()[0]?.roundResult.eliminated).toStrictEqual([
-      'b',
-      'c',
-    ])
+    expect(baldwin.rounds()[0]?.eliminated).toStrictEqual(['b', 'c'])
     expect(baldwin.ranking()).toStrictEqual([['a'], ['b', 'c']])
   })
 
@@ -416,10 +408,7 @@ describe('tieBreakers', () => {
       tieBreakers: [Copeland, Borda],
     })
     // Copeland can't split b/c (tied pairwise), Borda breaks it → b eliminated
-    expect(baldwin.rounds()[0]?.roundResult.eliminated).toStrictEqual([
-      'b',
-      'c',
-    ])
+    expect(baldwin.rounds()[0]?.eliminated).toStrictEqual(['b', 'c'])
   })
 })
 
@@ -441,7 +430,7 @@ describe('tb() tiebreaker API', () => {
       ballots: asymmetricBallots,
       tieBreakers: [Borda],
     })
-    expect(irv.rounds()[0]?.roundResult.eliminated).toStrictEqual(['c'])
+    expect(irv.rounds()[0]?.eliminated).toStrictEqual(['c'])
   })
 
   it('matrix method (Copeland) as a tiebreaker', () => {
@@ -451,7 +440,7 @@ describe('tb() tiebreaker API', () => {
       ballots: asymmetricBallots,
       tieBreakers: [Copeland],
     })
-    expect(irv.rounds()[0]?.roundResult.eliminated).toStrictEqual(['c'])
+    expect(irv.rounds()[0]?.eliminated).toStrictEqual(['c'])
   })
 
   it('tb(Ctor, opts) passes extra params to constructor', () => {
@@ -462,7 +451,7 @@ describe('tb() tiebreaker API', () => {
       ballots: asymmetricBallots,
       tieBreakers: [tb(RandomCandidates, { rng })],
     })
-    expect(irv.rounds()[0]?.roundResult.eliminated).toHaveLength(1)
+    expect(irv.rounds()[0]?.eliminated).toHaveLength(1)
   })
 
   it('full: true runs tiebreaker on all candidates instead of tied subset', () => {
@@ -478,8 +467,8 @@ describe('tb() tiebreaker API', () => {
       ballots: asymmetricBallots,
       tieBreakers: [tb(FirstPastThePost, { full: true })],
     })
-    expect(restricted.rounds()[0]?.roundResult.eliminated).toStrictEqual(['c'])
-    expect(full.rounds()[0]?.roundResult.eliminated).toStrictEqual(['b', 'c'])
+    expect(restricted.rounds()[0]?.eliminated).toStrictEqual(['c'])
+    expect(full.rounds()[0]?.eliminated).toStrictEqual(['b', 'c'])
   })
 
   it('stable: true recurses into sub-ties until no further progress', () => {
@@ -497,7 +486,7 @@ describe('tb() tiebreaker API', () => {
       ],
       tieBreakers: [tb(Borda, { stable: true })],
     })
-    const eliminated = irv.rounds()[0]?.roundResult.eliminated
+    const eliminated = irv.rounds()[0]?.eliminated
     expect(eliminated).toHaveLength(2)
     expect(eliminated).toContain('c')
     expect(eliminated).toContain('d')
@@ -516,7 +505,7 @@ describe('tb() tiebreaker API', () => {
       ],
       tieBreakers: [Borda],
     })
-    const eliminated = irv.rounds()[0]?.roundResult.eliminated
+    const eliminated = irv.rounds()[0]?.eliminated
     expect(eliminated).toHaveLength(2)
     expect(eliminated).not.toContain('b')
   })
