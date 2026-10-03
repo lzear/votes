@@ -17,5 +17,5 @@ export {
   toWeightedBallots,
 } from './normalize'
 export { rngGenerator } from './rng-generator'
-export { applyRankingAsTiebreaker, scoresToRanking } from './scores'
+export { scoresToRanking } from './scores'
 export { scoresAny, scoresZero } from './scores-zero'

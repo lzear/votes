@@ -1,14 +1,20 @@
 import { type Ranker } from './classes/method'
-import { type Round, type ScoreObject } from './types'
-import { applyRankingAsTiebreaker, iterateRanking } from './utils'
+import {
+  type MethodTiebreaker,
+  type Run,
+  type TbEntry,
+  tiebreaker,
+} from './classes/tiebreaker'
+import { type Profile } from './types'
+import { iterateRanking } from './utils'
 
 export interface StepResult<C extends string> {
-  // Constructor name of the ranker that produced this step.
-  rankerName: string
+  // The method's label, or its class name.
+  name: string
   before: C[][]
   after: C[][]
-  rounds?: Round<C, unknown>[]
-  scores?: ScoreObject<C>
+  // The method's run on each tier it ranked.
+  runs: (Run<C> & { candidates: C[] })[]
 }
 
 export interface ElectionResult<C extends string> {
@@ -16,84 +22,52 @@ export interface ElectionResult<C extends string> {
   steps: StepResult<C>[]
 }
 
-const instanceName = (instance: object): string =>
-  (Object.getPrototypeOf(instance) as { constructor?: { name?: string } })
-    .constructor?.name ?? 'Unknown'
-
-const computeFor = <C extends string>(
-  instance: Ranker<C>,
-): Pick<StepResult<C>, 'rounds' | 'scores'> & { ranking: C[][] } => {
-  const rounds = instance.rounds?.()
-  const scores = instance.scores?.()
-  return {
-    ranking: instance.ranking(),
-    ...(rounds && { rounds }),
-    ...(scores && { scores }),
-  }
+export type ElectionInput<C extends string> = Profile<C> & {
+  methods: [NoInfer<TbEntry<C>>, ...NoInfer<TbEntry<C>>[]]
 }
 
 /**
- * Chains pre-built rankers: the first provides the primary ranking, each
- * subsequent one breaks remaining ties.
+ * Chains methods: the first ranks the candidates, each next one re-ranks the
+ * tiers still tied, like round methods' `tieBreakers`.
  *
  * @example
  * ```ts
  * new Election({
- *   rankers: [
- *     new InstantRunoff({ ballots, candidates, tieBreakers: [tb(Copeland)] }),
- *     new Schulze(matrixFromBallots(ballots, candidates)),
- *     new RandomCandidates({ candidates, rng: myRng }),
- *   ],
+ *   candidates,
+ *   ballots,
+ *   methods: [InstantRunoff, Schulze, tb(RandomCandidates, { rng })],
  * })
  * ```
  */
 export class Election<C extends string> implements Ranker<C> {
-  private readonly rankers: [Ranker<C>, ...Ranker<C>[]]
-
+  private readonly input: ElectionInput<C>
+  private candidates: C[]
+  private tiebreakers: MethodTiebreaker<C>[]
   private _result?: ElectionResult<C>
 
-  constructor({ rankers }: { rankers: [Ranker<C>, ...Ranker<C>[]] }) {
-    this.rankers = rankers
+  constructor(input: ElectionInput<C>) {
+    const { methods, ...profile } = input
+    this.input = input
+    this.candidates = [...new Set(profile.candidates)]
+    this.tiebreakers = methods.map((m) => tiebreaker(m, profile))
   }
 
   result(): ElectionResult<C> {
     if (this._result) return this._result
 
     const steps: StepResult<C>[] = []
-
-    // First ranker produces the primary ranking
-    const {
-      ranking: firstRanking,
-      rounds,
-      scores,
-    } = computeFor(this.rankers[0])
-    const allCandidates = firstRanking.flat()
-
-    steps.push({
-      rankerName: instanceName(this.rankers[0]),
-      before: [allCandidates],
-      after: firstRanking,
-      ...(rounds && { rounds }),
-      ...(scores && { scores }),
-    })
-
-    let current = firstRanking
-
-    // Subsequent rankers refine remaining ties
-    for (const ranker of this.rankers.slice(1)) {
-      if (current.every((r) => r.length <= 1)) break
-
-      const { ranking, rounds: r2, scores: s2 } = computeFor(ranker)
-      const step: StepResult<C> = {
-        rankerName: instanceName(ranker),
-        before: current,
-        after: applyRankingAsTiebreaker(ranking, current),
-        ...(r2 && { rounds: r2 }),
-        ...(s2 && { scores: s2 }),
-      }
-
-      steps.push(step)
-      current = step.after
+    let current = this.candidates.length > 0 ? [this.candidates] : []
+    for (const { name, run } of this.tiebreakers) {
+      if (current.every((tier) => tier.length <= 1)) break
+      const runs: StepResult<C>['runs'] = []
+      const after = current.flatMap((tier) => {
+        if (tier.length <= 1) return [tier]
+        const r = { candidates: tier, ...run(tier) }
+        runs.push(r)
+        return r.ranking
+      })
+      steps.push({ name, before: current, after, runs })
+      current = after
     }
 
     this._result = { ranking: current, steps }
@@ -104,13 +78,12 @@ export class Election<C extends string> implements Ranker<C> {
     return this.result().ranking
   }
 
-  /**
-   * A new Election with every ranker restricted to a subset of candidates.
-   * Requires every ranker to support `restrict()` (all built-in methods do).
-   */
+  // The same election, every method restricted to `candidates`.
   restrict(candidates: C[]): Election<C> {
-    const rankers = this.rankers.map((r) => r.restrict(candidates))
-    return new Election({ rankers: rankers as [Ranker<C>, ...Ranker<C>[]] })
+    const election = new Election(this.input)
+    election.candidates = [...new Set(candidates)]
+    election.tiebreakers = this.tiebreakers.map((t) => t.restrict(candidates))
+    return election
   }
 
   /**
