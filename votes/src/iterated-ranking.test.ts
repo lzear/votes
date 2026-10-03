@@ -1,3 +1,4 @@
+import { type Ranker } from './classes/method'
 import { Election } from './election'
 import { Borda } from './methods/borda'
 import { Copeland } from './methods/copeland'
@@ -6,10 +7,7 @@ import { InstantRunoff } from './methods/instant-runoff'
 import { RandomCandidates } from './methods/random-candidates'
 import { type Ballot } from './types'
 import { matrixFromBallots } from './utils'
-import {
-  iterateRanking,
-  type RestrictableRanker,
-} from './utils/iterate-ranking'
+import { iterateRanking } from './utils/iterate-ranking'
 import { rngGenerator } from './utils/rng-generator'
 
 const abc = ['a', 'b', 'c']
@@ -93,24 +91,16 @@ describe('iteratedRanking', () => {
   })
 
   it('keeps the rest as one tier when a ranker places nobody first', () => {
-    const stub: RestrictableRanker<string> = {
+    const stub: Ranker<string> = {
       ranking: () => [[], ['a', 'b']],
       restrict: () => stub,
     }
     expect(iterateRanking(stub)).toStrictEqual([['a', 'b']])
 
-    const empty: RestrictableRanker<string> = {
+    const empty: Ranker<string> = {
       ranking: () => [],
       restrict: () => empty,
     }
     expect(iterateRanking(empty)).toStrictEqual([])
-  })
-
-  it('throws when an Election ranker cannot be restricted', () => {
-    const fixed = { ranking: () => [['a'], ['b'], ['c']] }
-    const election = new Election({ rankers: [fixed] })
-    expect(() => election.iteratedRanking()).toThrow(
-      /does not support restrict/,
-    )
   })
 })

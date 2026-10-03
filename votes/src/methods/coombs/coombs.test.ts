@@ -48,7 +48,7 @@ describe(Coombs, () => {
       ],
       unrankedLast: false,
     })
-    expect(coombs.computeRounds()[0]?.roundResult.scores).toStrictEqual({
+    expect(coombs.rounds()[0]?.roundResult.scores).toStrictEqual({
       A: -0,
       B: -2,
       C: -2,
@@ -74,7 +74,7 @@ describe(Coombs, () => {
         ],
       ]
     `)
-    expect(coombs.computeRounds()).toMatchInlineSnapshot(`
+    expect(coombs.rounds()).toMatchInlineSnapshot(`
       [
         {
           "candidates": [

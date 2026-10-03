@@ -1,5 +1,4 @@
 export type { MethodCtor, Ranker } from './classes/method'
-export type { Round, TieBreakStep } from './classes/round-ballot-method'
 export { tb, type TbEntry } from './classes/round-ballot-method-tb'
 export type { ElectionResult, StepResult } from './election'
 export { Election } from './election'
@@ -32,7 +31,14 @@ export type { Edge as RankedPairsEdge } from './methods/ranked-pairs/generate-ac
 export { Schulze } from './methods/schulze'
 export { Smith } from './methods/smith'
 export { TwoRoundRunoff } from './methods/two-round-runoff'
-export type { Ballot, Matrix, Profile, ScoreObject } from './types'
+export type {
+  Ballot,
+  Matrix,
+  Profile,
+  Round,
+  ScoreObject,
+  TieBreakStep,
+} from './types'
 export { VotingSystem } from './types'
 export * as utils from './utils'
 export { matrixFromBallots } from './utils/make-matrix'

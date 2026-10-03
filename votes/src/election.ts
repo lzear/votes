@@ -1,6 +1,5 @@
 import { type Ranker } from './classes/method'
-import { type Round } from './classes/round-ballot-method'
-import { type ScoreObject } from './types'
+import { type Round, type ScoreObject } from './types'
 import { applyRankingAsTiebreaker, iterateRanking } from './utils'
 
 export interface StepResult<C extends string> {
@@ -8,7 +7,7 @@ export interface StepResult<C extends string> {
   rankerName: string
   before: C[][]
   after: C[][]
-  rounds?: Round<C>[]
+  rounds?: Round<C, unknown>[]
   scores?: ScoreObject<C>
 }
 
@@ -21,27 +20,16 @@ const instanceName = (instance: object): string =>
   (Object.getPrototypeOf(instance) as { constructor?: { name?: string } })
     .constructor?.name ?? 'Unknown'
 
-const isRandomInstance = (instance: object): boolean =>
-  (Object.getPrototypeOf(instance) as { constructor?: { isRandom?: unknown } })
-    .constructor?.isRandom === true
-
 const computeFor = <C extends string>(
-  instance: Ranker<C> & {
-    computeRounds?(): Round<C>[]
-    scores?(): ScoreObject<C>
-  },
-): { ranking: C[][]; rounds?: Round<C>[]; scores?: ScoreObject<C> } => {
-  if (typeof instance.computeRounds === 'function') {
-    const rounds = instance.computeRounds()
-    return { ranking: instance.ranking(), rounds }
+  instance: Ranker<C>,
+): Pick<StepResult<C>, 'rounds' | 'scores'> & { ranking: C[][] } => {
+  const rounds = instance.rounds?.()
+  const scores = instance.scores?.()
+  return {
+    ranking: instance.ranking(),
+    ...(rounds && { rounds }),
+    ...(scores && { scores }),
   }
-
-  // The ranker's own ranking, which need not follow its scores: an absolute
-  // majority ranks no one first without a majority.
-  const ranking = instance.ranking()
-  return !isRandomInstance(instance) && typeof instance.scores === 'function'
-    ? { ranking, scores: instance.scores() }
-    : { ranking }
 }
 
 /**
@@ -121,17 +109,8 @@ export class Election<C extends string> implements Ranker<C> {
    * Requires every ranker to support `restrict()` (all built-in methods do).
    */
   restrict(candidates: C[]): Election<C> {
-    const restricted = this.rankers.map((ranker) => {
-      const r = ranker as Ranker<C> & {
-        restrict?: (candidates: C[]) => Ranker<C>
-      }
-      if (typeof r.restrict !== 'function')
-        throw new TypeError(
-          `Ranker "${instanceName(ranker)}" does not support restrict()`,
-        )
-      return r.restrict(candidates)
-    })
-    return new Election({ rankers: restricted as [Ranker<C>, ...Ranker<C>[]] })
+    const rankers = this.rankers.map((r) => r.restrict(candidates))
+    return new Election({ rankers: rankers as [Ranker<C>, ...Ranker<C>[]] })
   }
 
   /**

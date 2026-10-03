@@ -4,7 +4,6 @@ import { shuffleArray } from '../utils/shuffle-array'
 import { sum } from '../utils/sum'
 import { type Matrixer } from './matrix-score-method'
 import { RandomMethod } from './random-method'
-import { type Scorer } from './score-method'
 
 // Draws candidates one at a time, each with probability proportional to its
 // score among those not yet drawn.
@@ -33,7 +32,7 @@ const randomRankingFromScores = <C extends string>(
 
 export abstract class RandomMatrixMethod<C extends string>
   extends RandomMethod<C>
-  implements Scorer<C>, Matrixer<C>
+  implements Matrixer<C>
 {
   private readonly _matrix: Matrix<C>
 
@@ -47,10 +46,12 @@ export abstract class RandomMatrixMethod<C extends string>
     return this._matrix
   }
 
-  public abstract override scores(): ScoreObject<C>
+  public abstract override probabilities(): ScoreObject<C>
 
   public ranking(): C[][] {
-    return randomRankingFromScores(this.scores(), this.rng).map((c) => [c])
+    return randomRankingFromScores(this.probabilities(), this.rng).map((c) => [
+      c,
+    ])
   }
 
   public override restrict<D extends C>(

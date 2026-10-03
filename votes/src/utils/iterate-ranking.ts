@@ -1,10 +1,5 @@
 import { type Ranker } from '../classes/method'
 
-// A ranker that can re-run itself on a subset of its candidates.
-export interface RestrictableRanker<C extends string> extends Ranker<C> {
-  restrict(candidates: C[]): RestrictableRanker<C>
-}
-
 /**
  * Ranking built by repeated wins: take the ranker's winning tier, then re-run
  * the full ranker restricted to the remaining candidates to fill the next
@@ -14,9 +9,7 @@ export interface RestrictableRanker<C extends string> extends Ranker<C> {
  * how it ranks subsets: round-based methods order losers by elimination time,
  * and score methods can reshuffle once a winner's votes are gone.
  */
-export const iterateRanking = <C extends string>(
-  ranker: RestrictableRanker<C>,
-): C[][] => {
+export const iterateRanking = <C extends string>(ranker: Ranker<C>): C[][] => {
   const tiers: C[][] = []
   let current = ranker
   for (;;) {

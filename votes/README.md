@@ -95,14 +95,14 @@ new InstantRunoff({
 
 ### Round trace
 
-`computeRounds()` returns detailed per-round results:
+`rounds()` returns detailed per-round results:
 
 ```typescript
 const rounds = new InstantRunoff({
   candidates,
   ballots,
   tieBreakers: [Borda],
-}).computeRounds()
+}).rounds()
 
 rounds[0].roundResult
 // {
@@ -198,6 +198,9 @@ re-run itself on a subset of candidates.
 FPTP step is the head-to-head runoff mechanism, not a fallback. It will appear
 as the first entry in `tieBreakSteps`. User-supplied `tieBreakers` fire after it
 only if the head-to-head itself ties.
+
+`MaximalLotteries`, `RandomizedCondorcet` and `RandomCandidates` expose
+`probabilities()`, each candidate's chance to win, instead of `scores()`.
 
 `Schulze` also exposes `strengths()` — the beatpath strength matrix its scores
 derive from.

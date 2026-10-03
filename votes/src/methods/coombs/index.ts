@@ -1,6 +1,5 @@
-import { type QE } from '../../classes/round-ballot-method'
 import { TbEliminateLast } from '../../classes/round-ballot-method-tb'
-import { type Ballot, type ScoreObject } from '../../types'
+import { type Ballot, type QE, type ScoreObject } from '../../types'
 import { scoresToRanking, totalBallotsWeight } from '../../utils'
 import { config } from '../../utils/config'
 import { majorityWinner } from '../absolute-majority'

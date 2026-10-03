@@ -22,7 +22,7 @@ describe(BottomTwoRunoff, () => {
       candidates: ['😡', '🤡', '🤥', '🔏', '🎽'],
     }
     const bo = new BottomTwoRunoff(input)
-    expect(bo.computeRounds()).toMatchInlineSnapshot(`
+    expect(bo.rounds()).toMatchInlineSnapshot(`
       [
         {
           "candidates": [
@@ -252,12 +252,10 @@ describe(BottomTwoRunoff, () => {
       tieBreakers: [tb(RandomCandidates, { rng: () => 0 })],
     })
     expect(
-      b2r
-        .computeRounds()[0]
-        ?.roundResult.tieBreakSteps?.map(({ tbName }) => tbName),
+      b2r.rounds()[0]?.roundResult.tieBreakSteps?.map(({ tbName }) => tbName),
     ).toStrictEqual(['FirstPastThePost', 'RandomCandidates'])
     const restricted = b2r.restrict(['a', 'b', 'c']) as typeof b2r
-    expect(restricted.computeRounds()).toStrictEqual(b2r.computeRounds())
+    expect(restricted.rounds()).toStrictEqual(b2r.rounds())
   })
 
   it('does not depend on candidate order', () => {

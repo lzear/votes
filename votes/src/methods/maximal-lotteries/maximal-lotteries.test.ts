@@ -31,7 +31,7 @@ describe('maximal lotteries', () => {
       new MaximalLotteries({
         array: example1,
         candidates: ['a', 'b', 'c'],
-      }).scores(),
+      }).probabilities(),
     ).toEqual({
       a: closeTo(2 / 7, 6),
       b: closeTo(4 / 7, 6),
@@ -40,7 +40,7 @@ describe('maximal lotteries', () => {
   })
   it('works with "complexer" example', () => {
     expect(
-      new MaximalLotteries({ array: example2, candidates }).scores(),
+      new MaximalLotteries({ array: example2, candidates }).probabilities(),
     ).toEqual({
       a: 0,
       b: closeTo(2 / 7, 6),
@@ -54,7 +54,7 @@ describe('maximal lotteries', () => {
       new MaximalLotteries({
         array: example3,
         candidates: ['a', 'b', 'c', 'd', 'e'],
-      }).scores(),
+      }).probabilities(),
     ).toEqual({
       a: closeTo(3 / 11, 6),
       b: 0,
