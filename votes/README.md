@@ -207,6 +207,9 @@ re-run itself on a subset of candidates.
 ⚠️ `Kemeny` runs in O(n·2ⁿ) time and memory — slow beyond ~20 candidates, and
 throws beyond 30.
 
+`MajorityJudgment` reads a ballot's tiers as grades, best first (`grades`,
+default 6), and breaks ties one vote at a time: give it whole weights.
+
 `BottomTwoRunoff` always prepends `tb(FirstPastThePost)` to `tieBreakers` — that
 FPTP step is the head-to-head runoff mechanism, not a fallback. It will appear
 as the first entry in `tieBreakSteps`. User-supplied `tieBreakers` fire after it
