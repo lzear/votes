@@ -207,6 +207,25 @@ describe('sanity check', () => {
       }
     },
   )
+  // Majority judgment's majority value counts whole votes.
+  it.each(
+    Object.values(VotingSystem).filter(
+      (s) => !methods[s].isRandom && s !== VotingSystem.MajorityJudgment,
+    ),
+  )('ranks fractional weights like whole ones (%s)', (system) => {
+    // a over b: 0.4 + 0.2, which floats above b over a: 0.6.
+    const ballots = [
+      { ranking: [['a'], ['b'], ['c']], weight: 4 },
+      { ranking: [['a'], ['c'], ['b']], weight: 2 },
+      { ranking: [['b'], ['a'], ['c']], weight: 6 },
+    ]
+    const run = (divisor: number) =>
+      new methods[system]({
+        candidates: ['a', 'b', 'c'],
+        ballots: ballots.map((b) => ({ ...b, weight: b.weight / divisor })),
+      }).ranking()
+    expect(run(10)).toStrictEqual(run(1))
+  })
   it.each(Object.values(VotingSystem))(
     'ranks a candidate named __proto__ (%s)',
     (system) => {

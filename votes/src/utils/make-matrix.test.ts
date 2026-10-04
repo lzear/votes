@@ -41,6 +41,17 @@ describe('matrixes', () => {
       [0, 0, 0],
     ])
   })
+  it('ties fractional weights that sum alike', () => {
+    const ballots = [
+      { ranking: [['a'], ['b']], weight: 0.4 },
+      { ranking: [['a'], ['b']], weight: 0.2 },
+      { ranking: [['b'], ['a']], weight: 0.6 },
+    ]
+    expect(matrixFromBallots(ballots, ['a', 'b']).array).toStrictEqual([
+      [0, 0.6],
+      [0.6, 0],
+    ])
+  })
   it('lists a candidate given twice once', () => {
     const ballots = [{ ranking: [['a'], ['b']] }]
 

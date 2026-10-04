@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import { type Ballot, type Matrix, type Profile } from '../types'
+import { config } from './config'
 import { weightOf } from './normalize'
 
 const zeros = (n: number): number[][] =>
@@ -19,7 +20,8 @@ export const pairwiseMatrix = (
 
 /**
  * Pairwise matrix: `array[i][j]` is the weight of ballots ranking candidate
- * `i` above candidate `j`.
+ * `i` above candidate `j`, rounded to the 1e-6 tie tolerance so that
+ * fractional weights tie as they should (0.4 + 0.2 floats above 0.6).
  *
  * @param unrankedLast - whether a ballot ranks the candidates it leaves out
  * below the others (default true). Pass false to count only what it ranks.
@@ -50,7 +52,11 @@ export const matrixFromBallots = <C extends string>(
         for (const l of rankedLower) array[w]![l]! += weight
     }
   }
-  return { array, candidates }
+  const scale = 1 / config.EPSILON
+  return {
+    array: array.map((row) => row.map((v) => Math.round(v * scale) / scale)),
+    candidates,
+  }
 }
 
 // The matrix `input` is, or the one its ballots make.
