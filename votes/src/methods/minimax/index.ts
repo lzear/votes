@@ -23,18 +23,24 @@ const computeScores = <C extends string>(
   excludeTies: boolean,
 ): ScoreObject<C> =>
   Object.fromEntries(
-    matrix.candidates.map((candidate, c1Index) => [
-      candidate,
-      -Math.max(
-        ...matrix.array[c1Index]!.flatMap((yOverX, c2Index) => {
-          if (c2Index === c1Index) return []
-          const xOverY = matrix.array[c2Index]![c1Index]!
-          return xOverY === yOverX && excludeTies
+    matrix.candidates.map((candidate, c1Index) => {
+      // [votes against, votes for] in each duel.
+      const duels = matrix.array[c1Index]!.flatMap(
+        (yOverX, c2Index): [number, number][] =>
+          c2Index === c1Index
             ? []
-            : [scoreXY[variant](xOverY, yOverX)]
-        }),
-      ),
-    ]),
+            : [[matrix.array[c2Index]![c1Index]!, yOverX]],
+      )
+      // Ties left out, unless they are all there is.
+      const counted =
+        excludeTies && duels.some(([x, y]) => x !== y)
+          ? duels.filter(([x, y]) => x !== y)
+          : duels
+      return [
+        candidate,
+        -Math.max(...counted.map(([x, y]) => scoreXY[variant](x, y))),
+      ]
+    }),
   ) as ScoreObject<C>
 
 /**

@@ -118,6 +118,21 @@ describe(Minimax, () => {
     expect(election.matrix).toStrictEqual(election.matrix)
   })
 
+  it('scores a candidate tied with everyone by its ties', () => {
+    // a ties both; b beats c.
+    const matrix = {
+      candidates: ['a', 'b', 'c'],
+      array: [
+        [0, 1, 1],
+        [1, 0, 2],
+        [1, 0, 0],
+      ],
+    }
+    const minimax = new Minimax({ ...matrix, excludeTies: true })
+    expect(minimax.scores()).toStrictEqual({ a: -0, b: 2, c: -2 })
+    expect(minimax.ranking()).toStrictEqual([['b'], ['a'], ['c']])
+  })
+
   it('ties candidates with only excluded ties', () => {
     const matrix = {
       candidates: ['a', 'b'],
