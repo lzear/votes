@@ -46,7 +46,7 @@ export abstract class Method<C extends string> implements Ranker<C> {
    * Return a new instance of the same method restricted to a subset of
    * candidates.
    */
-  public abstract restrict<D extends C>(candidates: readonly D[]): Method<D>
+  public abstract restrict(candidates: readonly C[]): this
 
   /**
    * Ranking built by repeated wins instead of the method's own full ranking:

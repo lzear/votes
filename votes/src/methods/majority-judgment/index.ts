@@ -172,9 +172,12 @@ export class MajorityJudgment<C extends string> extends Method<C> {
     return tiers
   }
 
-  public restrict<D extends C>(candidates: readonly D[]): MajorityJudgment<D> {
-    return new MajorityJudgment({
-      ballots: this.gradeBallots as Ballot<D>[],
+  public restrict(candidates: readonly C[]): this {
+    type Ctor = new (
+      i: ConstructorParameters<typeof MajorityJudgment<C>>[0],
+    ) => this
+    return new (this.constructor as Ctor)({
+      ballots: this.gradeBallots,
       candidates,
       grades: this.grades,
       unrankedLast: this.unrankedLast,

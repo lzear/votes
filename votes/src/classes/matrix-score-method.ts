@@ -29,8 +29,8 @@ export abstract class MatrixScoreMethod<C extends string>
     return this._matrix
   }
 
-  restrict<D extends C>(candidates: readonly D[]): MatrixScoreMethod<D> {
-    type Ctor = new (matrix: Matrix<D>) => MatrixScoreMethod<D>
+  restrict(candidates: readonly C[]): this {
+    type Ctor = new (matrix: Matrix<C>) => this
     return new (this.constructor as Ctor)({
       ...this.input,
       ...subMatrix(this.matrix, candidates),

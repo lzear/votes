@@ -60,12 +60,8 @@ export abstract class RandomMatrixMethod<C extends string>
     ])
   }
 
-  public override restrict<D extends C>(
-    candidates: readonly D[],
-  ): RandomMatrixMethod<D> {
-    type Ctor = new (
-      i: Matrix<D> & { rng?: () => number },
-    ) => RandomMatrixMethod<D>
+  public override restrict(candidates: readonly C[]): this {
+    type Ctor = new (i: Matrix<C> & { rng?: () => number }) => this
     return new (this.constructor as Ctor)({
       ...subMatrix(this.matrix, candidates),
       rng: this.rng,

@@ -5,7 +5,10 @@ import { Borda } from './methods/borda'
 import { Copeland } from './methods/copeland'
 import { FirstPastThePost } from './methods/first-past-the-post'
 import { InstantRunoff } from './methods/instant-runoff'
+import { Minimax, MinimaxVariant } from './methods/minimax'
 import { RandomCandidates } from './methods/random-candidates'
+import { RandomDictator } from './methods/random-dictator'
+import { Schulze } from './methods/schulze'
 import { type Ballot } from './types'
 import { matrixFromBallots } from './utils'
 import { iterateRanking } from './utils/iterate-ranking'
@@ -102,6 +105,30 @@ describe('iteratedRanking', () => {
       restrict: () => empty,
     }
     expect(iterateRanking(empty)).toStrictEqual([])
+  })
+})
+
+describe('restrict', () => {
+  it("keeps each method's own members", () => {
+    const profile = {
+      candidates: ['a', 'b', 'c'],
+      ballots: [{ ranking: [['a'], ['b'], ['c']] }],
+    }
+    const pair = ['a', 'b']
+    expect(new Borda(profile).restrict(pair).scores()).toStrictEqual({
+      a: 2,
+      b: 1,
+    })
+    expect(
+      new Schulze(profile).restrict(pair).strengths().candidates,
+    ).toStrictEqual(pair)
+    expect(
+      new RandomDictator(profile).restrict(pair).probabilities(),
+    ).toStrictEqual({ a: 1, b: 0 })
+    const variant = MinimaxVariant.WinningVotes
+    expect(
+      new Minimax({ ...profile, variant }).restrict(pair).minimaxVariant,
+    ).toBe(variant)
   })
 })
 

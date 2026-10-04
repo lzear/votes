@@ -37,14 +37,9 @@ export abstract class RoundBallotMethodTb<
 
   // Restricts the caller's tiebreakers too: rebuilt on the normalized ballots
   // restrict() passes, majority judgment would lose its empty grades.
-  public override restrict<D extends C>(
-    candidates: readonly D[],
-  ): RoundBallotMethodTb<D, I> {
-    const method = super.restrict(candidates) as RoundBallotMethodTb<D, I>
-    // Restricted to `candidates`, they rank only those.
-    method.tieBreakers = this.tieBreakers.map((t) =>
-      t.restrict(candidates),
-    ) as unknown as MethodTiebreaker<D>[]
+  public override restrict(candidates: readonly C[]): this {
+    const method = super.restrict(candidates)
+    method.tieBreakers = this.tieBreakers.map((t) => t.restrict(candidates))
     return method
   }
 

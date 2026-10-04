@@ -243,7 +243,7 @@ describe(BottomTwoRunoff, () => {
     expect(
       b2r.rounds()[0]?.tieBreakSteps?.map(({ name }) => name),
     ).toStrictEqual(['FirstPastThePost', 'RandomCandidates'])
-    const restricted = b2r.restrict(['a', 'b', 'c']) as typeof b2r
+    const restricted = b2r.restrict(['a', 'b', 'c'])
     expect(restricted.rounds()).toStrictEqual(b2r.rounds())
   })
 
