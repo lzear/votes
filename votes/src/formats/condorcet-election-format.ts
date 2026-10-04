@@ -54,15 +54,13 @@ const collectLines = <C extends string>(input: string): ParsedParams<C> => {
   }
 
   for (const rawLine of input.split('\n')) {
-    const line = rawLine.trimEnd()
+    // `trim` also drops a byte order mark.
+    const line = rawLine.trim()
     if (line.startsWith('#/')) {
       parseParamLine(line, state)
       continue
     }
-    if (line.trimStart().startsWith('#') || line.trim() === '') continue
-    const commentIdx = line.indexOf('#')
-    const voteLine =
-      commentIdx === -1 ? line : line.slice(0, commentIdx).trimEnd()
+    const [voteLine = ''] = line.split('#', 1)
     if (voteLine.trim()) state.voteLines.push(voteLine.trim())
   }
 
@@ -76,14 +74,14 @@ const stripQuantifierAndWeight = (
   let line = rawLine
 
   let quantifier = 1
-  const quantifierMatch = /\*\s*(\d+(?:\.\d+)?)$/.exec(line)
+  const quantifierMatch = /\*\s*(\d+(?:\.\d+)?(?:e[+-]?\d+)?)$/i.exec(line)
   if (quantifierMatch?.[1]) {
     quantifier = Number(quantifierMatch[1])
     line = line.slice(0, line.length - quantifierMatch[0].length).trim()
   }
 
   let voteWeight = 1
-  const weightMatch = /\^\s*(\d+(?:\.\d+)?)$/.exec(line)
+  const weightMatch = /\^\s*(\d+(?:\.\d+)?(?:e[+-]?\d+)?)$/i.exec(line)
   if (weightMatch?.[1]) {
     voteWeight = Number(weightMatch[1])
     line = line.slice(0, line.length - weightMatch[0].length).trim()
@@ -121,6 +119,8 @@ const buildBallot = <C extends string = string>(
     tagSepIdx === -1 ? rawVote : rawVote.slice(tagSepIdx + 2).trim()
 
   const { line, weight } = stripQuantifierAndWeight(stripped, weightAllowed)
+  if (!Number.isFinite(weight))
+    throw new RangeError(`Vote "${rawVote}" weighs more than a number holds`)
   if (weight <= 0) return null
 
   let ranking: C[][] =
@@ -149,6 +149,8 @@ const deriveCandidates = <C extends string>(ballots: Ballot<C>[]): C[] => {
 export const parseCondorcetElectionFormat = <C extends string = string>(
   input: string,
 ): ParsedCondorcetElection<C> => {
+  if (input.includes('\0'))
+    throw new Error('The Condorcet election format forbids the null byte')
   const params = collectLines<C>(input)
   const ballots = params.voteLines
     .map((line) => buildBallot(line, params))
@@ -178,8 +180,9 @@ const stripImplicitRank = <C extends string>(
     : ranking
 }
 
-// Characters the format reserves, and the null byte it forbids.
-const RESERVED = /[>=;,#/*^\0]/
+// Characters the format reserves, the null byte it forbids, line breaks and
+// the tag separator. Parsers trim names, so none can be empty or padded.
+const UNWRITABLE = /[>=;,#/*^\0\n\r]|\|\||^\s|\s$|^$/
 
 export const stringifyCondorcetElectionFormat = <C extends string>(
   { candidates, ballots }: Pick<Profile<C>, 'candidates' | 'ballots'>,
@@ -189,8 +192,10 @@ export const stringifyCondorcetElectionFormat = <C extends string>(
     ...candidates,
     ...ballots.flatMap((b) => b.ranking.flat()),
   ])
-    if (RESERVED.test(name))
-      throw new Error(`Candidate "${name}" has a reserved character`)
+    if (UNWRITABLE.test(name))
+      throw new Error(
+        `Candidate "${name}" is empty, padded or has a reserved character`,
+      )
   const lines = [
     `#/Candidates: ${candidates.join('; ')}`,
     `#/Implicit Ranking: ${String(implicitRanking)}`,
@@ -198,7 +203,8 @@ export const stringifyCondorcetElectionFormat = <C extends string>(
   ]
 
   for (const ballot of ballots) {
-    const { ranking } = ballot
+    // The format has no empty rank.
+    const ranking = ballot.ranking.filter((rank) => rank.length > 0)
     const weight = weightOf(ballot)
     const r = implicitRanking ? stripImplicitRank(ranking, candidates) : ranking
     const rankStr = r.length === 0 ? '/EMPTY_RANKING/' : serializeRanking(r)

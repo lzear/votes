@@ -204,6 +204,29 @@ Bob > Alice > Charlie`
     expect(result.ballots).toHaveLength(2)
   })
 
+  it('reads parameters after a byte order mark or indent', () => {
+    for (const text of [
+      '\u{FEFF}#/Candidates: A; B; C\nA > B',
+      '  #/Candidates: A; B; C\nA > B',
+    ])
+      expect(parseCondorcetElectionFormat(text)).toStrictEqual({
+        candidates: ['A', 'B', 'C'],
+        ballots: [{ ranking: [['A'], ['B'], ['C']], weight: 1 }],
+      })
+  })
+
+  it('refuses a null byte', () => {
+    expect(() =>
+      parseCondorcetElectionFormat('#/Candidates: A; B\nA\0 > B'),
+    ).toThrow('null byte')
+  })
+
+  it('throws on a weight past the largest number', () => {
+    expect(() =>
+      parseCondorcetElectionFormat('#/Candidates: A; B\nA > B * 1e999'),
+    ).toThrow(RangeError)
+  })
+
   it('handles parameter names case-insensitively', () => {
     const input = `#/CANDIDATES: Alice; Bob
 #/IMPLICIT RANKING: false
@@ -253,6 +276,11 @@ describe('stringifyCondorcetElectionFormat', () => {
       'A*',
       'A^2',
       'A\0',
+      'A\nB',
+      'A||B',
+      ' A',
+      'A ',
+      '',
     ])
       expect(() =>
         stringifyCondorcetElectionFormat({
@@ -296,6 +324,15 @@ describe('stringifyCondorcetElectionFormat', () => {
     expect(result).toContain('Alice > Bob = Charlie')
   })
 
+  it('skips empty ranks', () => {
+    expect(
+      stringifyCondorcetElectionFormat(
+        { candidates: ['A', 'B'], ballots: [{ ranking: [['A'], [], ['B']] }] },
+        { implicitRanking: false },
+      ),
+    ).toContain('\nA > B')
+  })
+
   it('writes /EMPTY_RANKING/ for empty ranking', () => {
     const result = stringifyCondorcetElectionFormat(
       {
@@ -319,6 +356,20 @@ describe('stringifyCondorcetElectionFormat', () => {
       stringifyCondorcetElectionFormat(original, { implicitRanking: false }),
     )
     expect(parsed.candidates).toEqual(original.candidates)
+    expect(parsed.ballots).toEqual(original.ballots)
+  })
+
+  it('round-trips weights written with an exponent', () => {
+    const original = {
+      candidates: ['Alice', 'Bob'],
+      ballots: [
+        { ranking: [['Alice'], ['Bob']], weight: 1.5e21 },
+        { ranking: [['Bob'], ['Alice']], weight: 1e-7 },
+      ],
+    }
+    const parsed = parseCondorcetElectionFormat(
+      stringifyCondorcetElectionFormat(original, { implicitRanking: false }),
+    )
     expect(parsed.ballots).toEqual(original.ballots)
   })
 })
