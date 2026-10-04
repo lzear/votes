@@ -1,7 +1,12 @@
 /* eslint-disable vitest/no-conditional-expect */
 
 import { type Ballot, methods, VotingSystem } from '..'
-import { abcde, dummyProfile, dummyProfile10 } from '../test/test-utils'
+import {
+  abcde,
+  balinski,
+  dummyProfile,
+  dummyProfile10,
+} from '../test/test-utils'
 import { matrixFromBallots } from './make-matrix'
 import { canonizeRanking } from './normalize'
 
@@ -169,6 +174,18 @@ describe('sanity check', () => {
       ).toStrictEqual(
         run(ranked.map((ranking) => ({ ranking, weight: 1 })) as Ballot<ABC>[]),
       )
+    },
+  )
+  it.each(Object.values(VotingSystem).filter((s) => !methods[s].isRandom))(
+    'ignores a candidate given twice (%s)',
+    (system) => {
+      const run = (candidates: typeof abcde) =>
+        new methods[system]({
+          ballots: balinski,
+          candidates,
+          unrankedLast: false,
+        }).ranking()
+      expect(run([...abcde, 'a'])).toStrictEqual(run(abcde))
     },
   )
   it.each(Object.values(VotingSystem))(

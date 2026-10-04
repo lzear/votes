@@ -41,6 +41,17 @@ describe('matrixes', () => {
       [0, 0, 0],
     ])
   })
+  it('lists a candidate given twice once', () => {
+    const ballots = [{ ranking: [['a'], ['b']] }]
+
+    expect(matrixFromBallots(ballots, ['a', 'b', 'a'])).toStrictEqual({
+      array: [
+        [0, 1],
+        [0, 0],
+      ],
+      candidates: ['a', 'b'],
+    })
+  })
   it('makes submatrixes', () => {
     const m = matrixFromBallots(balinski, abcde)
 

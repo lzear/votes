@@ -26,9 +26,11 @@ export const pairwiseMatrix = (
  */
 export const matrixFromBallots = <C extends string>(
   ballots: Ballot<C>[],
-  candidates: C[],
+  _candidates: C[],
   unrankedLast = true,
 ): Matrix<C> => {
+  // Once each: a repeat would add a row that no ballot counts.
+  const candidates = [...new Set(_candidates)]
   const array = zeros(candidates.length)
   const candidateIdx = new Map(candidates.map((c, i) => [c, i]))
   for (const ranking of ballots) {
