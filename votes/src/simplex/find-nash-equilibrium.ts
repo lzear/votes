@@ -1,110 +1,83 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { sum } from '../utils/sum'
 
 type SkewSymmetricMatrix = number[][]
 
-const isZero = (matrix: number[][]): boolean => {
-  for (const row of matrix) for (const val of row) if (val !== 0) return false
-  return true
-}
+const abs = (v: bigint): bigint => (v < 0n ? -v : v)
 
-const normalizeVector = (vector: number[]): number[] => {
-  const positive = vector.map((v) => Math.max(v, 0))
-  const total = sum(positive)
-  return total === 0
-    ? vector.map(() => 1 / vector.length)
-    : positive.map((v) => v / total)
-}
-
-const initTableau = (n: number, cols: number, A: number[][]): number[][] => {
-  const tab = Array.from({ length: n + 1 }, () =>
-    Array.from({ length: cols }, () => 0),
-  )
-  for (let i = 0; i < n; i++) {
-    for (let j = 0; j < n; j++) tab[i]![j] = A[i]![j]!
-    tab[i]![n + i] = 1
-    tab[i]![cols - 1] = 1
+// The column to bring in: the most negative reduced cost, or with `bland`,
+// the first negative one.
+const entering = (cost: bigint[], bland: boolean): number => {
+  let c = -1
+  for (const [j, v] of cost.entries()) {
+    if (v >= 0n || (c !== -1 && v >= cost[c]!)) continue
+    if (bland) return j
+    c = j
   }
-  for (let j = 0; j < n; j++) tab[n]![j] = -1
-  return tab
+  return c
 }
 
-const findEntering = (tab: number[][], n: number): number => {
-  let enterCol = -1
-  let minCost = -1e-10
-  for (let j = 0; j < 2 * n; j++)
-    if (tab[n]![j]! < minCost) {
-      minCost = tab[n]![j]!
-      enterCol = j
-    }
-  return enterCol
+// The row to pivot on: the smallest ratio, ties going to the lowest basic
+// column.
+const leaving = (tab: bigint[][], basis: number[], c: number): number => {
+  const rhs = tab[0]!.length - 1
+  let r = -1
+  for (const [i, row] of tab.slice(0, basis.length).entries()) {
+    if (row[c]! <= 0n) continue
+    const x = r === -1 ? -1n : row[rhs]! * tab[r]![c]! - tab[r]![rhs]! * row[c]!
+    if (x < 0n || (x === 0n && basis[i]! < basis[r]!)) r = i
+  }
+  return r
 }
 
-const findLeaving = (
-  tab: number[][],
-  n: number,
-  cols: number,
-  enterCol: number,
-): number => {
-  let leaveRow = -1
-  let minRatio = Infinity
-  for (let i = 0; i < n; i++)
-    if (tab[i]![enterCol]! > 1e-10) {
-      const ratio = tab[i]![cols - 1]! / tab[i]![enterCol]!
-      if (ratio < minRatio) {
-        minRatio = ratio
-        leaveRow = i
-      }
-    }
-  return leaveRow
+// Pivots on `tab[r][c]`, fraction-free: each entry is an integer, its value
+// times `d`, the last pivot. Returns the new `d`.
+const pivotOn = (tab: bigint[][], r: number, c: number, d: bigint): bigint => {
+  const pivot = tab[r]![c]!
+  for (const [i, row] of tab.entries()) {
+    if (i === r) continue
+    const f = row[c]!
+    for (const [j, v] of row.entries())
+      row[j] = (v * pivot - f * tab[r]![j]!) / d
+  }
+  return pivot
 }
 
-const pivotStep = (
-  tab: number[][],
-  n: number,
-  cols: number,
-  leaveRow: number,
-  enterCol: number,
-): void => {
-  const pivotVal = tab[leaveRow]![enterCol]!
-  for (let j = 0; j < cols; j++) tab[leaveRow]![j]! /= pivotVal
-  for (let i = 0; i <= n; i++)
-    if (i !== leaveRow && Math.abs(tab[i]![enterCol]!) > 1e-12) {
-      const factor = tab[i]![enterCol]!
-      for (let j = 0; j < cols; j++) tab[i]![j]! -= factor * tab[leaveRow]![j]!
-    }
-}
-
-// Solves: maximize sum(y) s.t. A*y <= 1, y >= 0
-const solveLP = (A: number[][]): number[] => {
+// Solves max Σy s.t. By ≤ 1, y ≥ 0, for B = A + K > 0, and returns y / Σy.
+// Exactly: on degenerate games, a float tableau can cycle or stall. Dantzig's
+// rule, then Bland's, which cannot cycle, once that runs long.
+const solveLP = (A: SkewSymmetricMatrix): number[] => {
   const n = A.length
-  const cols = 2 * n + 1
-  const tab = initTableau(n, cols, A)
-  const basis = Array.from({ length: n }, (_, i) => n + i)
+  // Integers: as they are, or on the 1e-6 tie tolerance grid.
+  const scale = A.flat().every((v) => Number.isSafeInteger(v)) ? 1 : 1e6
+  const S = A.map((row) => row.map((v) => BigInt(Math.round(v * scale))))
+  let K = 1n
+  for (const v of S.flat()) if (abs(v) >= K) K = abs(v) + 1n
+  const tab = S.map((row, i) => [
+    ...row.map((v) => v + K),
+    ...row.map((_, j) => (i === j ? 1n : 0n)),
+    1n,
+  ])
+  const cost = [...S.map(() => -1n), ...S.map(() => 0n), 0n]
+  tab.push(cost)
+  const basis = S.map((_, i) => n + i)
+  let d = 1n
 
-  for (let iter = 0; iter < 10 * (2 * n + 1); iter++) {
-    const enterCol = findEntering(tab, n)
-    if (enterCol === -1) break
-    const leaveRow = findLeaving(tab, n, cols, enterCol)
-    if (leaveRow === -1) break
-    basis[leaveRow] = enterCol
-    pivotStep(tab, n, cols, leaveRow, enterCol)
+  for (let iter = 0; ; iter++) {
+    const c = entering(cost.slice(0, -1), iter >= 10 * (2 * n + 1))
+    if (c === -1) break
+    const r = leaving(tab, basis, c)
+    d = pivotOn(tab, r, c, d)
+    basis[r] = c
   }
 
-  const y = Array.from({ length: n }, () => 0)
-  for (let i = 0; i < n; i++)
-    if (basis[i]! < n) y[basis[i]!] = tab[i]![cols - 1]!
-  return y
+  const y = S.map(() => 0n)
+  for (const [i, b] of basis.entries()) if (b < n) y[b] = tab[i]!.at(-1)!
+  let total = 0n
+  for (const v of y) total += v
+  return y.map((v) => Number((v << 64n) / total) / 2 ** 64)
 }
 
-export const findNashEquilibrium = (matrix: SkewSymmetricMatrix): number[] => {
-  if (isZero(matrix)) return matrix.map(() => 1 / matrix.length)
-
-  let maxAbs = 0
-  for (const row of matrix)
-    for (const v of row) if (Math.abs(v) > maxAbs) maxAbs = Math.abs(v)
-  const K = maxAbs + 1
-  const B = matrix.map((row) => row.map((v) => v + K))
-
-  return normalizeVector(solveLP(B))
-}
+export const findNashEquilibrium = (matrix: SkewSymmetricMatrix): number[] =>
+  matrix.every((row) => row.every((v) => v === 0))
+    ? matrix.map(() => 1 / matrix.length)
+    : solveLP(matrix)

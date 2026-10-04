@@ -1,4 +1,8 @@
+import { parseCondorcetElectionFormat } from '../../formats/condorcet-election-format'
+import { productVectM } from '../../test/matrix'
 import { closeTo, matrixString } from '../../test/test-utils'
+import { makeAntisymmetric, matrixFromBallots } from '../../utils'
+import { RandomizedCondorcet } from '../randomized-condorcet'
 import { MaximalLotteries } from '.'
 
 const example1 = [
@@ -84,6 +88,38 @@ describe('maximal lotteries', () => {
       rng: () => 1,
     })
     expect(lottery.ranking()[0]).toStrictEqual(['a'])
+  })
+
+  it('picks the same lottery whatever the candidate order', () => {
+    // a beats b, c ties both: any lottery between a and c is maximal.
+    const ballots = [{ ranking: [['a'], ['b']] }, { ranking: [['c']] }]
+    const odds = (candidates: string[]) =>
+      new MaximalLotteries({ candidates, ballots }).probabilities()
+    expect(odds(['c', 'b', 'a'])).toStrictEqual(odds(['a', 'b', 'c']))
+  })
+
+  it('finds unbeatable lotteries on a degenerate profile', () => {
+    // Few ballots, many ties: a float simplex went wrong on it.
+    const candidates = Array.from({ length: 37 }, (_, i) => `c${i}`)
+    const { ballots } =
+      parseCondorcetElectionFormat(`#/Candidates: ${candidates.join(';')}
+c27>c33>c25>c5>c3>c30>c17=c23>c28=c20>c7=c4>c34
+c35>c12=c11>c31=c30=c28
+c29=c31=c4>c16=c17>c27=c3>c34=c26=c15>c11=c18>c19>c14>c24>c10=c0>c21
+c3>c20=c23=c6>c13>c32>c7=c25>c11=c33=c1=c10>c18>c34=c22>c12>c31=c36>c9=c29=c28>c4=c24=c27>c8=c26>c15>c0=c5=c17>c14=c16
+c31=c12>c8>c1=c34>c2>c29=c6=c5=c28>c13>c30>c4>c15=c11>c35>c16=c20=c33=c7=c23>c36>c10=c26>c14>c9=c21=c22=c19>c27>c17=c3=c25>c0>c32`)
+    const { array } = makeAntisymmetric(matrixFromBallots(ballots, candidates))
+    for (const [Method, payoff] of [
+      [MaximalLotteries, (v: number) => v],
+      [RandomizedCondorcet, Math.sign],
+    ] as const) {
+      const odds = new Method({ candidates, ballots }).probabilities()
+      const lottery = candidates.map((c) => odds[c] ?? 0)
+      const games = array.map((row) => row.map((v) => payoff(v)))
+      // No candidate beats it.
+      for (const v of productVectM(lottery, games))
+        expect(v).toBeGreaterThanOrEqual(-1e-9)
+    }
   })
 })
 
