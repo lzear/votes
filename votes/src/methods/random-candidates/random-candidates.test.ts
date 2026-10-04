@@ -39,6 +39,12 @@ describe(RandomCandidates, () => {
     expect(vote(['a', 'b'], 'ddd')).toStrictEqual([['a'], ['b']])
   })
 
+  it('takes an rng that returns 1', () => {
+    expect(
+      new RandomCandidates({ candidates: ['a', 'b'], rng: () => 1 }).ranking(),
+    ).toStrictEqual([['a'], ['b']])
+  })
+
   it('gives every candidate the same odds', () => {
     expect(
       new RandomCandidates({
