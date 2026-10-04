@@ -3,7 +3,7 @@
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import { type Matrix, type Profile, type ScoreObject } from '../../types'
 import { scoresAny } from '../../utils/scores-zero'
-import { type Edge, generateAcyclicGraph } from './generate-acyclic-graph'
+import { type Edge, lockEdges } from './lock-edges'
 
 /**
  * Tiebreaker for equal-strength pairs: prefer the pair where more voters
@@ -40,14 +40,11 @@ const computeFromMatrix = <C extends string>(
     else groups.push([edge])
   }
 
-  let acyclicGraph: Edge[] = []
-  for (const edgesToAdd of groups)
-    acyclicGraph = generateAcyclicGraph(acyclicGraph, edgesToAdd)
-
-  // Sources of the acyclic graph (no incoming locked edge) win this iteration
+  // Sources of the locked graph (no incoming locked edge) win this iteration
+  const beaten = lockEdges(matrix.candidates.length, groups)
   const winnersIdx = matrix.candidates
     .keys()
-    .filter((key) => acyclicGraph.every(({ to }) => to !== key))
+    .filter((key) => !beaten.has(key))
     .toArray()
   if (winnersIdx.length === 0 || winnersIdx.length === matrix.candidates.length)
     return scoresAny(matrix.candidates, 1)
