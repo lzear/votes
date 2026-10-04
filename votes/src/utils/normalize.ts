@@ -5,12 +5,11 @@ export const weightOf = <C extends string>({ weight = 1 }: Ballot<C>): number =>
   weight
 
 export const canonizeRanking = <C extends string>(ranking: C[][]): C[][] =>
-  ranking
-    .map((rank) => rank.toSorted((a, b) => a.localeCompare(b)))
-    .filter((rank) => rank.length > 0)
+  ranking.map((rank) => rank.toSorted((a, b) => a.localeCompare(b)))
 
 // Merge ballots with the same tiers, whatever the order within each, summing
-// weights. The first occurrence's ranking representation and order are kept.
+// weights. Empty tiers count: majority judgment reads a tier's index as its
+// grade. The first occurrence's ranking representation and order are kept.
 const mergeEquivalentBallots = <C extends string, B extends Ballot<C>>(
   ballots: B[],
 ): B[] => {

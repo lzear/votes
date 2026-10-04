@@ -20,6 +20,18 @@ describe('normalize', () => {
     ])
   })
 
+  it('keeps apart ballots that differ by an empty tier', () => {
+    expect(
+      groupBallots([
+        { weight: 1, ranking: [['a'], [], ['b']] },
+        { weight: 2, ranking: [['a'], ['b']] },
+      ]),
+    ).toStrictEqual([
+      { weight: 2, ranking: [['a'], ['b']] },
+      { weight: 1, ranking: [['a'], [], ['b']] },
+    ])
+  })
+
   it('removes duplicated candidates', () => {
     expect(removeDuplicatedCandidates([['a', 'b'], ['a']])).toStrictEqual([
       ['a', 'b'],
