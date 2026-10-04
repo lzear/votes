@@ -2,8 +2,8 @@ import { abcde, balinski } from '../test/test-utils'
 import { makeAntisymmetric, matrixFromBallots } from '.'
 import { subMatrix, toMatrix } from './make-matrix'
 
-describe('matrixes', () => {
-  it('makes antisymetric', () => {
+describe('matrices', () => {
+  it('makes antisymmetric', () => {
     expect(makeAntisymmetric(matrixFromBallots(balinski, abcde))).toStrictEqual(
       {
         array: [
@@ -94,7 +94,7 @@ describe('matrixes', () => {
     ] as [string[], number[][]][])
       expect(() => toMatrix({ candidates, array })).toThrow(RangeError)
   })
-  it('makes submatrixes', () => {
+  it('makes submatrices', () => {
     const m = matrixFromBallots(balinski, abcde)
 
     expect(subMatrix(m, ['a'])).toStrictEqual({

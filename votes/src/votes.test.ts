@@ -81,7 +81,7 @@ describe('Test all methods', () => {
       new InstantRunoff({ candidates: abcde, ballots: balinski }).ranking(),
     ).toStrictEqual([['d'], ['a'], ['e'], ['b'], ['c']])
   })
-  it('votes with instant nanson', () => {
+  it('votes with nanson', () => {
     expect(
       new Nanson({ candidates: abcde, ballots: balinski }).ranking(),
     ).toStrictEqual([['c'], ['b'], ['a', 'd', 'e']])

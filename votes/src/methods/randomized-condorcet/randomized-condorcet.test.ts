@@ -1,5 +1,5 @@
-import { rngGenerator } from '../../test/rng-generator'
 import { closeTo, matrixString } from '../../test/test-utils'
+import { rngGenerator } from '../../utils'
 import { RandomizedCondorcet } from '.'
 
 const example1 = [
