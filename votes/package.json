@@ -30,7 +30,7 @@
   },
   "scripts": {
     "build": "tsup",
-    "build-docs": "typedoc src/index.ts --tsconfig tsconfig.typedoc.json",
+    "build-docs": "typedoc",
     "test": "vitest",
     "typecheck": "yarn run -T tsc --noEmit"
   },

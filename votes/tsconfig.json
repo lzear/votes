@@ -2,9 +2,9 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "@lzear/forge/tsconfig/lib",
   "compilerOptions": {
-    "lib": ["ES2023", "ESNext.Collection", "ESNext.Iterator"],
+    "lib": ["ES2024", "ES2025.Collection", "ES2025.Iterator"],
     "outDir": "dist",
-    "target": "ES2023",
+    "target": "ES2024",
     "types": ["node", "vitest/globals"]
   },
   "include": ["src", "*.ts"]
