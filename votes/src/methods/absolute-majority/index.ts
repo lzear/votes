@@ -1,14 +1,17 @@
 import { BallotScoreMethod } from '../../classes/ballot-score-method'
-import { type ScoreObject } from '../../types'
+import { type Ballot, type ScoreObject } from '../../types'
 import { totalBallotsWeight } from '../../utils'
 import { firstChoices } from '../first-past-the-post/iterate-first-choices'
 
-// The candidate with more than half of `total`, if any: at most one can be.
+// The candidate scoring more than half the weight of `ballots`, if any: at
+// most one can.
 export const majorityWinner = <C extends string>(
   scores: ScoreObject<C>,
-  total: number,
-): C | undefined =>
-  (Object.keys(scores) as C[]).find((c) => scores[c] > total / 2)
+  ballots: Ballot<C>[],
+): C | undefined => {
+  const half = totalBallotsWeight(ballots) / 2
+  return (Object.keys(scores) as C[]).find((c) => scores[c] > half)
+}
 
 /**
  * #### Wikipedia: [Majority](https://en.wikipedia.org/wiki/Majority)
@@ -19,7 +22,7 @@ export class AbsoluteMajority<C extends string> extends BallotScoreMethod<C> {
   }
 
   public override ranking(): C[][] {
-    const top = majorityWinner(this.scores(), totalBallotsWeight(this.ballots))
+    const top = majorityWinner(this.scores(), this.castBallots(this.candidates))
     const tiers =
       top === undefined
         ? [this.candidates]

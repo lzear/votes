@@ -1,6 +1,6 @@
 import { RoundBallotMethodTb } from '../../classes/round-ballot-method-tb'
 import { type QE, type TieBreakStep } from '../../types'
-import { scoresToRanking, totalBallotsWeight } from '../../utils'
+import { scoresToRanking } from '../../utils'
 import { majorityWinner } from '../absolute-majority'
 import { firstChoices } from '../first-past-the-post/iterate-first-choices'
 
@@ -60,7 +60,7 @@ export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
     }
 
     const scores = firstChoices(this.ballots, candidates)
-    const winner = majorityWinner(scores, totalBallotsWeight(this.ballots))
+    const winner = majorityWinner(scores, this.castBallots(candidates))
     return winner === undefined
       ? this.top(candidates, 2)
       : {

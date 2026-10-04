@@ -81,6 +81,7 @@ export class MajorityJudgment<C extends string> extends Method<C> {
   // its grade.
   private readonly gradeBallots: Ballot<C>[]
   private readonly unrankedLast: boolean
+  private readonly countBlank: boolean
   public readonly grades: number
 
   constructor(i: {
@@ -96,10 +97,16 @@ export class MajorityJudgment<C extends string> extends Method<C> {
      * the worst grade (default true). Pass false to count only given grades.
      */
     unrankedLast?: boolean
+    /**
+     * Whether a ballot that grades no one gives everyone the worst grade too,
+     * with `unrankedLast` (default false).
+     */
+    countBlank?: boolean
   }) {
     super(i.candidates)
     this.grades = i.grades ?? 6
     this.unrankedLast = i.unrankedLast ?? true
+    this.countBlank = i.countBlank ?? false
     this.gradeBallots = i.ballots.map((b) => {
       // A candidate gets one grade per ballot, its best.
       const left = new Set(this.candidates)
@@ -111,8 +118,10 @@ export class MajorityJudgment<C extends string> extends Method<C> {
         throw new RangeError(
           `Grade ${worst + 1} given, but there are ${this.grades} grades`,
         )
-      // Those it leaves out get the worst grade, unless it grades no one.
-      if (worst !== -1 && left.size > 0 && this.unrankedLast) {
+      // Those it leaves out get the worst grade, unless it grades no one and
+      // blank ballots don't count.
+      const counts = worst !== -1 || this.countBlank
+      if (counts && left.size > 0 && this.unrankedLast) {
         while (ranking.length < this.grades) ranking.push([])
         ranking[this.grades - 1]!.push(...left)
       }
@@ -158,6 +167,7 @@ export class MajorityJudgment<C extends string> extends Method<C> {
       candidates,
       grades: this.grades,
       unrankedLast: this.unrankedLast,
+      countBlank: this.countBlank,
     })
   }
 

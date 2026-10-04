@@ -290,6 +290,13 @@ describe(MajorityJudgment, () => {
       [99, 0],
     ])
 
+    expect(
+      new MajorityJudgment({ ...input, countBlank: true }).judgements(),
+    ).toStrictEqual({
+      a: [1, 0, 0, 0, 0, 104],
+      b: [0, 100, 0, 0, 0, 5],
+    })
+
     const given = new MajorityJudgment({ ...input, unrankedLast: false })
     expect(given.ranking()).toStrictEqual([['a'], ['b']])
     expect(given.matrix.array).toStrictEqual([

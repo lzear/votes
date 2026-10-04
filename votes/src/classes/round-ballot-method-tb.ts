@@ -24,7 +24,12 @@ export abstract class RoundBallotMethodTb<
     // The input's own ballots: normalized ones lose majority judgment's
     // empty grades.
     const { candidates, ballots } = input
-    const profile = { candidates, ballots, unrankedLast: this.unrankedLast }
+    const profile = {
+      candidates,
+      ballots,
+      unrankedLast: this.unrankedLast,
+      countBlank: this.countBlank,
+    }
     this.tieBreakers = (input.tieBreakers ?? []).map((e) =>
       tiebreaker(e, profile),
     )

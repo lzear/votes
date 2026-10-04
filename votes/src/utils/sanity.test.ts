@@ -188,6 +188,25 @@ describe('sanity check', () => {
       expect(run([...abcde, 'a'])).toStrictEqual(run(abcde))
     },
   )
+  it.each(Object.values(VotingSystem).filter((s) => !methods[s].isRandom))(
+    'ignores blank ballots (%s)',
+    (system) => {
+      const ballots: Ballot<ABC>[] = [
+        { ranking: [['a'], ['b'], ['c']], weight: 3 },
+        { ranking: [['b'], ['c'], ['a']], weight: 2 },
+      ]
+      const blank: Ballot<ABC>[] = [{ ranking: [], weight: 2 }]
+      for (const unrankedLast of [true, false]) {
+        const run = (b: Ballot<ABC>[]) =>
+          new methods[system]({
+            ballots: b,
+            candidates: ['a', 'b', 'c'],
+            unrankedLast,
+          }).ranking()
+        expect(run([...ballots, ...blank])).toStrictEqual(run(ballots))
+      }
+    },
+  )
   it.each(Object.values(VotingSystem))(
     'ranks a candidate named __proto__ (%s)',
     (system) => {

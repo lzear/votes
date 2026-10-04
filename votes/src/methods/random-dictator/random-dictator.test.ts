@@ -132,6 +132,23 @@ describe(RandomDictator, () => {
     })
   })
 
+  it('draws blank ballots only with countBlank', () => {
+    const input = {
+      candidates: ['a', 'b'],
+      ballots: [
+        { ranking: [['a']], weight: 1 },
+        { ranking: [], weight: 1 },
+      ],
+    }
+    expect(new RandomDictator(input).probabilities()).toStrictEqual({
+      a: 1,
+      b: 0,
+    })
+    expect(
+      new RandomDictator({ ...input, countBlank: true }).probabilities(),
+    ).toStrictEqual({ a: 0.75, b: 0.25 })
+  })
+
   it('ties everyone without weight to draw from', () => {
     const dictator = new RandomDictator({
       candidates: ['a', 'b'],

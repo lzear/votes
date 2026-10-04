@@ -56,6 +56,25 @@ describe(Coombs, () => {
     expect(coombs.ranking()).toStrictEqual([['A'], ['B', 'C']])
   })
 
+  it('takes a majority of the ballots ranking someone left', () => {
+    // Once C is out, the C-only ballots rank no one left.
+    const input = {
+      candidates: ['A', 'B', 'C'],
+      ballots: [
+        { ranking: [['C']], weight: 2 },
+        { ranking: [['A'], ['B'], ['C']], weight: 2 },
+        { ranking: [['B'], ['A'], ['C']], weight: 1 },
+      ],
+      unrankedLast: false,
+    }
+    const resolutions = (countBlank: boolean) =>
+      new Coombs({ ...input, countBlank })
+        .rounds()
+        .map((round) => round.info?.resolution)
+    expect(resolutions(false)).toStrictEqual(['elimination', 'majority'])
+    expect(resolutions(true)).toStrictEqual(['elimination', 'elimination'])
+  })
+
   it('works with the complex test', () => {
     const coombs = new Coombs(condorcetMess)
 

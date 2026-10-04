@@ -3,6 +3,7 @@ export { iterateRanking } from './iterate-ranking'
 export { makeAntisymmetric, matrixFromBallots } from './make-matrix'
 export {
   groupBallots,
+  nonBlank,
   normalizeBallots,
   removeDuplicatedCandidates,
   removeInvalidCandidates,

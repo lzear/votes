@@ -39,11 +39,12 @@ const rank = <C extends string>(
 export class RandomDictator<C extends string> extends RandomBallotMethod<C> {
   // Each candidate's chance to top the drawn ballot, shared within a tie.
   public probabilities(): ScoreObject<C> {
-    const total = totalBallotsWeight(this.ballots)
+    const ballots = this.castBallots(this.candidates)
+    const total = totalBallotsWeight(ballots)
     if (total <= 0)
       return scoresAny(this.candidates, 1 / this.candidates.length)
     const odds = scoresZero(this.candidates)
-    for (const ballot of this.ballots) {
+    for (const ballot of ballots) {
       const [top = []] = completeRanking(ballot.ranking, this.candidates)
       for (const c of top) odds[c] += weightOf(ballot) / top.length / total
     }
@@ -51,6 +52,6 @@ export class RandomDictator<C extends string> extends RandomBallotMethod<C> {
   }
 
   protected draw(): C[][] {
-    return rank(this.candidates, this.ballots, this.rng)
+    return rank(this.candidates, this.castBallots(this.candidates), this.rng)
   }
 }

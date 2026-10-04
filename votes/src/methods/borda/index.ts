@@ -1,6 +1,6 @@
 import { BallotScoreMethod } from '../../classes/ballot-score-method'
 import { type Ballot, type Matrix, type ScoreObject } from '../../types'
-import { scoresZero, totalBallotsWeight, weightOf } from '../../utils'
+import { nonBlank, scoresZero, totalBallotsWeight, weightOf } from '../../utils'
 import { makeAntisymmetric, subMatrix } from '../../utils/make-matrix'
 import { sum } from '../../utils/sum'
 
@@ -38,10 +38,7 @@ export const matrixBordaScores = <C extends string>(
   ballots: Ballot<C>[],
   candidates: C[],
 ): ScoreObject<C> => {
-  const running = new Set(candidates)
-  const voters = totalBallotsWeight(
-    ballots.filter((b) => b.ranking.some((t) => t.some((c) => running.has(c)))),
-  )
+  const voters = totalBallotsWeight(nonBlank(ballots, candidates))
   const { array } = makeAntisymmetric(subMatrix(matrix, candidates))
   return Object.fromEntries(
     candidates.map((c, i) => [

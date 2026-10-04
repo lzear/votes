@@ -132,3 +132,14 @@ export const normalizeBallots = <C extends string, B extends Ballot<C>>(
 export const totalBallotsWeight = <C extends string>(
   ballots: Ballot<C>[],
 ): number => sum(ballots.map((ballot) => weightOf(ballot)))
+
+// The ballots ranking any of `candidates`: the others are blank to them.
+export const nonBlank = <C extends string>(
+  ballots: Ballot<C>[],
+  candidates: C[],
+): Ballot<C>[] => {
+  const running = new Set(candidates)
+  return ballots.filter((b) =>
+    b.ranking.some((t) => t.some((c) => running.has(c))),
+  )
+}

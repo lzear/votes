@@ -1,4 +1,5 @@
 import {
+  AbsoluteMajority,
   Approval,
   Baldwin,
   Borda,
@@ -100,6 +101,29 @@ describe('Test all methods', () => {
       new TwoRoundRunoff({ candidates: abcde, ballots: balinski }).ranking(),
     ).toStrictEqual([['e'], ['a'], ['b', 'c', 'd']])
   })
+  it('counts blank ballots toward majorities with countBlank', () => {
+    const input = {
+      candidates: ['a', 'b', 'c'],
+      ballots: [
+        { ranking: [['a'], ['b'], ['c']], weight: 3 },
+        { ranking: [['b'], ['c'], ['a']], weight: 2 },
+        { ranking: [], weight: 2 },
+      ],
+    }
+    const counted = { ...input, countBlank: true }
+    for (const Method of [AbsoluteMajority, Coombs, TwoRoundRunoff])
+      expect(new Method(input).ranking()).toStrictEqual([['a'], ['b', 'c']])
+    expect(new AbsoluteMajority(counted).ranking()).toStrictEqual([
+      ['a', 'b', 'c'],
+    ])
+    expect(new Coombs(counted).ranking()).toStrictEqual([['a'], ['b'], ['c']])
+    expect(new TwoRoundRunoff(counted).ranking()).toStrictEqual([
+      ['a'],
+      ['b'],
+      ['c'],
+    ])
+  })
+
   it('votes with copeland', () => {
     expect(
       new Copeland(matrixFromBallots(balinski, abcde)).scores(),
@@ -323,6 +347,24 @@ describe('tieBreakers', () => {
     // scores a=3, b=2 → b alone eliminated.
     const expressed = new InstantRunoff({ ...base, unrankedLast: false })
     expect(expressed.rounds()[0]?.eliminated).toStrictEqual(['b'])
+  })
+
+  it("forwards the host's countBlank setting into tiebreakers", () => {
+    // a and b tie on first choices; among them, a leads 5 to 2.
+    const input = {
+      candidates: ['a', 'b', 'c'],
+      ballots: [
+        { ranking: [['a'], ['b'], ['c']], weight: 2 },
+        { ranking: [['b'], ['a'], ['c']], weight: 2 },
+        { ranking: [['c'], ['a'], ['b']], weight: 3 },
+        { ranking: [], weight: 6 },
+      ],
+      tieBreakers: [AbsoluteMajority],
+    }
+    const eliminated = (countBlank: boolean) =>
+      new InstantRunoff({ ...input, countBlank }).rounds()[0]?.eliminated
+    expect(eliminated(false)).toStrictEqual(['b'])
+    expect(eliminated(true)).toStrictEqual(['a', 'b'])
   })
 
   it("forwards the host's unrankedLast setting into matrix tiebreakers", () => {

@@ -45,10 +45,14 @@ A ballot ranks candidates in tiers: `[['Bear', 'Sheep'], ['Lion']]` means Bear
 and Sheep tied first, Lion last. `weight` is how many voters cast that ballot
 (default 1). Candidates a ballot leaves unranked join it as one tied bottom tier
 by default; pass `unrankedLast: false` to score only expressed preferences
-(unranked candidates then earn nothing from that ballot).
+(unranked candidates then earn nothing from that ballot). Blank ballots, ranking
+none of the candidates still in the race, don't count as cast; pass
+`countBlank: true` to count them toward absolute majorities (`AbsoluteMajority`,
+`Coombs`, `TwoRoundRunoff`), in `RandomDictator`'s draw and, with
+`unrankedLast`, as worst grades in `MajorityJudgment`.
 
-Every method takes this same `{ candidates, ballots, unrankedLast }` input.
-Matrix methods (see the table below) also take a pairwise matrix
+Every method takes this same `{ candidates, ballots, unrankedLast, countBlank }`
+input. Matrix methods (see the table below) also take a pairwise matrix
 `{ candidates, array }`, such as `matrixFromBallots(ballots, candidates)`.
 
 ## Tiebreakers

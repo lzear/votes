@@ -1,5 +1,5 @@
 import { type Ballot, type Matrix, type Profile } from '../types'
-import { matrixFromBallots, normalizeBallots } from '../utils'
+import { matrixFromBallots, nonBlank, normalizeBallots } from '../utils'
 import { type Matrixer } from './matrix-score-method'
 import { Method, type Ranker } from './method'
 
@@ -13,12 +13,20 @@ export abstract class BallotMethod<C extends string>
   private readonly options: object
   protected readonly ballots: Ballot<C>[]
   protected readonly unrankedLast: boolean
+  protected readonly countBlank: boolean
 
   constructor({ ballots, candidates, ...options }: Profile<C>) {
     super(candidates)
     this.options = options
     this.unrankedLast = options.unrankedLast ?? true
+    this.countBlank = options.countBlank ?? false
     this.ballots = normalizeBallots(ballots, candidates, this.unrankedLast)
+  }
+
+  // The ballots cast in a race between `candidates`: blank ones only with
+  // `countBlank`.
+  protected castBallots(candidates: C[]): Ballot<C>[] {
+    return this.countBlank ? this.ballots : nonBlank(this.ballots, candidates)
   }
 
   /**

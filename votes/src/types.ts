@@ -21,6 +21,13 @@ export interface Profile<C extends string> {
    * points, no transfers, no last-place counts, no pairwise wins).
    */
   unrankedLast?: boolean
+  /**
+   * Whether blank ballots, ranking none of the candidates still in the race,
+   * count as cast (default false): toward absolute majorities, in random
+   * dictator's draw and, with `unrankedLast`, as worst grades in majority
+   * judgment.
+   */
+  countBlank?: boolean
 }
 
 export type ScoreObject<C extends string> = Record<C, number>

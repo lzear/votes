@@ -1,6 +1,6 @@
 import { TbEliminateLast } from '../../classes/round-ballot-method-tb'
 import { type Ballot, type QE, type ScoreObject } from '../../types'
-import { scoresToRanking, totalBallotsWeight } from '../../utils'
+import { scoresToRanking } from '../../utils'
 import { config } from '../../utils/config'
 import { majorityWinner } from '../absolute-majority'
 import { firstChoices } from '../first-past-the-post/iterate-first-choices'
@@ -60,7 +60,7 @@ export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {
       }
 
     const scores = firstChoices(this.ballots, candidates)
-    const winner = majorityWinner(scores, totalBallotsWeight(this.ballots))
+    const winner = majorityWinner(scores, this.castBallots(candidates))
     if (winner !== undefined)
       return {
         eliminated: candidates.filter((c) => c !== winner),
