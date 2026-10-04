@@ -267,6 +267,13 @@ describe(MajorityJudgment, () => {
     ).toThrow(RangeError)
   })
 
+  it('throws on a grade count that is not a positive integer', () => {
+    for (const grades of [0, 2.5, NaN, Infinity])
+      expect(
+        () => new MajorityJudgment({ candidates: ['a'], ballots: [], grades }),
+      ).toThrow(RangeError)
+  })
+
   it('gives the worst grade to those a ballot leaves out', () => {
     const input = {
       candidates: ['a', 'b'],

@@ -105,6 +105,10 @@ export class MajorityJudgment<C extends string> extends Method<C> {
   }) {
     super(i.candidates)
     this.grades = i.grades ?? 6
+    if (!Number.isSafeInteger(this.grades) || this.grades < 1)
+      throw new RangeError(
+        `Grades should be a positive integer, not ${this.grades}`,
+      )
     this.unrankedLast = i.unrankedLast ?? true
     this.countBlank = i.countBlank ?? false
     this.gradeBallots = i.ballots.map((b) => {
