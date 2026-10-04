@@ -5,14 +5,14 @@ export interface Ballot<C extends string> {
 }
 
 export interface Matrix<C extends string> {
-  candidates: C[]
+  candidates: readonly C[]
   array: number[][]
 }
 
 // What every method takes.
 export interface Profile<C extends string> {
-  candidates: C[]
-  ballots: Ballot<C>[]
+  candidates: readonly C[]
+  ballots: readonly Ballot<C>[]
   /**
    * Whether candidates a ballot leaves unranked are appended to it as one
    * tied bottom tier (default true — the classic "pessimistic" completion

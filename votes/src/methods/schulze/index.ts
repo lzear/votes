@@ -29,7 +29,7 @@ const floydWarshall = (p: number[][], n: number): void => {
 // of whom beats the other. A candidate scores the number ranked below it,
 // which is its win count when there are no ties.
 const scoresFromStrengths = <C extends string>(
-  candidates: C[],
+  candidates: readonly C[],
   p: number[][],
 ): ScoreObject<C> => {
   const s = new Map<C, number>()

@@ -19,7 +19,7 @@ export abstract class RoundBallotMethodTb<
   // The caller's, applied after the built-in ones.
   private tieBreakers: MethodTiebreaker<C>[]
 
-  constructor(input: Profile<C> & { tieBreakers?: TbEntry<C>[] }) {
+  constructor(input: Profile<C> & { tieBreakers?: readonly TbEntry<C>[] }) {
     super(input)
     // The input's own ballots: normalized ones lose majority judgment's
     // empty grades.

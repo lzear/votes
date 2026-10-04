@@ -27,8 +27,8 @@ export const pairwiseMatrix = (
  * below the others (default true). Pass false to count only what it ranks.
  */
 export const matrixFromBallots = <C extends string>(
-  ballots: Ballot<C>[],
-  _candidates: C[],
+  ballots: readonly Ballot<C>[],
+  _candidates: readonly C[],
   unrankedLast = true,
 ): Matrix<C> => {
   // Once each: a repeat would add a row that no ballot counts.

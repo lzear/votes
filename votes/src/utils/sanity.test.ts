@@ -1,6 +1,16 @@
 /* eslint-disable vitest/no-conditional-expect */
 
-import { type Ballot, methods, VotingSystem } from '..'
+import {
+  type Ballot,
+  Borda,
+  Copeland,
+  Election,
+  InstantRunoff,
+  MajorityJudgment,
+  methods,
+  RandomCandidates,
+  VotingSystem,
+} from '..'
 import {
   abcde,
   balinski,
@@ -238,6 +248,30 @@ describe('sanity check', () => {
           ballots: [{ ranking: [['a'], ['b']], weight }],
         }).ranking(),
       ).toThrow(RangeError)
+  })
+  it('takes readonly input', () => {
+    const candidates = ['a', 'b'] as const
+    const ballots: readonly Ballot<'a' | 'b'>[] = [{ ranking: [['a'], ['b']] }]
+    const array = [
+      [0, 1],
+      [0, 0],
+    ]
+    const tieBreakers = [Borda] as const
+    for (const ranker of [
+      new Borda({ candidates, ballots }),
+      new InstantRunoff({ candidates, ballots, tieBreakers }),
+      new Copeland({ candidates, array }),
+      new MajorityJudgment({ candidates, ballots }),
+      new Election({
+        candidates,
+        ballots,
+        methods: [Copeland, Borda] as const,
+      }),
+    ])
+      expect(ranker.ranking()).toStrictEqual([['a'], ['b']])
+    expect(new RandomCandidates({ candidates }).ranking().flat()).toHaveLength(
+      2,
+    )
   })
   it.each(Object.values(VotingSystem))(
     'ranks a candidate named __proto__ (%s)',

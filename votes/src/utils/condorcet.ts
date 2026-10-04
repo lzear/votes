@@ -36,4 +36,4 @@ export const findSmithSet = <C extends string>(
 // The smallest set of candidates who each beat everyone outside it.
 export const smithSet = <C extends string>(
   input: Matrix<C> | Profile<C>,
-): C[] => findSmithSet(toMatrix(input)).candidates
+): C[] => [...findSmithSet(toMatrix(input)).candidates]

@@ -12,7 +12,7 @@ export abstract class RandomMethod<C extends string> extends Method<C> {
 
   constructor(
     i: Partial<Profile<C>> & {
-      candidates: C[]
+      candidates: readonly C[]
       rng?: (() => number) | undefined
     },
   ) {

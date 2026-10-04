@@ -85,8 +85,8 @@ export class MajorityJudgment<C extends string> extends Method<C> {
   public readonly grades: number
 
   constructor(i: {
-    ballots: Ballot<C>[]
-    candidates: C[]
+    ballots: readonly Ballot<C>[]
+    candidates: readonly C[]
     /**
      * Number of grades, best first (default 6). A ballot tier's index is its
      * grade.

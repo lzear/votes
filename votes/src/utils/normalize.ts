@@ -16,7 +16,7 @@ export const canonizeRanking = <C extends string>(ranking: C[][]): C[][] =>
 // weights. Empty tiers count: majority judgment reads a tier's index as its
 // grade. The first occurrence's ranking representation and order are kept.
 const mergeEquivalentBallots = <C extends string, B extends Ballot<C>>(
-  ballots: B[],
+  ballots: readonly B[],
 ): B[] => {
   const byRanking = new Map<string, B>()
   for (const ballot of ballots) {
@@ -36,14 +36,14 @@ const mergeEquivalentBallots = <C extends string, B extends Ballot<C>>(
  * Merges ballots with the same tiers, summing weights, heaviest first.
  */
 export const groupBallots = <C extends string, B extends Ballot<C>>(
-  ballots: B[],
+  ballots: readonly B[],
 ): B[] =>
   mergeEquivalentBallots(ballots)
     .filter((b) => weightOf(b) > 0)
     .toSorted((a, b) => weightOf(b) - weightOf(a))
 
 export const toWeightedBallots = <C extends string>(
-  ballots: C[][][],
+  ballots: readonly C[][][],
 ): Ballot<C>[] =>
   mergeEquivalentBallots(ballots.map((ranking) => ({ ranking, weight: 1 })))
 
@@ -75,12 +75,12 @@ export const removeDuplicatedCandidates = <C extends string>(
  */
 export const removeInvalidCandidates = <C extends string>(
   ranking: string[][],
-  candidates: C[],
+  candidates: readonly C[],
 ): C[][] =>
   ranking
     .map((names) =>
       names.filter((name): name is C =>
-        (candidates as string[]).includes(name),
+        (candidates as readonly string[]).includes(name),
       ),
     )
     .filter((rank) => rank.length > 0)
@@ -89,7 +89,7 @@ export const removeInvalidCandidates = <C extends string>(
 // run on every ballot, every round.
 const withUnranked = <C extends string>(
   ranking: string[][],
-  candidates: C[],
+  candidates: readonly C[],
 ): [C[][], C[]] => {
   const left = new Set<string>(candidates)
   const ranked: C[][] = []
@@ -110,7 +110,7 @@ const appendTier = <C extends string>(ranking: C[][], tier: C[]): C[][] =>
  */
 export const completeRanking = <C extends string>(
   ranking: string[][],
-  candidates: C[],
+  candidates: readonly C[],
 ): C[][] => appendTier(...withUnranked(ranking, candidates))
 
 /**
@@ -119,8 +119,8 @@ export const completeRanking = <C extends string>(
  * rest, tied last.
  */
 export const normalizeBallots = <C extends string, B extends Ballot<C>>(
-  ballots: B[],
-  candidates: C[],
+  ballots: readonly B[],
+  candidates: readonly C[],
   appendUnranked = true,
 ): B[] =>
   ballots.map((ballot) => {
@@ -135,13 +135,13 @@ export const normalizeBallots = <C extends string, B extends Ballot<C>>(
   })
 
 export const totalBallotsWeight = <C extends string>(
-  ballots: Ballot<C>[],
+  ballots: readonly Ballot<C>[],
 ): number => sum(ballots.map((ballot) => weightOf(ballot)))
 
 // The ballots ranking any of `candidates`: the others are blank to them.
 export const nonBlank = <C extends string>(
-  ballots: Ballot<C>[],
-  candidates: C[],
+  ballots: readonly Ballot<C>[],
+  candidates: readonly C[],
 ): Ballot<C>[] => {
   const running = new Set(candidates)
   return ballots.filter((b) =>

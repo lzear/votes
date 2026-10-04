@@ -23,7 +23,7 @@ export interface ElectionResult<C extends string> {
 }
 
 export type ElectionInput<C extends string> = Profile<C> & {
-  methods: [NoInfer<TbEntry<C>>, ...NoInfer<TbEntry<C>>[]]
+  methods: readonly [NoInfer<TbEntry<C>>, ...NoInfer<TbEntry<C>>[]]
 }
 
 /**

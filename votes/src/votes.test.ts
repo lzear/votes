@@ -288,7 +288,7 @@ describe('tieBreakers', () => {
     // Ranks only the first candidate it is given.
     class FirstOnly {
       private readonly first: ABCD[]
-      constructor({ candidates }: { candidates: ABCD[] }) {
+      constructor({ candidates }: { candidates: readonly ABCD[] }) {
         this.first = candidates.slice(0, 1)
       }
 

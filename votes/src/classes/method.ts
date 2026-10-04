@@ -20,7 +20,7 @@ export abstract class Method<C extends string> implements Ranker<C> {
   public static readonly isRandom: boolean = false
   public readonly candidates: C[]
 
-  constructor(candidates: C[]) {
+  constructor(candidates: readonly C[]) {
     this.candidates = [...new Set(candidates)]
   }
 
