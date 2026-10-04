@@ -124,6 +124,17 @@ describe('Test all methods', () => {
     ])
   })
 
+  it('sees no majority in an even split of fractional weights', () => {
+    const ballots = [
+      { ranking: [['a']], weight: 0.6 },
+      { ranking: [['b']], weight: 0.4 },
+      { ranking: [['b']], weight: 0.2 },
+    ]
+    expect(
+      new AbsoluteMajority({ candidates: ['a', 'b'], ballots }).ranking(),
+    ).toStrictEqual([['a', 'b']])
+  })
+
   it('votes with copeland', () => {
     expect(
       new Copeland(matrixFromBallots(balinski, abcde)).scores(),
