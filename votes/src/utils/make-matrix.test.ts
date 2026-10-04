@@ -52,6 +52,13 @@ describe('matrixes', () => {
       [0.6, 0],
     ])
   })
+  it('keeps huge counts exact', () => {
+    const ballots = [{ ranking: [['a'], ['b']], weight: 1e12 + 1 }]
+    expect(matrixFromBallots(ballots, ['a', 'b']).array[0]).toStrictEqual([
+      0,
+      1e12 + 1,
+    ])
+  })
   it('lists a candidate given twice once', () => {
     const ballots = [{ ranking: [['a'], ['b']] }]
 

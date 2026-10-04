@@ -52,11 +52,12 @@ export const matrixFromBallots = <C extends string>(
         for (const l of rankedLower) array[w]![l]! += weight
     }
   }
+  // Past 2⁵³ · 1e-6, doubles are coarser than the grid: rounding would only
+  // blur exact counts.
   const scale = 1 / config.EPSILON
-  return {
-    array: array.map((row) => row.map((v) => Math.round(v * scale) / scale)),
-    candidates,
-  }
+  const round = (v: number) =>
+    Math.abs(v) < 2 ** 53 / scale ? Math.round(v * scale) / scale : v
+  return { array: array.map((row) => row.map((v) => round(v))), candidates }
 }
 
 // The matrix `input` is, or the one its ballots make.
