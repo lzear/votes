@@ -38,4 +38,12 @@ describe(RandomCandidates, () => {
     expect(vote(['a', 'b'], 'ddd')).toStrictEqual([['a'], ['b']])
     expect(vote(['a', 'b'], 'ddd')).toStrictEqual([['a'], ['b']])
   })
+
+  it('gives every candidate the same odds', () => {
+    expect(
+      new RandomCandidates({
+        candidates: ['a', 'b', 'c', 'd'],
+      }).probabilities(),
+    ).toStrictEqual({ a: 0.25, b: 0.25, c: 0.25, d: 0.25 })
+  })
 })
