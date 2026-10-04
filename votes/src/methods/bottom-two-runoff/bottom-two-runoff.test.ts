@@ -1,4 +1,5 @@
 import { tb } from '../../classes/tiebreaker'
+import { Borda } from '../borda'
 import { RandomCandidates } from '../random-candidates'
 import { BottomTwoRunoff } from '.'
 
@@ -244,6 +245,19 @@ describe(BottomTwoRunoff, () => {
     ).toStrictEqual(['FirstPastThePost', 'RandomCandidates'])
     const restricted = b2r.restrict(['a', 'b', 'c']) as typeof b2r
     expect(restricted.rounds()).toStrictEqual(b2r.rounds())
+  })
+
+  it('breaks a full first-choice tie with its tieBreakers', () => {
+    const b2r = new BottomTwoRunoff({
+      candidates: ['a', 'b', 'c'],
+      ballots: [
+        { ranking: [['a'], ['b'], ['c']] },
+        { ranking: [['b'], ['a'], ['c']] },
+        { ranking: [['c'], ['a'], ['b']] },
+      ],
+      tieBreakers: [Borda],
+    })
+    expect(b2r.ranking()).toStrictEqual([['a'], ['b'], ['c']])
   })
 
   it('does not depend on candidate order', () => {

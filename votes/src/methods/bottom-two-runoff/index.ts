@@ -39,10 +39,6 @@ export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
 
     const last = ranked.at(-1) ?? []
 
-    // Complete tie — no meaningful bottom-2 distinction; everyone ties
-    if (last.length === candidates.length)
-      return { qualified: [], eliminated: candidates, scores }
-
     // The bottom two, or everyone tied with them: picking two of a tie by list
     // order would make the result depend on the order candidates are given in.
     const pending =
