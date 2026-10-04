@@ -9,7 +9,7 @@
 [![CI](https://github.com/lzear/votes/actions/workflows/main.yml/badge.svg)](https://github.com/lzear/votes/actions/workflows/main.yml)
 [![Codacy grade](https://app.codacy.com/project/badge/Grade/d2378c63d95f41efb79072176f015976)](https://app.codacy.com/gh/lzear/votes)
 [![Codacy coverage](https://app.codacy.com/project/badge/Coverage/d2378c63d95f41efb79072176f015976)](https://app.codacy.com/gh/lzear/votes)
-[![Website](https://img.shields.io/website?url=https%3A%2F%2Frank-votes.vercel.app%2F)](https://rank-votes.vercel.app/)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Flzear.org%2Fvotes)](https://lzear.org/votes)
 
 TypeScript library of ranked voting methods, published to NPM.
 
@@ -264,9 +264,7 @@ const text = stringifyCondorcetElectionFormat({ candidates, ballots })
 
 ## Documentation
 
-- Demo/Playground: [rank-votes.vercel.app](https://rank-votes.vercel.app/)
-- Blog post:
-  [Ranked voting systems](https://www.elzear.de/posts/2021-01-10-polls)
+- Demo: [lzear.org/votes](https://lzear.org/votes)
 - API docs: [lzear.github.io/votes](https://lzear.github.io/votes/)
 - Reference:
   [Comparison of electoral systems (Wikipedia)](https://en.wikipedia.org/wiki/Comparison_of_electoral_systems)
