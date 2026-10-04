@@ -91,7 +91,7 @@ new InstantRunoff({
 | -------------- | ---------- | --------------------------------------------------------------------------------------------------- |
 | `full`         | `false`    | Rank the tie by the method's ranking of all candidates instead of re-running it on the tied subset. |
 | `stable`       | `false`    | After one pass, recurse into any remaining sub-ties until no further progress can be made.          |
-| `label`        | class name | Name in traces (`tbName`, `StepResult.name`).                                                       |
+| `label`        | class name | Name in traces (`TieBreakStep.name`, `StepResult.name`).                                            |
 | Any other prop | —          | Passed through to the method constructor (e.g. `rng` for random methods).                           |
 
 ### Round trace
@@ -246,7 +246,7 @@ rngGenerator('my-seed') // seeded RNG for random methods' `rng`
 
 Parse and serialize the
 [Condorcet Election Format](https://github.com/CondorcetVote/CondorcetElectionFormat)
-(`.blt`-style text files):
+(`.cvotes` files):
 
 ```typescript
 import {
