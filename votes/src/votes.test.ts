@@ -146,6 +146,14 @@ describe('Test all methods', () => {
       e: 1,
     })
   })
+  it('throws on kemeny past 30 candidates', () => {
+    // 32 used to tie everyone: 1 << 32 is 1.
+    const candidates = Array.from({ length: 32 }, (_, i) => `c${i}`)
+    expect(() => new Kemeny({ candidates, ballots: [] }).ranking()).toThrow(
+      RangeError,
+    )
+  })
+
   it('averages kemeny scores over the best orders', () => {
     const cycle = [
       { ranking: [['a'], ['b'], ['c']], weight: 1 },

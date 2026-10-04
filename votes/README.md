@@ -204,7 +204,8 @@ re-run itself on a subset of candidates.
 `Baldwin` and `Nanson` take Borda scores from the pairwise matrix: the same as
 `Borda`'s when ballots rank everyone, and a Condorcet winner always wins.
 
-⚠️ `Kemeny` runs in O(n·2ⁿ) time and memory — slow beyond ~20 candidates.
+⚠️ `Kemeny` runs in O(n·2ⁿ) time and memory — slow beyond ~20 candidates, and
+throws beyond 30.
 
 `BottomTwoRunoff` always prepends `tb(FirstPastThePost)` to `tieBreakers` — that
 FPTP step is the head-to-head runoff mechanism, not a fallback. It will appear

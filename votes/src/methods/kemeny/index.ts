@@ -31,6 +31,9 @@ const computeScores = <C extends string>({
   array,
 }: Matrix<C>): ScoreObject<C> => {
   const n = candidates.length
+  // Subsets are 32-bit masks.
+  if (n > 30)
+    throw new RangeError(`Kemeny takes at most 30 candidates, not ${n}`)
   const all = (1 << n) - 1
   const internal = new Float64Array(all + 1)
   const count = new Float64Array(all + 1)
@@ -79,7 +82,8 @@ const computeScores = <C extends string>({
 
 /**
  * Scores are how many candidates each one ranks above, averaged over the
- * best orders. Runs in O(n·2ⁿ) time and memory: slow beyond ~20 candidates.
+ * best orders. Runs in O(n·2ⁿ) time and memory: slow beyond ~20 candidates,
+ * and throws beyond 30.
  *
  * #### Wikipedia: [Kemeny–Young method](https://en.wikipedia.org/wiki/Kemeny%E2%80%93Young_method)
  */
