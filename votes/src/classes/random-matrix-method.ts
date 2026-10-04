@@ -18,14 +18,20 @@ const randomRankingFromScores = <C extends string>(
     if (total <= 0) return [...ranking, ...shuffleArray(left, random)]
 
     // `>`, or a score of 0 is drawn when `random()` gives 0. Unnormalized,
-    // so `w` ends at exactly `total`.
+    // so `w` ends at exactly `total`; past it, when `random()` gives 1, the
+    // last candidate with a score.
     const pickAt = random() * total
     let w = 0
     const i = left.findIndex((c) => {
       w += scores[c]
       return w > pickAt
     })
-    ranking.push(...left.splice(i === -1 ? -1 : i, 1))
+    ranking.push(
+      ...left.splice(
+        i === -1 ? left.findLastIndex((c) => scores[c] > 0) : i,
+        1,
+      ),
+    )
   }
   return [...ranking, ...left]
 }

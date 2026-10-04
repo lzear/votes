@@ -104,6 +104,18 @@ describe(RandomDictator, () => {
     expect(result).toStrictEqual([['b'], ['a']])
   })
 
+  it('draws no ballot without weight when rng returns 1', () => {
+    const dictator = new RandomDictator({
+      candidates: ['a', 'b'],
+      ballots: [
+        { ranking: [['a'], ['b']], weight: 1 },
+        { ranking: [['b'], ['a']], weight: 0 },
+      ],
+      rng: () => 1,
+    })
+    expect(dictator.ranking()).toStrictEqual([['a'], ['b']])
+  })
+
   it('ranks the candidates the picked ballot leaves out last', () => {
     expect(
       vote([{ ranking: [], weight: 1 }], ['a', 'b'], 'aaa').ranking(),

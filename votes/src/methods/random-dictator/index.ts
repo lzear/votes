@@ -19,7 +19,8 @@ const pickBallotIdx = <C extends string>(
     w += weightOf(ballot)
     if (w > pickAt) return i
   }
-  return ballots.length - 1
+  // `ratio` was 1: the last ballot with weight.
+  return ballots.findLastIndex((b) => weightOf(b) > 0)
 }
 
 const rank = <C extends string>(

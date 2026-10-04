@@ -76,6 +76,15 @@ describe('maximal lotteries', () => {
     })
     expect(lottery.ranking()[0]).toStrictEqual(['b'])
   })
+
+  it('draws no candidate of probability 0 when rng returns 1', () => {
+    const lottery = new MaximalLotteries({
+      candidates: ['a', 'b', 'c'],
+      ballots: [{ ranking: [['a'], ['b'], ['c']] }],
+      rng: () => 1,
+    })
+    expect(lottery.ranking()[0]).toStrictEqual(['a'])
+  })
 })
 
 describe('pivot', () => {
