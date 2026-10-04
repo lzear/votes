@@ -226,6 +226,19 @@ describe('sanity check', () => {
       }).ranking()
     expect(run(10)).toStrictEqual(run(1))
   })
+  it.each(
+    Object.values(VotingSystem).filter(
+      (s) => s !== VotingSystem.RandomCandidates,
+    ),
+  )('rejects a negative or non-finite weight (%s)', (system) => {
+    for (const weight of [-1, NaN, Infinity])
+      expect(() =>
+        new methods[system]({
+          candidates: ['a', 'b'],
+          ballots: [{ ranking: [['a'], ['b']], weight }],
+        }).ranking(),
+      ).toThrow(RangeError)
+  })
   it.each(Object.values(VotingSystem))(
     'ranks a candidate named __proto__ (%s)',
     (system) => {

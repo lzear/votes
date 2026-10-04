@@ -1,6 +1,6 @@
 export interface Ballot<C extends string> {
   ranking: C[][]
-  // How many voters cast it (default 1).
+  // How many voters cast it (default 1): finite, not negative.
   weight?: number
 }
 

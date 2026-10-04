@@ -1,6 +1,6 @@
 import { abcde, balinski } from '../test/test-utils'
 import { makeAntisymmetric, matrixFromBallots } from '.'
-import { subMatrix } from './make-matrix'
+import { subMatrix, toMatrix } from './make-matrix'
 
 describe('matrixes', () => {
   it('makes antisymetric', () => {
@@ -62,6 +62,30 @@ describe('matrixes', () => {
       ],
       candidates: ['a', 'b'],
     })
+  })
+  it('rejects a malformed matrix', () => {
+    for (const [candidates, array] of [
+      [['a', 'b'], [[0, 1]]],
+      [
+        ['a', 'b'],
+        [[0, 1], [1]],
+      ],
+      [
+        ['a', 'b'],
+        [
+          [0, NaN],
+          [1, 0],
+        ],
+      ],
+      [
+        ['a', 'a'],
+        [
+          [0, 1],
+          [1, 0],
+        ],
+      ],
+    ] as [string[], number[][]][])
+      expect(() => toMatrix({ candidates, array })).toThrow(RangeError)
   })
   it('makes submatrixes', () => {
     const m = matrixFromBallots(balinski, abcde)

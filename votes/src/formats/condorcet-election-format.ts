@@ -1,5 +1,9 @@
 import { type Ballot } from '../types'
-import { removeDuplicatedCandidates, removeInvalidCandidates } from '../utils'
+import {
+  removeDuplicatedCandidates,
+  removeInvalidCandidates,
+  weightOf,
+} from '../utils'
 
 export interface ParsedCondorcetElection<C extends string> {
   candidates: C[]
@@ -193,7 +197,9 @@ export const stringifyCondorcetElectionFormat = <C extends string>(
     '',
   ]
 
-  for (const { ranking, weight = 1 } of ballots) {
+  for (const ballot of ballots) {
+    const { ranking } = ballot
+    const weight = weightOf(ballot)
     const r = implicitRanking ? stripImplicitRank(ranking, candidates) : ranking
     const rankStr = r.length === 0 ? '/EMPTY_RANKING/' : serializeRanking(r)
     lines.push(weight === 1 ? rankStr : `${rankStr} * ${weight}`)

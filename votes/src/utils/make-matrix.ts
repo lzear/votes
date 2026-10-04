@@ -62,10 +62,27 @@ export const matrixFromBallots = <C extends string>(
 // The matrix `input` is, or the one its ballots make.
 export const toMatrix = <C extends string>(
   input: Matrix<C> | Profile<C>,
-): Matrix<C> =>
-  'array' in input
-    ? { array: input.array, candidates: input.candidates }
-    : matrixFromBallots(input.ballots, input.candidates, input.unrankedLast)
+): Matrix<C> => {
+  if (!('array' in input))
+    return matrixFromBallots(
+      input.ballots,
+      input.candidates,
+      input.unrankedLast,
+    )
+  const { array, candidates } = input
+  const n = candidates.length
+  if (
+    new Set(candidates).size < n ||
+    array.length !== n ||
+    array.some(
+      (row) => row.length !== n || row.some((v) => !Number.isFinite(v)),
+    )
+  )
+    throw new RangeError(
+      `A matrix of ${n} distinct candidates should be ${n} × ${n} finite numbers`,
+    )
+  return { array, candidates }
+}
 
 export const makeAntisymmetric = <C extends string>(
   matrix: Matrix<C>,

@@ -1,8 +1,13 @@
 import { type Ballot } from '../types'
 import { sum } from './sum'
 
-export const weightOf = <C extends string>({ weight = 1 }: Ballot<C>): number =>
-  weight
+export const weightOf = <C extends string>({
+  weight = 1,
+}: Ballot<C>): number => {
+  if (!Number.isFinite(weight) || weight < 0)
+    throw new RangeError(`Weight ${weight} should be finite and not negative`)
+  return weight
+}
 
 export const canonizeRanking = <C extends string>(ranking: C[][]): C[][] =>
   ranking.map((rank) => rank.toSorted((a, b) => a.localeCompare(b)))
