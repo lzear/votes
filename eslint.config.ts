@@ -4,13 +4,7 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 const base = await config()
 
 export default defineConfig(
-  globalIgnores([
-    'dist/**',
-    'build/**',
-    'coverage/**',
-    'node_modules/**',
-    'votes/docs/**',
-  ]),
+  globalIgnores(['votes/docs/**']),
   ...base,
   {
     rules: {

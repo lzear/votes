@@ -1,7 +1,7 @@
 {
   "name": "votes",
   "version": "3.0.0",
-  "description": "Implementation of some [electoral systems](https://en.wikipedia.org/wiki/Electoral_system)",
+  "description": "TypeScript library of ranked voting methods",
   "license": "MIT",
   "repository": "lzear/votes",
   "homepage": "https://github.com/lzear/votes",
