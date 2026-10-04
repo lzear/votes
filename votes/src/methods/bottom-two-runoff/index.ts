@@ -1,6 +1,6 @@
+import { type Step } from '../../classes/round-ballot-method'
 import { RoundBallotMethodTb } from '../../classes/round-ballot-method-tb'
 import { type Tiebreaker } from '../../classes/tiebreaker'
-import { type QE } from '../../types'
 import { scoresToRanking } from '../../utils'
 import { firstChoices } from '../first-past-the-post/iterate-first-choices'
 
@@ -18,6 +18,20 @@ import { firstChoices } from '../first-past-the-post/iterate-first-choices'
  * #### Electowiki: [Bottom-Two-Runoff IRV](https://electowiki.org/wiki/Bottom-Two-Runoff_IRV)
  */
 export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
+  // The bottom two of `race` on first choices, or everyone tied with them:
+  // picking two of a tie by list order would make the result depend on the
+  // order candidates are given in. Ties split by first choices among the tied.
+  private bottomTwo(race: C[]): C[] {
+    const ranked = scoresToRanking(firstChoices(this.ballots, race)).flatMap(
+      (tier) =>
+        tier.length <= 1
+          ? [tier]
+          : scoresToRanking(firstChoices(this.ballots, tier)),
+    )
+    const last = ranked.at(-1) ?? []
+    return last.length >= 2 ? last : [...last, ...(ranked.at(-2) ?? [])]
+  }
+
   protected override builtInTieBreakers(): Tiebreaker<C>[] {
     // First choices on the ballots as they are: a FirstPastThePost would
     // re-normalize them every round.
@@ -28,34 +42,23 @@ export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
     return [{ name: 'FirstPastThePost', run }]
   }
 
-  protected round(candidates: C[]): QE<C> {
-    const scores = firstChoices(this.ballots, candidates)
-    // Ties split by first choices among the tied.
-    const ranked = scoresToRanking(scores).flatMap((tier) =>
-      tier.length <= 1
-        ? [tier]
-        : scoresToRanking(firstChoices(this.ballots, tier)),
-    )
+  protected override nextOut(race: C[]): C[] {
+    return this.resolvePending(this.bottomTwo(race)).eliminated
+  }
 
-    const last = ranked.at(-1) ?? []
-
-    // The bottom two, or everyone tied with them: picking two of a tie by list
-    // order would make the result depend on the order candidates are given in.
-    const pending =
-      last.length >= 2 ? last : [...last, ...(ranked.at(-2) ?? [])]
-
-    const pendingSet = new Set(pending)
-    const mainQualified = candidates.filter((c) => !pendingSet.has(c))
+  protected round(candidates: C[]): Step<C, undefined> {
+    const pending = new Set(this.bottomTwo(candidates))
     const {
       qualified: q2,
       eliminated,
       tieBreakSteps,
-    } = this.resolvePending(pending)
+    } = this.resolvePending([...pending])
     return {
-      qualified: [...mainQualified, ...q2],
+      qualified: [...candidates.filter((c) => !pending.has(c)), ...q2],
       eliminated,
-      scores,
+      scores: firstChoices(this.ballots, candidates),
       ...(tieBreakSteps.length > 0 && { tieBreakSteps }),
+      ...this.openTie(eliminated, candidates),
     }
   }
 }

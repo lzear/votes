@@ -260,6 +260,16 @@ describe(BottomTwoRunoff, () => {
     expect(b2r.ranking()).toStrictEqual([['a'], ['b'], ['c']])
   })
 
+  it('stops on a head-to-head tie that decides the winner', () => {
+    // One first choice each: whoever goes out first, a or b wins, never c.
+    const ballots = ['cba', 'bac', 'abc'].map((order) => ({
+      ranking: order.split('').map((c) => [c]),
+    }))
+    expect(
+      new BottomTwoRunoff({ candidates: ['a', 'b', 'c'], ballots }).ranking(),
+    ).toStrictEqual([['a', 'b'], ['c']])
+  })
+
   it('does not depend on candidate order', () => {
     const ballots = ['bdac', 'abdc', 'bcda', 'abdc'].map((order) => ({
       ranking: order.split('').map((c) => [c]),

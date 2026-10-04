@@ -1,5 +1,6 @@
+import { type Step } from '../../classes/round-ballot-method'
 import { TbEliminateLast } from '../../classes/round-ballot-method-tb'
-import { type Ballot, type QE, type ScoreObject } from '../../types'
+import { type Ballot, type ScoreObject } from '../../types'
 import { scoresToRanking } from '../../utils'
 import { config } from '../../utils/config'
 import { majorityWinner } from '../absolute-majority'
@@ -50,7 +51,21 @@ export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {
     return { ranking: scoresToRanking(scores, config.EPSILON), scores }
   }
 
-  protected override round(candidates: C[], index: number): QE<C, CoombsInfo> {
+  // A majority ends the count, everyone else out at once.
+  protected override nextOut(race: C[]): C[] {
+    const winner = majorityWinner(
+      firstChoices(this.ballots, race),
+      this.castBallots(race),
+    )
+    return winner === undefined
+      ? super.nextOut(race)
+      : race.filter((c) => c !== winner)
+  }
+
+  protected override round(
+    candidates: C[],
+    index: number,
+  ): Step<C, CoombsInfo> {
     const scores = firstChoices(this.ballots, candidates)
     const winner = majorityWinner(scores, this.castBallots(candidates))
     if (winner !== undefined)

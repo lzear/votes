@@ -358,13 +358,17 @@ describe('tieBreakers', () => {
       { ranking: [['c']], weight: 2 },
     ]
     const base = { candidates: ['a', 'b', 'c'], ballots, tieBreakers: [Borda] }
-    // Default (unranked appended): Borda on {a, b} ties 6–6 → unresolved,
-    // both eliminated together.
+    const borda = (irv: InstantRunoff<string>) =>
+      irv.rounds()[0]?.tieBreakSteps?.[0]?.scores
+    // Default (unranked appended): Borda on {a, b} ties 6–6. Which goes out
+    // decides the winner: a and c can win.
     const appended = new InstantRunoff(base)
-    expect(appended.rounds()[0]?.eliminated).toStrictEqual(['a', 'b'])
+    expect(borda(appended)).toStrictEqual({ a: 6, b: 6 })
+    expect(appended.ranking()).toStrictEqual([['a', 'c'], ['b']])
     // Expressed-only: the a-only and c-only ballots give b nothing → Borda
     // scores a=3, b=2 → b alone eliminated.
     const expressed = new InstantRunoff({ ...base, unrankedLast: false })
+    expect(borda(expressed)).toStrictEqual({ a: 3, b: 2 })
     expect(expressed.rounds()[0]?.eliminated).toStrictEqual(['b'])
   })
 
@@ -380,10 +384,12 @@ describe('tieBreakers', () => {
       ],
       tieBreakers: [AbsoluteMajority],
     }
-    const eliminated = (countBlank: boolean) =>
-      new InstantRunoff({ ...input, countBlank }).rounds()[0]?.eliminated
-    expect(eliminated(false)).toStrictEqual(['b'])
-    expect(eliminated(true)).toStrictEqual(['a', 'b'])
+    const promoted = (countBlank: boolean) =>
+      new InstantRunoff({ ...input, countBlank }).rounds()[0]
+        ?.tieBreakSteps?.[0]?.resolved
+    // 5 of the 7 ballots cast are a majority, 5 of all 13 are not.
+    expect(promoted(false)).toStrictEqual(['a'])
+    expect(promoted(true)).toStrictEqual([])
   })
 
   it("forwards the host's unrankedLast setting into matrix tiebreakers", () => {
@@ -398,10 +404,9 @@ describe('tieBreakers', () => {
       tieBreakers: [Copeland],
     }
     // Default: a beats b on the a-only ballot, b beats a on the other.
-    expect(new InstantRunoff(base).rounds()[0]?.eliminated).toStrictEqual([
-      'a',
-      'b',
-    ])
+    expect(
+      new InstantRunoff(base).rounds()[0]?.tieBreakSteps?.[0]?.remaining,
+    ).toStrictEqual(['a', 'b'])
     // Expressed-only: the a-only ballot says nothing about b.
     const expressed = new InstantRunoff({ ...base, unrankedLast: false })
     expect(expressed.rounds()[0]?.eliminated).toStrictEqual(['a'])
@@ -480,6 +485,41 @@ describe('tieBreakers', () => {
     })
     // Copeland can't split b/c (tied pairwise), Borda breaks it → b eliminated
     expect(baldwin.rounds()[0]?.eliminated).toStrictEqual(['b', 'c'])
+  })
+})
+
+describe('a tie no tiebreaker breaks', () => {
+  // b and d tie for last on 2 first choices; c, on 3, loses to both head to
+  // head. Whichever of b and d goes out, the other wins.
+  const candidates = ['a', 'b', 'c', 'd', 'e']
+  const ballots = [
+    ['b', 'e', 'd', 'a', 'c', 1],
+    ['c', 'd', 'e', 'b', 'a', 3],
+    ['b', 'a', 'e', 'd', 'c', 1],
+    ['d', 'e', 'a', 'b', 'c', 2],
+  ].map((b) => ({
+    ranking: b.slice(0, -1).map((c) => [String(c)]),
+    weight: Number(b.at(-1)),
+  }))
+
+  it('stops the count on those who win in some order of breaking it', () => {
+    for (const Method of [InstantRunoff, TwoRoundRunoff])
+      expect(new Method({ candidates, ballots }).ranking()).toStrictEqual([
+        ['b', 'd'],
+        ['c'],
+        ['a', 'e'],
+      ])
+  })
+
+  it('ends the rounds on them', () => {
+    const rounds = new InstantRunoff({ candidates, ballots }).rounds()
+    expect(rounds.map((r) => [r.qualified, r.eliminated])).toStrictEqual([
+      [
+        ['c', 'b', 'd'],
+        ['a', 'e'],
+      ],
+      [['b', 'd'], ['c']],
+    ])
   })
 })
 

@@ -1,10 +1,7 @@
-import {
-  type Profile,
-  type QE,
-  type ScoreObject,
-  type TieBreakStep,
-} from '../types'
-import { RoundBallotMethod } from './round-ballot-method'
+import { majorityWinner } from '../methods/absolute-majority'
+import { firstChoices } from '../methods/first-past-the-post/iterate-first-choices'
+import { type Profile, type ScoreObject, type TieBreakStep } from '../types'
+import { RoundBallotMethod, type Step } from './round-ballot-method'
 import {
   type MethodTiebreaker,
   type TbEntry,
@@ -87,11 +84,66 @@ export abstract class RoundBallotMethodTb<
 
     return { qualified: promoted, eliminated: current, tieBreakSteps }
   }
+
+  /**
+   * Those one of whom the method puts out of `race` next, after its
+   * tiebreakers: by default, anyone.
+   */
+  protected nextOut(race: C[]): C[] {
+    return race
+  }
+
+  // One with a majority of the ballots cast: no round puts them out.
+  protected sureWinner(race: C[]): C | undefined {
+    return majorityWinner(
+      firstChoices(this.ballots, race),
+      this.castBallots(race),
+    )
+  }
+
+  /**
+   * Whether putting `group` out of `race` at once ends where every order of
+   * putting it out one at a time does.
+   */
+  protected canEliminateTogether(group: C[], race: C[]): boolean {
+    if (this.exploring) return false
+    const others = race.filter((c) => !group.includes(c))
+    const seen = new Set<string>()
+    // Whether those put out of what is left are all in `left`, until gone.
+    const safe = (left: C[]): boolean => {
+      const key = this.raceKey(left)
+      if (left.length === 0 || seen.has(key)) return true
+      seen.add(key)
+      if (seen.size > MAX_ORDERS) return false
+      const out = this.nextOut([...others, ...left])
+      return (
+        out.every((c) => left.includes(c)) &&
+        this.oneEach(out).every((c) => safe(left.filter((x) => x !== c)))
+      )
+    }
+    return this.oneEach(group).every((g) => safe(group.filter((x) => x !== g)))
+  }
+
+  /**
+   * `group`, a tie the tiebreakers leave, as open when its order matters.
+   */
+  protected openTie(group: C[], race: C[]): { open?: C[] } {
+    return group.length > 1 &&
+      (group.length === race.length || !this.canEliminateTogether(group, race))
+      ? { open: group }
+      : {}
+  }
 }
+
+// States to try at most when checking every order of eliminating a tie: past
+// it, the count stops on the tie, which costs only the ranking below winners.
+const MAX_ORDERS = 256
 
 /**
  * Each round: rank candidates, eliminate the last-tier candidate(s).
- * Tiebreakers are applied when multiple candidates share the last tier.
+ * Tiebreakers are applied when multiple candidates share the last tier; a tie
+ * they leave goes out at once if no order of it changes the outcome, else
+ * the count stops on those who win in some order.
  */
 export abstract class TbEliminateLast<
   C extends string,
@@ -102,7 +154,12 @@ export abstract class TbEliminateLast<
     index: number,
   ): { ranking: C[][]; scores: ScoreObject<C> }
 
-  protected round(candidates: C[], index: number): QE<C, I> {
+  protected override nextOut(race: C[]): C[] {
+    const last = this.oneRound(race, 0).ranking.at(-1) ?? []
+    return last.length > 1 ? this.resolvePending(last).eliminated : last
+  }
+
+  protected round(candidates: C[], index: number): Step<C, I> {
     const { ranking, scores } = this.oneRound(candidates, index)
     const qualified = ranking.slice(0, -1).flat()
     const lastTier = ranking.at(-1) ?? []
@@ -119,6 +176,7 @@ export abstract class TbEliminateLast<
       eliminated,
       scores,
       ...(tieBreakSteps.length > 0 && { tieBreakSteps }),
+      ...this.openTie(eliminated, candidates),
     }
   }
 }

@@ -1,6 +1,7 @@
 import { TbEliminateLast } from '../../classes/round-ballot-method-tb'
 import { type ScoreObject } from '../../types'
 import { scoresToRanking } from '../../utils'
+import { subMatrix } from '../../utils/make-matrix'
 import { matrixBordaScores } from '../borda'
 
 /**
@@ -10,6 +11,14 @@ import { matrixBordaScores } from '../borda'
  * #### Wikipedia: [Baldwin method](https://en.wikipedia.org/wiki/Nanson%27s_method#Baldwin_method)
  */
 export class Baldwin<C extends string> extends TbEliminateLast<C> {
+  // A Condorcet winner, whose Borda score stays above the average.
+  protected override sureWinner(race: C[]): C | undefined {
+    const { array } = subMatrix(this.matrix, race)
+    return race.find((_, i) =>
+      array.every((row, j) => i === j || (array[i]?.[j] ?? 0) > (row[i] ?? 0)),
+    )
+  }
+
   protected oneRound(candidates: C[]): {
     ranking: C[][]
     scores: ScoreObject<C>

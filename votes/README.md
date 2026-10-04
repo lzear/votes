@@ -60,7 +60,10 @@ input. Matrix methods (see the table below) also take a pairwise matrix
 Round-based methods (`InstantRunoff`, `Baldwin`, `Coombs`, `Nanson`,
 `TwoRoundRunoff`, `BottomTwoRunoff`) accept a `tieBreakers` array. When a round
 ties (for last place, at two-round runoff's cut, or Nanson's complete tie),
-tiebreakers apply in order until the tie breaks.
+tiebreakers apply in order until the tie breaks. A tie they leave goes out at
+once if no order of it changes the outcome; otherwise the count stops, and those
+who win in some order of breaking the ties tie first (or, past 10,000 orders
+tried, everyone left).
 
 ```typescript
 import {

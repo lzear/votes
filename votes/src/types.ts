@@ -71,6 +71,11 @@ export interface TieBreakStep<C extends string> {
 }
 
 export interface QE<C extends string, I = undefined> {
+  /**
+   * Candidates still in the race after this round. In the last, the winners:
+   * several when it stops on a tie whose order decides who wins, those who
+   * win in some order of breaking it.
+   */
   qualified: C[]
   eliminated: C[]
   scores: ScoreObject<C>
