@@ -5,13 +5,19 @@ import {
   type TieBreakStep,
 } from '../types'
 import { RoundBallotMethod } from './round-ballot-method'
-import { type TbEntry, type Tiebreaker, tiebreaker } from './tiebreaker'
+import {
+  type MethodTiebreaker,
+  type TbEntry,
+  type Tiebreaker,
+  tiebreaker,
+} from './tiebreaker'
 
 export abstract class RoundBallotMethodTb<
   C extends string,
   I = undefined,
 > extends RoundBallotMethod<C, I> {
-  private readonly tiebreakers: Tiebreaker<C>[]
+  // The caller's, applied after the built-in ones.
+  private tieBreakers: MethodTiebreaker<C>[]
 
   constructor(input: Profile<C> & { tieBreakers?: TbEntry<C>[] }) {
     super(input)
@@ -19,10 +25,22 @@ export abstract class RoundBallotMethodTb<
     // empty grades.
     const { candidates, ballots } = input
     const profile = { candidates, ballots, unrankedLast: this.unrankedLast }
-    this.tiebreakers = [
-      ...this.builtInTieBreakers(),
-      ...(input.tieBreakers ?? []).map((e) => tiebreaker(e, profile)),
-    ]
+    this.tieBreakers = (input.tieBreakers ?? []).map((e) =>
+      tiebreaker(e, profile),
+    )
+  }
+
+  // Restricts the caller's tiebreakers too: rebuilt on the normalized ballots
+  // restrict() passes, majority judgment would lose its empty grades.
+  public override restrict<D extends C>(
+    candidates: D[],
+  ): RoundBallotMethodTb<D, I> {
+    const method = super.restrict(candidates) as RoundBallotMethodTb<D, I>
+    // Restricted to `candidates`, they rank only those.
+    method.tieBreakers = this.tieBreakers.map((t) =>
+      t.restrict(candidates),
+    ) as unknown as MethodTiebreaker<D>[]
+    return method
   }
 
   /**
@@ -46,7 +64,8 @@ export abstract class RoundBallotMethodTb<
     const promoted: C[] = []
     const tieBreakSteps: TieBreakStep<C>[] = []
 
-    for (const [index, { name, run }] of this.tiebreakers.entries()) {
+    const tiebreakers = [...this.builtInTieBreakers(), ...this.tieBreakers]
+    for (const [index, { name, run }] of tiebreakers.entries()) {
       if (current.length <= 1) break
       const { ranking, scores } = run(current)
       const last = ranking.at(-1) ?? []

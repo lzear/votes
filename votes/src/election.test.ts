@@ -7,6 +7,7 @@ import {
   Election,
   FirstPastThePost,
   InstantRunoff,
+  MajorityJudgment,
   RandomCandidates,
   type Ranker,
   rngGenerator,
@@ -148,6 +149,17 @@ describe('Election', () => {
       methods: [Borda, OnlyB],
     })
     expect(election.ranking()).toStrictEqual([['a'], ['b'], ['c']])
+  })
+
+  it('ranks like its method alone, tiebreakers included', () => {
+    // a and b tie on grades, those left out getting the worst one.
+    const irv = tb(InstantRunoff, { tieBreakers: [MajorityJudgment] })
+    const election = new Election({
+      candidates,
+      ballots: [{ ranking: [['a']] }, { ranking: [['b'], ['c']] }],
+      methods: [irv],
+    })
+    expect(election.ranking()).toStrictEqual([['a', 'b'], ['c']])
   })
 
   it('stops early when no ties remain', () => {
