@@ -58,9 +58,9 @@ input. Matrix methods (see the table below) also take a pairwise matrix
 ## Tiebreakers
 
 Round-based methods (`InstantRunoff`, `Baldwin`, `Coombs`, `Nanson`,
-`TwoRoundRunoff`, `BottomTwoRunoff`) accept a `tieBreakers` array. When multiple
-candidates tie for last place in a round, tiebreakers are applied in order until
-one candidate can be singled out.
+`TwoRoundRunoff`, `BottomTwoRunoff`) accept a `tieBreakers` array. When a round
+ties (for last place, at two-round runoff's cut, or Nanson's complete tie),
+tiebreakers apply in order until the tie breaks.
 
 ```typescript
 import {
@@ -121,6 +121,7 @@ rounds[0]
 //     name: 'Borda',
 //     candidates: ['b', 'c'],   // tied candidates
 //     ranking: [['b'], ['c']],  // tiebreaker's verdict
+//     scores: { b: 19, c: 14 }, // when the tiebreaker scores
 //     resolved: ['b'],          // promoted out of tie
 //     remaining: ['c'],         // eliminated
 //   }]
@@ -210,10 +211,9 @@ throws beyond 30.
 `MajorityJudgment` reads a ballot's tiers as grades, best first (`grades`,
 default 6), and breaks ties one vote at a time: give it whole weights.
 
-`BottomTwoRunoff` always prepends `tb(FirstPastThePost)` to `tieBreakers` — that
-FPTP step is the head-to-head runoff mechanism, not a fallback. It will appear
-as the first entry in `tieBreakSteps`. User-supplied `tieBreakers` fire after it
-only if the head-to-head itself ties.
+`BottomTwoRunoff` settles each round with a first-choices head-to-head, the
+first `tieBreakSteps` entry (named `FirstPastThePost`); its `tieBreakers` apply
+only if that ties.
 
 Random methods expose `probabilities()`, each candidate's chance to win, instead
 of `scores()`, and draw their ranking once per instance.
@@ -245,7 +245,7 @@ toWeightedBallots([
   [['a'], ['b']],
 ]) // one ballot per ranking
 groupBallots(ballots) // equal ballots merged, heaviest first
-normalizeBallots(ballots, candidates) // unknown and repeated candidates dropped
+normalizeBallots(ballots, candidates) // unknown and repeated candidates dropped, unranked ones tied last
 scoresToRanking({ a: 2, b: 1 }) // [['a'], ['b']]
 rngGenerator('my-seed') // seeded RNG for random methods' `rng`
 ```
