@@ -4,7 +4,7 @@ import { iterateRanking } from '../utils/iterate-ranking'
 export interface Ranker<C extends string> {
   ranking(): C[][]
   // The same ranker on a subset of its candidates.
-  restrict(candidates: C[]): Ranker<C>
+  restrict(candidates: readonly C[]): Ranker<C>
   // Points behind the ranking, for methods that score.
   scores?(): ScoreObject<C>
   // Each round, for methods that eliminate.
@@ -36,7 +36,7 @@ export abstract class Method<C extends string> implements Ranker<C> {
    * Return a new instance of the same method restricted to a subset of
    * candidates.
    */
-  public abstract restrict<D extends C>(candidates: D[]): Method<D>
+  public abstract restrict<D extends C>(candidates: readonly D[]): Method<D>
 
   /**
    * Ranking built by repeated wins instead of the method's own full ranking:

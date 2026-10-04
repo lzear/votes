@@ -79,7 +79,7 @@ export class Election<C extends string> implements Ranker<C> {
   }
 
   // The same election, every method restricted to `candidates`.
-  restrict(candidates: C[]): Election<C> {
+  restrict(candidates: readonly C[]): Election<C> {
     const election = new Election(this.input)
     election.candidates = [...new Set(candidates)]
     election.tiebreakers = this.tiebreakers.map((t) => t.restrict(candidates))

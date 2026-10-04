@@ -97,7 +97,7 @@ export const makeAntisymmetric = <C extends string>(
 // The matrix of `selected` alone, in their order.
 export const subMatrix = <C extends string, S extends C>(
   matrix: Matrix<C>,
-  selected: S[],
+  selected: readonly S[],
 ): Matrix<S> => {
   const candidates = [...new Set(selected)]
   const idx = candidates.map((c) => {

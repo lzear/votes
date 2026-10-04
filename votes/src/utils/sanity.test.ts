@@ -9,6 +9,8 @@ import {
   MajorityJudgment,
   methods,
   RandomCandidates,
+  type Ranker,
+  stringifyCondorcetElectionFormat,
   VotingSystem,
 } from '..'
 import {
@@ -257,9 +259,9 @@ describe('sanity check', () => {
       [0, 0],
     ]
     const tieBreakers = [Borda] as const
-    for (const ranker of [
+    const rankers: Ranker<'a' | 'b'>[] = [
       new Borda({ candidates, ballots }),
-      new InstantRunoff({ candidates, ballots, tieBreakers }),
+      new InstantRunoff<'a' | 'b'>({ candidates, ballots, tieBreakers }),
       new Copeland({ candidates, array }),
       new MajorityJudgment({ candidates, ballots }),
       new Election({
@@ -267,10 +269,19 @@ describe('sanity check', () => {
         ballots,
         methods: [Copeland, Borda] as const,
       }),
-    ])
+    ]
+    for (const ranker of rankers) {
       expect(ranker.ranking()).toStrictEqual([['a'], ['b']])
+      expect(ranker.restrict(candidates).ranking()).toStrictEqual([
+        ['a'],
+        ['b'],
+      ])
+    }
     expect(new RandomCandidates({ candidates }).ranking().flat()).toHaveLength(
       2,
+    )
+    expect(stringifyCondorcetElectionFormat({ candidates, ballots })).toContain(
+      '#/Candidates: a; b',
     )
   })
   it.each(Object.values(VotingSystem))(

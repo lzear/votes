@@ -36,7 +36,7 @@ export interface Tiebreaker<C extends string> {
 
 // A tiebreaker backed by a method, which narrows along with it.
 export interface MethodTiebreaker<C extends string> extends Tiebreaker<C> {
-  restrict: (candidates: C[]) => MethodTiebreaker<C>
+  restrict: (candidates: readonly C[]) => MethodTiebreaker<C>
 }
 
 interface Meta {

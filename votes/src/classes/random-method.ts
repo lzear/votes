@@ -32,9 +32,9 @@ export abstract class RandomMethod<C extends string> extends Method<C> {
 
   protected abstract draw(): C[][]
 
-  restrict<D extends C>(candidates: D[]): Method<D> {
+  restrict<D extends C>(candidates: readonly D[]): Method<D> {
     type Ctor = new (i: {
-      candidates: D[]
+      candidates: readonly D[]
       rng?: () => number
     }) => RandomMethod<D>
     return new (this.constructor as Ctor)({ candidates, rng: this.rng })

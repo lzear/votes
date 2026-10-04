@@ -161,7 +161,7 @@ export class MajorityJudgment<C extends string> extends Method<C> {
     return tiers
   }
 
-  public restrict<D extends C>(candidates: D[]): MajorityJudgment<D> {
+  public restrict<D extends C>(candidates: readonly D[]): MajorityJudgment<D> {
     return new MajorityJudgment({
       ballots: this.gradeBallots as Ballot<D>[],
       candidates,

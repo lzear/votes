@@ -46,7 +46,7 @@ export abstract class BallotMethod<C extends string>
    * Ballots are filtered to remove candidates not in the subset; unranked candidates
    * are NOT appended (preserves only opinions voters expressed).
    */
-  restrict<D extends C>(candidates: D[]): BallotMethod<D> {
+  restrict<D extends C>(candidates: readonly D[]): BallotMethod<D> {
     type Ctor = new (input: Profile<D>) => BallotMethod<D>
     return new (this.constructor as Ctor)({
       ...this.options,

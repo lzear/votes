@@ -1,4 +1,4 @@
-import { type Ballot } from '../types'
+import { type Ballot, type Profile } from '../types'
 import {
   removeDuplicatedCandidates,
   removeInvalidCandidates,
@@ -165,7 +165,7 @@ const serializeRanking = (ranking: string[][]): string =>
 
 const stripImplicitRank = <C extends string>(
   ranking: C[][],
-  candidates: C[],
+  candidates: readonly C[],
 ): C[][] => {
   if (ranking.length === 0) return ranking
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -182,7 +182,7 @@ const stripImplicitRank = <C extends string>(
 const RESERVED = /[>=;,#/*^\0]/
 
 export const stringifyCondorcetElectionFormat = <C extends string>(
-  { candidates, ballots }: ParsedCondorcetElection<C>,
+  { candidates, ballots }: Pick<Profile<C>, 'candidates' | 'ballots'>,
   { implicitRanking = true }: { implicitRanking?: boolean } = {},
 ): string => {
   for (const name of [
