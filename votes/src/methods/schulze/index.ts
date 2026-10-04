@@ -32,16 +32,16 @@ const scoresFromStrengths = <C extends string>(
   candidates: C[],
   p: number[][],
 ): ScoreObject<C> => {
-  const s = {} as ScoreObject<C>
+  const s = new Map<C, number>()
   let left = candidates.keys().toArray()
   while (left.length > 0) {
     const unbeaten = left.filter((i) =>
       left.every((j) => p[j]![i]! <= p[i]![j]!),
     )
     left = left.filter((i) => !unbeaten.includes(i))
-    for (const i of unbeaten) s[candidates[i]!] = left.length
+    for (const i of unbeaten) s.set(candidates[i]!, left.length)
   }
-  return s
+  return Object.fromEntries(s) as ScoreObject<C>
 }
 
 /**

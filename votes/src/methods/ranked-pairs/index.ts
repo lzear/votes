@@ -64,9 +64,13 @@ const computeFromMatrix = <C extends string>(
   const maxScore2 = Math.max(
     ...Object.values(nextResults as Record<string, number>),
   )
-  for (const winnerIdx of winnersIdx)
-    nextResults[matrix.candidates[winnerIdx]!] = maxScore2 + 1
-  return nextResults
+  return {
+    ...nextResults,
+    ...scoresAny(
+      winnersIdx.map((i) => matrix.candidates[i]!),
+      maxScore2 + 1,
+    ),
+  }
 }
 
 /**

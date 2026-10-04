@@ -21,20 +21,21 @@ const computeScores = <C extends string>(
   matrix: Matrix<C>,
   variant: MinimaxVariant,
   excludeTies: boolean,
-): ScoreObject<C> => {
-  const s = {} as ScoreObject<C>
-  for (const [c1Index, candidate] of matrix.candidates.entries())
-    s[candidate] = -Math.max(
-      ...matrix.array[c1Index]!.flatMap((yOverX, c2Index) => {
-        if (c2Index === c1Index) return []
-        const xOverY = matrix.array[c2Index]![c1Index]!
-        return xOverY === yOverX && excludeTies
-          ? []
-          : [scoreXY[variant](xOverY, yOverX)]
-      }),
-    )
-  return s
-}
+): ScoreObject<C> =>
+  Object.fromEntries(
+    matrix.candidates.map((candidate, c1Index) => [
+      candidate,
+      -Math.max(
+        ...matrix.array[c1Index]!.flatMap((yOverX, c2Index) => {
+          if (c2Index === c1Index) return []
+          const xOverY = matrix.array[c2Index]![c1Index]!
+          return xOverY === yOverX && excludeTies
+            ? []
+            : [scoreXY[variant](xOverY, yOverX)]
+        }),
+      ),
+    ]),
+  ) as ScoreObject<C>
 
 /**
  * #### Wikipedia: [Minimax Condorcet method](https://en.wikipedia.org/wiki/Minimax_Condorcet_method)

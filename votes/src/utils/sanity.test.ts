@@ -171,6 +171,17 @@ describe('sanity check', () => {
       )
     },
   )
+  it.each(Object.values(VotingSystem))(
+    'ranks a candidate named __proto__ (%s)',
+    (system) => {
+      const candidates = ['__proto__', 'b']
+      const ballots = [{ ranking: [['__proto__'], ['b']] }]
+      const election = new methods[system]({ ballots, candidates })
+      expect(new Set(election.ranking().flat())).toStrictEqual(
+        new Set(candidates),
+      )
+    },
+  )
   it.each(Object.values(VotingSystem).filter((s) => methods[s].isRandom))(
     'draws once (%s)',
     (system) => {
