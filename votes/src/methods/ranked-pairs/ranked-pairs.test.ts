@@ -181,6 +181,35 @@ describe('ranked pairs', () => {
     })
   })
 
+  it('locks the pairs a sorter cannot tell apart together', () => {
+    // a→b, b→d and d→a tie on margin and participation, and close a cycle:
+    // locked one by one, candidate order would pick the one dropped.
+    const ballots = [
+      { ranking: [['a'], ['b'], ['d']] },
+      { ranking: [['d'], ['c'], ['a'], ['b']] },
+      { ranking: [['b'], ['c'], ['d'], ['a']] },
+    ]
+    const rankings = new Set(
+      [
+        ['a', 'b', 'c', 'd'],
+        ['a', 'c', 'd', 'b'],
+        ['b', 'c', 'd', 'a'],
+      ].map((candidates) =>
+        JSON.stringify(
+          new RankedPairs({
+            candidates,
+            ballots,
+            unrankedLast: false,
+            edgeSorter: byTotalParticipation,
+          })
+            .ranking()
+            .map((tier) => tier.toSorted((a, b) => a.localeCompare(b))),
+        ),
+      ),
+    )
+    expect([...rankings]).toStrictEqual(['[["b","c","d"],["a"]]'])
+  })
+
   it('does not infinitely recurse on a raw win-count matrix with wide ties (regression)', () => {
     const rawCounts = {
       array: [

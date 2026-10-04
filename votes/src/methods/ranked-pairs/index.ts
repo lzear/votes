@@ -29,21 +29,20 @@ const computeFromMatrix = <C extends string>(
         : []
     }),
   )
-  const groups = [...new Set(allEdges.map((e) => e.value))]
-    .toSorted((a, b) => b - a)
-    .map((value) => allEdges.filter((e) => e.value === value))
+  // Strongest first, then in the sorter's order. Edges neither tells apart
+  // lock together, so that the result does not depend on candidate order.
+  const order = (a: Edge, b: Edge) =>
+    b.value - a.value || (edgeSorter?.(a, b) ?? 0)
+  const groups: Edge[][] = []
+  for (const edge of allEdges.toSorted(order)) {
+    const group = groups.at(-1)
+    if (group && order(group[0]!, edge) === 0) group.push(edge)
+    else groups.push([edge])
+  }
 
   let acyclicGraph: Edge[] = []
-  for (const edgesToAdd of groups) {
-    const sorted = edgeSorter ? edgesToAdd.toSorted(edgeSorter) : null
-    const useSequential = sorted?.some(
-      (e, i) => i > 0 && edgeSorter!(sorted[i - 1]!, e) !== 0,
-    )
-    if (useSequential && sorted)
-      for (const edge of sorted)
-        acyclicGraph = generateAcyclicGraph(acyclicGraph, [edge])
-    else acyclicGraph = generateAcyclicGraph(acyclicGraph, edgesToAdd)
-  }
+  for (const edgesToAdd of groups)
+    acyclicGraph = generateAcyclicGraph(acyclicGraph, edgesToAdd)
 
   // Sources of the acyclic graph (no incoming locked edge) win this iteration
   const winnersIdx = matrix.candidates
@@ -77,12 +76,10 @@ const computeFromMatrix = <C extends string>(
  * By default, equal-strength pairs are locked simultaneously: if they would
  * form a cycle among themselves, none are locked (most neutral outcome).
  *
- * Pass `edgeSorter` to process equal-strength pairs sequentially instead —
- * the sorter determines which pairs are locked first. `byTotalParticipation`
- * (exported from this module) is a ready-made sorter that prefers pairs where
- * more voters expressed a preference. Sequential processing matches the
- * canonical Tideman algorithm but makes the result order-dependent when the
- * sorter cannot distinguish all tied pairs.
+ * Pass `edgeSorter` to lock equal-strength pairs in its order instead, like
+ * canonical Tideman; pairs it cannot tell apart still lock simultaneously.
+ * `byTotalParticipation` (exported from this module) is a ready-made sorter
+ * that prefers pairs where more voters expressed a preference.
  *
  * The `Edge` type passed to the sorter has `{ from, to, value, total }`.
  *

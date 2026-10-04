@@ -215,7 +215,8 @@ derive from.
 
 `RankedPairs` locks equal-strength pairs simultaneously by default (ties are
 preserved rather than order-dependent). Pass `edgeSorter` — e.g. the exported
-`byTotalParticipation` — to process them sequentially like canonical Tideman.
+`byTotalParticipation` — to lock them in its order like canonical Tideman; pairs
+it cannot tell apart still lock together.
 
 Every method also exposes `deTie()`, which recursively resolves ties by
 re-running the same method on each tied subset:
