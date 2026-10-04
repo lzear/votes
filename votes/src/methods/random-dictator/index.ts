@@ -37,6 +37,11 @@ const rank = <C extends string>(
   return completeRanking(ballots[idx]!.ranking, candidates)
 }
 
+/**
+ * Ranks as a ballot drawn at random, by weight.
+ *
+ * #### Wikipedia: [Random ballot](https://en.wikipedia.org/wiki/Random_ballot)
+ */
 export class RandomDictator<C extends string> extends RandomBallotMethod<C> {
   // Each candidate's chance to top the drawn ballot, shared within a tie.
   public probabilities(): ScoreObject<C> {

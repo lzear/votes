@@ -6,7 +6,9 @@ import { matrixFromBallots, weightOf } from '../../utils'
 import { config } from '../../utils/config'
 import { sum } from '../../utils/sum'
 
-// Votes per grade, best grade first.
+/**
+ * Votes per grade, best grade first.
+ */
 export type Judgements<C extends string> = Record<C, number[]>
 
 const makeJudgement = <C extends string>(
@@ -74,6 +76,11 @@ const compareValues = (a: [number, number][], b: [number, number][]) => {
   return (i < a.length ? 0 : 1) - (j < b.length ? 0 : 1)
 }
 
+/**
+ * Ranks by majority grade, ties broken by Balinski–Laraki's majority value.
+ *
+ * #### Wikipedia: [Majority judgment](https://en.wikipedia.org/wiki/Majority_judgment)
+ */
 export class MajorityJudgment<C extends string> extends Method<C> {
   private _judgements: Judgements<C> | undefined
   private _matrix?: Matrix<C>

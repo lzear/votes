@@ -6,6 +6,10 @@ export interface Matrixer<C extends string> {
   matrix: Matrix<C>
 }
 
+/**
+ * Score method for which the matrix of duels is enough: it takes one, or
+ * builds it from ballots.
+ */
 export abstract class MatrixScoreMethod<C extends string>
   extends ScoreMethod<C>
   implements Scorer<C>, Matrixer<C>

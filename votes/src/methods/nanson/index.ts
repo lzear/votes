@@ -4,7 +4,9 @@ import { config } from '../../utils/config'
 import { sum } from '../../utils/sum'
 import { matrixBordaScores } from '../borda'
 
-// Round-level detail specific to Nanson: the Borda-score cutoff used to eliminate candidates.
+/**
+ * Round-level detail specific to Nanson: the Borda-score cutoff used to eliminate candidates.
+ */
 export interface NansonInfo {
   average: number
 }

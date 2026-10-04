@@ -13,6 +13,9 @@ const computeScores = <C extends string>(matrix: Matrix<C>): ScoreObject<C> => {
   return lotteryFromAntisymmetric(signMatrix)
 }
 
+/**
+ * The maximal lottery of pairwise wins alone, whatever their margins.
+ */
 export class RandomizedCondorcet<
   C extends string,
 > extends RandomMatrixMethod<C> {

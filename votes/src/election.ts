@@ -9,11 +9,15 @@ import { type Profile } from './types'
 import { iterateRanking } from './utils'
 
 export interface StepResult<C extends string> {
-  // The method's label, or its class name.
+  /**
+   * The method's label, or its class name.
+   */
   name: string
   before: C[][]
   after: C[][]
-  // The method's run on each tier it ranked.
+  /**
+   * The method's run on each tier it ranked.
+   */
   runs: (Run<C> & { candidates: C[] })[]
 }
 

@@ -7,7 +7,7 @@ export interface Scorer<C extends string> extends Ranker<C> {
 }
 
 /**
- * Voting method for which the ballots are not necessary: the matrix of duels in enough.
+ * Voting method that ranks candidates by score, highest first.
  */
 export abstract class ScoreMethod<C extends string>
   extends Method<C>

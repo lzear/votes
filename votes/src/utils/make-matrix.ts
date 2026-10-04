@@ -85,6 +85,9 @@ export const toMatrix = <C extends string>(
   return { array, candidates }
 }
 
+/**
+ * Margins: `array[i][j] - array[j][i]`.
+ */
 export const makeAntisymmetric = <C extends string>(
   matrix: Matrix<C>,
 ): Matrix<C> => ({

@@ -2,13 +2,20 @@ import { type Profile, type Round, type ScoreObject } from '../types'
 import { completeRanking } from '../utils/normalize'
 import { type MethodCtor, type Ranker } from './method'
 
+/**
+ * `tb()` options of the tiebreaker itself.
+ *
+ * @inline
+ */
 export interface TbMeta {
   full?: boolean
   stable?: boolean
   label?: string
 }
 
-// Constructor props beyond those the tiebreaker supplies itself
+/**
+ * Constructor props beyond those the tiebreaker supplies itself.
+ */
 export type PropsOf<T> = T extends new (input: infer P) => unknown
   ? Omit<P, keyof Profile<string> | 'array'>
   : unknown
@@ -16,13 +23,21 @@ export type PropsOf<T> = T extends new (input: infer P) => unknown
 export type TbEntry<C extends string, T extends MethodCtor<C> = MethodCtor<C>> =
   T | readonly [T, PropsOf<T> & TbMeta]
 
+/**
+ * A tiebreaker or `Election` method: `ctor` with options for its constructor,
+ * and `full`, `stable` or `label`.
+ */
 export const tb = <C extends string, T extends MethodCtor<C>>(
   ctor: T,
   opts?: PropsOf<T> & TbMeta,
 ): TbEntry<C, NoInfer<T>> =>
   opts === undefined ? ctor : ([ctor, opts] as const)
 
-// A ranking of tied candidates, and what the method behind it reports.
+/**
+ * A ranking of tied candidates, and what the method behind it reports.
+ *
+ * @inline
+ */
 export interface Run<C extends string> {
   ranking: C[][]
   scores?: ScoreObject<C>

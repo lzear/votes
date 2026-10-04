@@ -1,6 +1,8 @@
 export interface Ballot<C extends string> {
   ranking: C[][]
-  // How many voters cast it (default 1): finite, not negative.
+  /**
+   * How many voters cast it (default 1): finite, not negative.
+   */
   weight?: number
 }
 
@@ -9,7 +11,9 @@ export interface Matrix<C extends string> {
   array: number[][]
 }
 
-// What every method takes.
+/**
+ * What every method takes.
+ */
 export interface Profile<C extends string> {
   candidates: readonly C[]
   ballots: readonly Ballot<C>[]
@@ -32,21 +36,37 @@ export interface Profile<C extends string> {
 
 export type ScoreObject<C extends string> = Record<C, number>
 
-// Trace of one tiebreaker's work within a round.
+/**
+ * Trace of one tiebreaker's work within a round.
+ */
 export interface TieBreakStep<C extends string> {
-  // Position among the method's tiebreakers, built-in ones first.
+  /**
+   * Position among the method's tiebreakers, built-in ones first.
+   */
   index: number
-  // The tiebreaker's label, or its class name.
+  /**
+   * The tiebreaker's label, or its class name.
+   */
   name: string
-  // Candidates that were tied going into this step.
+  /**
+   * Candidates that were tied going into this step.
+   */
   candidates: C[]
-  // Full ranking produced by the tiebreaker on `candidates`.
+  /**
+   * Full ranking produced by the tiebreaker on `candidates`.
+   */
   ranking: C[][]
-  // Scores produced by the tiebreaker (when the method supports scores()).
+  /**
+   * Scores produced by the tiebreaker (when the method supports scores()).
+   */
   scores?: Partial<Record<C, number>>
-  // Candidates promoted out of the tie (upper tiers of `ranking`).
+  /**
+   * Candidates promoted out of the tie (upper tiers of `ranking`).
+   */
   resolved: C[]
-  // Candidates still tied after this step (last tier of `ranking`).
+  /**
+   * Candidates still tied after this step (last tier of `ranking`).
+   */
   remaining: C[]
 }
 
@@ -55,13 +75,17 @@ export interface QE<C extends string, I = undefined> {
   eliminated: C[]
   scores: ScoreObject<C>
   tieBreakSteps?: TieBreakStep<C>[]
-  // Method-specific detail about this round
+  /**
+   * Method-specific detail about this round
+   */
   info?: I
 }
 
 export interface Round<C extends string, I = undefined> extends QE<C, I> {
   index: number
-  // Candidates still in the race.
+  /**
+   * Candidates still in the race.
+   */
   candidates: C[]
 }
 

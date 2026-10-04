@@ -5,6 +5,7 @@ module.exports = {
   externalPattern: ['../node_modules/**/*'],
   excludeExternals: true,
   excludePrivate: true,
+  excludeProtected: true,
   excludeInternal: true,
   validation: { notExported: false },
 }

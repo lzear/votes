@@ -1,5 +1,8 @@
 import { config } from './config'
 
+/**
+ * Tiers of candidates, highest score first, ties within `epsilon`.
+ */
 export const scoresToRanking = <C extends string>(
   scores: Record<C, number>,
   epsilon = config.EPSILON,

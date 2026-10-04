@@ -3,17 +3,27 @@ import { iterateRanking } from '../utils/iterate-ranking'
 
 export interface Ranker<C extends string> {
   ranking(): C[][]
-  // The same ranker on a subset of its candidates.
+  /**
+   * The same ranker on a subset of its candidates.
+   */
   restrict(candidates: readonly C[]): Ranker<C>
-  // Points behind the ranking, for methods that score.
+  /**
+   * Points behind the ranking, for methods that score.
+   */
   scores?(): ScoreObject<C>
-  // Each round, for methods that eliminate.
+  /**
+   * Each round, for methods that eliminate.
+   */
   rounds?(): Round<C, unknown>[]
-  // Each candidate's chance to win, for random methods.
+  /**
+   * Each candidate's chance to win, for random methods.
+   */
   probabilities?(): ScoreObject<C>
 }
 
-// Every method takes the same input.
+/**
+ * Every method takes the same input.
+ */
 export type MethodCtor<C extends string> = new (input: Profile<C>) => Ranker<C>
 
 export abstract class Method<C extends string> implements Ranker<C> {

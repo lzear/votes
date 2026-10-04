@@ -42,6 +42,9 @@ export const groupBallots = <C extends string, B extends Ballot<C>>(
     .filter((b) => weightOf(b) > 0)
     .toSorted((a, b) => weightOf(b) - weightOf(a))
 
+/**
+ * Ballots from rankings, the same ones merged into one weighted ballot.
+ */
 export const toWeightedBallots = <C extends string>(
   ballots: readonly C[][][],
 ): Ballot<C>[] =>
