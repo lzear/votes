@@ -1,8 +1,8 @@
 import { RoundBallotMethodTb } from '../../classes/round-ballot-method-tb'
 import { type QE, type TieBreakStep } from '../../types'
-import { scoresToRanking } from '../../utils'
-import { AbsoluteMajority } from '../absolute-majority'
-import { FirstPastThePost } from '../first-past-the-post'
+import { scoresToRanking, totalBallotsWeight } from '../../utils'
+import { majorityWinner } from '../absolute-majority'
+import { firstChoices } from '../first-past-the-post/iterate-first-choices'
 
 /**
  * The two candidates with the most first choices go to a runoff, unless one of
@@ -26,10 +26,7 @@ export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
 
   // The best `k` candidates on first choices.
   private top(candidates: C[], k: number): QE<C> {
-    const scores = new FirstPastThePost({
-      ballots: this.ballots,
-      candidates,
-    }).scores()
+    const scores = firstChoices(this.ballots, candidates)
     const qualified: C[] = []
     const tieBreakSteps: TieBreakStep<C>[] = []
     for (const tier of scoresToRanking(scores)) {
@@ -62,10 +59,14 @@ export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
         : runoff
     }
 
-    const am = new AbsoluteMajority({ ballots: this.ballots, candidates })
-    const [winner = [], ...rest] = am.ranking()
-    return winner.length === 1
-      ? { qualified: winner, eliminated: rest.flat(), scores: am.scores() }
-      : this.top(candidates, 2)
+    const scores = firstChoices(this.ballots, candidates)
+    const winner = majorityWinner(scores, totalBallotsWeight(this.ballots))
+    return winner === undefined
+      ? this.top(candidates, 2)
+      : {
+          qualified: [winner],
+          eliminated: candidates.filter((c) => c !== winner),
+          scores,
+        }
   }
 }
