@@ -51,14 +51,6 @@ export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {
   }
 
   protected override round(candidates: C[], index: number): QE<C, CoombsInfo> {
-    if (candidates.length < 2)
-      return {
-        eliminated: candidates,
-        qualified: [],
-        scores: this.roundScoresZero(candidates),
-        info: { resolution: 'elimination' },
-      }
-
     const scores = firstChoices(this.ballots, candidates)
     const winner = majorityWinner(scores, this.castBallots(candidates))
     if (winner !== undefined)

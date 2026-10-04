@@ -1,6 +1,6 @@
 import { RoundBallotMethodTb } from '../../classes/round-ballot-method-tb'
 import { type QE, type TieBreakStep } from '../../types'
-import { scoresToRanking } from '../../utils'
+import { scoresToRanking, scoresZero } from '../../utils'
 import { majorityWinner } from '../absolute-majority'
 import { firstChoices } from '../first-past-the-post/iterate-first-choices'
 
@@ -48,7 +48,7 @@ export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
       return {
         qualified: [],
         eliminated: candidates,
-        scores: this.roundScoresZero(candidates),
+        scores: scoresZero(candidates),
       }
 
     if (index === 1) {

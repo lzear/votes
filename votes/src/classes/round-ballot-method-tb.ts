@@ -108,13 +108,6 @@ export abstract class TbEliminateLast<
   ): { ranking: C[][]; scores: ScoreObject<C> }
 
   protected round(candidates: C[], index: number): QE<C, I> {
-    if (candidates.length < 2)
-      return {
-        qualified: [],
-        eliminated: candidates,
-        scores: this.roundScoresZero(candidates),
-      }
-
     const { ranking, scores } = this.oneRound(candidates, index)
     const qualified = ranking.slice(0, -1).flat()
     const lastTier = ranking.at(-1) ?? []

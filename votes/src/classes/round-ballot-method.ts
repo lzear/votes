@@ -1,5 +1,4 @@
-import { type QE, type Round, type ScoreObject } from '../types'
-import { scoresZero } from '../utils'
+import { type QE, type Round } from '../types'
 import { BallotMethod } from './ballot-method'
 import { type Ranker } from './method'
 
@@ -35,9 +34,6 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
     ].filter((tier) => tier.length > 0)
   }
 
+  // Only ever called with two candidates or more.
   protected abstract round(candidates: C[], index: number): QE<C, I>
-
-  protected roundScoresZero(candidates: C[]): ScoreObject<C> {
-    return scoresZero(candidates)
-  }
 }
