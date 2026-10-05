@@ -9,6 +9,8 @@ Ranked voting library in `votes/`. `yarn qa` runs everything.
 - Check a behavior change against the previous build:
   `git archive <sha> votes/src`, bundle it with esbuild, compare outputs on
   random profiles.
+- `votes/src/invariants.test.ts` checks every method's invariants on random
+  profiles: list a new Condorcet method there.
 - Round methods' `tieBreakers` input is internal: `Election` fills it with the
   methods after each, already built. Tests reach round traces through `firstRun`
   (`votes/src/test/test-utils.ts`).
