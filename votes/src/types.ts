@@ -100,6 +100,7 @@ export const VotingSystem = {
   AbsoluteMajority: 'ABSOLUTE_MAJORITY',
   AntiPlurality: 'ANTI_PLURALITY',
   Baldwin: 'BALDWIN',
+  Black: 'BLACK',
   Borda: 'BORDA',
   BottomTwoRunoff: 'BOTTOM_TWO_RUNOFF',
   Bucklin: 'BUCKLIN',

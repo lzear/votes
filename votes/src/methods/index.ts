@@ -4,6 +4,7 @@ import { AbsoluteMajority } from './absolute-majority'
 import { AntiPlurality } from './anti-plurality'
 import { Approval } from './approval'
 import { Baldwin } from './baldwin'
+import { Black } from './black'
 import { Borda } from './borda'
 import { BottomTwoRunoff } from './bottom-two-runoff'
 import { Bucklin } from './bucklin'
@@ -30,6 +31,7 @@ export const methods = {
   [VotingSystem.AntiPlurality]: AntiPlurality,
   [VotingSystem.Approval]: Approval,
   [VotingSystem.Baldwin]: Baldwin,
+  [VotingSystem.Black]: Black,
   [VotingSystem.Borda]: Borda,
   [VotingSystem.BottomTwoRunoff]: BottomTwoRunoff,
   [VotingSystem.Bucklin]: Bucklin,

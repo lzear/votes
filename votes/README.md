@@ -167,6 +167,7 @@ re-run itself on a subset of candidates.
 | Anti-plurality       | `AntiPlurality`       | ballots           |
 | Approval voting      | `Approval`            | ballots           |
 | Baldwin method       | `Baldwin`             | ballots           |
+| Black's method       | `Black`               | ballots           |
 | Borda count          | `Borda`               | ballots           |
 | Bottom-two-runoff    | `BottomTwoRunoff`     | ballots           |
 | Bucklin voting       | `Bucklin`             | ballots           |

@@ -3,6 +3,7 @@ import {
   AntiPlurality,
   Approval,
   Baldwin,
+  Black,
   Borda,
   Bucklin,
   Coombs,
@@ -75,6 +76,30 @@ describe('Test all methods', () => {
     expect(
       new Baldwin({ ballots: balinski, candidates: abcde }).ranking(),
     ).toStrictEqual([['c'], ['b'], ['d'], ['e'], ['a']])
+  })
+  it('votes with black', () => {
+    // a beats b and c, but b has the most Borda points.
+    const input = {
+      candidates: ['a', 'b', 'c'],
+      ballots: [
+        { ranking: [['a'], ['b'], ['c']], weight: 3 },
+        { ranking: [['b'], ['c'], ['a']], weight: 2 },
+      ],
+    }
+    expect(new Borda(input).ranking()).toStrictEqual([['b'], ['a'], ['c']])
+    expect(new Black(input).ranking()).toStrictEqual([['a'], ['b'], ['c']])
+    expect(new Black(input).scores()).toStrictEqual(new Borda(input).scores())
+  })
+  it('falls back on Borda without a Condorcet winner (Black)', () => {
+    const input = {
+      candidates: ['a', 'b', 'c'],
+      ballots: [
+        { ranking: [['a'], ['b'], ['c']], weight: 3 },
+        { ranking: [['b'], ['c'], ['a']], weight: 2 },
+        { ranking: [['c'], ['a'], ['b']], weight: 2 },
+      ],
+    }
+    expect(new Black(input).ranking()).toStrictEqual([['a'], ['b'], ['c']])
   })
   it('votes with borda', () => {
     expect(
