@@ -4,6 +4,7 @@ import {
   Approval,
   Baldwin,
   Borda,
+  Bucklin,
   Coombs,
   Copeland,
   Election,
@@ -85,6 +86,21 @@ describe('Test all methods', () => {
       d: 292,
       e: 282,
     })
+  })
+  it('votes with bucklin', () => {
+    // No majority before third choices.
+    expect(
+      new Bucklin({ candidates: abcde, ballots: balinski }).scores(),
+    ).toStrictEqual({ a: 33, b: 82, c: 100, d: 37, e: 48 })
+  })
+  it('counts the share of a Bucklin tier across the cut', () => {
+    const ballots = [
+      { ranking: [['a'], ['b', 'c']] },
+      { ranking: [['b'], ['a']] },
+    ]
+    expect(
+      new Bucklin({ candidates: ['a', 'b', 'c'], ballots }).scores(),
+    ).toStrictEqual({ a: 2, b: 1.5, c: 0.5 })
   })
   it('votes with coombs', () => {
     expect(

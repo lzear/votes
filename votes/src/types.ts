@@ -102,6 +102,7 @@ export const VotingSystem = {
   Baldwin: 'BALDWIN',
   Borda: 'BORDA',
   BottomTwoRunoff: 'BOTTOM_TWO_RUNOFF',
+  Bucklin: 'BUCKLIN',
   Coombs: 'COOMBS',
   Copeland: 'COPELAND',
   FirstPastThePost: 'FIRST_PAST_THE_POST',

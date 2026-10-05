@@ -169,6 +169,7 @@ re-run itself on a subset of candidates.
 | Baldwin method       | `Baldwin`             | ballots           |
 | Borda count          | `Borda`               | ballots           |
 | Bottom-two-runoff    | `BottomTwoRunoff`     | ballots           |
+| Bucklin voting       | `Bucklin`             | ballots           |
 | Coombs' method       | `Coombs`              | ballots           |
 | Copeland's method    | `Copeland`            | ballots or matrix |
 | First-past-the-post  | `FirstPastThePost`    | ballots           |
@@ -188,6 +189,9 @@ re-run itself on a subset of candidates.
 | Two-round runoff     | `TwoRoundRunoff`      | ballots           |
 
 `Approval` approves the candidates in each ballot's first tier.
+
+`Bucklin` scores the count that finds a majority, a tier across its cut counting
+for its share of places within.
 
 `Baldwin` and `Nanson` take Borda scores from the pairwise matrix: the same as
 `Borda`'s when ballots rank everyone, and a Condorcet winner always wins.

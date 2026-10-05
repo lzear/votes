@@ -6,6 +6,7 @@ import { Approval } from './approval'
 import { Baldwin } from './baldwin'
 import { Borda } from './borda'
 import { BottomTwoRunoff } from './bottom-two-runoff'
+import { Bucklin } from './bucklin'
 import { Coombs } from './coombs'
 import { Copeland } from './copeland'
 import { FirstPastThePost } from './first-past-the-post'
@@ -31,6 +32,7 @@ export const methods = {
   [VotingSystem.Baldwin]: Baldwin,
   [VotingSystem.Borda]: Borda,
   [VotingSystem.BottomTwoRunoff]: BottomTwoRunoff,
+  [VotingSystem.Bucklin]: Bucklin,
   [VotingSystem.Coombs]: Coombs,
   [VotingSystem.Copeland]: Copeland,
   [VotingSystem.FirstPastThePost]: FirstPastThePost,
