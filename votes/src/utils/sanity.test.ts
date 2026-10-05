@@ -92,7 +92,12 @@ describe('sanity check', () => {
   it.each(Object.values(VotingSystem))(
     'gets the winner from 1 ballot %s',
     (system) => {
-      if (system === VotingSystem.RandomCandidates) return
+      // Anti-plurality only tells a lone ballot's last choice apart.
+      if (
+        system === VotingSystem.RandomCandidates ||
+        system === VotingSystem.AntiPlurality
+      )
+        return
 
       const ballots = [{ ranking: [['a'], ['b'], ['c']], weight: 1 }]
       const candidates = ['a', 'b', 'c']
@@ -104,7 +109,8 @@ describe('sanity check', () => {
   it.each(Object.values(VotingSystem))(
     'gets the 2 winners from 1 ballot (%s)',
     (system) => {
-      if (methods[system].isRandom) return
+      if (methods[system].isRandom || system === VotingSystem.AntiPlurality)
+        return
 
       const ballots = [{ ranking: [['a', 'd'], ['b'], ['c']], weight: 1 }]
       const candidates = ['a', 'b', 'c', 'd']
@@ -154,7 +160,8 @@ describe('sanity check', () => {
     },
   )
   it.each(Object.values(VotingSystem))('dummyProfile %s', (system) => {
-    if (methods[system].isRandom) return
+    if (methods[system].isRandom || system === VotingSystem.AntiPlurality)
+      return
 
     const candidates = abcde
     const ballots = dummyProfile
@@ -163,7 +170,8 @@ describe('sanity check', () => {
   })
 
   it.each(Object.values(VotingSystem))('dummyProfile10 (%s)', (system) => {
-    if (methods[system].isRandom) return
+    if (methods[system].isRandom || system === VotingSystem.AntiPlurality)
+      return
 
     const candidates = abcde
     const ballots = dummyProfile10

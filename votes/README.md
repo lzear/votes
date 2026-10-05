@@ -164,6 +164,7 @@ re-run itself on a subset of candidates.
 | Method               | Class                 | Input             |
 | -------------------- | --------------------- | ----------------- |
 | Absolute majority    | `AbsoluteMajority`    | ballots           |
+| Anti-plurality       | `AntiPlurality`       | ballots           |
 | Approval voting      | `Approval`            | ballots           |
 | Baldwin method       | `Baldwin`             | ballots           |
 | Borda count          | `Borda`               | ballots           |

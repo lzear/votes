@@ -1,23 +1,11 @@
 import { type Step } from '../../classes/round-ballot-method'
 import { TbEliminateLast } from '../../classes/round-ballot-method-tb'
-import { type Ballot, type ScoreObject } from '../../types'
+import { type ScoreObject } from '../../types'
 import { scoresToRanking } from '../../utils'
 import { config } from '../../utils/config'
 import { majorityWinner } from '../absolute-majority'
+import { antiPluralityScores } from '../anti-plurality'
 import { firstChoices } from '../first-past-the-post/iterate-first-choices'
-
-const reverseBallots = <C extends string>(ballots: Ballot<C>[]): Ballot<C>[] =>
-  ballots.map((ballot) => ({ ...ballot, ranking: ballot.ranking.toReversed() }))
-
-const ranksAll = <C extends string>(
-  { ranking }: Ballot<C>,
-  candidates: Set<C>,
-): boolean => {
-  let ranked = 0
-  for (const rank of ranking)
-    for (const c of rank) if (candidates.has(c)) ranked++
-  return ranked === candidates.size
-}
 
 /**
  * Round-level detail specific to Coombs: how this round was resolved.
@@ -38,16 +26,11 @@ export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {
     ranking: C[][]
     scores: ScoreObject<C>
   } {
-    // Only a ballot that ranks everyone left has a last choice; with
-    // unrankedLast, any ballot that ranks someone does.
-    const running = new Set(candidates)
-    const complete = this.unrankedLast
-      ? this.ballots
-      : this.ballots.filter((b) => ranksAll(b, running))
-    const reversedScores = firstChoices(reverseBallots(complete), candidates)
-    const scores = Object.fromEntries(
-      Object.entries<number>(reversedScores).map(([c, s]) => [c, -s]),
-    ) as ScoreObject<C>
+    const scores = antiPluralityScores(
+      this.ballots,
+      candidates,
+      this.unrankedLast,
+    )
     return { ranking: scoresToRanking(scores, config.EPSILON), scores }
   }
 

@@ -1,5 +1,6 @@
 import {
   AbsoluteMajority,
+  AntiPlurality,
   Approval,
   Baldwin,
   Borda,
@@ -40,6 +41,24 @@ const tieBallots = [
 ] as { ranking: ABCD[][]; weight: number }[]
 
 describe('Test all methods', () => {
+  it('votes with anti-plurality', () => {
+    const antiPlurality = new AntiPlurality({
+      candidates: abcde,
+      ballots: balinski,
+    })
+    expect(antiPlurality.scores()).toStrictEqual({
+      a: -64,
+      b: -0,
+      c: -0,
+      d: -0,
+      e: -36,
+    })
+    expect(antiPlurality.ranking()).toStrictEqual([
+      ['b', 'c', 'd'],
+      ['e'],
+      ['a'],
+    ])
+  })
   it('votes with approval', () => {
     expect(
       new Approval({ candidates: abcde, ballots: balinski }).scores(),

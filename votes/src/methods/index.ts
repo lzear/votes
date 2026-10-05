@@ -1,6 +1,7 @@
 import { type MethodCtor } from '../classes/method'
 import { VotingSystem } from '../types'
 import { AbsoluteMajority } from './absolute-majority'
+import { AntiPlurality } from './anti-plurality'
 import { Approval } from './approval'
 import { Baldwin } from './baldwin'
 import { Borda } from './borda'
@@ -25,6 +26,7 @@ import { TwoRoundRunoff } from './two-round-runoff'
 
 export const methods = {
   [VotingSystem.AbsoluteMajority]: AbsoluteMajority,
+  [VotingSystem.AntiPlurality]: AntiPlurality,
   [VotingSystem.Approval]: Approval,
   [VotingSystem.Baldwin]: Baldwin,
   [VotingSystem.Borda]: Borda,
