@@ -1,13 +1,8 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { RandomBallotMethod } from '../../classes/random-ballot-method'
 import { type Ballot, type ScoreObject } from '../../types'
-import {
-  scoresAny,
-  scoresZero,
-  totalBallotsWeight,
-  weightOf,
-} from '../../utils'
-import { completeRanking } from '../../utils/normalize'
+import { nonBlank, scoresZero, totalBallotsWeight, weightOf } from '../../utils'
+import { sum } from '../../utils/sum'
+import { refine, serialRanking } from '../dictator'
 
 const pickBallotIdx = <C extends string>(
   ballots: Ballot<C>[],
@@ -19,45 +14,67 @@ const pickBallotIdx = <C extends string>(
     w += weightOf(ballot)
     if (w > pickAt) return i
   }
-  // `ratio` was 1: the last ballot with weight.
-  return ballots.findLastIndex((b) => weightOf(b) > 0)
+  // `ratio` was 1: the last ballot.
+  return ballots.length - 1
 }
 
-const rank = <C extends string>(
-  candidates: C[],
+// The ballots in random order, each drawn by weight among those left.
+function* drawOrder<C extends string>(
   ballots: Ballot<C>[],
   rng: () => number,
-): C[][] => {
-  if (candidates.length === 0) return []
-  // No weight to draw from: everyone ties.
-  if (totalBallotsWeight(ballots) <= 0) return [candidates]
+): Generator<Ballot<C>> {
+  const left = ballots.filter((b) => weightOf(b) > 0)
+  while (left.length > 0) yield* left.splice(pickBallotIdx(left, rng()), 1)
+}
 
-  const ratio = rng()
-  const idx = pickBallotIdx(ballots, ratio)
-  return completeRanking(ballots[idx]!.ranking, candidates)
+// Each candidate's chance to win from the tie `tier`: the first drawn ballot
+// that splits it hands it to its top part, so each part gets the weight of the
+// ballots that make it. Shared evenly when no ballot splits it.
+const winChances = <C extends string>(
+  tier: C[],
+  ballots: Ballot<C>[],
+  memo: Map<string, Map<C, number>>,
+): Map<C, number> => {
+  const key = JSON.stringify(tier)
+  const known = memo.get(key)
+  if (known) return known
+  const parts = new Map<string, { top: C[]; weight: number }>()
+  for (const ballot of ballots) {
+    const [top = []] = refine([tier], ballot)
+    if (top.length === tier.length) continue
+    const k = JSON.stringify(top)
+    const weight = (parts.get(k)?.weight ?? 0) + weightOf(ballot)
+    parts.set(k, { top, weight })
+  }
+  const parted = parts.values().toArray()
+  const total = sum(parted.map((p) => p.weight))
+  const chances = new Map<C, number>()
+  if (total <= 0) for (const c of tier) chances.set(c, 1 / tier.length)
+  else
+    for (const { top, weight } of parted)
+      for (const [c, p] of winChances(top, ballots, memo))
+        chances.set(c, (chances.get(c) ?? 0) + (p * weight) / total)
+  memo.set(key, chances)
+  return chances
 }
 
 /**
- * Ranks as a ballot drawn at random, by weight.
+ * Ranks as a ballot drawn at random by weight, breaking its ties with the next
+ * drawn and so on: `Dictator` on ballots in random order.
  *
  * #### Wikipedia: [Random ballot](https://en.wikipedia.org/wiki/Random_ballot)
  */
 export class RandomDictator<C extends string> extends RandomBallotMethod<C> {
-  // Each candidate's chance to top the drawn ballot, shared within a tie.
   public probabilities(): ScoreObject<C> {
-    const ballots = this.castBallots(this.candidates)
-    const total = totalBallotsWeight(ballots)
-    if (total <= 0)
-      return scoresAny(this.candidates, 1 / this.candidates.length)
-    const odds = scoresZero(this.candidates)
-    for (const ballot of ballots) {
-      const [top = []] = completeRanking(ballot.ranking, this.candidates)
-      for (const c of top) odds[c] += weightOf(ballot) / top.length / total
+    const ballots = this.ballots.filter((b) => weightOf(b) > 0)
+    return {
+      ...scoresZero(this.candidates),
+      ...Object.fromEntries(winChances(this.candidates, ballots, new Map())),
     }
-    return odds
   }
 
   protected draw(): C[][] {
-    return rank(this.candidates, this.castBallots(this.candidates), this.rng)
+    const ballots = nonBlank(this.ballots, this.candidates)
+    return serialRanking(this.candidates, drawOrder(ballots, this.rng))
   }
 }

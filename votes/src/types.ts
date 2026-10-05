@@ -27,9 +27,8 @@ export interface Profile<C extends string> {
   unrankedLast?: boolean
   /**
    * Whether blank ballots, ranking none of the candidates still in the race,
-   * count as cast (default false): toward absolute majorities, in random
-   * dictator's draw and, with `unrankedLast`, as worst grades in majority
-   * judgment.
+   * count as cast (default false): toward absolute majorities and, with
+   * `unrankedLast`, as worst grades in majority judgment.
    */
   countBlank?: boolean
 }

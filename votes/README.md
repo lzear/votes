@@ -48,8 +48,8 @@ by default; pass `unrankedLast: false` to score only expressed preferences
 (unranked candidates then earn nothing from that ballot). Blank ballots, ranking
 none of the candidates still in the race, don't count as cast; pass
 `countBlank: true` to count them toward absolute majorities (`AbsoluteMajority`,
-`Coombs`, `TwoRoundRunoff`), in `RandomDictator`'s draw and, with
-`unrankedLast`, as worst grades in `MajorityJudgment`.
+`Coombs`, `TwoRoundRunoff`) and, with `unrankedLast`, as worst grades in
+`MajorityJudgment`.
 
 Every method takes this same `{ candidates, ballots, unrankedLast, countBlank }`
 input. Matrix methods (see the table below) also take a pairwise matrix
@@ -198,7 +198,8 @@ for its share of places within.
 
 `CandidateOrder` ranks candidates in the order given, whatever the order of a
 tie it breaks, and `Dictator` as the first ballot, breaking its ties with the
-next and so on: deterministic last resorts for an `Election`.
+next and so on: deterministic last resorts for an `Election`. `RandomDictator`
+is `Dictator` on ballots drawn in random order, by weight.
 
 `Baldwin` and `Nanson` take Borda scores from the pairwise matrix: the same as
 `Borda`'s when ballots rank everyone, and a Condorcet winner always wins.
