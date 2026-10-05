@@ -258,10 +258,9 @@ describe('sanity check', () => {
       [0, 1],
       [0, 0],
     ]
-    const tieBreakers = [Borda] as const
     const rankers: Ranker<'a' | 'b'>[] = [
       new Borda({ candidates, ballots }),
-      new InstantRunoff<'a' | 'b'>({ candidates, ballots, tieBreakers }),
+      new InstantRunoff({ candidates, ballots }),
       new Copeland({ candidates, array }),
       new MajorityJudgment({ candidates, ballots }),
       new Election({

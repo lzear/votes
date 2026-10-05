@@ -1,5 +1,4 @@
 import { type Ranker } from './classes/method'
-import { tb } from './classes/tiebreaker'
 import { Election } from './election'
 import { Borda } from './methods/borda'
 import { Copeland } from './methods/copeland'
@@ -84,7 +83,7 @@ describe('iteratedRanking', () => {
     const election = new Election({
       candidates: abc,
       ballots,
-      methods: [Borda, tb(FirstPastThePost, { full: true })],
+      methods: [Borda, FirstPastThePost.with({ mode: 'full' })],
     })
 
     // Regular: FPTP on everyone breaks the a/c tie for a (3 firsts vs 2).
@@ -129,21 +128,5 @@ describe('restrict', () => {
     expect(
       new Minimax({ ...profile, variant }).restrict(pair).minimaxVariant,
     ).toBe(variant)
-  })
-})
-
-describe('deTie', () => {
-  it('re-ranks each tie until none splits further (Borda)', () => {
-    const borda = new Borda({
-      candidates: ['a', 'b', 'c', 'd'],
-      ballots: [
-        { ranking: [['d'], ['a']], weight: 2 },
-        { ranking: [['d'], ['b'], ['a'], ['c']], weight: 3 },
-        { ranking: [['c']], weight: 3 },
-      ],
-    })
-    // a, b and c tie; among them, a and b; between them, b wins.
-    expect(borda.ranking()).toStrictEqual([['d'], ['a', 'b', 'c']])
-    expect(borda.deTie()).toStrictEqual([['d'], ['b'], ['a'], ['c']])
   })
 })

@@ -41,7 +41,8 @@ export type ScoreObject<C extends string> = Record<C, number>
  */
 export interface TieBreakStep<C extends string> {
   /**
-   * Position among the method's tiebreakers, built-in ones first.
+   * Position among the round's tiebreakers: the method's built-in ones, then
+   * the `Election` methods after it.
    */
   index: number
   /**

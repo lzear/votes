@@ -5,6 +5,7 @@ import {
   Borda,
   Coombs,
   Copeland,
+  Election,
   FirstPastThePost,
   InstantRunoff,
   Kemeny,
@@ -17,10 +18,16 @@ import {
   RandomizedCondorcet,
   RankedPairs,
   Schulze,
-  tb,
   TwoRoundRunoff,
 } from '.'
-import { abcde, balinski, closeTo, sW } from './test/test-utils'
+import {
+  abcde,
+  balinski,
+  closeTo,
+  firstRun,
+  openTie,
+  sW,
+} from './test/test-utils'
 import { matrixFromBallots, rngGenerator } from './utils'
 
 type ABCD = 'a' | 'b' | 'c' | 'd'
@@ -239,49 +246,48 @@ describe('Test all methods', () => {
   })
 })
 
-describe('tieBreakers', () => {
-  it('InstantRunoff with empty tieBreakers eliminates all tied-last candidates', () => {
+describe('round tiebreakers', () => {
+  it('InstantRunoff alone eliminates all tied-last candidates', () => {
     const irv = new InstantRunoff({
       candidates: tieCandidates,
       ballots: tieBallots,
-      tieBreakers: [],
     })
     expect(irv.rounds()[0]?.eliminated).toStrictEqual(['b', 'c'])
   })
 
-  it('InstantRunoff with custom tieBreakers chain eliminates one tied-last candidate', () => {
-    const irv = new InstantRunoff({
+  it('InstantRunoff breaks a round tie with the methods after it', () => {
+    const { rounds } = firstRun({
       candidates: tieCandidates,
       ballots: tieBallots,
-      tieBreakers: [Borda],
+      methods: [InstantRunoff, Borda],
     })
-    expect(irv.rounds()[0]?.eliminated).toStrictEqual(['c'])
+    expect(rounds[0]?.eliminated).toStrictEqual(['c'])
   })
 
-  it('Nanson breaks a complete tie with its tieBreakers', () => {
+  it('Nanson breaks a complete tie with the methods after it', () => {
     // A Condorcet cycle: every Borda score equals the average.
-    const nanson = new Nanson({
+    const { rounds } = firstRun({
       candidates: ['a', 'b', 'c'],
       ballots: [
         { ranking: [['a'], ['b'], ['c']], weight: 1 },
         { ranking: [['b'], ['c'], ['a']], weight: 1 },
         { ranking: [['c'], ['a'], ['b']], weight: 1 },
       ],
-      tieBreakers: [tb(RandomCandidates, { rng: () => 0 })],
+      methods: [Nanson, RandomCandidates.with({ rng: () => 0 })],
     })
-    expect(nanson.rounds()[0]).toMatchObject({
+    expect(rounds[0]).toMatchObject({
       qualified: ['b', 'c'],
       eliminated: ['a'],
     })
   })
 
   it('takes MajorityJudgment as a tiebreaker', () => {
-    const irv = new InstantRunoff({
+    const { rounds } = firstRun({
       candidates: tieCandidates,
       ballots: tieBallots,
-      tieBreakers: [MajorityJudgment],
+      methods: [InstantRunoff, MajorityJudgment],
     })
-    expect(irv.rounds()[0]?.eliminated).toStrictEqual(['c'])
+    expect(rounds[0]?.eliminated).toStrictEqual(['c'])
   })
 
   it('keeps tied candidates a tiebreaker does not rank', () => {
@@ -300,25 +306,25 @@ describe('tieBreakers', () => {
         return new FirstOnly({ candidates })
       }
     }
-    const irv = new InstantRunoff({
+    const { rounds } = firstRun({
       candidates: tieCandidates,
       ballots: tieBallots,
-      tieBreakers: [FirstOnly],
+      methods: [InstantRunoff, FirstOnly],
     })
-    expect(irv.rounds()[0]).toMatchObject({
+    expect(rounds[0]).toMatchObject({
       qualified: ['d', 'a', 'b'],
       eliminated: ['c'],
     })
   })
 
-  it('keeps tieBreakers on restrict', () => {
-    const irv = new InstantRunoff({
+  it('keeps round tiebreakers on restrict', () => {
+    const election = new Election({
       candidates: tieCandidates,
       ballots: tieBallots,
-      tieBreakers: [Borda],
+      methods: [InstantRunoff, Borda],
     })
     // Restricted to {a, b, c}, b and c tie on first choices; Borda splits them.
-    expect(irv.restrict(['a', 'b', 'c']).ranking()).toStrictEqual([
+    expect(election.restrict(['a', 'b', 'c']).ranking()).toStrictEqual([
       ['a'],
       ['b'],
       ['c'],
@@ -332,11 +338,11 @@ describe('tieBreakers', () => {
       { ranking: [['a'], ['b']], weight: 1 },
     ]
     const irv = (variant: MinimaxVariant) =>
-      new InstantRunoff({
+      firstRun({
         candidates: tieCandidates,
         ballots,
-        tieBreakers: [tb(Minimax, { full: true, variant })],
-      }).ranking()
+        methods: [InstantRunoff, Minimax.with({ mode: 'full', variant })],
+      }).ranking
     expect(irv(MinimaxVariant.Margins)).toStrictEqual([
       ['d'],
       ['a'],
@@ -350,29 +356,33 @@ describe('tieBreakers', () => {
     ])
   })
 
-  it("forwards the host's unrankedLast setting into ballot tiebreakers", () => {
+  it("forwards the election's unrankedLast setting into ballot tiebreakers", () => {
     // First choices: a=1, b=1, c=2 → a and b tie for elimination.
-    const ballots = [
-      { ranking: [['a']], weight: 1 },
-      { ranking: [['b'], ['a']], weight: 1 },
-      { ranking: [['c']], weight: 2 },
-    ]
-    const base = { candidates: ['a', 'b', 'c'], ballots, tieBreakers: [Borda] }
-    const borda = (irv: InstantRunoff<string>) =>
-      irv.rounds()[0]?.tieBreakSteps?.[0]?.scores
+    const input = {
+      candidates: ['a', 'b', 'c'],
+      ballots: [
+        { ranking: [['a']], weight: 1 },
+        { ranking: [['b'], ['a']], weight: 1 },
+        { ranking: [['c']], weight: 2 },
+      ],
+    }
+    const irv = (unrankedLast: boolean) =>
+      firstRun({ ...input, unrankedLast, methods: [InstantRunoff, Borda] })
+    const borda = ({ rounds }: ReturnType<typeof irv>) =>
+      rounds[0]?.tieBreakSteps?.[0]?.scores
     // Default (unranked appended): Borda on {a, b} ties 6–6. Which goes out
     // decides the winner: a and c can win.
-    const appended = new InstantRunoff(base)
+    const appended = irv(true)
     expect(borda(appended)).toStrictEqual({ a: 6, b: 6 })
-    expect(appended.ranking()).toStrictEqual([['a', 'c'], ['b']])
+    expect(appended.ranking).toStrictEqual([['a', 'c'], ['b']])
     // Expressed-only: the a-only and c-only ballots give b nothing → Borda
     // scores a=3, b=2 → b alone eliminated.
-    const expressed = new InstantRunoff({ ...base, unrankedLast: false })
+    const expressed = irv(false)
     expect(borda(expressed)).toStrictEqual({ a: 3, b: 2 })
-    expect(expressed.rounds()[0]?.eliminated).toStrictEqual(['b'])
+    expect(expressed.rounds[0]?.eliminated).toStrictEqual(['b'])
   })
 
-  it("forwards the host's countBlank setting into tiebreakers", () => {
+  it("forwards the election's countBlank setting into tiebreakers", () => {
     // a and b tie on first choices; among them, a leads 5 to 2.
     const input = {
       candidates: ['a', 'b', 'c'],
@@ -382,35 +392,37 @@ describe('tieBreakers', () => {
         { ranking: [['c'], ['a'], ['b']], weight: 3 },
         { ranking: [], weight: 6 },
       ],
-      tieBreakers: [AbsoluteMajority],
     }
     const promoted = (countBlank: boolean) =>
-      new InstantRunoff({ ...input, countBlank }).rounds()[0]
-        ?.tieBreakSteps?.[0]?.resolved
+      firstRun({
+        ...input,
+        countBlank,
+        methods: [InstantRunoff, AbsoluteMajority],
+      }).rounds[0]?.tieBreakSteps?.[0]?.resolved
     // 5 of the 7 ballots cast are a majority, 5 of all 13 are not.
     expect(promoted(false)).toStrictEqual(['a'])
     expect(promoted(true)).toStrictEqual([])
   })
 
-  it("forwards the host's unrankedLast setting into matrix tiebreakers", () => {
-    const ballots = [
-      { ranking: [['a']], weight: 1 },
-      { ranking: [['b'], ['a']], weight: 1 },
-      { ranking: [['c']], weight: 2 },
-    ]
-    const base = {
+  it("forwards the election's unrankedLast setting into matrix tiebreakers", () => {
+    const input = {
       candidates: ['a', 'b', 'c'],
-      ballots,
-      tieBreakers: [Copeland],
+      ballots: [
+        { ranking: [['a']], weight: 1 },
+        { ranking: [['b'], ['a']], weight: 1 },
+        { ranking: [['c']], weight: 2 },
+      ],
     }
+    const irv = (unrankedLast: boolean) =>
+      firstRun({ ...input, unrankedLast, methods: [InstantRunoff, Copeland] })
+        .rounds[0]
     // Default: a beats b on the a-only ballot, b beats a on the other.
-    expect(
-      new InstantRunoff(base).rounds()[0]?.tieBreakSteps?.[0]?.remaining,
-    ).toStrictEqual(['a', 'b'])
+    expect(irv(true)?.tieBreakSteps?.[0]?.remaining).toStrictEqual(['a', 'b'])
     // Expressed-only: the a-only ballot says nothing about b.
-    const expressed = new InstantRunoff({ ...base, unrankedLast: false })
-    expect(expressed.rounds()[0]?.eliminated).toStrictEqual(['a'])
-    expect(expressed.matrix.array).toStrictEqual([
+    expect(irv(false)?.eliminated).toStrictEqual(['a'])
+    expect(
+      new InstantRunoff({ ...input, unrankedLast: false }).matrix.array,
+    ).toStrictEqual([
       [0, 0, 0],
       [1, 0, 0],
       [0, 0, 0],
@@ -419,16 +431,15 @@ describe('tieBreakers', () => {
 
   it('keeps the grades of a majority judgment tiebreaker', () => {
     // Tiers are grades: a gets 0 and 1, b gets 3 and 0. Ranked, they tie.
-    const ballots = [
-      { ranking: [['a'], [], [], ['b']], weight: 1 },
-      { ranking: [['b'], ['a']], weight: 1 },
-    ]
-    const irv = new InstantRunoff({
+    const { ranking } = firstRun({
       candidates: ['a', 'b'],
-      ballots,
-      tieBreakers: [MajorityJudgment],
+      ballots: [
+        { ranking: [['a'], [], [], ['b']], weight: 1 },
+        { ranking: [['b'], ['a']], weight: 1 },
+      ],
+      methods: [InstantRunoff, MajorityJudgment],
     })
-    expect(irv.ranking()).toStrictEqual([['a'], ['b']])
+    expect(ranking).toStrictEqual([['a'], ['b']])
   })
 
   it('builds matrix methods from ballots, honoring unrankedLast', () => {
@@ -445,66 +456,48 @@ describe('tieBreakers', () => {
     ).toStrictEqual(matrixFromBallots(ballots, candidates, false))
   })
 
-  it('Baldwin with empty tieBreakers eliminates all tied-last candidates', () => {
-    const ballots = [
+  // b and c tie for last, and every method sees them alike.
+  const symmetric = {
+    candidates: ['a', 'b', 'c'],
+    ballots: [
       { ranking: [['a'], ['b'], ['c']], weight: 2 },
       { ranking: [['a'], ['c'], ['b']], weight: 2 },
-    ]
-    const baldwin = new Baldwin({
-      candidates: ['a', 'b', 'c'],
-      ballots,
-      tieBreakers: [],
-    })
-    expect(baldwin.rounds()[0]?.eliminated).toStrictEqual(['b', 'c'])
+    ],
+  }
+
+  it('Baldwin alone eliminates all tied-last candidates', () => {
+    expect(new Baldwin(symmetric).rounds()[0]?.eliminated).toStrictEqual([
+      'b',
+      'c',
+    ])
   })
 
-  it('Baldwin with custom tieBreakers chain eliminates one tied-last candidate', () => {
-    const ballots = [
-      { ranking: [['a'], ['b'], ['c']], weight: 2 },
-      { ranking: [['a'], ['c'], ['b']], weight: 2 },
-    ]
-    const baldwin = new Baldwin({
-      candidates: ['a', 'b', 'c'],
-      ballots,
-      tieBreakers: [Borda],
+  it('Baldwin keeps a tie the methods after it cannot break', () => {
+    const { ranking, rounds } = firstRun({
+      ...symmetric,
+      methods: [Baldwin, Borda],
     })
-    expect(baldwin.rounds()[0]?.eliminated).toStrictEqual(['b', 'c'])
-    expect(baldwin.ranking()).toStrictEqual([['a'], ['b', 'c']])
+    expect(rounds[0]?.eliminated).toStrictEqual(['b', 'c'])
+    expect(ranking).toStrictEqual([['a'], ['b', 'c']])
   })
 
-  it('chain tries next tiebreaker when first leaves ties unresolved', () => {
-    // b and c tie pairwise (Copeland can't resolve) → falls through to Borda tiebreaker
-    const ballots = [
-      { ranking: [['a'], ['b'], ['c']], weight: 2 },
-      { ranking: [['a'], ['c'], ['b']], weight: 2 },
-    ]
-    const baldwin = new Baldwin({
-      candidates: ['a', 'b', 'c'],
-      ballots,
-      tieBreakers: [Copeland, Borda],
+  it('tries each next method while the tie holds', () => {
+    const { rounds } = firstRun({
+      ...symmetric,
+      methods: [Baldwin, Copeland, Borda],
     })
-    // Copeland can't split b/c (tied pairwise), Borda breaks it → b eliminated
-    expect(baldwin.rounds()[0]?.eliminated).toStrictEqual(['b', 'c'])
+    expect(rounds[0]?.tieBreakSteps?.map(({ name }) => name)).toStrictEqual([
+      'Copeland',
+      'Borda',
+    ])
+    expect(rounds[0]?.eliminated).toStrictEqual(['b', 'c'])
   })
 })
 
 describe('a tie no tiebreaker breaks', () => {
-  // b and d tie for last on 2 first choices; c, on 3, loses to both head to
-  // head. Whichever of b and d goes out, the other wins.
-  const candidates = ['a', 'b', 'c', 'd', 'e']
-  const ballots = [
-    ['b', 'e', 'd', 'a', 'c', 1],
-    ['c', 'd', 'e', 'b', 'a', 3],
-    ['b', 'a', 'e', 'd', 'c', 1],
-    ['d', 'e', 'a', 'b', 'c', 2],
-  ].map((b) => ({
-    ranking: b.slice(0, -1).map((c) => [String(c)]),
-    weight: Number(b.at(-1)),
-  }))
-
   it('stops the count on those who win in some order of breaking it', () => {
     for (const Method of [InstantRunoff, TwoRoundRunoff])
-      expect(new Method({ candidates, ballots }).ranking()).toStrictEqual([
+      expect(new Method(openTie).ranking()).toStrictEqual([
         ['b', 'd'],
         ['c'],
         ['a', 'e'],
@@ -512,7 +505,7 @@ describe('a tie no tiebreaker breaks', () => {
   })
 
   it('ends the rounds on them', () => {
-    const rounds = new InstantRunoff({ candidates, ballots }).rounds()
+    const rounds = new InstantRunoff(openTie).rounds()
     expect(rounds.map((r) => [r.qualified, r.eliminated])).toStrictEqual([
       [
         ['c', 'b', 'd'],
@@ -523,7 +516,7 @@ describe('a tie no tiebreaker breaks', () => {
   })
 })
 
-describe('tb() tiebreaker API', () => {
+describe('Election method options', () => {
   // a wins FPTP clearly; b preferred over c by 3 voters, c over b by 2
   const candidates3 = ['a', 'b', 'c']
   const asymmetricBallots = [
@@ -536,88 +529,97 @@ describe('tb() tiebreaker API', () => {
     // Ballot1(w=3): b before c → b gets 2, c gets 1 → b+=6, c+=3
     // Ballot2(w=2): c before b → c gets 2, b gets 1 → c+=4, b+=2
     // Total: b=8, c=7 → c eliminated
-    const irv = new InstantRunoff({
+    const irv = firstRun({
       candidates: candidates3,
       ballots: asymmetricBallots,
-      tieBreakers: [Borda],
+      methods: [InstantRunoff, Borda],
     })
-    expect(irv.rounds()[0]?.eliminated).toStrictEqual(['c'])
+    expect(irv.rounds[0]?.eliminated).toStrictEqual(['c'])
   })
 
   it('matrix method (Copeland) as a tiebreaker', () => {
     // Copeland restricted to [b,c]: b beats c (3 voters) vs c beats b (2 voters) → b=1 win
-    const irv = new InstantRunoff({
+    const irv = firstRun({
       candidates: candidates3,
       ballots: asymmetricBallots,
-      tieBreakers: [Copeland],
+      methods: [InstantRunoff, Copeland],
     })
-    expect(irv.rounds()[0]?.eliminated).toStrictEqual(['c'])
+    expect(irv.rounds[0]?.eliminated).toStrictEqual(['c'])
   })
 
-  it('tb(Ctor, opts) passes extra params to constructor', () => {
-    // RandomCandidates takes { candidates, rng } — no ballots — pass rng via tb()
+  it('with() passes options to the constructor', () => {
+    // RandomCandidates takes { candidates, rng }: rng comes through with()
     const rng = rngGenerator('deterministic-seed')
-    const irv = new InstantRunoff({
+    const irv = firstRun({
       candidates: candidates3,
       ballots: asymmetricBallots,
-      tieBreakers: [tb(RandomCandidates, { rng })],
+      methods: [InstantRunoff, RandomCandidates.with({ rng })],
     })
-    expect(irv.rounds()[0]?.eliminated).toHaveLength(1)
+    expect(irv.rounds[0]?.eliminated).toHaveLength(1)
   })
 
-  it('full: true runs tiebreaker on all candidates instead of tied subset', () => {
+  it("mode 'full' ranks a tie among all candidates, not the tied ones", () => {
     // Restricted FPTP on [b,c]: ballot1 → b first, ballot2 → c first → b=3, c=2 → c eliminated
     // Full FPTP on [a,b,c]: a=5, b=0, c=0 → [[a],[b,c]] filtered to [b,c] → tied → both eliminated
-    const restricted = new InstantRunoff({
+    const restricted = firstRun({
       candidates: candidates3,
       ballots: asymmetricBallots,
-      tieBreakers: [FirstPastThePost],
+      methods: [InstantRunoff, FirstPastThePost],
     })
-    const full = new InstantRunoff({
+    const full = firstRun({
       candidates: candidates3,
       ballots: asymmetricBallots,
-      tieBreakers: [tb(FirstPastThePost, { full: true })],
+      methods: [InstantRunoff, FirstPastThePost.with({ mode: 'full' })],
     })
-    expect(restricted.rounds()[0]?.eliminated).toStrictEqual(['c'])
-    expect(full.rounds()[0]?.eliminated).toStrictEqual(['b', 'c'])
+    expect(restricted.rounds[0]?.eliminated).toStrictEqual(['c'])
+    expect(full.rounds[0]?.eliminated).toStrictEqual(['b', 'c'])
   })
 
-  it('stable: true recurses into sub-ties until no further progress', () => {
+  it("mode 'recursive' re-ranks each tie that leaves until none splits", () => {
     // 3-way tie [b,c,d] at bottom (all 0 first-choice votes)
     // Borda restricted to [b,c,d]:
     //   ballot1(w=1): b=3,c=2,d=1 → ballot2(w=1): b=3,d=2,c=1 → b=6,c=3,d=3
     // First pass: [[b],[c,d]] → c,d still tied (length 2 < tied 3 → recurse on [c,d])
-    // Borda on [c,d]: ballot1 c>d(+2), ballot2 d>c(+2) → c=d → stable, stop
+    // Borda on [c,d]: ballot1 c>d(+2), ballot2 d>c(+2) → c=d → no split, stop
     // Result: b survives, c and d both eliminated (tie unresolvable)
-    const irv = new InstantRunoff({
+    const irv = firstRun({
       candidates: ['a', 'b', 'c', 'd'],
       ballots: [
         { ranking: [['a'], ['b'], ['c'], ['d']], weight: 1 },
         { ranking: [['a'], ['b'], ['d'], ['c']], weight: 1 },
       ],
-      tieBreakers: [tb(Borda, { stable: true })],
+      methods: [InstantRunoff, Borda.with({ mode: 'recursive' })],
     })
-    const eliminated = irv.rounds()[0]?.eliminated
+    const eliminated = irv.rounds[0]?.eliminated
     expect(eliminated).toHaveLength(2)
     expect(eliminated).toContain('c')
     expect(eliminated).toContain('d')
     expect(eliminated).not.toContain('b')
   })
 
-  it('stable: false (default) eliminates entire unresolved sub-tie at once', () => {
-    // Same scenario — without stable, sub-tie [c,d] is not recursed into
-    // Result is the same here (both c,d eliminated) but for different reasons:
-    // stable=false: after first pass promoted [b], current=[c,d], loop ends, eliminate [c,d]
-    const irv = new InstantRunoff({
+  it("mode 'restricted' (default) eliminates an unresolved sub-tie at once", () => {
+    // Same scenario: sub-tie [c,d] is not re-ranked. Same result (both out),
+    // for another reason: after one pass promotes [b], [c,d] goes out.
+    const irv = firstRun({
       candidates: ['a', 'b', 'c', 'd'],
       ballots: [
         { ranking: [['a'], ['b'], ['c'], ['d']], weight: 1 },
         { ranking: [['a'], ['b'], ['d'], ['c']], weight: 1 },
       ],
-      tieBreakers: [Borda],
+      methods: [InstantRunoff, Borda],
     })
-    const eliminated = irv.rounds()[0]?.eliminated
+    const eliminated = irv.rounds[0]?.eliminated
     expect(eliminated).toHaveLength(2)
     expect(eliminated).not.toContain('b')
+  })
+
+  it('type-checks options', () => {
+    // @ts-expect-error: Borda takes no rng.
+    Borda.with({ rng: Math.random })
+    // @ts-expect-error: not a mode.
+    Borda.with({ mode: 'stable' })
+    expect(RandomCandidates.with({ rng: Math.random })[0]).toBe(
+      RandomCandidates,
+    )
   })
 })

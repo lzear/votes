@@ -1,3 +1,4 @@
+import { firstRun } from '../../test/test-utils'
 import { Borda } from '../borda'
 import { TwoRoundRunoff } from '.'
 
@@ -22,22 +23,21 @@ describe(TwoRoundRunoff, () => {
 
   it('breaks a tie for the second qualifying spot', () => {
     // Firsts: a=5, b=3, c=3 — b and c tied for the 2nd runoff spot.
-    const trr = new TwoRoundRunoff({
+    const { ranking, rounds } = firstRun({
       candidates: ['a', 'b', 'c', 'd'],
       ballots: [
         { ranking: [['a'], ['b'], ['c'], ['d']], weight: 5 },
         { ranking: [['b'], ['c'], ['a'], ['d']], weight: 3 },
         { ranking: [['c'], ['b'], ['a'], ['d']], weight: 3 },
       ],
-      tieBreakers: [Borda],
+      methods: [TwoRoundRunoff, Borda],
     })
 
-    const rounds = trr.rounds()
     // Borda on the restricted {b, c} ballots promotes b.
     expect(rounds[0]?.qualified).toStrictEqual(['a', 'b'])
     expect(rounds[0]?.tieBreakSteps?.[0]?.name).toBe('Borda')
     // Runoff: c-voters transfer to b — b overtakes a 6 to 5.
-    expect(trr.ranking()).toStrictEqual([['b'], ['a'], ['c', 'd']])
+    expect(ranking).toStrictEqual([['b'], ['a'], ['c', 'd']])
   })
 
   it('sends everyone tied at the cut to the runoff', () => {
@@ -63,12 +63,12 @@ describe(TwoRoundRunoff, () => {
       { ranking: [['c'], ['a'], ['b'], ['d']], weight: 2 },
       { ranking: [['d'], ['a'], ['b'], ['c']], weight: 2 },
     ]
-    const trr = new TwoRoundRunoff({
+    const { rounds } = firstRun({
       candidates: ['a', 'b', 'c', 'd'],
       ballots,
-      tieBreakers: [Borda],
+      methods: [TwoRoundRunoff, Borda],
     })
-    expect(trr.rounds()[0]?.qualified).toStrictEqual(['a', 'b'])
+    expect(rounds[0]?.qualified).toStrictEqual(['a', 'b'])
   })
 
   it('eliminates everyone on out-of-range round index (safety fallback)', () => {

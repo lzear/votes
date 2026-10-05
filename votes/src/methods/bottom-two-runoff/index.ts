@@ -12,8 +12,9 @@ import { firstChoices } from '../first-past-the-post/iterate-first-choices'
  * 3. Eliminate whichever of the two loses a head-to-head FPTP matchup.
  *
  * The head-to-head step in (3) is a built-in `FirstPastThePost` tiebreaker,
- * so it always appears as the first entry in `tieBreakSteps`. Any
- * `tieBreakers` you supply apply after it if the head-to-head ends in a tie.
+ * so it always appears as the first entry in `tieBreakSteps`. In an
+ * `Election`, the methods after it apply only if the head-to-head ends in a
+ * tie.
  *
  * #### Electowiki: [Bottom-Two-Runoff IRV](https://electowiki.org/wiki/Bottom-Two-Runoff_IRV)
  */

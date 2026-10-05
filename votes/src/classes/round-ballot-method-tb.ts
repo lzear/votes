@@ -2,38 +2,31 @@ import { majorityWinner } from '../methods/absolute-majority'
 import { firstChoices } from '../methods/first-past-the-post/iterate-first-choices'
 import { type Profile, type ScoreObject, type TieBreakStep } from '../types'
 import { RoundBallotMethod, type Step } from './round-ballot-method'
-import {
-  type MethodTiebreaker,
-  type TbEntry,
-  type Tiebreaker,
-  tiebreaker,
-} from './tiebreaker'
+import { type MethodTiebreaker, type Tiebreaker } from './tiebreaker'
 
 export abstract class RoundBallotMethodTb<
   C extends string,
   I = undefined,
 > extends RoundBallotMethod<C, I> {
-  // The caller's, applied after the built-in ones.
-  private tieBreakers: MethodTiebreaker<C>[]
+  // The Election's methods after this one, applied after the built-in ones.
+  private tieBreakers: readonly MethodTiebreaker<C>[]
 
-  constructor(input: Profile<C> & { tieBreakers?: readonly TbEntry<C>[] }) {
+  constructor(
+    input: Profile<C> & {
+      /**
+       * Set by `Election`: the methods after this one.
+       *
+       * @internal
+       */
+      tieBreakers?: readonly MethodTiebreaker<C>[]
+    },
+  ) {
     super(input)
-    // The input's own ballots: normalized ones lose majority judgment's
-    // empty grades.
-    const { candidates, ballots } = input
-    const profile = {
-      candidates,
-      ballots,
-      unrankedLast: this.unrankedLast,
-      countBlank: this.countBlank,
-    }
-    this.tieBreakers = (input.tieBreakers ?? []).map((e) =>
-      tiebreaker(e, profile),
-    )
+    this.tieBreakers = input.tieBreakers ?? []
   }
 
-  // Restricts the caller's tiebreakers too: rebuilt on the normalized ballots
-  // restrict() passes, majority judgment would lose its empty grades.
+  // Restricts the Election's tiebreakers too: rebuilt on the normalized
+  // ballots restrict() passes, majority judgment would lose its empty grades.
   public override restrict(candidates: readonly C[]): this {
     const method = super.restrict(candidates)
     method.tieBreakers = this.tieBreakers.map((t) => t.restrict(candidates))

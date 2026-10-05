@@ -3,35 +3,38 @@ import { completeRanking } from '../utils/normalize'
 import { type MethodCtor, type Ranker } from './method'
 
 /**
- * `tb()` options of the tiebreaker itself.
+ * `Method.with()` options beyond the constructor's.
  *
  * @inline
  */
-export interface TbMeta {
-  full?: boolean
-  stable?: boolean
+export interface EntryOptions {
+  /**
+   * Which candidates the method ranks a tie among: the tied ones
+   * (`'restricted'`, default), everyone (`'full'`), or the tied ones, then
+   * those of each tie that leaves, until none splits (`'recursive'`).
+   */
+  mode?: 'restricted' | 'full' | 'recursive'
+  /**
+   * Name in traces (`TieBreakStep.name`, `StepResult.name`) instead of the
+   * class name.
+   */
   label?: string
 }
 
 /**
- * Constructor props beyond those the tiebreaker supplies itself.
+ * Constructor props beyond those the election supplies itself.
  */
 export type PropsOf<T> = T extends new (input: infer P) => unknown
-  ? Omit<P, keyof Profile<string> | 'array'>
+  ? Omit<P, keyof Profile<string> | 'array' | 'tieBreakers'>
   : unknown
 
-export type TbEntry<C extends string, T extends MethodCtor<C> = MethodCtor<C>> =
-  T | readonly [T, PropsOf<T> & TbMeta]
-
 /**
- * A tiebreaker or `Election` method: `ctor` with options for its constructor,
- * and `full`, `stable` or `label`.
+ * An `Election` method: its class, or `Class.with(options)`.
  */
-export const tb = <C extends string, T extends MethodCtor<C>>(
-  ctor: T,
-  opts?: PropsOf<T> & TbMeta,
-): TbEntry<C, NoInfer<T>> =>
-  opts === undefined ? ctor : ([ctor, opts] as const)
+export type ElectionMethod<
+  C extends string,
+  T extends MethodCtor<C> = MethodCtor<C>,
+> = T | readonly [T, PropsOf<T> & EntryOptions]
 
 /**
  * A ranking of tied candidates, and what the method behind it reports.
@@ -56,12 +59,11 @@ export interface MethodTiebreaker<C extends string> extends Tiebreaker<C> {
 
 interface Meta {
   name: string
-  full: boolean
-  stable: boolean
+  mode: NonNullable<EntryOptions['mode']>
 }
 
 // Ranks a tie with the method restricted to it, or with its ranking of
-// everyone when `full`. The method is built on first use.
+// everyone in mode `full`. The method is built on first use.
 const fromMethod = <C extends string>(
   build: () => Ranker<C>,
   meta: Meta,
@@ -69,19 +71,20 @@ const fromMethod = <C extends string>(
   let method: Ranker<C> | undefined
   const get = () => (method ??= build())
   const run = (tied: C[]): Run<C> => {
-    const m = meta.full ? get() : get().restrict(tied)
+    const m = meta.mode === 'full' ? get() : get().restrict(tied)
     // A tied candidate the method does not rank stays, tied last.
     const ranking = completeRanking(m.ranking(), tied)
     const scores = m.scores?.()
     const rounds = m.rounds?.()
     return {
-      ranking: meta.stable
-        ? ranking.flatMap((tier) =>
-            tier.length <= 1 || tier.length === tied.length
-              ? [tier]
-              : run(tier).ranking,
-          )
-        : ranking,
+      ranking:
+        meta.mode === 'recursive'
+          ? ranking.flatMap((tier) =>
+              tier.length <= 1 || tier.length === tied.length
+                ? [tier]
+                : run(tier).ranking,
+            )
+          : ranking,
       ...(scores && { scores }),
       ...(rounds && { rounds }),
     }
@@ -94,18 +97,17 @@ const fromMethod = <C extends string>(
   }
 }
 
-// The tiebreaker `entry` names, its method built on `profile`.
+// The tiebreaker `entry` names, its method built on `profile`: a round
+// method breaks its round ties with `after`.
 export const tiebreaker = <C extends string>(
-  entry: TbEntry<C>,
+  entry: ElectionMethod<C>,
   profile: Profile<C>,
+  after: readonly MethodTiebreaker<C>[] = [],
 ): MethodTiebreaker<C> => {
   const Ctor = (Array.isArray(entry) ? entry[0] : entry) as MethodCtor<C>
-  const opts = (Array.isArray(entry) ? entry[1] : {}) as TbMeta &
+  const opts = (Array.isArray(entry) ? entry[1] : {}) as EntryOptions &
     Record<string, unknown>
-  const { full = false, stable = false, label, ...props } = opts
-  return fromMethod(() => new Ctor({ ...profile, ...props }), {
-    name: label ?? Ctor.name,
-    full,
-    stable,
-  })
+  const { mode = 'restricted', label, ...props } = opts
+  const input = { ...profile, ...props, tieBreakers: after }
+  return fromMethod(() => new Ctor(input), { name: label ?? Ctor.name, mode })
 }

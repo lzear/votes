@@ -1,3 +1,4 @@
+import { Election, type ElectionInput } from '../election'
 import { type Ballot } from '../types'
 import { toWeightedBallots } from '../utils'
 
@@ -57,4 +58,26 @@ export const matrixString = (matrix: number[][]): string => {
       )
       .join('\n')
   )
+}
+
+// The first method's ranking and rounds: it breaks its round ties with the
+// methods after it.
+export const firstRun = <C extends string>(input: ElectionInput<C>) => {
+  const [step] = new Election(input).result().steps
+  return { ranking: step?.after ?? [], rounds: step?.runs[0]?.rounds ?? [] }
+}
+
+// b and d tie for last on 2 first choices; c, on 3, loses to both head to
+// head. Whichever of b and d goes out, the other wins.
+export const openTie = {
+  candidates: ['a', 'b', 'c', 'd', 'e'],
+  ballots: [
+    ['b', 'e', 'd', 'a', 'c', 1],
+    ['c', 'd', 'e', 'b', 'a', 3],
+    ['b', 'a', 'e', 'd', 'c', 1],
+    ['d', 'e', 'a', 'b', 'c', 2],
+  ].map((b) => ({
+    ranking: b.slice(0, -1).map((c) => [String(c)]),
+    weight: Number(b.at(-1)),
+  })),
 }

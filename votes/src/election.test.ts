@@ -5,14 +5,14 @@ import {
   Borda,
   Copeland,
   Election,
+  type ElectionMethod,
   FirstPastThePost,
   InstantRunoff,
-  MajorityJudgment,
   RandomCandidates,
   type Ranker,
   rngGenerator,
-  tb,
 } from '.'
+import { firstRun, openTie } from './test/test-utils'
 
 type ABC = 'a' | 'b' | 'c'
 const candidates: ABC[] = ['a', 'b', 'c']
@@ -40,7 +40,7 @@ describe('Election', () => {
     expect(election.ranking()).toStrictEqual([['a'], ['b', 'c']])
   })
 
-  it('re-ranks each tie on its own, or everyone with full', () => {
+  it("re-ranks each tie on its own, or everyone in mode 'full'", () => {
     const fptp = new Election({
       candidates,
       ballots,
@@ -51,7 +51,7 @@ describe('Election', () => {
     const full = new Election({
       candidates,
       ballots,
-      methods: [Borda, tb(FirstPastThePost, { full: true })],
+      methods: [Borda, FirstPastThePost.with({ mode: 'full' })],
     })
     expect(full.ranking()).toStrictEqual([['a'], ['c'], ['b']])
   })
@@ -94,7 +94,7 @@ describe('Election', () => {
     const [step] = new Election({
       candidates,
       ballots,
-      methods: [tb(InstantRunoff, { label: 'IRV' })],
+      methods: [InstantRunoff.with({ label: 'IRV' })],
     }).result().steps
     expect(step?.name).toBe('IRV')
     expect(step?.runs[0]?.rounds).toHaveLength(2)
@@ -104,7 +104,7 @@ describe('Election', () => {
     const election = new Election({
       candidates,
       ballots: tieBallots,
-      methods: [Baldwin, tb(RandomCandidates, { rng: rngGenerator('seed') })],
+      methods: [Baldwin, RandomCandidates.with({ rng: rngGenerator('seed') })],
     })
     const ranking = election.ranking()
     expect(ranking.every((r) => r.length === 1)).toBe(true)
@@ -151,15 +151,38 @@ describe('Election', () => {
     expect(election.ranking()).toStrictEqual([['a'], ['b'], ['c']])
   })
 
-  it('ranks like its method alone, tiebreakers included', () => {
-    // a and b tie on grades, those left out getting the worst one.
-    const irv = tb(InstantRunoff, { tieBreakers: [MajorityJudgment] })
-    const election = new Election({
-      candidates,
-      ballots: [{ ranking: [['a']] }, { ranking: [['b'], ['c']] }],
-      methods: [irv],
+  it('breaks round ties with the methods after it', () => {
+    // Alone, instant runoff stops on b and d.
+    const { ranking, rounds } = firstRun({
+      ...openTie,
+      methods: [InstantRunoff, Borda],
     })
-    expect(election.ranking()).toStrictEqual([['a', 'b'], ['c']])
+    // Of b and d, Borda puts b out: 5 of the 7 voters prefer d.
+    expect(rounds[2]?.tieBreakSteps).toMatchObject([
+      { name: 'Borda', candidates: ['b', 'd'], remaining: ['b'] },
+    ])
+    expect(ranking).toStrictEqual([['d'], ['c'], ['b'], ['e'], ['a']])
+  })
+
+  it("re-ranks each tie a method in mode 'recursive' leaves", () => {
+    const input = {
+      candidates: ['a', 'b', 'c', 'd'],
+      ballots: [
+        { ranking: [['d'], ['a']], weight: 2 },
+        { ranking: [['d'], ['b'], ['a'], ['c']], weight: 3 },
+        { ranking: [['c']], weight: 3 },
+      ],
+    }
+    const ranking = (borda: ElectionMethod<string>) =>
+      new Election({ ...input, methods: [borda] }).ranking()
+    // a, b and c tie; among them, a and b; between them, b wins.
+    expect(ranking(Borda)).toStrictEqual([['d'], ['a', 'b', 'c']])
+    expect(ranking(Borda.with({ mode: 'recursive' }))).toStrictEqual([
+      ['d'],
+      ['b'],
+      ['a'],
+      ['c'],
+    ])
   })
 
   it('stops early when no ties remain', () => {

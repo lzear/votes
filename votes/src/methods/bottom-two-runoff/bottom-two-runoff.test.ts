@@ -1,4 +1,5 @@
-import { tb } from '../../classes/tiebreaker'
+import { Election } from '../../election'
+import { firstRun } from '../../test/test-utils'
 import { Borda } from '../borda'
 import { RandomCandidates } from '../random-candidates'
 import { BottomTwoRunoff } from '.'
@@ -227,10 +228,10 @@ describe(BottomTwoRunoff, () => {
     `)
   })
 
-  it('keeps its tieBreakers on restrict', () => {
-    // b and c tie for the bottom two and head to head, so the caller's
-    // tiebreaker runs after the built-in FPTP one.
-    const b2r = new BottomTwoRunoff({
+  it('keeps the methods after it on restrict', () => {
+    // b and c tie for the bottom two and head to head, so the next method
+    // runs after the built-in FPTP one.
+    const election = new Election({
       candidates: ['a', 'b', 'c'],
       ballots: [
         { ranking: [['a'], ['b'], ['c']], weight: 1 },
@@ -238,26 +239,28 @@ describe(BottomTwoRunoff, () => {
         { ranking: [['b'], ['c']], weight: 1 },
         { ranking: [['c'], ['b']], weight: 1 },
       ],
-      tieBreakers: [tb(RandomCandidates, { rng: () => 0 })],
+      methods: [BottomTwoRunoff, RandomCandidates.with({ rng: () => 0 })],
     })
+    const rounds = <C extends string>(e: Election<C>) =>
+      e.result().steps[0]?.runs[0]?.rounds
     expect(
-      b2r.rounds()[0]?.tieBreakSteps?.map(({ name }) => name),
+      rounds(election)?.[0]?.tieBreakSteps?.map(({ name }) => name),
     ).toStrictEqual(['FirstPastThePost', 'RandomCandidates'])
-    const restricted = b2r.restrict(['a', 'b', 'c'])
-    expect(restricted.rounds()).toStrictEqual(b2r.rounds())
+    const restricted = election.restrict(['a', 'b', 'c'])
+    expect(rounds(restricted)).toStrictEqual(rounds(election))
   })
 
-  it('breaks a full first-choice tie with its tieBreakers', () => {
-    const b2r = new BottomTwoRunoff({
+  it('breaks a full first-choice tie with the methods after it', () => {
+    const { ranking } = firstRun({
       candidates: ['a', 'b', 'c'],
       ballots: [
         { ranking: [['a'], ['b'], ['c']] },
         { ranking: [['b'], ['a'], ['c']] },
         { ranking: [['c'], ['a'], ['b']] },
       ],
-      tieBreakers: [Borda],
+      methods: [BottomTwoRunoff, Borda],
     })
-    expect(b2r.ranking()).toStrictEqual([['a'], ['b'], ['c']])
+    expect(ranking).toStrictEqual([['a'], ['b'], ['c']])
   })
 
   it('stops on a head-to-head tie that decides the winner', () => {

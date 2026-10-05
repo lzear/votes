@@ -55,64 +55,69 @@ Every method takes this same `{ candidates, ballots, unrankedLast, countBlank }`
 input. Matrix methods (see the table below) also take a pairwise matrix
 `{ candidates, array }`, such as `matrixFromBallots(ballots, candidates)`.
 
-## Tiebreakers
+## Ties: chaining methods
 
-Round-based methods (`InstantRunoff`, `Baldwin`, `Coombs`, `Nanson`,
-`TwoRoundRunoff`, `BottomTwoRunoff`) accept a `tieBreakers` array. When a round
-ties (for last place, at two-round runoff's cut, or Nanson's complete tie),
-tiebreakers apply in order until the tie breaks. A tie they leave goes out at
-once if no order of it changes the outcome; otherwise the count stops, and those
-who win in some order of breaking the ties tie first (or, past 10,000 orders
-tried, everyone left).
+`Election` chains methods on one input. The first ranks the candidates; each
+next one re-ranks the tiers still tied. Round-based methods (`InstantRunoff`,
+`Baldwin`, `Coombs`, `Nanson`, `TwoRoundRunoff`, `BottomTwoRunoff`) also break
+their round ties (for last place, at two-round runoff's cut, or Nanson's
+complete tie) with the methods after them, in order. A round tie they leave goes
+out at once if no order of it changes the outcome; otherwise the count stops,
+and those who win in some order of breaking the ties tie first (or, past 10,000
+orders tried, everyone left). Alone, a round method has no tiebreakers.
 
 ```typescript
 import {
+  Election,
   InstantRunoff,
   RandomCandidates,
-  Borda,
-  Copeland,
-  tb,
+  Schulze,
   rngGenerator,
 } from 'votes'
 
-// Simple: pass constructors directly
-new InstantRunoff({ candidates, ballots, tieBreakers: [Borda, Copeland] })
-
-// tb() lets you pass extra constructor options
-const rng = rngGenerator('seed')
-new InstantRunoff({
+const election = new Election({
   candidates,
   ballots,
-  tieBreakers: [
-    Copeland, // first try Copeland
-    tb(Borda, { full: true }), // run Borda on ALL candidates, not just the tied subset
-    tb(Borda, { stable: true }), // recurse into sub-ties until stable
-    tb(RandomCandidates, { rng }), // last resort: random with seeded RNG
+  methods: [
+    InstantRunoff,
+    Schulze, // breaks IRV's round ties, then the ties left in its ranking
+    RandomCandidates.with({ rng: rngGenerator('seed') }), // last resort
   ],
 })
+
+election.ranking() // final ranking after all tie-breaking
+election.result() // { ranking, steps: StepResult[] }
 ```
 
-### `tb(Ctor, opts?)` options
+Each `StepResult` records `name`, `before`, `after`, and `runs`: the method's
+ranking of each tied tier, with its `scores` or `rounds`.
 
-| Option         | Default    | Description                                                                                         |
-| -------------- | ---------- | --------------------------------------------------------------------------------------------------- |
-| `full`         | `false`    | Rank the tie by the method's ranking of all candidates instead of re-running it on the tied subset. |
-| `stable`       | `false`    | After one pass, recurse into any remaining sub-ties until no further progress can be made.          |
-| `label`        | class name | Name in traces (`TieBreakStep.name`, `StepResult.name`).                                            |
-| Any other prop | —          | Passed through to the method constructor (e.g. `rng` for random methods).                           |
+### `Method.with(options)`
+
+| Option         | Default        | Description                                                                                                                                                        |
+| -------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `mode`         | `'restricted'` | Which candidates the method ranks a tie among: the tied ones, everyone (`'full'`), or the tied ones, then each tie that leaves, until none splits (`'recursive'`). |
+| `label`        | class name     | Name in traces (`TieBreakStep.name`, `StepResult.name`).                                                                                                           |
+| Any other prop | —              | Passed through to the method constructor (e.g. `rng` for random methods).                                                                                          |
+
+Among two tied candidates, most methods only count who more voters prefer;
+`'full'` brings in how each fares against everyone:
+`[InstantRunoff, FirstPastThePost.with({ mode: 'full' })]` breaks instant
+runoff's ties by first-round votes.
 
 ### Round trace
 
-`rounds()` returns detailed per-round results:
+`rounds()` returns detailed per-round results; in an `Election`, they are in the
+round method's step:
 
 ```typescript
-const rounds = new InstantRunoff({
+const [step] = new Election({
   candidates,
   ballots,
-  tieBreakers: [Borda],
-}).rounds()
+  methods: [InstantRunoff, Borda],
+}).result().steps
 
-rounds[0]
+step.runs[0].rounds[0]
 // {
 //   index: 0,
 //   candidates: ['a', 'b', 'c'],
@@ -134,28 +139,6 @@ rounds[0]
 Some methods add method-specific detail as `info`: `Coombs` reports whether a
 round was resolved by majority or elimination (`CoombsInfo`), `Nanson` reports
 the Borda average used as elimination cutoff (`NansonInfo`).
-
-## Election: chaining methods
-
-`Election` chains methods on one input. The first ranks the candidates; each
-next one re-ranks the tiers still tied, taking the same entries and `tb()`
-options as `tieBreakers`.
-
-```typescript
-import { Election, InstantRunoff, RandomCandidates, Schulze, tb } from 'votes'
-
-const election = new Election({
-  candidates,
-  ballots,
-  methods: [InstantRunoff, Schulze, tb(RandomCandidates, { rng })],
-})
-
-election.ranking() // final ranking after all tie-breaking
-election.result() // { ranking, steps: StepResult[] }
-```
-
-Each `StepResult` records `name`, `before`, `after`, and `runs`: the method's
-ranking of each tied tier, with its `scores` or `rounds`.
 
 ## Iterated ranking
 
@@ -215,8 +198,8 @@ throws beyond 30.
 default 6), and breaks ties one vote at a time: give it whole weights.
 
 `BottomTwoRunoff` settles each round with a first-choices head-to-head, the
-first `tieBreakSteps` entry (named `FirstPastThePost`); its `tieBreakers` apply
-only if that ties.
+first `tieBreakSteps` entry (named `FirstPastThePost`); the methods after it in
+an `Election` apply only if that ties.
 
 Random methods expose `probabilities()`, each candidate's chance to win, instead
 of `scores()`, and draw their ranking once per instance.
@@ -228,14 +211,6 @@ derive from.
 preserved rather than order-dependent). Pass `edgeSorter` — e.g. the exported
 `byTotalParticipation` — to lock them in its order like canonical Tideman; pairs
 it cannot tell apart still lock together.
-
-Every method also exposes `deTie()`, which recursively resolves ties by
-re-running the same method on each tied subset:
-
-```typescript
-new Borda({ candidates, ballots }).deTie()
-// ranking(), each tie re-ranked by Borda on it, until no tie splits further
-```
 
 ## Utilities
 

@@ -1,8 +1,8 @@
 import { type Ranker } from './classes/method'
 import {
+  type ElectionMethod,
   type MethodTiebreaker,
   type Run,
-  type TbEntry,
   tiebreaker,
 } from './classes/tiebreaker'
 import { type Profile } from './types'
@@ -27,19 +27,23 @@ export interface ElectionResult<C extends string> {
 }
 
 export type ElectionInput<C extends string> = Profile<C> & {
-  methods: readonly [NoInfer<TbEntry<C>>, ...NoInfer<TbEntry<C>>[]]
+  methods: readonly [
+    NoInfer<ElectionMethod<C>>,
+    ...NoInfer<ElectionMethod<C>>[],
+  ]
 }
 
 /**
  * Chains methods: the first ranks the candidates, each next one re-ranks the
- * tiers still tied, like round methods' `tieBreakers`.
+ * tiers still tied. A round method breaks its round ties with the methods
+ * after it.
  *
  * @example
  * ```ts
  * new Election({
  *   candidates,
  *   ballots,
- *   methods: [InstantRunoff, Schulze, tb(RandomCandidates, { rng })],
+ *   methods: [InstantRunoff, Schulze, RandomCandidates.with({ rng })],
  * })
  * ```
  */
@@ -53,7 +57,11 @@ export class Election<C extends string> implements Ranker<C> {
     const { methods, ...profile } = input
     this.input = input
     this.candidates = [...new Set(profile.candidates)]
-    this.tiebreakers = methods.map((m) => tiebreaker(m, profile))
+    // From the last, each built with those after it.
+    let after: MethodTiebreaker<C>[] = []
+    for (const m of methods.toReversed())
+      after = [tiebreaker(m, profile, after), ...after]
+    this.tiebreakers = after
   }
 
   result(): ElectionResult<C> {

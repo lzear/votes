@@ -5,9 +5,10 @@
 Refactor everything. New API. Main changes:
 
 - Remove external dependency `javascript-lp-solver`.
-- Implement tie-breaking mechanism: round-based methods take `tieBreakers`,
-  built with `tb()`.
-- New `Election` class to chain methods: each re-ranks the tiers still tied.
+- New `Election` class to chain methods: each re-ranks the tiers still tied, and
+  round-based methods break their round ties with the methods after them.
+  `Method.with()` passes options, such as `mode`: rank a tie among the tied
+  candidates, everyone, or recursively.
 - New `unrankedLast` option: by default unranked candidates join a ballot as one
   tied bottom tier; pass `false` to score only expressed preferences.
 - Round-based methods report per-round details: scores, tie-break steps, and
@@ -17,6 +18,5 @@ Refactor everything. New API. Main changes:
 - New `iteratedRanking()` on all methods and `Election`: fill each place by
   re-running the full method without the already-placed candidates, instead of
   using the method's own full ranking. `restrict()` is now public.
-- New `deTie()` on all methods: re-rank each tie with the same method.
 - New Condorcet Election Format parser and writer.
 - Ranked pairs: fix infinite recursion on raw win-count matrices with wide ties.

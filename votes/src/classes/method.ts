@@ -1,5 +1,6 @@
 import { type Profile, type Round, type ScoreObject } from '../types'
 import { iterateRanking } from '../utils/iterate-ranking'
+import { type EntryOptions, type PropsOf } from './tiebreaker'
 
 export interface Ranker<C extends string> {
   ranking(): C[][]
@@ -28,6 +29,27 @@ export type MethodCtor<C extends string> = new (input: Profile<C>) => Ranker<C>
 
 export abstract class Method<C extends string> implements Ranker<C> {
   public static readonly isRandom: boolean = false
+
+  /**
+   * The method as an `Election` method, with options for its constructor and
+   * `mode` or `label`.
+   *
+   * @example
+   * ```ts
+   * new Election({
+   *   candidates,
+   *   ballots,
+   *   methods: [Copeland, Borda.with({ mode: 'full' })],
+   * })
+   * ```
+   */
+  public static with<T extends MethodCtor<string>>(
+    this: T,
+    options: PropsOf<T> & EntryOptions,
+  ): readonly [T, PropsOf<T> & EntryOptions] {
+    return [this, options]
+  }
+
   public readonly candidates: C[]
 
   constructor(candidates: readonly C[]) {
@@ -59,17 +81,5 @@ export abstract class Method<C extends string> implements Ranker<C> {
    */
   public iteratedRanking(): C[][] {
     return iterateRanking(this)
-  }
-
-  /**
-   * The ranking, each tie re-ranked by the method restricted to it, until no
-   * tie splits further.
-   */
-  public deTie(): C[][] {
-    return this.ranking().flatMap((tier) =>
-      tier.length <= 1 || tier.length === this.candidates.length
-        ? [tier]
-        : this.restrict(tier).deTie(),
-    )
   }
 }
