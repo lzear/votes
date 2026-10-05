@@ -8,6 +8,7 @@ import { Black } from './black'
 import { Borda } from './borda'
 import { BottomTwoRunoff } from './bottom-two-runoff'
 import { Bucklin } from './bucklin'
+import { CandidateOrder } from './candidate-order'
 import { Coombs } from './coombs'
 import { Copeland } from './copeland'
 import { FirstPastThePost } from './first-past-the-post'
@@ -35,6 +36,7 @@ export const methods = {
   [VotingSystem.Borda]: Borda,
   [VotingSystem.BottomTwoRunoff]: BottomTwoRunoff,
   [VotingSystem.Bucklin]: Bucklin,
+  [VotingSystem.CandidateOrder]: CandidateOrder,
   [VotingSystem.Coombs]: Coombs,
   [VotingSystem.Copeland]: Copeland,
   [VotingSystem.FirstPastThePost]: FirstPastThePost,

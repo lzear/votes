@@ -24,6 +24,9 @@ import { canonizeRanking } from './normalize'
 
 type ABC = 'a' | 'b' | 'c'
 
+// Rank by the order of their input, not by the votes alone.
+const byOrder = new Set<VotingSystem>([VotingSystem.CandidateOrder])
+
 describe('sanity check', () => {
   it.each(Object.values(VotingSystem))(
     'empty list and empty candidates %s',
@@ -47,7 +50,7 @@ describe('sanity check', () => {
   it.each(Object.values(VotingSystem))(
     'empty ballot list %s (ranking)',
     (system) => {
-      if (methods[system].isRandom) return
+      if (methods[system].isRandom || byOrder.has(system)) return
 
       const candidates = ['a', 'b', 'c']
       const ballots: Ballot<ABC>[] = []
@@ -109,7 +112,11 @@ describe('sanity check', () => {
   it.each(Object.values(VotingSystem))(
     'gets the 2 winners from 1 ballot (%s)',
     (system) => {
-      if (methods[system].isRandom || system === VotingSystem.AntiPlurality)
+      if (
+        methods[system].isRandom ||
+        byOrder.has(system) ||
+        system === VotingSystem.AntiPlurality
+      )
         return
 
       const ballots = [{ ranking: [['a', 'd'], ['b'], ['c']], weight: 1 }]
@@ -126,8 +133,7 @@ describe('sanity check', () => {
   it.each(Object.values(VotingSystem))(
     'gets the condorcet cycle %s (ranking)',
     (system) => {
-      // Exclude randomized
-      if (methods[system].isRandom) return
+      if (methods[system].isRandom || byOrder.has(system)) return
 
       const candidates = ['a', 'b', 'c']
       const ballots = [
@@ -248,7 +254,10 @@ describe('sanity check', () => {
   })
   it.each(
     Object.values(VotingSystem).filter(
-      (s) => s !== VotingSystem.RandomCandidates,
+      // They read no ballot.
+      (s) =>
+        s !== VotingSystem.RandomCandidates &&
+        s !== VotingSystem.CandidateOrder,
     ),
   )('rejects a negative or non-finite weight (%s)', (system) => {
     for (const weight of [-1, NaN, Infinity])
@@ -311,15 +320,13 @@ describe('sanity check', () => {
     },
   )
   it.each(Object.values(VotingSystem))('gets matrix (%s)', (system) => {
-    if (
-      system === VotingSystem.MajorityJudgment ||
-      system === VotingSystem.RandomCandidates
-    )
-      return
+    if (system === VotingSystem.MajorityJudgment) return
 
     const candidates = abcde
     const ballots = dummyProfile10
     const election = new methods[system]({ ballots, candidates })
+    // Methods reading no ballot have none.
+    if (!('matrix' in election)) return
     expect(election.matrix).toStrictEqual(
       matrixFromBallots(ballots, candidates),
     )

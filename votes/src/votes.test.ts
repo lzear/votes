@@ -6,6 +6,7 @@ import {
   Black,
   Borda,
   Bucklin,
+  CandidateOrder,
   Coombs,
   Copeland,
   Election,
@@ -126,6 +127,19 @@ describe('Test all methods', () => {
     expect(
       new Bucklin({ candidates: ['a', 'b', 'c'], ballots }).scores(),
     ).toStrictEqual({ a: 2, b: 1.5, c: 0.5 })
+  })
+  it('ranks in candidate order', () => {
+    const order = new CandidateOrder({ candidates: ['c', 'a', 'b'] })
+    expect(order.ranking()).toStrictEqual([['c'], ['a'], ['b']])
+    expect(order.restrict(['b', 'c']).ranking()).toStrictEqual([['c'], ['b']])
+  })
+  it('breaks a tie in candidate order', () => {
+    const election = new Election({
+      candidates: ['b', 'a', 'c'],
+      ballots: [{ ranking: [['a'], ['c']] }, { ranking: [['b'], ['c']] }],
+      methods: [FirstPastThePost, CandidateOrder],
+    })
+    expect(election.ranking()).toStrictEqual([['b'], ['a'], ['c']])
   })
   it('votes with coombs', () => {
     expect(

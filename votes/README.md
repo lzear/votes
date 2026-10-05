@@ -171,6 +171,7 @@ re-run itself on a subset of candidates.
 | Borda count          | `Borda`               | ballots           |
 | Bottom-two-runoff    | `BottomTwoRunoff`     | ballots           |
 | Bucklin voting       | `Bucklin`             | ballots           |
+| Candidate order      | `CandidateOrder`      | —                 |
 | Coombs' method       | `Coombs`              | ballots           |
 | Copeland's method    | `Copeland`            | ballots or matrix |
 | First-past-the-post  | `FirstPastThePost`    | ballots           |
@@ -193,6 +194,9 @@ re-run itself on a subset of candidates.
 
 `Bucklin` scores the count that finds a majority, a tier across its cut counting
 for its share of places within.
+
+`CandidateOrder` ranks candidates in the order given, whatever the order of a
+tie it breaks: a deterministic last resort for an `Election`.
 
 `Baldwin` and `Nanson` take Borda scores from the pairwise matrix: the same as
 `Borda`'s when ballots rank everyone, and a Condorcet winner always wins.

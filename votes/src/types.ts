@@ -104,6 +104,7 @@ export const VotingSystem = {
   Borda: 'BORDA',
   BottomTwoRunoff: 'BOTTOM_TWO_RUNOFF',
   Bucklin: 'BUCKLIN',
+  CandidateOrder: 'CANDIDATE_ORDER',
   Coombs: 'COOMBS',
   Copeland: 'COPELAND',
   FirstPastThePost: 'FIRST_PAST_THE_POST',
