@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-export interface Edge {
+export type Edge = {
   from: number
   to: number
   value: number

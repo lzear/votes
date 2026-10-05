@@ -7,7 +7,7 @@ import type { MethodCtor, Ranker } from './method'
  *
  * @inline
  */
-export interface EntryOptions {
+export type EntryOptions = {
   /**
    * Which candidates the method ranks a tie among: the tied ones
    * (`'restricted'`, default), everyone (`'full'`), or the tied ones, then
@@ -41,23 +41,23 @@ export type ElectionMethod<
  *
  * @inline
  */
-export interface Run<C extends string> {
+export type Run<C extends string> = {
   ranking: C[][]
   scores?: ScoreObject<C>
   rounds?: Round<C, unknown>[]
 }
 
-export interface Tiebreaker<C extends string> {
+export type Tiebreaker<C extends string> = {
   name: string
   run: (tied: C[]) => Run<C>
 }
 
 // A tiebreaker backed by a method, which narrows along with it.
-export interface MethodTiebreaker<C extends string> extends Tiebreaker<C> {
+export type MethodTiebreaker<C extends string> = {
   restrict: (candidates: readonly C[]) => MethodTiebreaker<C>
-}
+} & Tiebreaker<C>
 
-interface Meta {
+type Meta = {
   name: string
   mode: NonNullable<EntryOptions['mode']>
 }

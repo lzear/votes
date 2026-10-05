@@ -7,7 +7,7 @@ import { matrixBordaScores } from '../borda'
 /**
  * Round-level detail specific to Nanson: the Borda-score cutoff used to eliminate candidates.
  */
-export interface NansonInfo {
+export type NansonInfo = {
   average: number
 }
 

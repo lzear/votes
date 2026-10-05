@@ -14,7 +14,7 @@ import { firstChoices } from '../first-past-the-post/iterate-first-choices'
  * absolute majority of first choices — which can happen on the very last
  * round, so this can't be inferred from round position alone.
  */
-export interface CoombsInfo {
+export type CoombsInfo = {
   resolution: 'majority' | 'elimination'
 }
 

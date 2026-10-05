@@ -2,7 +2,7 @@ import type { Matrix, Profile } from '../types'
 import { subMatrix, toMatrix } from '../utils/make-matrix'
 import { ScoreMethod, type Scorer } from './score-method'
 
-export interface Matrixer<C extends string> {
+export type Matrixer<C extends string> = {
   matrix: Matrix<C>
 }
 

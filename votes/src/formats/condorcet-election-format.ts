@@ -5,12 +5,12 @@ import {
   weightOf,
 } from '../utils'
 
-export interface ParsedCondorcetElection<C extends string> {
+export type ParsedCondorcetElection<C extends string> = {
   candidates: C[]
   ballots: Ballot<C>[]
 }
 
-interface ParsedParams<C extends string> {
+type ParsedParams<C extends string> = {
   candidates: C[]
   implicitRanking: boolean
   weightAllowed: boolean

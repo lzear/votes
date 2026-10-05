@@ -1,4 +1,4 @@
-export interface Ballot<C extends string> {
+export type Ballot<C extends string> = {
   ranking: C[][]
   /**
    * How many voters cast it (default 1): finite, not negative.
@@ -6,7 +6,7 @@ export interface Ballot<C extends string> {
   weight?: number
 }
 
-export interface Matrix<C extends string> {
+export type Matrix<C extends string> = {
   candidates: readonly C[]
   array: number[][]
 }
@@ -14,7 +14,7 @@ export interface Matrix<C extends string> {
 /**
  * What every method takes.
  */
-export interface Profile<C extends string> {
+export type Profile<C extends string> = {
   candidates: readonly C[]
   ballots: readonly Ballot<C>[]
   /**
@@ -38,7 +38,7 @@ export type ScoreObject<C extends string> = Record<C, number>
 /**
  * Trace of one tiebreaker's work within a round.
  */
-export interface TieBreakStep<C extends string> {
+export type TieBreakStep<C extends string> = {
   /**
    * Position among the round's tiebreakers: the method's built-in ones, then
    * the `Election` methods after it.
@@ -70,7 +70,7 @@ export interface TieBreakStep<C extends string> {
   remaining: C[]
 }
 
-export interface QE<C extends string, I = undefined> {
+export type QE<C extends string, I = undefined> = {
   /**
    * Candidates still in the race after this round. In the last, the winners:
    * several when it stops on a tie whose order decides who wins, those who
@@ -86,13 +86,13 @@ export interface QE<C extends string, I = undefined> {
   info?: I
 }
 
-export interface Round<C extends string, I = undefined> extends QE<C, I> {
+export type Round<C extends string, I = undefined> = {
   index: number
   /**
    * Candidates still in the race.
    */
   candidates: C[]
-}
+} & QE<C, I>
 
 export const VotingSystem = {
   Approval: 'APPROVAL',

@@ -2,9 +2,9 @@ import type { ScoreObject } from '../types'
 import { scoresToRanking } from '../utils'
 import { Method, type Ranker } from './method'
 
-export interface Scorer<C extends string> extends Ranker<C> {
+export type Scorer<C extends string> = {
   scores(): ScoreObject<C>
-}
+} & Ranker<C>
 
 /**
  * Voting method that ranks candidates by score, highest first.

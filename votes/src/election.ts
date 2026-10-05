@@ -8,7 +8,7 @@ import {
 import type { Profile } from './types'
 import { iterateRanking } from './utils'
 
-export interface StepResult<C extends string> {
+export type StepResult<C extends string> = {
   /**
    * The method's label, or its class name.
    */
@@ -21,7 +21,7 @@ export interface StepResult<C extends string> {
   runs: (Run<C> & { candidates: C[] })[]
 }
 
-export interface ElectionResult<C extends string> {
+export type ElectionResult<C extends string> = {
   ranking: C[][]
   steps: StepResult<C>[]
 }

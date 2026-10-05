@@ -6,7 +6,7 @@ import { firstChoices } from '../first-past-the-post/iterate-first-choices'
 
 // Who gets through a cut: those the tiebreakers settle, and `spots` of the
 // tie they leave at it.
-interface Cut<C extends string> {
+type Cut<C extends string> = {
   through: C[]
   tied: C[]
   spots: number
