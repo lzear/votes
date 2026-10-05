@@ -10,6 +10,8 @@ import { bordaScores } from '../borda'
  * #### Wikipedia: [Black's method](https://en.wikipedia.org/wiki/Black%27s_method)
  */
 export class Black<C extends string> extends BallotScoreMethod<C> {
+  public static readonly label = 'Black'
+
   public scores(): ScoreObject<C> {
     return bordaScores(this.ballots, this.candidates)
   }

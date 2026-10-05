@@ -48,6 +48,8 @@ const scoresFromStrengths = <C extends string>(
  * #### Wikipedia: [Schulze method](https://en.wikipedia.org/wiki/Schulze_method)
  */
 export class Schulze<C extends string> extends MatrixScoreMethod<C> {
+  public static readonly label = 'Schulze'
+
   /**
    * Strongest-path ("beatpath") strength between every ordered pair of
    * candidates, after Floyd-Warshall — the matrix Schulze's win count is

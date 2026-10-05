@@ -11,6 +11,8 @@ import { matrixBordaScores } from '../borda'
  * #### Wikipedia: [Baldwin method](https://en.wikipedia.org/wiki/Nanson%27s_method#Baldwin_method)
  */
 export class Baldwin<C extends string> extends TbEliminateLast<C> {
+  public static readonly label = 'Baldwin'
+
   // A Condorcet winner, whose Borda score stays above the average.
   protected override sureWinner(race: C[]): C | undefined {
     const { array } = subMatrix(this.matrix, race)

@@ -54,6 +54,8 @@ export const matrixBordaScores = <C extends string>(
  * #### Wikipedia: [Borda count](https://en.wikipedia.org/wiki/Borda_count)
  */
 export class Borda<C extends string> extends BallotScoreMethod<C> {
+  public static readonly label = 'Borda'
+
   public scores(): ScoreObject<C> {
     return bordaScores(this.ballots, this.candidates)
   }

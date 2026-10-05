@@ -42,6 +42,8 @@ export const serialRanking = <C extends string>(
  * #### Wikipedia: [Dictatorship mechanism](https://en.wikipedia.org/wiki/Dictatorship_mechanism)
  */
 export class Dictator<C extends string> extends BallotMethod<C> {
+  public static readonly label = 'Dictator'
+
   public ranking(): C[][] {
     return serialRanking(this.candidates, this.ballots)
   }

@@ -35,6 +35,8 @@ const placedWithin = <C extends string>(
  * #### Wikipedia: [Bucklin voting](https://en.wikipedia.org/wiki/Bucklin_voting)
  */
 export class Bucklin<C extends string> extends BallotScoreMethod<C> {
+  public static readonly label = 'Bucklin'
+
   public scores(): ScoreObject<C> {
     const half =
       totalBallotsWeight(this.castBallots(this.candidates)) / 2 + config.EPSILON

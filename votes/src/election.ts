@@ -10,7 +10,7 @@ import { iterateRanking } from './utils'
 
 export type StepResult<C extends string> = {
   /**
-   * The method's label, or its class name.
+   * The method's label: its `with()` option, or its class's.
    */
   name: string
   before: C[][]

@@ -22,6 +22,8 @@ export class Nanson<C extends string> extends RoundBallotMethodTb<
   C,
   NansonInfo
 > {
+  public static readonly label = 'Nanson'
+
   protected round(candidates: C[]): QE<C, NansonInfo> {
     const scores = matrixBordaScores(this.matrix, this.ballots, candidates)
     const values = Object.values<number>(scores)

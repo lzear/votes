@@ -23,6 +23,8 @@ const computeFromMatrix = <C extends string>(
  * #### Wikipedia: [Copeland's method](https://en.wikipedia.org/wiki/Copeland%27s_method)
  */
 export class Copeland<C extends string> extends MatrixScoreMethod<C> {
+  public static readonly label = 'Copeland'
+
   public scores(): ScoreObject<C> {
     return computeFromMatrix(this.matrix)
   }

@@ -41,6 +41,8 @@ export const antiPluralityScores = <C extends string>(
  * #### Wikipedia: [Anti-plurality voting](https://en.wikipedia.org/wiki/Anti-plurality_voting)
  */
 export class AntiPlurality<C extends string> extends BallotScoreMethod<C> {
+  public static readonly label = 'AntiPlurality'
+
   public scores(): ScoreObject<C> {
     return antiPluralityScores(this.ballots, this.candidates, this.unrankedLast)
   }

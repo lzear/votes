@@ -82,6 +82,8 @@ const compareValues = (a: [number, number][], b: [number, number][]) => {
  * #### Wikipedia: [Majority judgment](https://en.wikipedia.org/wiki/Majority_judgment)
  */
 export class MajorityJudgment<C extends string> extends Method<C> {
+  public static readonly label = 'MajorityJudgment'
+
   private _judgements: Judgements<C> | undefined
   private _matrix?: Matrix<C>
   // Ballots keep their empty tiers, unlike BallotMethod's: a tier's index is

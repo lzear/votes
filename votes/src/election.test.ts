@@ -8,9 +8,11 @@ import {
   type ElectionMethod,
   FirstPastThePost,
   InstantRunoff,
+  methods,
   RandomCandidates,
   type Ranker,
   rngGenerator,
+  VotingSystem,
 } from '.'
 import { firstRun, openTie } from './test/test-utils'
 
@@ -100,6 +102,11 @@ describe('Election', () => {
     expect(step?.runs[0]?.rounds).toHaveLength(2)
   })
 
+  it('names steps by a label minifiers keep: the VotingSystem key', () => {
+    for (const [key, system] of Object.entries(VotingSystem))
+      expect(methods[system].label).toBe(key)
+  })
+
   it('RandomCandidates as fallback produces fully resolved ranking', () => {
     const election = new Election({
       candidates,
@@ -135,6 +142,8 @@ describe('Election', () => {
 
   it('keeps candidates a fallback method does not rank', () => {
     class OnlyB implements Ranker<ABC> {
+      static readonly label = 'OnlyB'
+
       ranking(): ABC[][] {
         return [['b']]
       }
@@ -187,6 +196,8 @@ describe('Election', () => {
 
   it('stops early when no ties remain', () => {
     class Unreachable implements Ranker<ABC> {
+      static readonly label = 'Unreachable'
+
       ranking(): ABC[][] {
         throw new Error('should not be called')
       }

@@ -23,9 +23,12 @@ export type Ranker<C extends string> = {
 }
 
 /**
- * Every method takes the same input.
+ * Every method takes the same input, and names itself in traces with `label`:
+ * class names don't survive minifiers.
  */
-export type MethodCtor<C extends string> = new (input: Profile<C>) => Ranker<C>
+export type MethodCtor<C extends string> = (new (
+  input: Profile<C>,
+) => Ranker<C>) & { readonly label: string }
 
 export abstract class Method<C extends string> implements Ranker<C> {
   public static readonly isRandom: boolean = false

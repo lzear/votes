@@ -97,7 +97,7 @@ ranking of each tied tier, with its `scores` or `rounds`.
 | Option         | Default        | Description                                                                                                                                                        |
 | -------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `mode`         | `'restricted'` | Which candidates the method ranks a tie among: the tied ones, everyone (`'full'`), or the tied ones, then each tie that leaves, until none splits (`'recursive'`). |
-| `label`        | class name     | Name in traces (`TieBreakStep.name`, `StepResult.name`).                                                                                                           |
+| `label`        | `Class.label`  | Name in traces (`TieBreakStep.name`, `StepResult.name`).                                                                                                           |
 | Any other prop | —              | Passed through to the method constructor (e.g. `rng` for random methods).                                                                                          |
 
 Among two tied candidates, most methods only count who more voters prefer;

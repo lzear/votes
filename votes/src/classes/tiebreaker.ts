@@ -16,7 +16,7 @@ export type EntryOptions = {
   mode?: 'restricted' | 'full' | 'recursive'
   /**
    * Name in traces (`TieBreakStep.name`, `StepResult.name`) instead of the
-   * class name.
+   * method's `label`.
    */
   label?: string
 }
@@ -109,5 +109,5 @@ export const tiebreaker = <C extends string>(
     Record<string, unknown>
   const { mode = 'restricted', label, ...props } = opts
   const input = { ...profile, ...props, tieBreakers: after }
-  return fromMethod(() => new Ctor(input), { name: label ?? Ctor.name, mode })
+  return fromMethod(() => new Ctor(input), { name: label ?? Ctor.label, mode })
 }

@@ -21,6 +21,8 @@ type Cut<C extends string> = {
  * #### Wikipedia: [Two-round system](https://en.wikipedia.org/wiki/Two-round_system)
  */
 export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
+  public static readonly label = 'TwoRoundRunoff'
+
   // The first round's, for a runoff of more than two.
   private cut: Cut<C> = { through: [], tied: [], spots: 0 }
 

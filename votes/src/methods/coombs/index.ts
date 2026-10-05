@@ -22,6 +22,8 @@ export type CoombsInfo = {
  * #### Wikipedia: [Coombs' method](https://en.wikipedia.org/wiki/Coombs%27_method)
  */
 export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {
+  public static readonly label = 'Coombs'
+
   protected oneRound(candidates: C[]): {
     ranking: C[][]
     scores: ScoreObject<C>

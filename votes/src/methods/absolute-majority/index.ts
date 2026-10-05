@@ -18,6 +18,8 @@ export const majorityWinner = <C extends string>(
  * #### Wikipedia: [Majority](https://en.wikipedia.org/wiki/Majority)
  */
 export class AbsoluteMajority<C extends string> extends BallotScoreMethod<C> {
+  public static readonly label = 'AbsoluteMajority'
+
   public scores(): ScoreObject<C> {
     return firstChoices(this.ballots, this.candidates)
   }

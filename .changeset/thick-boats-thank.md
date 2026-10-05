@@ -8,7 +8,8 @@ Refactor everything. New API. Main changes:
 - New `Election` class to chain methods: each re-ranks the tiers still tied, and
   round-based methods break their round ties with the methods after them.
   `Method.with()` passes options, such as `mode`: rank a tie among the tied
-  candidates, everyone, or recursively.
+  candidates, everyone, or recursively. Traces name each method by its static
+  `label`, or `with({ label })`'s.
 - New `unrankedLast` option: by default unranked candidates join a ballot as one
   tied bottom tier; pass `false` to score only expressed preferences.
 - Round-based methods report per-round details: scores, tie-break steps, and

@@ -88,6 +88,8 @@ const computeScores = <C extends string>({
  * #### Wikipedia: [Kemeny–Young method](https://en.wikipedia.org/wiki/Kemeny%E2%80%93Young_method)
  */
 export class Kemeny<C extends string> extends MatrixScoreMethod<C> {
+  public static readonly label = 'Kemeny'
+
   public scores(): ScoreObject<C> {
     return computeScores(this.matrix)
   }

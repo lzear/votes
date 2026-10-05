@@ -381,6 +381,8 @@ describe('round tiebreakers', () => {
   it('keeps tied candidates a tiebreaker does not rank', () => {
     // Ranks only the first candidate it is given.
     class FirstOnly {
+      static readonly label = 'FirstOnly'
+
       private readonly first: ABCD[]
       constructor({ candidates }: { candidates: readonly ABCD[] }) {
         this.first = candidates.slice(0, 1)

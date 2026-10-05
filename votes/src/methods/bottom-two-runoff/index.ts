@@ -19,6 +19,8 @@ import { firstChoices } from '../first-past-the-post/iterate-first-choices'
  * #### Electowiki: [Bottom-Two-Runoff IRV](https://electowiki.org/wiki/Bottom-Two-Runoff_IRV)
  */
 export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
+  public static readonly label = 'BottomTwoRunoff'
+
   // The bottom two of `race` on first choices, or everyone tied with them:
   // picking two of a tie by list order would make the result depend on the
   // order candidates are given in. Ties split by first choices among the tied.

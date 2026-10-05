@@ -9,6 +9,8 @@ import { firstChoices } from '../first-past-the-post/iterate-first-choices'
  * #### Wikipedia: [Instant-runoff voting](https://en.wikipedia.org/wiki/Instant-runoff_voting)
  */
 export class InstantRunoff<C extends string> extends TbEliminateLast<C> {
+  public static readonly label = 'InstantRunoff'
+
   // Bulk exclusion: what the group passes among itself leaves it below the
   // others.
   protected override canEliminateTogether(group: C[], race: C[]): boolean {

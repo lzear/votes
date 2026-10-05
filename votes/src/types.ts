@@ -45,7 +45,7 @@ export type TieBreakStep<C extends string> = {
    */
   index: number
   /**
-   * The tiebreaker's label, or its class name.
+   * The tiebreaker's label: its `with()` option, or its class's.
    */
   name: string
   /**

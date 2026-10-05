@@ -33,6 +33,8 @@ export const lotteryFromAntisymmetric = <C extends string>(
  * #### Wikipedia: [Maximal lotteries](https://en.wikipedia.org/wiki/Maximal_lotteries)
  */
 export class MaximalLotteries<C extends string> extends RandomMatrixMethod<C> {
+  public static readonly label = 'MaximalLotteries'
+
   public probabilities(): ScoreObject<C> {
     return lotteryFromAntisymmetric(makeAntisymmetric(this.matrix))
   }

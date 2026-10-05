@@ -65,6 +65,8 @@ const winChances = <C extends string>(
  * #### Wikipedia: [Random ballot](https://en.wikipedia.org/wiki/Random_ballot)
  */
 export class RandomDictator<C extends string> extends RandomBallotMethod<C> {
+  public static readonly label = 'RandomDictator'
+
   public probabilities(): ScoreObject<C> {
     const ballots = this.ballots.filter((b) => weightOf(b) > 0)
     return {

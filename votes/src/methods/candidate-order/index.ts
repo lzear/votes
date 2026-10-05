@@ -7,6 +7,8 @@ import type { Profile } from '../../types'
  * some election laws break ties with.
  */
 export class CandidateOrder<C extends string> extends Method<C> {
+  public static readonly label = 'CandidateOrder'
+
   constructor(i: Partial<Profile<C>> & { candidates: readonly C[] }) {
     super(i.candidates)
   }

@@ -83,6 +83,8 @@ const computeFromMatrix = <C extends string>(
  * #### Wikipedia: [Ranked pairs](https://en.wikipedia.org/wiki/Ranked_pairs)
  */
 export class RankedPairs<C extends string> extends MatrixScoreMethod<C> {
+  public static readonly label = 'RankedPairs'
+
   private readonly edgeSorter: ((a: Edge, b: Edge) => number) | undefined
 
   constructor(
