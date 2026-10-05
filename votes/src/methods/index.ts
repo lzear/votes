@@ -11,6 +11,7 @@ import { Bucklin } from './bucklin'
 import { CandidateOrder } from './candidate-order'
 import { Coombs } from './coombs'
 import { Copeland } from './copeland'
+import { Dictator } from './dictator'
 import { FirstPastThePost } from './first-past-the-post'
 import { InstantRunoff } from './instant-runoff'
 import { Kemeny } from './kemeny'
@@ -39,6 +40,7 @@ export const methods = {
   [VotingSystem.CandidateOrder]: CandidateOrder,
   [VotingSystem.Coombs]: Coombs,
   [VotingSystem.Copeland]: Copeland,
+  [VotingSystem.Dictator]: Dictator,
   [VotingSystem.FirstPastThePost]: FirstPastThePost,
   [VotingSystem.InstantRunoff]: InstantRunoff,
   [VotingSystem.Kemeny]: Kemeny,

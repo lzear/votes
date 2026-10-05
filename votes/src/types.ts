@@ -107,6 +107,7 @@ export const VotingSystem = {
   CandidateOrder: 'CANDIDATE_ORDER',
   Coombs: 'COOMBS',
   Copeland: 'COPELAND',
+  Dictator: 'DICTATOR',
   FirstPastThePost: 'FIRST_PAST_THE_POST',
   Kemeny: 'KEMENY',
   InstantRunoff: 'INSTANT_RUNOFF',

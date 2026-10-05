@@ -174,6 +174,7 @@ re-run itself on a subset of candidates.
 | Candidate order      | `CandidateOrder`      | —                 |
 | Coombs' method       | `Coombs`              | ballots           |
 | Copeland's method    | `Copeland`            | ballots or matrix |
+| Dictator             | `Dictator`            | ballots           |
 | First-past-the-post  | `FirstPastThePost`    | ballots           |
 | Instant-runoff (IRV) | `InstantRunoff`       | ballots           |
 | Kemeny–Young ⚠️      | `Kemeny`              | ballots or matrix |
@@ -196,7 +197,8 @@ re-run itself on a subset of candidates.
 for its share of places within.
 
 `CandidateOrder` ranks candidates in the order given, whatever the order of a
-tie it breaks: a deterministic last resort for an `Election`.
+tie it breaks, and `Dictator` as the first ballot, breaking its ties with the
+next and so on: deterministic last resorts for an `Election`.
 
 `Baldwin` and `Nanson` take Borda scores from the pairwise matrix: the same as
 `Borda`'s when ballots rank everyone, and a Condorcet winner always wins.

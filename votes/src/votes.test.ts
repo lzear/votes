@@ -9,6 +9,7 @@ import {
   CandidateOrder,
   Coombs,
   Copeland,
+  Dictator,
   Election,
   FirstPastThePost,
   InstantRunoff,
@@ -140,6 +141,19 @@ describe('Test all methods', () => {
       methods: [FirstPastThePost, CandidateOrder],
     })
     expect(election.ranking()).toStrictEqual([['b'], ['a'], ['c']])
+  })
+  it('ranks as the first ballot, then the next (Dictator)', () => {
+    const dictator = new Dictator({
+      candidates: ['a', 'b', 'c', 'd'],
+      ballots: [
+        { ranking: [['a'], ['b']], weight: 0 },
+        { ranking: [['c', 'd']] },
+        { ranking: [] },
+        { ranking: [['d'], ['a']] },
+      ],
+    })
+    // c and d tie first, a and b last; the next ballot ranks d over c, a over b.
+    expect(dictator.ranking()).toStrictEqual([['d'], ['c'], ['a'], ['b']])
   })
   it('votes with coombs', () => {
     expect(

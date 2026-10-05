@@ -25,7 +25,10 @@ import { canonizeRanking } from './normalize'
 type ABC = 'a' | 'b' | 'c'
 
 // Rank by the order of their input, not by the votes alone.
-const byOrder = new Set<VotingSystem>([VotingSystem.CandidateOrder])
+const byOrder = new Set<VotingSystem>([
+  VotingSystem.CandidateOrder,
+  VotingSystem.Dictator,
+])
 
 describe('sanity check', () => {
   it.each(Object.values(VotingSystem))(
