@@ -1,5 +1,5 @@
 import { Method } from '../../classes/method'
-import { type Profile } from '../../types'
+import type { Profile } from '../../types'
 
 /**
  * Ranks the candidates in the order given, regardless of the ballots: a

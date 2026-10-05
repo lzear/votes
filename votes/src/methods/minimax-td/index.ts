@@ -1,4 +1,4 @@
-import { type Matrix, type ScoreObject } from '../../types'
+import type { Matrix, ScoreObject } from '../../types'
 import { findSmithSet, scoresAny } from '../../utils'
 import { Minimax, type MinimaxVariant } from '../minimax'
 

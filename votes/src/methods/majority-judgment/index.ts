@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import { Method } from '../../classes/method'
-import { type Ballot, type Matrix, type ScoreObject } from '../../types'
+import type { Ballot, Matrix, ScoreObject } from '../../types'
 import { matrixFromBallots, weightOf } from '../../utils'
 import { config } from '../../utils/config'
 import { sum } from '../../utils/sum'

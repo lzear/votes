@@ -1,6 +1,6 @@
-import { type Profile, type Round, type ScoreObject } from '../types'
+import type { Profile, Round, ScoreObject } from '../types'
 import { completeRanking } from '../utils/normalize'
-import { type MethodCtor, type Ranker } from './method'
+import type { MethodCtor, Ranker } from './method'
 
 /**
  * `Method.with()` options beyond the constructor's.

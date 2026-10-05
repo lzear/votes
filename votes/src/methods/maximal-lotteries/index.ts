@@ -1,6 +1,6 @@
 import { RandomMatrixMethod } from '../../classes/random-matrix-method'
 import { findNashEquilibrium } from '../../simplex/find-nash-equilibrium'
-import { type Matrix, type ScoreObject } from '../../types'
+import type { Matrix, ScoreObject } from '../../types'
 import { findSmithSet, makeAntisymmetric, scoresZero } from '../../utils'
 import { subMatrix } from '../../utils/make-matrix'
 

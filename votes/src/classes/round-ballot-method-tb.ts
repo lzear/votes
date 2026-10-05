@@ -1,8 +1,8 @@
 import { majorityWinner } from '../methods/absolute-majority'
 import { firstChoices } from '../methods/first-past-the-post/iterate-first-choices'
-import { type Profile, type ScoreObject, type TieBreakStep } from '../types'
+import type { Profile, ScoreObject, TieBreakStep } from '../types'
 import { RoundBallotMethod, type Step } from './round-ballot-method'
-import { type MethodTiebreaker, type Tiebreaker } from './tiebreaker'
+import type { MethodTiebreaker, Tiebreaker } from './tiebreaker'
 
 export abstract class RoundBallotMethodTb<
   C extends string,

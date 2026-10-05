@@ -1,6 +1,6 @@
-import { type Step } from '../../classes/round-ballot-method'
+import type { Step } from '../../classes/round-ballot-method'
 import { TbEliminateLast } from '../../classes/round-ballot-method-tb'
-import { type ScoreObject } from '../../types'
+import type { ScoreObject } from '../../types'
 import { scoresToRanking } from '../../utils'
 import { config } from '../../utils/config'
 import { majorityWinner } from '../absolute-majority'

@@ -1,4 +1,4 @@
-import { type Matrix, type Profile } from '../types'
+import type { Matrix, Profile } from '../types'
 import { subMatrix, toMatrix } from '../utils/make-matrix'
 import { ScoreMethod, type Scorer } from './score-method'
 

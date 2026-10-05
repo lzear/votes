@@ -1,5 +1,5 @@
 import { BallotScoreMethod } from '../../classes/ballot-score-method'
-import { type Ballot, type Matrix, type ScoreObject } from '../../types'
+import type { Ballot, Matrix, ScoreObject } from '../../types'
 import { nonBlank, scoresZero, totalBallotsWeight, weightOf } from '../../utils'
 import { makeAntisymmetric, subMatrix } from '../../utils/make-matrix'
 import { sum } from '../../utils/sum'

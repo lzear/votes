@@ -1,4 +1,4 @@
-import { type Profile, type ScoreObject } from '../types'
+import type { Profile, ScoreObject } from '../types'
 import { Method } from './method'
 
 /**

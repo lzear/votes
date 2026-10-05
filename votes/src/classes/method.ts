@@ -1,6 +1,6 @@
-import { type Profile, type Round, type ScoreObject } from '../types'
+import type { Profile, Round, ScoreObject } from '../types'
 import { iterateRanking } from '../utils/iterate-ranking'
-import { type EntryOptions, type PropsOf } from './tiebreaker'
+import type { EntryOptions, PropsOf } from './tiebreaker'
 
 export interface Ranker<C extends string> {
   ranking(): C[][]

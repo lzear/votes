@@ -1,4 +1,4 @@
-import { type Ballot, type Profile } from '../types'
+import type { Ballot, Profile } from '../types'
 import {
   removeDuplicatedCandidates,
   removeInvalidCandidates,

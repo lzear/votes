@@ -1,8 +1,8 @@
-import { type Matrix, type Profile, type ScoreObject } from '../types'
+import type { Matrix, Profile, ScoreObject } from '../types'
 import { subMatrix, toMatrix } from '../utils/make-matrix'
 import { shuffleArray } from '../utils/shuffle-array'
 import { sum } from '../utils/sum'
-import { type Matrixer } from './matrix-score-method'
+import type { Matrixer } from './matrix-score-method'
 import { RandomMethod } from './random-method'
 
 // Draws candidates one at a time, each with probability proportional to its

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
-import { type Matrix, type Profile, type ScoreObject } from '../../types'
+import type { Matrix, Profile, ScoreObject } from '../../types'
 import { scoresAny } from '../../utils/scores-zero'
 import { type Edge, lockEdges } from './lock-edges'
 

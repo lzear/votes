@@ -1,11 +1,11 @@
-import { type Ranker } from './classes/method'
+import type { Ranker } from './classes/method'
 import {
   type ElectionMethod,
   type MethodTiebreaker,
   type Run,
   tiebreaker,
 } from './classes/tiebreaker'
-import { type Profile } from './types'
+import type { Profile } from './types'
 import { iterateRanking } from './utils'
 
 export interface StepResult<C extends string> {

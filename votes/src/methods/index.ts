@@ -1,4 +1,4 @@
-import { type MethodCtor } from '../classes/method'
+import type { MethodCtor } from '../classes/method'
 import { VotingSystem } from '../types'
 import { AbsoluteMajority } from './absolute-majority'
 import { AntiPlurality } from './anti-plurality'

@@ -1,6 +1,6 @@
-import { type QE, type Round } from '../types'
+import type { QE, Round } from '../types'
 import { BallotMethod } from './ballot-method'
-import { type Ranker } from './method'
+import type { Ranker } from './method'
 
 /**
  * A round, and with `open`, the tie the tiebreakers leave when its order

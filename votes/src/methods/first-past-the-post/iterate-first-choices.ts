@@ -1,4 +1,4 @@
-import { type Ballot, type ScoreObject } from '../../types'
+import type { Ballot, ScoreObject } from '../../types'
 import { scoresZero, weightOf } from '../../utils'
 
 // A ballot votes for its first tier with any of `candidates`, so ballots

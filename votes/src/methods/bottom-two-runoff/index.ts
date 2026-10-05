@@ -1,6 +1,6 @@
-import { type Step } from '../../classes/round-ballot-method'
+import type { Step } from '../../classes/round-ballot-method'
 import { RoundBallotMethodTb } from '../../classes/round-ballot-method-tb'
-import { type Tiebreaker } from '../../classes/tiebreaker'
+import type { Tiebreaker } from '../../classes/tiebreaker'
 import { scoresToRanking } from '../../utils'
 import { firstChoices } from '../first-past-the-post/iterate-first-choices'
 

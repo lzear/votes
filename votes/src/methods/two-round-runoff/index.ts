@@ -1,5 +1,5 @@
 import { RoundBallotMethodTb } from '../../classes/round-ballot-method-tb'
-import { type QE, type TieBreakStep } from '../../types'
+import type { QE, TieBreakStep } from '../../types'
 import { scoresToRanking, scoresZero } from '../../utils'
 import { majorityWinner } from '../absolute-majority'
 import { firstChoices } from '../first-past-the-post/iterate-first-choices'

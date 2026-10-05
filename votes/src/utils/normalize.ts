@@ -1,4 +1,4 @@
-import { type Ballot } from '../types'
+import type { Ballot } from '../types'
 import { sum } from './sum'
 
 export const weightOf = <C extends string>({

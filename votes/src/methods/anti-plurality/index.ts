@@ -1,5 +1,5 @@
 import { BallotScoreMethod } from '../../classes/ballot-score-method'
-import { type Ballot, type ScoreObject } from '../../types'
+import type { Ballot, ScoreObject } from '../../types'
 import { firstChoices } from '../first-past-the-post/iterate-first-choices'
 
 const ranksAll = <C extends string>(

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import { type Ballot, type Matrix, type Profile } from '../types'
+import type { Ballot, Matrix, Profile } from '../types'
 import { config } from './config'
 import { weightOf } from './normalize'
 

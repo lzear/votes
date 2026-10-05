@@ -1,5 +1,5 @@
 import { RandomBallotMethod } from '../../classes/random-ballot-method'
-import { type Ballot, type ScoreObject } from '../../types'
+import type { Ballot, ScoreObject } from '../../types'
 import { nonBlank, scoresZero, totalBallotsWeight, weightOf } from '../../utils'
 import { sum } from '../../utils/sum'
 import { refine, serialRanking } from '../dictator'

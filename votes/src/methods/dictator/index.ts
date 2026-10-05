@@ -1,5 +1,5 @@
 import { BallotMethod } from '../../classes/ballot-method'
-import { type Ballot } from '../../types'
+import type { Ballot } from '../../types'
 import { weightOf } from '../../utils'
 
 // Splits each tier by the ballot, the candidates it leaves out last.

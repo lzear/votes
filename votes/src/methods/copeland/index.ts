@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
-import { type Matrix, type ScoreObject } from '../../types'
+import type { Matrix, ScoreObject } from '../../types'
 import { pairwiseMatrix } from '../../utils/make-matrix'
 import { sum } from '../../utils/sum'
 

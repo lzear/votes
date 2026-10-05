@@ -1,4 +1,4 @@
-import { type Ranker } from '../classes/method'
+import type { Ranker } from '../classes/method'
 
 /**
  * Ranking built by repeated wins: take the ranker's winning tier, then re-run

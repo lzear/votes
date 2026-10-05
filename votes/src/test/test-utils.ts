@@ -1,5 +1,5 @@
 import { Election, type ElectionInput } from '../election'
-import { type Ballot } from '../types'
+import type { Ballot } from '../types'
 import { toWeightedBallots } from '../utils'
 
 export const closeTo = (num: number, numDigits?: number) =>
