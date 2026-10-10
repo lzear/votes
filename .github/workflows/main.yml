@@ -10,14 +10,14 @@ permissions:
 
 jobs:
   ci:
-    uses: lzear/forge/.github/workflows/ci.yml@a1ca03157aa99911896e38bea26aebbdc1e31796 # v4.7.0
+    uses: lzear/forge/.github/workflows/ci.yml@fb2a4ea4b2bb49007af5e641ce86dfaf57341410 # v4.10.0
     secrets:
       CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
   release:
     if: github.event_name == 'push'
     needs: ci
-    uses: lzear/forge/.github/workflows/release.yml@a1ca03157aa99911896e38bea26aebbdc1e31796 # v4.7.0
+    uses: lzear/forge/.github/workflows/release.yml@fb2a4ea4b2bb49007af5e641ce86dfaf57341410 # v4.10.0
     permissions:
       contents: write
       pull-requests: write
