@@ -17,31 +17,54 @@ const scoreXY = {
     xOverY > yOverX ? xOverY : 0,
 }
 
-const computeScores = <C extends string>(
+/**
+A candidate's worst result: the largest `defeat` (by the variant's measure,
+negative when it wins every duel by margins) and the `opponents` inflicting
+it.
+*/
+export type WorstDefeat<C extends string> = {
+  opponents: C[]
+  defeat: number
+}
+
+const computeWorstDefeats = <C extends string>(
   matrix: Matrix<C>,
   variant: MinimaxVariant,
   excludeTies: boolean,
-): ScoreObject<C> =>
+): Record<C, WorstDefeat<C>> =>
   Object.fromEntries(
     matrix.candidates.map((candidate, c1Index) => {
-      // [votes against, votes for] in each duel.
+      // Opponent, votes against, votes for in each duel.
       const duels = matrix.array[c1Index]!.flatMap(
-        (yOverX, c2Index): [number, number][] =>
+        (yOverX, c2Index): [C, number, number][] =>
           c2Index === c1Index
             ? []
-            : [[matrix.array[c2Index]![c1Index]!, yOverX]],
+            : [
+                [
+                  matrix.candidates[c2Index]!,
+                  matrix.array[c2Index]![c1Index]!,
+                  yOverX,
+                ],
+              ],
       )
       // Ties left out, unless they are all there is.
       const counted =
-        excludeTies && duels.some(([x, y]) => x !== y)
-          ? duels.filter(([x, y]) => x !== y)
+        excludeTies && duels.some(([, x, y]) => x !== y)
+          ? duels.filter(([, x, y]) => x !== y)
           : duels
+      const defeats = counted.map(
+        ([opponent, x, y]) => [opponent, scoreXY[variant](x, y)] as const,
+      )
+      const defeat = Math.max(...defeats.map(([, d]) => d))
       return [
         candidate,
-        -Math.max(...counted.map(([x, y]) => scoreXY[variant](x, y))),
+        {
+          opponents: defeats.filter(([, d]) => d === defeat).map(([o]) => o),
+          defeat,
+        },
       ]
     }),
-  ) as ScoreObject<C>
+  ) as Record<C, WorstDefeat<C>>
 
 /**
 #### Wikipedia: [Minimax Condorcet method](https://en.wikipedia.org/wiki/Minimax_Condorcet_method)
@@ -64,6 +87,23 @@ export class Minimax<C extends string> extends MatrixScoreMethod<C> {
   }
 
   public scores(): ScoreObject<C> {
-    return computeScores(this.matrix, this.minimaxVariant, this.excludeTies)
+    return Object.fromEntries(
+      Object.entries<WorstDefeat<C>>(this.worstDefeats()).map(([c, w]) => [
+        c,
+        -w.defeat,
+      ]),
+    ) as ScoreObject<C>
+  }
+
+  /**
+  Each candidate's worst defeat and who inflicts it: Minimax scores it,
+  negated.
+  */
+  public worstDefeats(): Record<C, WorstDefeat<C>> {
+    return computeWorstDefeats(
+      this.matrix,
+      this.minimaxVariant,
+      this.excludeTies,
+    )
   }
 }

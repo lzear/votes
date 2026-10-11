@@ -224,6 +224,9 @@ of `scores()`, and draw their ranking once per instance.
 `Schulze` also exposes `strengths()` — the beatpath strength matrix its scores
 derive from.
 
+`Minimax` also exposes `worstDefeats()`: each candidate's worst defeat and the
+opponents inflicting it.
+
 `RankedPairs` and `Schulze` measure a pairwise win by the winner's votes by
 default; pass `strength: 'margins'` to subtract the loser's. The two differ only
 when voters tie both candidates or leave both unranked.

@@ -25,7 +25,11 @@ export { InstantRunoff } from './methods/instant-runoff'
 export { Kemeny } from './methods/kemeny'
 export { type Judgements, MajorityJudgment } from './methods/majority-judgment'
 export { MaximalLotteries } from './methods/maximal-lotteries'
-export { Minimax, MinimaxVariant } from './methods/minimax'
+export {
+  Minimax,
+  MinimaxVariant,
+  type WorstDefeat as MinimaxWorstDefeat,
+} from './methods/minimax'
 export { MinimaxTD } from './methods/minimax-td'
 export { Nanson, type NansonInfo } from './methods/nanson'
 export { RandomCandidates } from './methods/random-candidates'

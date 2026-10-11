@@ -160,4 +160,18 @@ describe(Minimax, () => {
       })
     }
   })
+
+  it('names each worst defeat, opponents tied for it', () => {
+    const ballots = [
+      { ranking: [['b'], ['c'], ['a']], weight: 1 },
+      { ranking: [['c'], ['b'], ['a']], weight: 1 },
+    ]
+    const minimax = new Minimax(matrixFromBallots(ballots, ['a', 'b', 'c']))
+    expect(minimax.worstDefeats()).toStrictEqual({
+      a: { opponents: ['b', 'c'], defeat: 2 },
+      b: { opponents: ['c'], defeat: 0 },
+      c: { opponents: ['b'], defeat: 0 },
+    })
+    expect(minimax.scores()).toStrictEqual({ a: -2, b: -0, c: -0 })
+  })
 })
