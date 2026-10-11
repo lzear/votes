@@ -121,6 +121,7 @@ export const VotingSystem = {
   RankedPairs: 'RANKED_PAIRS',
   Schulze: 'SCHULZE',
   Smith: 'SMITH',
+  SplitCycle: 'SPLIT_CYCLE',
   TwoRoundRunoff: 'TWO_ROUND_RUNOFF',
 } as const
 export type VotingSystem = (typeof VotingSystem)[keyof typeof VotingSystem]

@@ -24,15 +24,23 @@ const relaxThrough = (p: number[][], n: number, i: number): void => {
           p[j]![k] = Math.max(p[j]![k]!, Math.min(p[j]![i]!, p[i]![k]!))
 }
 
-const floydWarshall = (p: number[][], n: number): void => {
+// Strongest path between every ordered pair, each direct win measured by
+// `strength`.
+export const beatpaths = <C extends string>(
+  matrix: Matrix<C>,
+  strength: Strength,
+): number[][] => {
+  const n = matrix.candidates.length
+  const p = initStrengths(n, matrix, strength)
   for (let i = 0; i < n; i++) relaxThrough(p, n, i)
+  return p
 }
 
 // Ranks in layers: the candidates no one beats on beatpaths, then those no one
 // left beats, and so on. Counting wins instead would split candidates neither
 // of whom beats the other. A candidate scores the number ranked below it,
 // which is its win count when there are no ties.
-const scoresFromStrengths = <C extends string>(
+export const scoresFromStrengths = <C extends string>(
   candidates: readonly C[],
   p: number[][],
 ): ScoreObject<C> => {
@@ -71,10 +79,10 @@ export class Schulze<C extends string> extends MatrixScoreMethod<C> {
   derived from.
   */
   public strengths(): Matrix<C> {
-    const { candidates } = this.matrix
-    const p = initStrengths(candidates.length, this.matrix, this.strength)
-    floydWarshall(p, candidates.length)
-    return { candidates, array: p }
+    return {
+      candidates: this.matrix.candidates,
+      array: beatpaths(this.matrix, this.strength),
+    }
   }
 
   public scores(): ScoreObject<C> {

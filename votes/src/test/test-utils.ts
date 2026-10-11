@@ -40,6 +40,17 @@ export const dummyProfile10: Ballot<ABCDE>[] = toWeightedBallots(
   repeat(10, [['a'], ['b'], ['c'], ['d'], ['e']]),
 )
 
+// The matrix of these wins: `[winner, loser, margin]`.
+export const fromMargins = <C extends string>(
+  candidates: C[],
+  wins: [C, C, number][],
+) => ({
+  candidates,
+  array: candidates.map((x) =>
+    candidates.map((y) => wins.find(([w, l]) => w === x && l === y)?.[2] ?? 0),
+  ),
+})
+
 export const matrixString = (matrix: number[][]): string => {
   const size = 6
 

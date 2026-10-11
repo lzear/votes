@@ -189,6 +189,7 @@ re-run itself on a subset of candidates.
 | Ranked pairs         | `RankedPairs`         | ballots or matrix |
 | Schulze method       | `Schulze`             | ballots or matrix |
 | Smith's method       | `Smith`               | ballots or matrix |
+| Split Cycle          | `SplitCycle`          | ballots or matrix |
 | Two-round runoff     | `TwoRoundRunoff`      | ballots           |
 
 `Approval` approves the candidates in each ballot's first tier.
