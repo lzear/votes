@@ -4,8 +4,8 @@ import { rngGenerator, toWeightedBallots } from '../../utils'
 import { Dictator } from '../dictator'
 import { RandomDictator } from '.'
 
-const expectNTimes = <T>(value: T, expected: T, times: number) => {
-  for (let i = 0; i < times; i++) expect(value).toStrictEqual(expected)
+const expectNTimes = <T>(value: T, expected: T) => {
+  for (let i = 0; i < 5; i++) expect(value).toStrictEqual(expected)
 }
 
 const vote = <C extends string>(
@@ -21,24 +21,21 @@ const vote = <C extends string>(
 
 describe(RandomDictator, () => {
   it('is deterministic', () => {
-    expectNTimes(vote([], ['a', 'b'], 'aaa').ranking(), [['a', 'b']], 5)
-    expectNTimes(vote([], ['a', 'b'], 'bbb').ranking(), [['a', 'b']], 5)
-    expectNTimes(vote([], ['a', 'b'], 'ccc').ranking(), [['a', 'b']], 5)
+    expectNTimes(vote([], ['a', 'b'], 'aaa').ranking(), [['a', 'b']])
+    expectNTimes(vote([], ['a', 'b'], 'bbb').ranking(), [['a', 'b']])
+    expectNTimes(vote([], ['a', 'b'], 'ccc').ranking(), [['a', 'b']])
 
     expectNTimes(
       vote(toWeightedBallots([[['a'], ['b']]]), ['a', 'b'], 'aaa').ranking(),
       [['a'], ['b']],
-      5,
     )
     expectNTimes(
       vote(toWeightedBallots([[['a'], ['b']]]), ['a', 'b'], 'bbb').ranking(),
       [['a'], ['b']],
-      5,
     )
     expectNTimes(
       vote(toWeightedBallots([[['a'], ['b']]]), ['a', 'b'], 'ccc').ranking(),
       [['a'], ['b']],
-      5,
     )
   })
 
@@ -53,7 +50,6 @@ describe(RandomDictator, () => {
         '111',
       ).ranking(),
       [['b'], ['a']],
-      5,
     )
     expectNTimes(
       vote(
@@ -65,7 +61,6 @@ describe(RandomDictator, () => {
         '222',
       ).ranking(),
       [['a'], ['b']],
-      5,
     )
     expectNTimes(
       vote(
@@ -77,7 +72,6 @@ describe(RandomDictator, () => {
         '333',
       ).ranking(),
       [['a'], ['b']],
-      5,
     )
   })
   it('picks first ballot when rng returns 0', () => {

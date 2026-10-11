@@ -24,9 +24,7 @@ const computeFromMatrix = <C extends string>(
   const allEdges: Edge[] = matrix.array.flatMap((row, from) =>
     row.flatMap((value, to) => {
       const against = matrix.array[to]![from]!
-      return value > against
-        ? [{ from, to, value, total: value + against }]
-        : []
+      return value > against ? { from, to, value, total: value + against } : []
     }),
   )
   // Strongest first, then in the sorter's order. Edges neither tells apart

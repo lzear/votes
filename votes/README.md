@@ -117,7 +117,7 @@ const [step] = new Election({
   methods: [InstantRunoff, Borda],
 }).result().steps
 
-step.runs[0].rounds[0]
+const [round] = step.runs[0].rounds
 // {
 //   index: 0,
 //   candidates: ['a', 'b', 'c'],

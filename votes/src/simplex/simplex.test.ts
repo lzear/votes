@@ -1,10 +1,10 @@
 import { productVectM } from '../test/matrix'
 import { findNashEquilibrium } from './find-nash-equilibrium'
 
-const closeToArray = (received: number[], expected: number[], digits = 6) => {
+const closeToArray = (received: number[], expected: number[]) => {
   expect(received).toHaveLength(expected.length)
   for (let i = 0; i < expected.length; i++)
-    expect(received[i]).toBeCloseTo(expected[i]!, digits)
+    expect(received[i]).toBeCloseTo(expected[i]!, 6)
 }
 
 it('solves 2', () => {

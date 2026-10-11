@@ -64,7 +64,7 @@ const rankings = (rank: (profile: RandomProfile) => Ranker<string>) =>
 
 const condorcetWinners = profiles.flatMap((profile) => {
   const [winner, ...others] = smithSet(profile)
-  return others.length > 0 ? [] : [{ profile, winner }]
+  return others.length > 0 ? [] : { profile, winner }
 })
 
 const election = (profile: RandomProfile) =>
