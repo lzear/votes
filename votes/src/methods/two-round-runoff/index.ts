@@ -16,12 +16,13 @@ type Cut<C extends string> = {
 The two candidates with the most first choices go to a runoff, unless one of
 them already has an absolute majority. A tie at the cut that the tiebreakers
 cannot break sends everyone in it through, and the count then stops on those
-who win the runoff of some pair breaking it gives.
+who win the runoff of some pair breaking it gives. Counting the runoff from
+the ballots makes it the contingent vote.
 
-#### Wikipedia: [Two-round system](https://en.wikipedia.org/wiki/Two-round_system)
+#### Wikipedia: [Two-round system](https://en.wikipedia.org/wiki/Two-round_system), [Contingent vote](https://en.wikipedia.org/wiki/Contingent_vote)
 */
 export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
-  public static readonly label = 'TwoRoundRunoff'
+  public static readonly label: string = 'TwoRoundRunoff'
 
   // The first round's, for a runoff of more than two.
   private cut: Cut<C> = { through: [], tied: [], spots: 0 }

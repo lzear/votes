@@ -323,7 +323,12 @@ describe('sanity check', () => {
     },
   )
   it.each(Object.values(VotingSystem))('gets matrix (%s)', (system) => {
-    if (system === VotingSystem.MajorityJudgment) return
+    // Supplementary vote counts only first and second places.
+    if (
+      system === VotingSystem.MajorityJudgment ||
+      system === VotingSystem.SupplementaryVote
+    )
+      return
 
     const candidates = abcde
     const ballots = dummyProfile10

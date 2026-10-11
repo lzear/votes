@@ -30,6 +30,7 @@ import { Smith } from './smith'
 import { SmithInstantRunoff } from './smith-instant-runoff'
 import { SplitCycle } from './split-cycle'
 import { StableVoting } from './stable-voting'
+import { SupplementaryVote } from './supplementary-vote'
 import { TidemanAlternative } from './tideman-alternative'
 import { TwoRoundRunoff } from './two-round-runoff'
 import { Woodall } from './woodall'
@@ -65,6 +66,7 @@ export const methods = {
   [VotingSystem.SmithInstantRunoff]: SmithInstantRunoff,
   [VotingSystem.SplitCycle]: SplitCycle,
   [VotingSystem.StableVoting]: StableVoting,
+  [VotingSystem.SupplementaryVote]: SupplementaryVote,
   [VotingSystem.TidemanAlternative]: TidemanAlternative,
   [VotingSystem.TwoRoundRunoff]: TwoRoundRunoff,
   [VotingSystem.Woodall]: Woodall,

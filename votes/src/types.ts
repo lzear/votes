@@ -125,6 +125,7 @@ export const VotingSystem = {
   SmithInstantRunoff: 'SMITH_INSTANT_RUNOFF',
   SplitCycle: 'SPLIT_CYCLE',
   StableVoting: 'STABLE_VOTING',
+  SupplementaryVote: 'SUPPLEMENTARY_VOTE',
   TidemanAlternative: 'TIDEMAN_ALTERNATIVE',
   TwoRoundRunoff: 'TWO_ROUND_RUNOFF',
   Woodall: 'WOODALL',

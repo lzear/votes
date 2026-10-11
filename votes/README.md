@@ -193,6 +193,7 @@ re-run itself on a subset of candidates.
 | Smith//IRV            | `SmithInstantRunoff`  | ballots           |
 | Split Cycle           | `SplitCycle`          | ballots or matrix |
 | Stable Voting ⚠️      | `StableVoting`        | ballots or matrix |
+| Supplementary vote    | `SupplementaryVote`   | ballots           |
 | Tideman's Alternative | `TidemanAlternative`  | ballots           |
 | Two-round runoff      | `TwoRoundRunoff`      | ballots           |
 | Woodall's method      | `Woodall`             | ballots           |
@@ -233,6 +234,10 @@ among those left, Woodall on the last member of the Smith set, Smith//IRV puts
 everyone outside the Smith set out first, and Tideman's Alternative narrows to
 the Smith set of those left before each count (`topSet: 'schwartz'` for the
 Schwartz set). A round that narrows puts everyone else out at once.
+
+`TwoRoundRunoff` counts the runoff from the ballots, as the contingent vote
+does; `SupplementaryVote` counts only each ballot's first two places
+(`preferences`, default 2).
 
 `BottomTwoRunoff` settles each round with a first-choices head-to-head, the
 first `tieBreakSteps` entry (named `FirstPastThePost`); the methods after it in
