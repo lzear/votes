@@ -92,3 +92,18 @@ export const openTie = {
     weight: Number(b.at(-1)),
   })),
 }
+
+// No Condorcet winner: A beats B and C, ties D; B beats C and D; D beats C.
+// The Smith set is A, B and D. Instant runoff puts out A, then B: D wins.
+export const smithCycle = {
+  candidates: ['A', 'B', 'C', 'D'],
+  ballots: [
+    ['C', 'A', 'B', 'D', 9],
+    ['A', 'D', 'B', 'C', 3],
+    ['D', 'A', 'B', 'C', 5],
+    ['B', 'D', 'A', 'C', 7],
+  ].map((b) => ({
+    ranking: b.slice(0, -1).map((c) => [String(c)]),
+    weight: Number(b.at(-1)),
+  })),
+}

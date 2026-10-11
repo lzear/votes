@@ -161,37 +161,41 @@ re-run itself on a subset of candidates.
 
 ## Voting systems
 
-| Method               | Class                 | Input             |
-| -------------------- | --------------------- | ----------------- |
-| Absolute majority    | `AbsoluteMajority`    | ballots           |
-| Anti-plurality       | `AntiPlurality`       | ballots           |
-| Approval voting      | `Approval`            | ballots           |
-| Baldwin method       | `Baldwin`             | ballots           |
-| Black's method       | `Black`               | ballots           |
-| Borda count          | `Borda`               | ballots           |
-| Bottom-two-runoff    | `BottomTwoRunoff`     | ballots           |
-| Bucklin voting       | `Bucklin`             | ballots           |
-| Candidate order      | `CandidateOrder`      | —                 |
-| Coombs' method       | `Coombs`              | ballots           |
-| Copeland's method    | `Copeland`            | ballots or matrix |
-| Dictator             | `Dictator`            | ballots           |
-| First-past-the-post  | `FirstPastThePost`    | ballots           |
-| Instant-runoff (IRV) | `InstantRunoff`       | ballots           |
-| Kemeny–Young ⚠️      | `Kemeny`              | ballots or matrix |
-| Majority judgment    | `MajorityJudgment`    | ballots as grades |
-| Maximal lotteries    | `MaximalLotteries`    | ballots or matrix |
-| Minimax Condorcet    | `Minimax`             | ballots or matrix |
-| Minimax-TD           | `MinimaxTD`           | ballots or matrix |
-| Nanson method        | `Nanson`              | ballots           |
-| Random candidate     | `RandomCandidates`    | —                 |
-| Random dictator      | `RandomDictator`      | ballots           |
-| Randomized Condorcet | `RandomizedCondorcet` | ballots or matrix |
-| Ranked pairs         | `RankedPairs`         | ballots or matrix |
-| Schulze method       | `Schulze`             | ballots or matrix |
-| Smith's method       | `Smith`               | ballots or matrix |
-| Split Cycle          | `SplitCycle`          | ballots or matrix |
-| Stable Voting ⚠️     | `StableVoting`        | ballots or matrix |
-| Two-round runoff     | `TwoRoundRunoff`      | ballots           |
+| Method                | Class                 | Input             |
+| --------------------- | --------------------- | ----------------- |
+| Absolute majority     | `AbsoluteMajority`    | ballots           |
+| Anti-plurality        | `AntiPlurality`       | ballots           |
+| Approval voting       | `Approval`            | ballots           |
+| Baldwin method        | `Baldwin`             | ballots           |
+| Benham's method       | `Benham`              | ballots           |
+| Black's method        | `Black`               | ballots           |
+| Borda count           | `Borda`               | ballots           |
+| Bottom-two-runoff     | `BottomTwoRunoff`     | ballots           |
+| Bucklin voting        | `Bucklin`             | ballots           |
+| Candidate order       | `CandidateOrder`      | —                 |
+| Coombs' method        | `Coombs`              | ballots           |
+| Copeland's method     | `Copeland`            | ballots or matrix |
+| Dictator              | `Dictator`            | ballots           |
+| First-past-the-post   | `FirstPastThePost`    | ballots           |
+| Instant-runoff (IRV)  | `InstantRunoff`       | ballots           |
+| Kemeny–Young ⚠️       | `Kemeny`              | ballots or matrix |
+| Majority judgment     | `MajorityJudgment`    | ballots as grades |
+| Maximal lotteries     | `MaximalLotteries`    | ballots or matrix |
+| Minimax Condorcet     | `Minimax`             | ballots or matrix |
+| Minimax-TD            | `MinimaxTD`           | ballots or matrix |
+| Nanson method         | `Nanson`              | ballots           |
+| Random candidate      | `RandomCandidates`    | —                 |
+| Random dictator       | `RandomDictator`      | ballots           |
+| Randomized Condorcet  | `RandomizedCondorcet` | ballots or matrix |
+| Ranked pairs          | `RankedPairs`         | ballots or matrix |
+| Schulze method        | `Schulze`             | ballots or matrix |
+| Smith's method        | `Smith`               | ballots or matrix |
+| Smith//IRV            | `SmithInstantRunoff`  | ballots           |
+| Split Cycle           | `SplitCycle`          | ballots or matrix |
+| Stable Voting ⚠️      | `StableVoting`        | ballots or matrix |
+| Tideman's Alternative | `TidemanAlternative`  | ballots           |
+| Two-round runoff      | `TwoRoundRunoff`      | ballots           |
+| Woodall's method      | `Woodall`             | ballots           |
 
 `Approval` approves the candidates in each ballot's first tier.
 
@@ -222,6 +226,13 @@ most 30). Below its winners, it ranks by running again without them;
 default 6), and breaks ties one vote at a time: give it whole weights. A ballot
 ranked past the last grade throws, or with `clampGrades` gives those ranks the
 worst grade.
+
+`Benham`, `Woodall`, `SmithInstantRunoff` (Smith//IRV) and `TidemanAlternative`
+run instant runoff with a Condorcet check: Benham stops on a Condorcet winner
+among those left, Woodall on the last member of the Smith set, Smith//IRV puts
+everyone outside the Smith set out first, and Tideman's Alternative narrows to
+the Smith set of those left before each count (`topSet: 'schwartz'` for the
+Schwartz set). A round that narrows puts everyone else out at once.
 
 `BottomTwoRunoff` settles each round with a first-choices head-to-head, the
 first `tieBreakSteps` entry (named `FirstPastThePost`); the methods after it in

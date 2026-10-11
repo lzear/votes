@@ -12,6 +12,7 @@ export { AbsoluteMajority } from './methods/absolute-majority'
 export { AntiPlurality } from './methods/anti-plurality'
 export { Approval } from './methods/approval'
 export { Baldwin } from './methods/baldwin'
+export { Benham } from './methods/benham'
 export { Black } from './methods/black'
 export { Borda } from './methods/borda'
 export { BottomTwoRunoff } from './methods/bottom-two-runoff'
@@ -43,9 +44,12 @@ export {
 export type { Edge as RankedPairsEdge } from './methods/ranked-pairs/lock-edges'
 export { Schulze } from './methods/schulze'
 export { Smith } from './methods/smith'
+export { SmithInstantRunoff } from './methods/smith-instant-runoff'
 export { SplitCycle } from './methods/split-cycle'
 export { StableVoting } from './methods/stable-voting'
+export { TidemanAlternative } from './methods/tideman-alternative'
 export { TwoRoundRunoff } from './methods/two-round-runoff'
+export { Woodall } from './methods/woodall'
 export type {
   Ballot,
   Matrix,

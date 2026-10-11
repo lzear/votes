@@ -15,6 +15,7 @@ import { shuffleArray } from './utils/shuffle-array'
 // Methods a Condorcet winner always wins.
 const condorcet = [
   VotingSystem.Baldwin,
+  VotingSystem.Benham,
   VotingSystem.Black,
   VotingSystem.Copeland,
   VotingSystem.Kemeny,
@@ -26,8 +27,11 @@ const condorcet = [
   VotingSystem.RankedPairs,
   VotingSystem.Schulze,
   VotingSystem.Smith,
+  VotingSystem.SmithInstantRunoff,
   VotingSystem.SplitCycle,
   VotingSystem.StableVoting,
+  VotingSystem.TidemanAlternative,
+  VotingSystem.Woodall,
 ]
 
 const systems = Object.values(VotingSystem)

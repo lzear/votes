@@ -99,6 +99,7 @@ export const VotingSystem = {
   AbsoluteMajority: 'ABSOLUTE_MAJORITY',
   AntiPlurality: 'ANTI_PLURALITY',
   Baldwin: 'BALDWIN',
+  Benham: 'BENHAM',
   Black: 'BLACK',
   Borda: 'BORDA',
   BottomTwoRunoff: 'BOTTOM_TWO_RUNOFF',
@@ -121,8 +122,11 @@ export const VotingSystem = {
   RankedPairs: 'RANKED_PAIRS',
   Schulze: 'SCHULZE',
   Smith: 'SMITH',
+  SmithInstantRunoff: 'SMITH_INSTANT_RUNOFF',
   SplitCycle: 'SPLIT_CYCLE',
   StableVoting: 'STABLE_VOTING',
+  TidemanAlternative: 'TIDEMAN_ALTERNATIVE',
   TwoRoundRunoff: 'TWO_ROUND_RUNOFF',
+  Woodall: 'WOODALL',
 } as const
 export type VotingSystem = (typeof VotingSystem)[keyof typeof VotingSystem]

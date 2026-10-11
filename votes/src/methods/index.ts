@@ -4,6 +4,7 @@ import { AbsoluteMajority } from './absolute-majority'
 import { AntiPlurality } from './anti-plurality'
 import { Approval } from './approval'
 import { Baldwin } from './baldwin'
+import { Benham } from './benham'
 import { Black } from './black'
 import { Borda } from './borda'
 import { BottomTwoRunoff } from './bottom-two-runoff'
@@ -26,15 +27,19 @@ import { RandomizedCondorcet } from './randomized-condorcet'
 import { RankedPairs } from './ranked-pairs'
 import { Schulze } from './schulze'
 import { Smith } from './smith'
+import { SmithInstantRunoff } from './smith-instant-runoff'
 import { SplitCycle } from './split-cycle'
 import { StableVoting } from './stable-voting'
+import { TidemanAlternative } from './tideman-alternative'
 import { TwoRoundRunoff } from './two-round-runoff'
+import { Woodall } from './woodall'
 
 export const methods = {
   [VotingSystem.AbsoluteMajority]: AbsoluteMajority,
   [VotingSystem.AntiPlurality]: AntiPlurality,
   [VotingSystem.Approval]: Approval,
   [VotingSystem.Baldwin]: Baldwin,
+  [VotingSystem.Benham]: Benham,
   [VotingSystem.Black]: Black,
   [VotingSystem.Borda]: Borda,
   [VotingSystem.BottomTwoRunoff]: BottomTwoRunoff,
@@ -57,9 +62,12 @@ export const methods = {
   [VotingSystem.RankedPairs]: RankedPairs,
   [VotingSystem.Schulze]: Schulze,
   [VotingSystem.Smith]: Smith,
+  [VotingSystem.SmithInstantRunoff]: SmithInstantRunoff,
   [VotingSystem.SplitCycle]: SplitCycle,
   [VotingSystem.StableVoting]: StableVoting,
+  [VotingSystem.TidemanAlternative]: TidemanAlternative,
   [VotingSystem.TwoRoundRunoff]: TwoRoundRunoff,
+  [VotingSystem.Woodall]: Woodall,
 } as const satisfies Record<VotingSystem, MethodCtor<string>>
 
 export type Methods = (typeof methods)[keyof typeof methods]
