@@ -212,7 +212,9 @@ is `Dictator` on ballots drawn in random order, by weight.
 throws beyond `maxCandidates` (default and at most 30).
 
 `MajorityJudgment` reads a ballot's tiers as grades, best first (`grades`,
-default 6), and breaks ties one vote at a time: give it whole weights.
+default 6), and breaks ties one vote at a time: give it whole weights. A ballot
+ranked past the last grade throws, or with `clampGrades` gives those ranks the
+worst grade.
 
 `BottomTwoRunoff` settles each round with a first-choices head-to-head, the
 first `tieBreakSteps` entry (named `FirstPastThePost`); the methods after it in

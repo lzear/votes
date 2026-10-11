@@ -111,6 +111,11 @@ export class MajorityJudgment<C extends string> extends Method<C> {
     with `unrankedLast` (default false).
     */
     countBlank?: boolean
+    /**
+    Whether a ballot ranked past the worst grade gives its ranks from the
+    worst grade on that grade (default false: it throws).
+    */
+    clampGrades?: boolean
   }) {
     super(i.candidates)
     this.grades = i.grades ?? 6
@@ -120,12 +125,15 @@ export class MajorityJudgment<C extends string> extends Method<C> {
       )
     this.unrankedLast = i.unrankedLast ?? true
     this.countBlank = i.countBlank ?? false
+    const g = this.grades
     this.gradeBallots = i.ballots.map((b) => {
+      const ranks =
+        i.clampGrades && b.ranking.length > g
+          ? [...b.ranking.slice(0, g - 1), b.ranking.slice(g - 1).flat()]
+          : b.ranking
       // A candidate gets one grade per ballot, its best.
       const left = new Set(this.candidates)
-      const ranking = b.ranking.map((rank) =>
-        rank.filter((c) => left.delete(c)),
-      )
+      const ranking = ranks.map((rank) => rank.filter((c) => left.delete(c)))
       const worst = ranking.findLastIndex((rank) => rank.length > 0)
       if (worst >= this.grades)
         throw new RangeError(

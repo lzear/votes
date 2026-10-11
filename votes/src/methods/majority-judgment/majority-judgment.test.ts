@@ -267,6 +267,17 @@ describe(MajorityJudgment, () => {
     ).toThrow(RangeError)
   })
 
+  it('clamps ranks past the last grade to it on request', () => {
+    const mj = new MajorityJudgment({
+      candidates: ['a', 'b', 'c'],
+      ballots: [{ ranking: [['a'], ['b'], ['c']], weight: 1 }],
+      grades: 2,
+      clampGrades: true,
+    })
+    expect(mj.judgements()).toStrictEqual({ a: [1, 0], b: [0, 1], c: [0, 1] })
+    expect(mj.ranking()).toStrictEqual([['a'], ['b', 'c']])
+  })
+
   it('throws on a grade count that is not a positive integer', () => {
     for (const grades of [0, 2.5, NaN, Infinity])
       expect(
