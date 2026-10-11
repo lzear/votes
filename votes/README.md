@@ -198,7 +198,7 @@ ballots, for the next method in an `Election` to settle; its `winner()` is then
 `undefined`.
 
 `Bucklin` scores the count that finds a majority, a tier across its cut counting
-for its share of places within.
+for its share of places within; `counts()` lists each round's count.
 
 `CandidateOrder` ranks candidates in the order given, whatever the order of a
 tie it breaks, and `Dictator` as the first ballot, breaking its ties with the

@@ -38,13 +38,23 @@ export class Bucklin<C extends string> extends BallotScoreMethod<C> {
   public static readonly label = 'Bucklin'
 
   public scores(): ScoreObject<C> {
+    return this.counts().at(-1) ?? scoresZero(this.candidates)
+  }
+
+  /**
+  Each round's count, one more place deep than the last, until someone has
+  an absolute majority: the weight of the ballots placing each candidate
+  within, a tier across the cut counting for its share of places within.
+  */
+  public counts(): ScoreObject<C>[] {
     const half =
       totalBallotsWeight(this.castBallots(this.candidates)) / 2 + config.EPSILON
-    let scores = scoresZero(this.candidates)
+    const counts: ScoreObject<C>[] = []
     for (let depth = 1; depth <= this.candidates.length; depth++) {
-      scores = placedWithin(this.ballots, this.candidates, depth)
+      const scores = placedWithin(this.ballots, this.candidates, depth)
+      counts.push(scores)
       if (Object.values<number>(scores).some((s) => s > half)) break
     }
-    return scores
+    return counts
   }
 }

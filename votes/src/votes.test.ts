@@ -131,6 +131,18 @@ describe('Test all methods', () => {
       new Bucklin({ candidates: ['a', 'b', 'c'], ballots }).scores(),
     ).toStrictEqual({ a: 2, b: 1.5, c: 0.5 })
   })
+  it('counts each Bucklin round, a tier across the cut by its share', () => {
+    const ballots = [
+      { ranking: [['a'], ['b', 'c']] },
+      { ranking: [['b'], ['a']] },
+    ]
+    expect(
+      new Bucklin({ candidates: ['a', 'b', 'c'], ballots }).counts(),
+    ).toStrictEqual([
+      { a: 1, b: 1, c: 0 },
+      { a: 2, b: 1.5, c: 0.5 },
+    ])
+  })
   it('ranks in candidate order', () => {
     const order = new CandidateOrder({ candidates: ['c', 'a', 'b'] })
     expect(order.ranking()).toStrictEqual([['c'], ['a'], ['b']])
