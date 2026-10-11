@@ -46,6 +46,7 @@ export type {
 } from './types'
 export { VotingSystem } from './types'
 export {
+  condorcetWinner,
   groupBallots,
   makeAntisymmetric,
   matrixFromBallots,

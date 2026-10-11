@@ -239,6 +239,7 @@ it cannot tell apart still lock together.
 matrixFromBallots(ballots, candidates) // array[i][j]: weight ranking i above j
 makeAntisymmetric(matrix) // margins: array[i][j] - array[j][i]
 smithSet({ candidates, ballots }) // smallest set beating everyone outside it
+condorcetWinner({ candidates, ballots }) // who beats everyone else head-to-head, or undefined
 toWeightedBallots([
   [['a'], ['b']],
   [['a'], ['b']],

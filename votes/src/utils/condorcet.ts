@@ -39,3 +39,15 @@ The smallest set of candidates who each beat everyone outside it.
 export const smithSet = <C extends string>(
   input: Matrix<C> | Profile<C>,
 ): C[] => [...findSmithSet(toMatrix(input)).candidates]
+
+/**
+The candidate who beats every other one head-to-head, if any.
+*/
+export const condorcetWinner = <C extends string>(
+  input: Matrix<C> | Profile<C>,
+): C | undefined => {
+  const { array, candidates } = toMatrix(input)
+  return candidates.find((_c, i) =>
+    array[i]!.every((v, j) => i === j || v > array[j]![i]!),
+  )
+}

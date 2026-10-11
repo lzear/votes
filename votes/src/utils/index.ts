@@ -1,4 +1,4 @@
-export { findSmithSet, smithSet } from './condorcet'
+export { condorcetWinner, findSmithSet, smithSet } from './condorcet'
 export { iterateRanking } from './iterate-ranking'
 export { makeAntisymmetric, matrixFromBallots } from './make-matrix'
 export {
