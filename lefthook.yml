@@ -8,9 +8,18 @@ pre-commit:
   jobs:
     # lefthook hides unstaged hunks while it fixes and restages
     - name: eslint
-      glob: '*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,json}'
+      glob: '*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,json,jsonc,md,yml,yaml}'
       run: node_modules/.bin/eslint --fix --no-warn-ignored {staged_files}
       stage_fixed: true
+    # scans the staged changes before the commit exists; without the binary
+    # (cloud sessions, fresh machines), CI's gitleaks job still gates
+    - name: gitleaks
+      run: |
+        if command -v gitleaks >/dev/null 2>&1; then
+          gitleaks git --pre-commit --staged --redact --no-banner --verbose --log-level warn
+        else
+          echo 'gitleaks not installed: CI scans'
+        fi
 
 commit-msg:
   jobs:
