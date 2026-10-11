@@ -15,10 +15,10 @@ export type Edge = {
 
 /**
 Locks each group of edges in turn, dropping an edge that lies on a cycle of
-the locked edges plus its whole group. Returns the candidates, out of `n`,
-that a locked edge points to.
+the locked edges plus its whole group. Returns whether each edge, out of `n`
+candidates, locks.
 */
-export const lockEdges = (n: number, groups: Edge[][]): Set<number> => {
+export const lockEdges = (n: number, groups: Edge[][]): boolean[][] => {
   // One bitset row per candidate: the candidates it reaches.
   const words = Math.ceil(n / 32)
   const reaches = (reach: Uint32Array, from: number, to: number) =>
@@ -34,16 +34,14 @@ export const lockEdges = (n: number, groups: Edge[][]): Set<number> => {
   }
 
   const reach = new Uint32Array(n * words)
-  const beaten = new Set<number>()
-  for (const group of groups) {
+  return groups.map((group) => {
     // An edge is on a cycle when its head reaches back to its tail.
     const withGroup = group.length > 1 ? new Uint32Array(reach) : reach
     if (group.length > 1) for (const e of group) link(withGroup, e.from, e.to)
-    for (const e of group)
-      if (!reaches(withGroup, e.to, e.from)) {
-        link(reach, e.from, e.to)
-        beaten.add(e.to)
-      }
-  }
-  return beaten
+    return group.map((e) => {
+      const locked = !reaches(withGroup, e.to, e.from)
+      if (locked) link(reach, e.from, e.to)
+      return locked
+    })
+  })
 }

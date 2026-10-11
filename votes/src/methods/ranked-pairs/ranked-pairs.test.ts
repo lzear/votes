@@ -49,7 +49,39 @@ const candidates4 = [
   'aAWfQstO',
 ]
 
+const step = (
+  winner: string,
+  loser: string,
+  strength: number,
+  locked: boolean,
+) => ({ winner, loser, strength, locked })
+
 describe('ranked pairs', () => {
+  it('traces locks, a tie of equal strength skipped together', () => {
+    const rp = new RankedPairs({
+      array: [
+        [0, 2, -2, 4],
+        [-2, 0, 2, 4],
+        [2, -2, 0, 4],
+        [-4, -4, -4, 0],
+      ],
+      candidates: ['a', 'b', 'c', 'd'],
+    })
+    expect(rp.lockSteps()).toStrictEqual([
+      [
+        step('a', 'd', 4, true),
+        step('b', 'd', 4, true),
+        step('c', 'd', 4, true),
+      ],
+      [
+        step('a', 'b', 2, false),
+        step('b', 'c', 2, false),
+        step('c', 'a', 2, false),
+      ],
+    ])
+    expect(rp.ranking()).toStrictEqual([['a', 'b', 'c'], ['d']])
+  })
+
   it('works with "simple" example', () => {
     expect(
       new RankedPairs({

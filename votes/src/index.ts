@@ -31,7 +31,11 @@ export { Nanson, type NansonInfo } from './methods/nanson'
 export { RandomCandidates } from './methods/random-candidates'
 export { RandomDictator } from './methods/random-dictator'
 export { RandomizedCondorcet } from './methods/randomized-condorcet'
-export { byTotalParticipation, RankedPairs } from './methods/ranked-pairs'
+export {
+  byTotalParticipation,
+  RankedPairs,
+  type LockStep as RankedPairsLockStep,
+} from './methods/ranked-pairs'
 export type { Edge as RankedPairsEdge } from './methods/ranked-pairs/lock-edges'
 export { Schulze } from './methods/schulze'
 export { Smith } from './methods/smith'

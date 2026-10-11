@@ -231,7 +231,8 @@ when voters tie both candidates or leave both unranked.
 `RankedPairs` locks equal-strength pairs simultaneously by default (ties are
 preserved rather than order-dependent). Pass `edgeSorter` — e.g. the exported
 `byTotalParticipation` — to lock them in its order like canonical Tideman; pairs
-it cannot tell apart still lock together.
+it cannot tell apart still lock together. `lockSteps()` traces it: each group of
+pairs, in order, each locked or skipped.
 
 ## Utilities
 

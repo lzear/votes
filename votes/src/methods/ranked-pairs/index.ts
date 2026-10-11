@@ -17,11 +17,25 @@ preserved.
 export const byTotalParticipation = (a: Edge, b: Edge): number =>
   b.total - a.total
 
-const computeFromMatrix = <C extends string>(
-  matrix: Matrix<C>,
-  edgeSorter: ((a: Edge, b: Edge) => number) | undefined,
+type EdgeSorter = (a: Edge, b: Edge) => number
+
+/**
+A pair in the lock order: `winner` beats `loser` by `strength`, and the pair
+locks unless it closes a cycle.
+*/
+export type LockStep<C extends string> = {
+  winner: C
+  loser: C
+  strength: number
+  locked: boolean
+}
+
+// Groups of equal-strength wins, strongest first, and whether each locks.
+const lock = (
+  matrix: Matrix<string>,
+  edgeSorter: EdgeSorter | undefined,
   strength: Strength,
-): ScoreObject<C> => {
+): { groups: Edge[][]; locked: boolean[][] } => {
   // Pairwise wins only: a defeat would close a cycle with its own win.
   const allEdges: Edge[] = matrix.array.flatMap((row, from) =>
     row.flatMap((value, to) => {
@@ -46,9 +60,21 @@ const computeFromMatrix = <C extends string>(
     if (group && order(group[0]!, edge) === 0) group.push(edge)
     else groups.push([edge])
   }
+  return { groups, locked: lockEdges(matrix.candidates.length, groups) }
+}
 
+const computeFromMatrix = <C extends string>(
+  matrix: Matrix<C>,
+  edgeSorter: EdgeSorter | undefined,
+  strength: Strength,
+): ScoreObject<C> => {
   // Sources of the locked graph (no incoming locked edge) win this iteration
-  const beaten = lockEdges(matrix.candidates.length, groups)
+  const { groups, locked } = lock(matrix, edgeSorter, strength)
+  const beaten = new Set(
+    groups
+      .flatMap((group, g) => group.filter((_, i) => locked[g]![i]!))
+      .map((e) => e.to),
+  )
   const winnersIdx = matrix.candidates
     .keys()
     .filter((key) => !beaten.has(key))
@@ -97,12 +123,12 @@ out both candidates.
 export class RankedPairs<C extends string> extends MatrixScoreMethod<C> {
   public static readonly label = 'RankedPairs'
 
-  private readonly edgeSorter: ((a: Edge, b: Edge) => number) | undefined
+  private readonly edgeSorter: EdgeSorter | undefined
   public readonly strength: Strength
 
   constructor(
     i: (Matrix<C> | Profile<C>) & {
-      edgeSorter?: (a: Edge, b: Edge) => number
+      edgeSorter?: EdgeSorter
       strength?: Strength
     },
   ) {
@@ -113,5 +139,24 @@ export class RankedPairs<C extends string> extends MatrixScoreMethod<C> {
 
   public scores(): ScoreObject<C> {
     return computeFromMatrix(this.matrix, this.edgeSorter, this.strength)
+  }
+
+  /**
+  Each pairwise win, strongest first, as groups the sorter cannot tell apart:
+  locked together, or skipped when it would close a cycle with the pairs
+  locked before and its whole group. The winners are those no locked pair
+  beats; the ranking below them runs again on the rest.
+  */
+  public lockSteps(): LockStep<C>[][] {
+    const { candidates } = this.matrix
+    const { groups, locked } = lock(this.matrix, this.edgeSorter, this.strength)
+    return groups.map((group, g) =>
+      group.map((e, i) => ({
+        winner: candidates[e.from]!,
+        loser: candidates[e.to]!,
+        strength: e.value,
+        locked: locked[g]![i]!,
+      })),
+    )
   }
 }
