@@ -193,6 +193,10 @@ re-run itself on a subset of candidates.
 
 `Approval` approves the candidates in each ballot's first tier.
 
+`AbsoluteMajority` ranks everyone tied when no candidate has more than half the
+ballots, for the next method in an `Election` to settle; its `winner()` is then
+`undefined`.
+
 `Bucklin` scores the count that finds a majority, a tier across its cut counting
 for its share of places within.
 

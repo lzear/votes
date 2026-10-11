@@ -213,6 +213,8 @@ describe('Test all methods', () => {
     expect(new AbsoluteMajority(counted).ranking()).toStrictEqual([
       ['a', 'b', 'c'],
     ])
+    expect(new AbsoluteMajority(input).winner()).toBe('a')
+    expect(new AbsoluteMajority(counted).winner()).toBeUndefined()
     expect(new Coombs(counted).ranking()).toStrictEqual([['a'], ['b'], ['c']])
     expect(new TwoRoundRunoff(counted).ranking()).toStrictEqual([
       ['a'],

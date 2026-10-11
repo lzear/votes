@@ -15,6 +15,10 @@ export const majorityWinner = <C extends string>(
 }
 
 /**
+Ranks the candidate with more than half the ballots first. Without one, it
+ranks everyone tied, for the next method in an `Election` to settle: `winner()`
+tells the two apart.
+
 #### Wikipedia: [Majority](https://en.wikipedia.org/wiki/Majority)
 */
 export class AbsoluteMajority<C extends string> extends BallotScoreMethod<C> {
@@ -24,8 +28,15 @@ export class AbsoluteMajority<C extends string> extends BallotScoreMethod<C> {
     return firstChoices(this.ballots, this.candidates)
   }
 
+  /**
+  The candidate with more than half the ballots, or `undefined` if none.
+  */
+  public winner(): C | undefined {
+    return majorityWinner(this.scores(), this.castBallots(this.candidates))
+  }
+
   public override ranking(): C[][] {
-    const top = majorityWinner(this.scores(), this.castBallots(this.candidates))
+    const top = this.winner()
     const tiers =
       top === undefined
         ? [this.candidates]
