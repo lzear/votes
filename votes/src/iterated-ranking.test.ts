@@ -7,6 +7,7 @@ import { InstantRunoff } from './methods/instant-runoff'
 import { Minimax, MinimaxVariant } from './methods/minimax'
 import { RandomCandidates } from './methods/random-candidates'
 import { RandomDictator } from './methods/random-dictator'
+import { RankedPairs } from './methods/ranked-pairs'
 import { Schulze } from './methods/schulze'
 import type { Ballot } from './types'
 import { matrixFromBallots } from './utils'
@@ -128,5 +129,12 @@ describe('restrict', () => {
     expect(
       new Minimax({ ...profile, variant }).restrict(pair).minimaxVariant,
     ).toBe(variant)
+    const strength = 'margins'
+    expect(new Schulze({ ...profile, strength }).restrict(pair).strength).toBe(
+      strength,
+    )
+    expect(
+      new RankedPairs({ ...profile, strength }).restrict(pair).strength,
+    ).toBe(strength)
   })
 })

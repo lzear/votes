@@ -220,6 +220,10 @@ of `scores()`, and draw their ranking once per instance.
 `Schulze` also exposes `strengths()` — the beatpath strength matrix its scores
 derive from.
 
+`RankedPairs` and `Schulze` measure a pairwise win by the winner's votes by
+default; pass `strength: 'margins'` to subtract the loser's. The two differ only
+when voters tie both candidates or leave both unranked.
+
 `RankedPairs` locks equal-strength pairs simultaneously by default (ties are
 preserved rather than order-dependent). Pass `edgeSorter` — e.g. the exported
 `byTotalParticipation` — to lock them in its order like canonical Tideman; pairs

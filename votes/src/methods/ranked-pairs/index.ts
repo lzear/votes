@@ -3,6 +3,7 @@
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import type { Matrix, Profile, ScoreObject } from '../../types'
 import { scoresAny } from '../../utils/scores-zero'
+import { type Strength, winStrength } from '../../utils/strength'
 import { type Edge, lockEdges } from './lock-edges'
 
 /**
@@ -19,12 +20,20 @@ export const byTotalParticipation = (a: Edge, b: Edge): number =>
 const computeFromMatrix = <C extends string>(
   matrix: Matrix<C>,
   edgeSorter: ((a: Edge, b: Edge) => number) | undefined,
+  strength: Strength,
 ): ScoreObject<C> => {
   // Pairwise wins only: a defeat would close a cycle with its own win.
   const allEdges: Edge[] = matrix.array.flatMap((row, from) =>
     row.flatMap((value, to) => {
       const against = matrix.array[to]![from]!
-      return value > against ? { from, to, value, total: value + against } : []
+      return value > against
+        ? {
+            from,
+            to,
+            value: winStrength(strength, value, against),
+            total: value + against,
+          }
+        : []
     }),
   )
   // Strongest first, then in the sorter's order. Edges neither tells apart
@@ -54,6 +63,7 @@ const computeFromMatrix = <C extends string>(
       candidates: matrix.candidates.filter((_c, k) => !winnersIdx.includes(k)),
     },
     edgeSorter,
+    strength,
   )
   const maxScore2 = Math.max(
     ...Object.values(nextResults as Record<string, number>),
@@ -78,23 +88,30 @@ that prefers pairs where more voters expressed a preference.
 
 The `Edge` type passed to the sorter has `{ from, to, value, total }`.
 
+`strength` measures a pair by the winner's votes (`'winning-votes'`, the
+default) or by its margin (`'margins'`): they differ when voters tie or leave
+out both candidates.
+
 #### Wikipedia: [Ranked pairs](https://en.wikipedia.org/wiki/Ranked_pairs)
 */
 export class RankedPairs<C extends string> extends MatrixScoreMethod<C> {
   public static readonly label = 'RankedPairs'
 
   private readonly edgeSorter: ((a: Edge, b: Edge) => number) | undefined
+  public readonly strength: Strength
 
   constructor(
     i: (Matrix<C> | Profile<C>) & {
       edgeSorter?: (a: Edge, b: Edge) => number
+      strength?: Strength
     },
   ) {
     super(i)
     this.edgeSorter = i.edgeSorter
+    this.strength = i.strength ?? 'winning-votes'
   }
 
   public scores(): ScoreObject<C> {
-    return computeFromMatrix(this.matrix, this.edgeSorter)
+    return computeFromMatrix(this.matrix, this.edgeSorter, this.strength)
   }
 }

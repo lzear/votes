@@ -18,6 +18,13 @@ export const pairwiseMatrix = (
   return array
 }
 
+// `v` on the 1e-6 tie tolerance's grid. Past 2⁵³ · 1e-6, doubles are coarser
+// than the grid: rounding would only blur exact counts.
+export const roundToGrid = (v: number): number => {
+  const scale = 1 / config.EPSILON
+  return Math.abs(v) < 2 ** 53 / scale ? Math.round(v * scale) / scale : v
+}
+
 /**
 Pairwise matrix: `array[i][j]` is the weight of ballots ranking candidate
 `i` above candidate `j`, rounded to the 1e-6 tie tolerance so that
@@ -52,12 +59,10 @@ export const matrixFromBallots = <C extends string>(
         for (const l of rankedLower) array[w]![l]! += weight
     }
   }
-  // Past 2⁵³ · 1e-6, doubles are coarser than the grid: rounding would only
-  // blur exact counts.
-  const scale = 1 / config.EPSILON
-  const round = (v: number) =>
-    Math.abs(v) < 2 ** 53 / scale ? Math.round(v * scale) / scale : v
-  return { array: array.map((row) => row.map((v) => round(v))), candidates }
+  return {
+    array: array.map((row) => row.map((v) => roundToGrid(v))),
+    candidates,
+  }
 }
 
 // The matrix `input` is, or the one its ballots make.

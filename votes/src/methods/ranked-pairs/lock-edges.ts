@@ -3,6 +3,9 @@
 export type Edge = {
   from: number
   to: number
+  /**
+  Strength of the win: the winner's votes, or the margin.
+  */
   value: number
   /**
   Total voters expressing a preference between these two candidates.

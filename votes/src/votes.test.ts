@@ -23,8 +23,10 @@ import {
   RandomizedCondorcet,
   RankedPairs,
   Schulze,
+  type Strength,
   TwoRoundRunoff,
 } from '.'
+import { animalCycle } from './test/animal-cycle'
 import {
   abcde,
   balinski,
@@ -33,7 +35,7 @@ import {
   openTie,
   sW,
 } from './test/test-utils'
-import { matrixFromBallots, rngGenerator } from './utils'
+import { makeAntisymmetric, matrixFromBallots, rngGenerator } from './utils'
 
 type ABCD = 'a' | 'b' | 'c' | 'd'
 const tieCandidates: ABCD[] = ['a', 'b', 'c', 'd']
@@ -299,6 +301,29 @@ describe('Test all methods', () => {
     expect(
       new Schulze(matrixFromBallots(ballots, ['a', 'b', 'c'])).ranking(),
     ).toStrictEqual([['a', 'b'], ['c']])
+  })
+  it('measures wins by winning votes or margins', () => {
+    const margins = makeAntisymmetric(
+      matrixFromBallots(animalCycle.ballots, animalCycle.candidates),
+    )
+    const rankings = (options: { strength?: Strength } = {}) => [
+      new RankedPairs({ ...animalCycle, ...options }).ranking(),
+      new Schulze({ ...animalCycle, ...options }).ranking(),
+    ]
+    expect(rankings()).toStrictEqual([
+      [['🐭'], ['🐻'], ['🐸'], ['🦁'], ['🐷']],
+      [['🐻'], ['🐷', '🐭'], ['🐸'], ['🦁']],
+    ])
+    expect(rankings({ strength: 'winning-votes' })).toStrictEqual(rankings())
+    expect(rankings({ strength: 'margins' })).toStrictEqual([
+      [['🐷'], ['🐭'], ['🦁'], ['🐻'], ['🐸']],
+      [['🐻'], ['🐷'], ['🐭'], ['🐸'], ['🦁']],
+    ])
+    // Winning votes in a margins matrix are the margins.
+    expect(rankings({ strength: 'margins' })).toStrictEqual([
+      new RankedPairs(margins).ranking(),
+      new Schulze(margins).ranking(),
+    ])
   })
   it('votes with minimax', () => {
     expect(new Minimax(matrixFromBallots(sW, abcde)).scores()).toStrictEqual({

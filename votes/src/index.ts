@@ -55,3 +55,4 @@ export {
   smithSet,
   toWeightedBallots,
 } from './utils'
+export type { Strength } from './utils/strength'
