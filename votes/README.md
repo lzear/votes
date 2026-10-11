@@ -190,6 +190,7 @@ re-run itself on a subset of candidates.
 | Schulze method       | `Schulze`             | ballots or matrix |
 | Smith's method       | `Smith`               | ballots or matrix |
 | Split Cycle          | `SplitCycle`          | ballots or matrix |
+| Stable Voting ⚠️     | `StableVoting`        | ballots or matrix |
 | Two-round runoff     | `TwoRoundRunoff`      | ballots           |
 
 `Approval` approves the candidates in each ballot's first tier.
@@ -211,6 +212,11 @@ is `Dictator` on ballots drawn in random order, by weight.
 
 ⚠️ `Kemeny` runs in O(n·2ⁿ) time and memory — slow beyond ~20 candidates, and
 throws beyond `maxCandidates` (default and at most 30).
+
+⚠️ `StableVoting` runs in exponential time at worst — seconds when majority
+cycles span 20 candidates — and throws beyond `maxCandidates` (default 20, at
+most 30). Below its winners, it ranks by running again without them;
+`SplitCycle` ranks the undefeated first, then those only they defeat, and so on.
 
 `MajorityJudgment` reads a ballot's tiers as grades, best first (`grades`,
 default 6), and breaks ties one vote at a time: give it whole weights. A ballot

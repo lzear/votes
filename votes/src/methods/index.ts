@@ -27,6 +27,7 @@ import { RankedPairs } from './ranked-pairs'
 import { Schulze } from './schulze'
 import { Smith } from './smith'
 import { SplitCycle } from './split-cycle'
+import { StableVoting } from './stable-voting'
 import { TwoRoundRunoff } from './two-round-runoff'
 
 export const methods = {
@@ -57,6 +58,7 @@ export const methods = {
   [VotingSystem.Schulze]: Schulze,
   [VotingSystem.Smith]: Smith,
   [VotingSystem.SplitCycle]: SplitCycle,
+  [VotingSystem.StableVoting]: StableVoting,
   [VotingSystem.TwoRoundRunoff]: TwoRoundRunoff,
 } as const satisfies Record<VotingSystem, MethodCtor<string>>
 

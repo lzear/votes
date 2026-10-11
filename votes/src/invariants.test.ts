@@ -27,6 +27,7 @@ const condorcet = [
   VotingSystem.Schulze,
   VotingSystem.Smith,
   VotingSystem.SplitCycle,
+  VotingSystem.StableVoting,
 ]
 
 const systems = Object.values(VotingSystem)

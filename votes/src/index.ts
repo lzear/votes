@@ -44,6 +44,7 @@ export type { Edge as RankedPairsEdge } from './methods/ranked-pairs/lock-edges'
 export { Schulze } from './methods/schulze'
 export { Smith } from './methods/smith'
 export { SplitCycle } from './methods/split-cycle'
+export { StableVoting } from './methods/stable-voting'
 export { TwoRoundRunoff } from './methods/two-round-runoff'
 export type {
   Ballot,

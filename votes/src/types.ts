@@ -122,6 +122,7 @@ export const VotingSystem = {
   Schulze: 'SCHULZE',
   Smith: 'SMITH',
   SplitCycle: 'SPLIT_CYCLE',
+  StableVoting: 'STABLE_VOTING',
   TwoRoundRunoff: 'TWO_ROUND_RUNOFF',
 } as const
 export type VotingSystem = (typeof VotingSystem)[keyof typeof VotingSystem]
