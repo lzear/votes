@@ -209,7 +209,7 @@ is `Dictator` on ballots drawn in random order, by weight.
 `Borda`'s when ballots rank everyone, and a Condorcet winner always wins.
 
 ⚠️ `Kemeny` runs in O(n·2ⁿ) time and memory — slow beyond ~20 candidates, and
-throws beyond 30.
+throws beyond `maxCandidates` (default and at most 30).
 
 `MajorityJudgment` reads a ballot's tiers as grades, best first (`grades`,
 default 6), and breaks ties one vote at a time: give it whole weights.

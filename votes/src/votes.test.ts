@@ -276,6 +276,18 @@ describe('Test all methods', () => {
     )
   })
 
+  it('throws on kemeny past maxCandidates, kept on restrict', () => {
+    const kemeny = new Kemeny({
+      candidates: ['a', 'b', 'c'],
+      ballots: [{ ranking: [['a'], ['b', 'c']] }],
+      maxCandidates: 2,
+    })
+    expect(() => kemeny.scores()).toThrow(RangeError)
+    const restricted = kemeny.restrict(['b', 'c'])
+    expect(restricted).toMatchObject({ maxCandidates: 2 })
+    expect(restricted.scores()).toStrictEqual({ b: 0.5, c: 0.5 })
+  })
+
   it('averages kemeny scores over the best orders', () => {
     const cycle = [
       { ranking: [['a'], ['b'], ['c']], weight: 1 },

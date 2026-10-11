@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
-import type { Matrix, ScoreObject } from '../../types'
+import type { Matrix, Profile, ScoreObject } from '../../types'
 import { config } from '../../utils/config'
 import { sum } from '../../utils/sum'
 
@@ -31,9 +31,6 @@ const computeScores = <C extends string>({
   array,
 }: Matrix<C>): ScoreObject<C> => {
   const n = candidates.length
-  // Subsets are 32-bit masks.
-  if (n > 30)
-    throw new RangeError(`Kemeny takes at most 30 candidates, not ${n}`)
   const all = (1 << n) - 1
   const internal = new Float64Array(all + 1)
   const count = new Float64Array(all + 1)
@@ -82,15 +79,29 @@ const computeScores = <C extends string>({
 
 /**
 Scores are how many candidates each one ranks above, averaged over the
-best orders. Runs in O(n·2ⁿ) time and memory: slow beyond ~20 candidates,
-and throws beyond 30.
+best orders. Runs in O(n·2ⁿ) time and memory: slow beyond ~20 candidates.
+`scores()` throws beyond `maxCandidates` (default and at most 30): about 16
+keep it within tens of milliseconds.
 
 #### Wikipedia: [Kemeny–Young method](https://en.wikipedia.org/wiki/Kemeny%E2%80%93Young_method)
 */
 export class Kemeny<C extends string> extends MatrixScoreMethod<C> {
   public static readonly label = 'Kemeny'
 
+  public readonly maxCandidates: number
+
+  constructor(i: (Matrix<C> | Profile<C>) & { maxCandidates?: number }) {
+    super(i)
+    // Subsets are 32-bit masks.
+    this.maxCandidates = Math.min(i.maxCandidates ?? 30, 30)
+  }
+
   public scores(): ScoreObject<C> {
+    const n = this.matrix.candidates.length
+    if (n > this.maxCandidates)
+      throw new RangeError(
+        `Kemeny takes at most ${this.maxCandidates} candidates, not ${n}`,
+      )
     return computeScores(this.matrix)
   }
 }
