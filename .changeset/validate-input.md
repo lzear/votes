@@ -1,5 +1,5 @@
 ---
-'votes': minor
+'votes': major
 ---
 
 Throw a `RangeError` on a negative or non-finite weight (majority judgment ran

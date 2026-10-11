@@ -1,6 +1,6 @@
 ---
-'votes': minor
+'votes': major
 ---
 
-Blank ballots count toward majorities and in random dictator's draw only with
-the new `countBlank` option.
+Blank ballots count toward absolute majorities, and as worst grades in majority
+judgment, only with the new `countBlank` option.

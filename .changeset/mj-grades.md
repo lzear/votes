@@ -1,5 +1,5 @@
 ---
-'votes': minor
+'votes': major
 ---
 
 Majority judgment takes a `grades` option (default 6) and throws on a grade past

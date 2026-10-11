@@ -1,5 +1,5 @@
 ---
-'votes': minor
+'votes': major
 ---
 
 A tie no tiebreaker breaks goes out at once only if its order cannot change the
