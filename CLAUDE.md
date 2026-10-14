@@ -2,6 +2,8 @@
 
 Ranked voting library in `votes/`. `yarn qa` runs everything.
 
+- `README.md` is a symlink to `votes/README.md`, the file: npm packs no symlink,
+  and typedoc's index page reads it too.
 - `@typescript/native` looks unused but provides `tsc` (TS 7); `typescript` is
   TS 6 for ESLint.
 - npm trusted publishing is bound to `.github/workflows/main.yml`: don't rename

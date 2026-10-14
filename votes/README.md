@@ -48,8 +48,8 @@ by default; pass `unrankedLast: false` to score only expressed preferences
 (unranked candidates then earn nothing from that ballot). Blank ballots, ranking
 none of the candidates still in the race, don't count as cast; pass
 `countBlank: true` to count them toward absolute majorities (`AbsoluteMajority`,
-`Coombs`, `TwoRoundRunoff`) and, with `unrankedLast`, as worst grades in
-`MajorityJudgment`.
+`Bucklin`, `Coombs`, `TwoRoundRunoff`, `SupplementaryVote`) and, with
+`unrankedLast`, as worst grades in `MajorityJudgment`.
 
 Every method takes this same `{ candidates, ballots, unrankedLast, countBlank }`
 input. Matrix methods (see the table below) also take a pairwise matrix
@@ -58,13 +58,14 @@ input. Matrix methods (see the table below) also take a pairwise matrix
 ## Ties: chaining methods
 
 `Election` chains methods on one input. The first ranks the candidates; each
-next one re-ranks the tiers still tied. Round-based methods (`InstantRunoff`,
-`Baldwin`, `Coombs`, `Nanson`, `TwoRoundRunoff`, `BottomTwoRunoff`) also break
-their round ties (for last place, at two-round runoff's cut, or Nanson's
-complete tie) with the methods after them, in order. A round tie they leave goes
-out at once if no order of it changes the outcome; otherwise the count stops,
-and those who win in some order of breaking the ties tie first (or, past 10,000
-orders tried, everyone left). Alone, a round method has no tiebreakers.
+next one re-ranks the tiers still tied. Round-based methods (`InstantRunoff` and
+its Condorcet hybrids below, `Baldwin`, `Coombs`, `Nanson`, `TwoRoundRunoff`,
+`SupplementaryVote`, `BottomTwoRunoff`) also break their round ties (for last
+place, at two-round runoff's cut, or Nanson's complete tie) with the methods
+after them, in order. A round tie they leave goes out at once if no order of it
+changes the outcome; otherwise the count stops, and those who win in some order
+of breaking the ties tie first (or, past 10,000 orders tried, everyone left).
+Alone, a round method has no tiebreakers.
 
 ```typescript
 import {
@@ -198,6 +199,9 @@ re-run itself on a subset of candidates.
 | Two-round runoff      | `TwoRoundRunoff`      | ballots           |
 | Woodall's method      | `Woodall`             | ballots           |
 
+`methods` maps each `VotingSystem` id to its class:
+`methods[VotingSystem.Borda]` is `Borda`.
+
 `Approval` approves the candidates in each ballot's first tier.
 
 `AbsoluteMajority` ranks everyone tied when no candidate has more than half the
@@ -250,7 +254,9 @@ of `scores()`, and draw their ranking once per instance.
 derive from.
 
 `Minimax` also exposes `worstDefeats()`: each candidate's worst defeat and the
-opponents inflicting it.
+opponents inflicting it. It measures a defeat by its margin; pass `variant`
+(`MinimaxVariant.WinningVotes` or `PairwiseOpposition`) to measure it otherwise,
+and `excludeTies: true` to leave tied duels out.
 
 `RankedPairs` and `Schulze` measure a pairwise win by the winner's votes by
 default; pass `strength: 'margins'` to subtract the loser's. The two differ only
