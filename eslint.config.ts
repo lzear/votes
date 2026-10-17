@@ -3,21 +3,12 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 
 const base = await config()
 
-export default defineConfig(
-  globalIgnores(['votes/docs/**']),
-  ...base,
-  {
-    rules: {
-      curly: [2, 'multi'],
-    },
+export default defineConfig(globalIgnores(['votes/docs/**']), ...base, {
+  files: ['votes/**/*.test.ts'],
+  rules: {
+    'vitest/expect-expect': [
+      'error',
+      { assertFunctionNames: ['expect', 'expectNTimes'] },
+    ],
   },
-  {
-    files: ['votes/**/*.test.ts'],
-    rules: {
-      'vitest/expect-expect': [
-        'error',
-        { assertFunctionNames: ['expect', 'expectNTimes'] },
-      ],
-    },
-  },
-)
+})
