@@ -239,9 +239,10 @@ everyone outside the Smith set out first, and Tideman's Alternative narrows to
 the Smith set of those left before each count (`topSet: 'schwartz'` for the
 Schwartz set). A round that narrows puts everyone else out at once.
 
-`TwoRoundRunoff` counts the runoff from the ballots, as the contingent vote
-does; `SupplementaryVote` counts only each ballot's first two places
-(`preferences`, default 2).
+`TwoRoundRunoff` counts the runoff from the ballots' whole rankings, as the
+contingent vote does; `SupplementaryVote` counts only each ballot's first two
+places (`preferences`, default 2), so `A > B > C` counts for neither in a C–D
+runoff. The two agree when no ballot ranks past `preferences`.
 
 `BottomTwoRunoff` settles each round with a first-choices head-to-head, the
 first `tieBreakSteps` entry (named `FirstPastThePost`); the methods after it in

@@ -21,7 +21,8 @@ const firstPlaces = <C extends string>(
 /**
 `TwoRoundRunoff` on each ballot's first two places alone (`preferences`,
 default 2; Sri Lanka's counts 3): a ballot that ranks neither finalist there
-counts for neither in the runoff.
+counts for neither in the runoff, where `TwoRoundRunoff` reads its whole
+ranking. The two agree when no ballot ranks past `preferences`.
 
 #### Wikipedia: [Contingent vote](https://en.wikipedia.org/wiki/Contingent_vote)
 */
