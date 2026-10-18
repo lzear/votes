@@ -33,6 +33,7 @@ import {
   closeTo,
   firstRun,
   openTie,
+  overTies,
   sW,
 } from './test/test-utils'
 import { makeAntisymmetric, matrixFromBallots, rngGenerator } from './utils'
@@ -659,6 +660,22 @@ describe('a tie no tiebreaker breaks', () => {
         ['a', 'e'],
       ],
       [['b', 'd'], ['c']],
+    ])
+  })
+
+  it('stops the count on a tie past 256 orders checked', () => {
+    const [x, y, ...tied] = overTies(9).candidates
+    expect(new InstantRunoff(overTies(8)).ranking()).toHaveLength(3)
+    expect(new InstantRunoff(overTies(9)).ranking()).toStrictEqual([
+      [x],
+      [y, ...tied],
+    ])
+  })
+
+  it('ties everyone left past 10,000 orders tried', () => {
+    const { candidates } = overTies(14)
+    expect(new InstantRunoff(overTies(14)).ranking()).toStrictEqual([
+      candidates,
     ])
   })
 })

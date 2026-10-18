@@ -1,5 +1,5 @@
 import type { Step } from '../../classes/round-ballot-method'
-import { RoundBallotMethodTb } from '../../classes/round-ballot-method-tb'
+import { TbEliminateOne } from '../../classes/round-ballot-method-tb'
 import type { Tiebreaker } from '../../classes/tiebreaker'
 import { scoresToRanking } from '../../utils'
 import { firstChoices } from '../first-past-the-post/iterate-first-choices'
@@ -18,7 +18,7 @@ tie.
 
 #### Electowiki: [Bottom-Two-Runoff IRV](https://electowiki.org/wiki/Bottom-Two-Runoff_IRV)
 */
-export class BottomTwoRunoff<C extends string> extends RoundBallotMethodTb<C> {
+export class BottomTwoRunoff<C extends string> extends TbEliminateOne<C> {
   public static readonly label = 'BottomTwoRunoff'
 
   // The bottom two of `race` on first choices, or everyone tied with them:

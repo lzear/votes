@@ -107,3 +107,17 @@ export const smithCycle = {
     weight: Number(b.at(-1)),
   })),
 }
+
+// x and y over `k` tied candidates, each alone on their ballot: whatever
+// order they go out in, x wins, then y.
+export const overTies = (k: number) => {
+  const tied = Array.from({ length: k }, (_, i) => `c${i}`)
+  return {
+    candidates: ['x', 'y', ...tied],
+    ballots: [
+      { ranking: [['x']], weight: 5 },
+      { ranking: [['y']], weight: 4 },
+      ...tied.map((c) => ({ ranking: [[c]], weight: 2 })),
+    ],
+  }
+}

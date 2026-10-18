@@ -78,14 +78,6 @@ export abstract class RoundBallotMethodTb<
     return { qualified: promoted, eliminated: current, tieBreakSteps }
   }
 
-  /**
-  Those one of whom the method puts out of `race` next, after its
-  tiebreakers: by default, anyone.
-  */
-  protected nextOut(race: C[]): C[] {
-    return race
-  }
-
   // One with a majority of the ballots cast: no round puts them out.
   protected sureWinner(race: C[]): C | undefined {
     return majorityWinner(
@@ -93,6 +85,25 @@ export abstract class RoundBallotMethodTb<
       this.castBallots(race),
     )
   }
+}
+
+// States to try at most when checking every order of eliminating a tie: past
+// it, the count stops on the tie, which costs only the ranking below winners.
+const MAX_ORDERS = 256
+
+/**
+Rounds that put out one candidate at a time: a tie the tiebreakers leave goes
+out at once if no order of it changes the outcome.
+*/
+export abstract class TbEliminateOne<
+  C extends string,
+  I = undefined,
+> extends RoundBallotMethodTb<C, I> {
+  /**
+  Those one of whom the method puts out of `race` next, after its
+  tiebreakers: what `openTie` checks orders of elimination with.
+  */
+  protected abstract nextOut(race: C[]): C[]
 
   /**
   Whether putting `group` out of `race` at once ends where every order of
@@ -128,10 +139,6 @@ export abstract class RoundBallotMethodTb<
   }
 }
 
-// States to try at most when checking every order of eliminating a tie: past
-// it, the count stops on the tie, which costs only the ranking below winners.
-const MAX_ORDERS = 256
-
 /**
 Each round: rank candidates, eliminate the last-tier candidate(s).
 Tiebreakers are applied when multiple candidates share the last tier; a tie
@@ -141,7 +148,7 @@ the count stops on those who win in some order.
 export abstract class TbEliminateLast<
   C extends string,
   I = undefined,
-> extends RoundBallotMethodTb<C, I> {
+> extends TbEliminateOne<C, I> {
   protected abstract oneRound(
     candidates: C[],
     index: number,
