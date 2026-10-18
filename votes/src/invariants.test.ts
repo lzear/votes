@@ -65,8 +65,9 @@ const run = (system: VotingSystem, profile: RandomProfile) =>
 
 // Each profile's ranking, ties sorted: one `expect`, its diff indexing the
 // profiles that fail.
-const rankings = (rank: (profile: RandomProfile) => Ranker<string>) =>
-  profiles.map((p) => canonizeRanking(rank(p).ranking()))
+const rankings = (
+  rank: (profile: RandomProfile, i: number) => Ranker<string>,
+) => profiles.map((p, i) => canonizeRanking(rank(p, i).ranking()))
 
 const condorcetWinners = profiles.flatMap((profile) => {
   const [winner, ...others] = smithSet(profile)
@@ -119,6 +120,29 @@ describe('invariants on random profiles', () => {
     expect(
       rankings((p) => run(system, p).restrict(p.candidates)),
     ).toStrictEqual(rankings((p) => run(system, p)))
+  })
+
+  // Majority judgment keeps its grades; candidate order, its order.
+  it.each(
+    systems.filter(
+      (s) =>
+        !methods[s].isRandom &&
+        s !== VotingSystem.CandidateOrder &&
+        s !== VotingSystem.MajorityJudgment,
+    ),
+  )('ranks as a fresh run on a random subset (%s)', (system) => {
+    const subset = rngGenerator(system)
+    const subsets = profiles.map(({ candidates }) =>
+      shuffleArray(candidates, subset).slice(
+        0,
+        1 + Math.floor(subset() * candidates.length),
+      ),
+    )
+    expect(
+      rankings((p, i) => run(system, p).restrict(subsets[i]!)),
+    ).toStrictEqual(
+      rankings((p, i) => run(system, { ...p, candidates: subsets[i]! })),
+    )
   })
 
   it('ranks as restricted to all candidates (Election)', () => {

@@ -69,7 +69,7 @@ export abstract class Method<C extends string> implements Ranker<C> {
 
   /**
   Return a new instance of the same method restricted to a subset of
-  candidates.
+  candidates, ranking as if only they ran.
   */
   public abstract restrict(candidates: readonly C[]): this
 

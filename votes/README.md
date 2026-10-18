@@ -158,7 +158,9 @@ new Election({ candidates, ballots, methods }).iteratedRanking() // re-runs the 
 ```
 
 Under the hood it uses `restrict(candidates)`, which every method exposes to
-re-run itself on a subset of candidates.
+re-run itself on a subset of candidates, as if only they ran: a ballot ranking
+none of them is blank. `MajorityJudgment` keeps its grades instead, as a grade
+does not depend on who else runs; `CandidateOrder` keeps its order.
 
 ## Voting systems
 

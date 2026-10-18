@@ -25,8 +25,8 @@ export abstract class RoundBallotMethodTb<
     this.tieBreakers = input.tieBreakers ?? []
   }
 
-  // Restricts the Election's tiebreakers too: rebuilt on the normalized
-  // ballots restrict() passes, majority judgment would lose its empty grades.
+  // Restricts the Election's tiebreakers too, each as its own restrict()
+  // does: majority judgment keeps its grades.
   public override restrict(candidates: readonly C[]): this {
     const method = super.restrict(candidates)
     method.tieBreakers = this.tieBreakers.map((t) => t.restrict(candidates))

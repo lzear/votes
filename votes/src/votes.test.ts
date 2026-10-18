@@ -517,10 +517,10 @@ describe('round tiebreakers', () => {
       firstRun({ ...input, unrankedLast, methods: [InstantRunoff, Borda] })
     const borda = ({ rounds }: ReturnType<typeof irv>) =>
       rounds[0]?.tieBreakSteps?.[0]?.scores
-    // Default (unranked appended): Borda on {a, b} ties 6–6. Which goes out
-    // decides the winner: a and c can win.
+    // Default (unranked appended): Borda on {a, b} ties 3–3, the c-only
+    // ballots blank there. Which goes out decides the winner: a and c can win.
     const appended = irv(true)
-    expect(borda(appended)).toStrictEqual({ a: 6, b: 6 })
+    expect(borda(appended)).toStrictEqual({ a: 3, b: 3 })
     expect(appended.ranking).toStrictEqual([['a', 'c'], ['b']])
     // Expressed-only: the a-only and c-only ballots give b nothing → Borda
     // scores a=3, b=2 → b alone eliminated.

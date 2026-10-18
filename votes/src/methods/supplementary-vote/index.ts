@@ -46,5 +46,7 @@ export class SupplementaryVote<C extends string> extends TwoRoundRunoff<C> {
       unrankedLast: false,
     })
     this.preferences = preferences
+    // restrict() cuts them afresh, among the candidates left.
+    this.keepInput(input.ballots)
   }
 }

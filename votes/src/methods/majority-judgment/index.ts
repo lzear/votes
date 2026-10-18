@@ -182,6 +182,12 @@ export class MajorityJudgment<C extends string> extends Method<C> {
     return tiers
   }
 
+  /**
+  The same grades, among `candidates` only: unlike other ballot methods, it
+  does not count afresh, as a grade does not depend on who else runs. With
+  `unrankedLast`, those a ballot left out keep its worst grade, even if it
+  graded none of `candidates`.
+  */
   public restrict(candidates: readonly C[]): this {
     type Ctor = new (
       i: ConstructorParameters<typeof MajorityJudgment<C>>[0],
