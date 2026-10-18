@@ -1163,7 +1163,38 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lzear/configs@npm:5.0.0, @lzear/configs@npm:^5":
+"@lzear/configs@npm:5.1.0":
+  version: 5.1.0
+  resolution: "@lzear/configs@npm:5.1.0"
+  dependencies:
+    "@commitlint/config-conventional": "npm:^21"
+    "@commitlint/types": "npm:^21"
+    conventional-changelog-conventionalcommits: "npm:^10"
+    std-env: "npm:^4"
+  peerDependencies:
+    jsdom: ~30
+    tsdown: ^0.23
+    vite: ^8
+    vitest: ^5
+  peerDependenciesMeta:
+    jsdom:
+      optional: true
+    tsdown:
+      optional: true
+    vite:
+      optional: true
+    vitest:
+      optional: true
+  bin:
+    lzear-changelog: src/changelog.mjs
+    lzear-prerelease: src/prerelease.mjs
+    lzear-publish: src/publish.mjs
+    lzear-sync-jsr: src/sync-jsr.mjs
+  checksum: 10c0/0a7832794c3ff274e2d12c2a347d80263ba3f6bb074606aef96d139055305657332df90754fc09eeaacd2e3dc4d548436d97a13a2842981d9dfe9d4ce6441864
+  languageName: node
+  linkType: hard
+
+"@lzear/configs@npm:^5":
   version: 5.0.0
   resolution: "@lzear/configs@npm:5.0.0"
   dependencies:
@@ -1193,9 +1224,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lzear/eslint-config@npm:5.0.0":
-  version: 5.0.0
-  resolution: "@lzear/eslint-config@npm:5.0.0"
+"@lzear/eslint-config@npm:5.1.0":
+  version: 5.1.0
+  resolution: "@lzear/eslint-config@npm:5.1.0"
   dependencies:
     "@e18e/eslint-plugin": "npm:^0.8"
     "@eslint-community/eslint-plugin-eslint-comments": "npm:^4"
@@ -1207,7 +1238,7 @@ __metadata:
     eslint-config-prettier: "npm:^10"
     eslint-import-resolver-typescript: "npm:^4"
     eslint-module-utils: "npm:^2"
-    eslint-package-json: "npm:^2"
+    eslint-package-json: "npm:^3"
     eslint-plugin-de-morgan: "npm:^2"
     eslint-plugin-import-x: "npm:^4"
     eslint-plugin-jsx-a11y-x: "npm:^0.2"
@@ -1222,7 +1253,7 @@ __metadata:
     eslint-plugin-regexp: "npm:^3"
     eslint-plugin-simple-import-sort: "npm:^14"
     eslint-plugin-sonarjs: "npm:^4"
-    eslint-plugin-unicorn: "npm:^77"
+    eslint-plugin-unicorn: "npm:^78"
     eslint-plugin-yml: "npm:^3"
     globals: "npm:^17"
     prettier: "npm:^3"
@@ -1230,18 +1261,18 @@ __metadata:
   peerDependencies:
     eslint: ^10
     typescript: "*"
-  checksum: 10c0/72cd7462e01d1edb4a76668f2df6dd1770d70181fca751a744a7655ca4831d3411300cff1d978a9db3acc6aaf9360596653689a102d1fe67960b8128e4a79f0f
+  checksum: 10c0/5e95646f2e28344f73cffab3da2d7217334f90405e4c0e2512de4cd81cc5c7c834c629896ef8dc794a165391fca66c22aaf3b15f6555a33b6e63aa7d89be077d
   languageName: node
   linkType: hard
 
 "@lzear/forge@npm:^5":
-  version: 5.0.0
-  resolution: "@lzear/forge@npm:5.0.0"
+  version: 5.1.0
+  resolution: "@lzear/forge@npm:5.1.0"
   dependencies:
     "@clack/prompts": "npm:^1"
-    "@lzear/configs": "npm:5.0.0"
-    "@lzear/eslint-config": "npm:5.0.0"
-    "@lzear/repo-lint": "npm:5.0.0"
+    "@lzear/configs": "npm:5.1.0"
+    "@lzear/eslint-config": "npm:5.1.0"
+    "@lzear/repo-lint": "npm:5.1.0"
     commander: "npm:^15"
     picocolors: "npm:^1"
     std-env: "npm:^4"
@@ -1264,13 +1295,13 @@ __metadata:
       optional: true
   bin:
     forge: dist/bin.js
-  checksum: 10c0/9540dbc1e41e874cc28d33b6e58bfd38d19d0305b9f1a81bb2a01c5d26a47dfa127afb55c7e831c68490af300d23a1adb4bb19a3061444b2423966ced5f06289
+  checksum: 10c0/a0afffa5ba55fb324bf827b57a50f6d0deb07e1f3a45c7f44c8d352d384574b777f29a95ee7c2e37ce2f6ca70ecf3a2f91a76b59f9768958cb2825d4e30df117
   languageName: node
   linkType: hard
 
-"@lzear/repo-lint@npm:5.0.0":
-  version: 5.0.0
-  resolution: "@lzear/repo-lint@npm:5.0.0"
+"@lzear/repo-lint@npm:5.1.0":
+  version: 5.1.0
+  resolution: "@lzear/repo-lint@npm:5.1.0"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.18"
     fallow: "npm:^3"
@@ -1278,7 +1309,7 @@ __metadata:
     publint: "npm:^0.3"
     semver: "npm:^7"
     sherif: "npm:^1"
-  checksum: 10c0/200d1904f8c10454d8bc32ee063c5a2b206430ab58b999df357f427386b9debdddfaab2022434dde10404579eb96425c4f1cb62ddf5c8019711a970b688cd987
+  checksum: 10c0/ee6a08c4e5dbccc0ee1b4a4227296beabd5c4cf62fa194ae7d6b2428d87ff10096a6ccf85a1e03ae1bd5f97b461d2ee6a39adc52b4669187eb81365c6a701c20
   languageName: node
   linkType: hard
 
@@ -3127,7 +3158,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"entities@npm:^8.1.0":
+"entities@npm:^8.0.0, entities@npm:^8.1.0":
   version: 8.1.0
   resolution: "entities@npm:8.1.0"
   checksum: 10c0/da0bf22912c19d2a4707783e1b905d3f6a977e93e0655a8d2c526455eb3996f668f9f2e4c2a07af8d6927d232c41b6e929a7044df0236c7bf6e9c38e070e3719
@@ -3272,9 +3303,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-package-json@npm:^2":
-  version: 2.0.0
-  resolution: "eslint-package-json@npm:2.0.0"
+"eslint-package-json@npm:^3":
+  version: 3.0.0
+  resolution: "eslint-package-json@npm:3.0.0"
   dependencies:
     "@eslint/json": "npm:^2.0.1"
     detect-indent: "npm:^7.0.2"
@@ -3285,7 +3316,7 @@ __metadata:
     validate-npm-package-name: "npm:^7.0.2"
   peerDependencies:
     eslint: ">=10.4"
-  checksum: 10c0/221a481f49822587da5cf956567b8868a90ab5e0a558a6a57eb578bc9f75410d2bc52540ceb8645191020fed3b1e06fb4569da00931ac10635a00681cc58140c
+  checksum: 10c0/1d19f79e811cbb451988e0d5668c4ba30f31a971c5ce17da44d3f86b9559841e50741c01578e6f437099aee6ea2b1404626b85be5670fe088ead6faff5a414b3
   languageName: node
   linkType: hard
 
@@ -3558,9 +3589,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-unicorn@npm:^77":
-  version: 77.0.0
-  resolution: "eslint-plugin-unicorn@npm:77.0.0"
+"eslint-plugin-unicorn@npm:^78":
+  version: 78.0.0
+  resolution: "eslint-plugin-unicorn@npm:78.0.0"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.10.1"
     "@eslint/css-tree": "npm:^4.1.1"
@@ -3575,6 +3606,8 @@ __metadata:
     identifier-regex: "npm:^1.1.0"
     indent-string: "npm:^5.0.0"
     is-builtin-module: "npm:^5.0.0"
+    micromark: "npm:^4.0.3"
+    parse5: "npm:^8.0.1"
     pluralize: "npm:^8.0.0"
     quote-js-string: "npm:^0.1.0"
     regjsparser: "npm:^0.13.3"
@@ -3584,7 +3617,11 @@ __metadata:
     yaml: "npm:^2.9.1"
   peerDependencies:
     eslint: ">=10.4"
-  checksum: 10c0/faa5c25d5a9917d6f96352dd41bb38eaf60f7c71bb4523976aaeed6cf6759301f64691ad46fb3d0b8bf6c596b6729a0842c8bba59b0b0a7e7ecc9d870f4a7e13
+    typescript: "*"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10c0/9d9fd5f73b2b7b8816e3cf886d81086512550fb989fa22d8cf25201ca8f36270190ce3826a2430dbaa45ea45e6e1de965b697d7b32d9900b9cf71ca2b376e6f9
   languageName: node
   linkType: hard
 
@@ -5355,7 +5392,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"micromark@npm:^4.0.0":
+"micromark@npm:^4.0.0, micromark@npm:^4.0.3":
   version: 4.0.3
   resolution: "micromark@npm:4.0.3"
   dependencies:
@@ -5636,6 +5673,15 @@ __metadata:
   version: 6.0.1
   resolution: "parse5@npm:6.0.1"
   checksum: 10c0/595821edc094ecbcfb9ddcb46a3e1fe3a718540f8320eff08b8cf6742a5114cce2d46d45f95c26191c11b184dcaf4e2960abcd9c5ed9eb9393ac9a37efcfdecb
+  languageName: node
+  linkType: hard
+
+"parse5@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "parse5@npm:8.0.1"
+  dependencies:
+    entities: "npm:^8.0.0"
+  checksum: 10c0/c3c1c5aab55f6e4be5245599790e56e64be7764a4a0edd7f98db4fe3bb380f63add752fa047dff0496446c25f4104f0c7c1967723de640bde92306a7bb67ed2f
   languageName: node
   linkType: hard
 
