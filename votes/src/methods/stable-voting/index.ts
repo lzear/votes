@@ -7,7 +7,9 @@ import { splitCycleDefeats } from '../split-cycle'
 // Stable Voting's winners among each set of candidates, a bitmask of their
 // indexes: an undefeated `a` who wins without some `b`, by the largest
 // margin of `a` over `b`; every one of them on a tie of margins.
-const stableVoting = (array: number[][]): ((set: number) => number[]) => {
+const stableVoting = (
+  array: readonly (readonly number[])[],
+): ((set: number) => number[]) => {
   const memo = new Map<number, number[]>()
   const winners = (set: number): number[] => {
     const known = memo.get(set)

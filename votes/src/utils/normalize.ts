@@ -9,8 +9,9 @@ export const weightOf = <C extends string>({
   return weight
 }
 
-export const canonizeRanking = <C extends string>(ranking: C[][]): C[][] =>
-  ranking.map((rank) => rank.toSorted((a, b) => a.localeCompare(b)))
+export const canonizeRanking = <C extends string>(
+  ranking: readonly (readonly C[])[],
+): C[][] => ranking.map((rank) => rank.toSorted((a, b) => a.localeCompare(b)))
 
 // Merge ballots with the same tiers, whatever the order within each, summing
 // weights. Empty tiers count: majority judgment reads a tier's index as its
@@ -46,7 +47,7 @@ export const groupBallots = <C extends string, B extends Ballot<C>>(
 Ballots from rankings, the same ones merged into one weighted ballot.
 */
 export const toWeightedBallots = <C extends string>(
-  ballots: readonly C[][][],
+  ballots: readonly (readonly (readonly C[])[])[],
 ): Ballot<C>[] =>
   mergeEquivalentBallots(ballots.map((ranking) => ({ ranking, weight: 1 })))
 
@@ -56,7 +57,7 @@ Remove candidates that are duplicated inside a ranking. Prevents cheating!
 @param ranking - input ranking
 */
 export const removeDuplicatedCandidates = <C extends string>(
-  ranking: C[][],
+  ranking: readonly (readonly C[])[],
 ): C[][] => {
   const result: C[][] = []
   const used = new Set<C>()
@@ -77,7 +78,7 @@ Remove candidates in `ranking` that don't exist in `candidates`. Prevents cheati
 @param candidates - official candidates
 */
 export const removeInvalidCandidates = <C extends string>(
-  ranking: string[][],
+  ranking: readonly (readonly string[])[],
   candidates: readonly C[],
 ): C[][] =>
   ranking
@@ -91,7 +92,7 @@ export const removeInvalidCandidates = <C extends string>(
 // The normalized ranking, and the candidates it leaves out. One pass: both
 // run on every ballot, every round.
 const withUnranked = <C extends string>(
-  ranking: string[][],
+  ranking: readonly (readonly string[])[],
   candidates: readonly C[],
 ): [C[][], C[]] => {
   const left = new Set<string>(candidates)
@@ -112,7 +113,7 @@ const appendTier = <C extends string>(ranking: C[][], tier: C[]): C[][] =>
 last.
 */
 export const completeRanking = <C extends string>(
-  ranking: string[][],
+  ranking: readonly (readonly string[])[],
   candidates: readonly C[],
 ): C[][] => appendTier(...withUnranked(ranking, candidates))
 

@@ -42,7 +42,7 @@ export const beatpaths = <C extends string>(
 // which is its win count when there are no ties.
 export const scoresFromStrengths = <C extends string>(
   candidates: readonly C[],
-  p: number[][],
+  p: readonly (readonly number[])[],
 ): ScoreObject<C> => {
   const s = new Map<C, number>()
   let left = candidates.keys().toArray()

@@ -1,5 +1,5 @@
 export type Ballot<C extends string> = {
-  ranking: C[][]
+  ranking: readonly (readonly C[])[]
   /**
   How many voters cast it (default 1): finite, not negative.
   */
@@ -8,7 +8,7 @@ export type Ballot<C extends string> = {
 
 export type Matrix<C extends string> = {
   candidates: readonly C[]
-  array: number[][]
+  array: readonly (readonly number[])[]
 }
 
 /**

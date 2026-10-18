@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-type SkewSymmetricMatrix = number[][]
+type SkewSymmetricMatrix = readonly (readonly number[])[]
 
 const abs = (v: bigint): bigint => (v < 0n ? -v : v)
 

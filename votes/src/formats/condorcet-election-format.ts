@@ -165,13 +165,13 @@ export const parseCondorcetElectionFormat = <C extends string = string>(
   return { candidates, ballots }
 }
 
-const serializeRanking = (ranking: string[][]): string =>
+const serializeRanking = (ranking: readonly (readonly string[])[]): string =>
   ranking.map((rank) => rank.join(' = ')).join(' > ')
 
 const stripImplicitRank = <C extends string>(
-  ranking: C[][],
+  ranking: readonly (readonly C[])[],
   candidates: readonly C[],
-): C[][] => {
+): readonly (readonly C[])[] => {
   if (ranking.length === 0) return ranking
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const lastRank = ranking.at(-1)!

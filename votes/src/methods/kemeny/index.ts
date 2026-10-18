@@ -8,7 +8,7 @@ import { sum } from '../../utils/sum'
 // Visits every non-empty subset of candidates, as a bitmask, in increasing
 // order, with `col[c]`: the voters preferring a member of it over `c`.
 const forEachSubset = (
-  array: number[][],
+  array: readonly (readonly number[])[],
   visit: (set: number, col: Float64Array) => void,
 ): void => {
   const n = array.length
