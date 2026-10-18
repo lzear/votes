@@ -172,8 +172,9 @@ describe(MinimaxTD, () => {
 
     /*
       A's 'worst pairwise victory' is -36% margin against C (32% -68%)
-      B's 'worst pairwise victory' is -20% margin against C (40% -60%)
-      A has the lowest "worst pairwise victory" against all the candidates, therefore A is the winner.
+      B's 'worst pairwise victory' is -20% margin against D (40% -60%)
+      A has the lowest "worst pairwise victory" against all the candidates, therefore A is the winner,
+      with excludeTies: true only; by default the A-B tie scores both 0.
      */
     const minimaxTD = new MinimaxTD(matrix)
     expect(minimaxTD.scores()).toMatchObject({

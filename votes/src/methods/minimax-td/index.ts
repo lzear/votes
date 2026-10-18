@@ -63,9 +63,9 @@ A and B are the members of the Smith set. Both of them beat every other candidat
 
 Look for the lowest 'worst pairwise defeat', and since there are no defeats, look for the lowest 'worst pairwise victory' (not just within the smith set):
 - A's 'worst pairwise victory' is -36% margin against C (32% -68%)
-- B's 'worst pairwise victory' is -20% margin against C (40% -60%)
+- B's 'worst pairwise victory' is -20% margin against D (40% -60%)
 
-A has the lowest "worst pairwise victory" against all the candidates, therefore A is the winner.
+A has the lowest "worst pairwise victory" against all the candidates, therefore A is the winner. That holds with `excludeTies: true`; by default the A-B tie counts, scoring both A and B 0, so they tie.
 */
 export class MinimaxTD<C extends string> extends Minimax<C> {
   public static override readonly label = 'MinimaxTD'
