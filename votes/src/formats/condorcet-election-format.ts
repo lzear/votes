@@ -212,6 +212,13 @@ export const stringifyCondorcetElectionFormat = <C extends string>(
     // The format has no empty rank.
     const ranking = ballot.ranking.filter((rank) => rank.length > 0)
     const weight = weightOf(ballot)
+    // The parser drops weight-0 ballots.
+    if (weight === 0) continue
+    // eslint-disable-next-line unicorn/prefer-number-is-safe-integer -- huge integer weights are valid, written with an exponent
+    if (!Number.isInteger(weight))
+      throw new RangeError(
+        `Weight ${weight} of ballot "${serializeRanking(ranking)}" is not an integer, which the format requires`,
+      )
     const r = implicitRanking ? stripImplicitRank(ranking, candidates) : ranking
     const rankStr = r.length === 0 ? '/EMPTY_RANKING/' : serializeRanking(r)
     lines.push(weight === 1 ? rankStr : `${rankStr} * ${weight}`)

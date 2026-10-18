@@ -362,9 +362,46 @@ describe('stringifyCondorcetElectionFormat', () => {
   it('round-trips weights written with an exponent', () => {
     const original = {
       candidates: ['Alice', 'Bob'],
+      ballots: [{ ranking: [['Alice'], ['Bob']], weight: 1.5e21 }],
+    }
+    const parsed = parseCondorcetElectionFormat(
+      stringifyCondorcetElectionFormat(original, { implicitRanking: false }),
+    )
+    expect(parsed.ballots).toEqual(original.ballots)
+  })
+
+  it('throws a RangeError on a non-integer weight, naming the ranking', () => {
+    const profile = {
+      candidates: ['Alice', 'Bob'],
+      ballots: [{ ranking: [['Alice'], ['Bob']], weight: 0.5 }],
+    }
+    expect(() => stringifyCondorcetElectionFormat(profile)).toThrow(RangeError)
+    expect(() => stringifyCondorcetElectionFormat(profile)).toThrow(
+      /Alice > Bob/,
+    )
+  })
+
+  it('skips weight-0 ballots', () => {
+    const result = stringifyCondorcetElectionFormat(
+      {
+        candidates: ['Alice', 'Bob'],
+        ballots: [
+          { ranking: [['Alice'], ['Bob']], weight: 0 },
+          { ranking: [['Bob'], ['Alice']], weight: 2 },
+        ],
+      },
+      { implicitRanking: false },
+    )
+    expect(result).not.toContain('Alice > Bob')
+    expect(result).toContain('Bob > Alice * 2')
+  })
+
+  it('round-trips integer weights', () => {
+    const original = {
+      candidates: ['Alice', 'Bob'],
       ballots: [
-        { ranking: [['Alice'], ['Bob']], weight: 1.5e21 },
-        { ranking: [['Bob'], ['Alice']], weight: 1e-7 },
+        { ranking: [['Alice'], ['Bob']], weight: 1 },
+        { ranking: [['Bob'], ['Alice']], weight: 7 },
       ],
     }
     const parsed = parseCondorcetElectionFormat(
