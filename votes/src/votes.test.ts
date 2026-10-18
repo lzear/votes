@@ -268,12 +268,18 @@ describe('Test all methods', () => {
       e: 1,
     })
   })
-  it('throws on kemeny past 30 candidates', () => {
-    // 32 used to tie everyone: 1 << 32 is 1.
-    const candidates = Array.from({ length: 32 }, (_, i) => `c${i}`)
+  it('throws on kemeny past 20 candidates by default', () => {
+    const candidates = Array.from({ length: 21 }, (_, i) => `c${i}`)
     expect(() => new Kemeny({ candidates, ballots: [] }).ranking()).toThrow(
       RangeError,
     )
+  })
+  it('throws on kemeny past 30 candidates whatever maxCandidates', () => {
+    // 32 used to tie everyone: 1 << 32 is 1.
+    const candidates = Array.from({ length: 32 }, (_, i) => `c${i}`)
+    expect(() =>
+      new Kemeny({ candidates, ballots: [], maxCandidates: 40 }).ranking(),
+    ).toThrow(RangeError)
   })
 
   it('throws on kemeny past maxCandidates, kept on restrict', () => {

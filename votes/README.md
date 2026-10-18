@@ -220,7 +220,7 @@ is `Dictator` on ballots drawn in random order, by weight.
 `Borda`'s when ballots rank everyone, and a Condorcet winner always wins.
 
 ⚠️ `Kemeny` runs in O(n·2ⁿ) time and memory — slow beyond ~20 candidates, and
-throws beyond `maxCandidates` (default and at most 30).
+throws beyond `maxCandidates` (default 20, at most 30).
 
 ⚠️ `StableVoting` runs in exponential time at worst — seconds when majority
 cycles span 20 candidates — and throws beyond `maxCandidates` (default 20, at
