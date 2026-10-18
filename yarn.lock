@@ -1163,7 +1163,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lzear/configs@npm:5.0.0, @lzear/configs@npm:^5":
+"@lzear/configs@npm:5.0.0":
   version: 5.0.0
   resolution: "@lzear/configs@npm:5.0.0"
   dependencies:
@@ -1190,6 +1190,37 @@ __metadata:
     lzear-publish: src/publish.mjs
     lzear-sync-jsr: src/sync-jsr.mjs
   checksum: 10c0/a326ec9d06a008a661a1b47d659a8c384f65db3c5396c64882ab4f29567acfec12ead208cfefe23bb2986f6979e49542eb9720a9eac85527138ccfbeaf97ab4c
+  languageName: node
+  linkType: hard
+
+"@lzear/configs@npm:^5":
+  version: 5.1.0
+  resolution: "@lzear/configs@npm:5.1.0"
+  dependencies:
+    "@commitlint/config-conventional": "npm:^21"
+    "@commitlint/types": "npm:^21"
+    conventional-changelog-conventionalcommits: "npm:^10"
+    std-env: "npm:^4"
+  peerDependencies:
+    jsdom: ~30
+    tsdown: ^0.23
+    vite: ^8
+    vitest: ^5
+  peerDependenciesMeta:
+    jsdom:
+      optional: true
+    tsdown:
+      optional: true
+    vite:
+      optional: true
+    vitest:
+      optional: true
+  bin:
+    lzear-changelog: src/changelog.mjs
+    lzear-prerelease: src/prerelease.mjs
+    lzear-publish: src/publish.mjs
+    lzear-sync-jsr: src/sync-jsr.mjs
+  checksum: 10c0/0a7832794c3ff274e2d12c2a347d80263ba3f6bb074606aef96d139055305657332df90754fc09eeaacd2e3dc4d548436d97a13a2842981d9dfe9d4ce6441864
   languageName: node
   linkType: hard
 
