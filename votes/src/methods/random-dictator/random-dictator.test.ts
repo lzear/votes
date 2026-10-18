@@ -1,6 +1,7 @@
 import { abcde, balinski, sW } from '../../test/test-utils'
 import type { Ballot } from '../../types'
 import { rngGenerator, toWeightedBallots } from '../../utils'
+import { sum } from '../../utils/sum'
 import { Dictator } from '../dictator'
 import { RandomDictator } from '.'
 
@@ -18,6 +19,9 @@ const vote = <C extends string>(
     candidates,
     rng: seed ? rngGenerator(seed) : undefined,
   })
+
+const names = (n: number) =>
+  Array.from({ length: n }, (_, i) => `c${String(i)}`)
 
 describe(RandomDictator, () => {
   it('is deterministic', () => {
@@ -201,5 +205,44 @@ describe(RandomDictator, () => {
         ['a'],
       ),
     ).toMatchObject({ rng })
+  })
+
+  describe('maxTies', () => {
+    const rng = rngGenerator('ties')
+    const shuffled = (candidates: string[]) =>
+      candidates
+        .map((c) => ({ c, r: rng() }))
+        .toSorted((x, y) => x.r - y.r)
+        .map(({ c }) => c)
+
+    it('throws past it on tied ballots', () => {
+      const candidates = names(16)
+      const ballots = Array.from({ length: 200 }, () => {
+        const order = shuffled(candidates)
+        return { ranking: [order.slice(0, 8), order.slice(8)], weight: 1 }
+      })
+      expect(() =>
+        new RandomDictator({ candidates, ballots }).probabilities(),
+      ).toThrow(/maxTies/)
+      expect(() =>
+        new RandomDictator({ candidates, ballots, maxTies: 10 })
+          .restrict(candidates.slice(0, 8))
+          .probabilities(),
+      ).toThrow(RangeError)
+    })
+
+    it('never reaches it on strict ballots', () => {
+      const candidates = names(30)
+      const ballots = Array.from({ length: 200 }, () => ({
+        ranking: shuffled(candidates).map((c) => [c]),
+        weight: 1,
+      }))
+      const odds = new RandomDictator({
+        candidates,
+        ballots,
+        maxTies: 1,
+      }).probabilities()
+      expect(sum(Object.values(odds))).toBeCloseTo(1)
+    })
   })
 })
