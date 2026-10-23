@@ -13,22 +13,24 @@ export const canonizeRanking = <C extends string>(
   ranking: readonly (readonly C[])[],
 ): C[][] => ranking.map((rank) => rank.toSorted((a, b) => a.localeCompare(b)))
 
+type Weighted<B extends Ballot<string>> = Omit<B, 'weight'> & {
+  weight: number
+}
+
 // Merge ballots with the same tiers, whatever the order within each, summing
 // weights. Empty tiers count: majority judgment reads a tier's index as its
 // grade. The first occurrence's ranking representation and order are kept.
-const mergeEquivalentBallots = <C extends string, B extends Ballot<C>>(
+const mergeEquivalentBallots = <B extends Ballot<string>>(
   ballots: readonly B[],
-): B[] => {
-  const byRanking = new Map<string, B>()
+): Weighted<B>[] => {
+  const byRanking = new Map<string, Weighted<B>>()
   for (const ballot of ballots) {
     const key = JSON.stringify(canonizeRanking(ballot.ranking))
     const match = byRanking.get(key)
-    if (match)
-      byRanking.set(key, {
-        ...match,
-        weight: weightOf(match) + weightOf(ballot),
-      })
-    else byRanking.set(key, ballot)
+    byRanking.set(key, {
+      ...(match ?? ballot),
+      weight: (match?.weight ?? 0) + weightOf(ballot),
+    })
   }
   return byRanking.values().toArray()
 }
@@ -36,12 +38,12 @@ const mergeEquivalentBallots = <C extends string, B extends Ballot<C>>(
 /**
 Merges ballots with the same tiers, summing weights, heaviest first.
 */
-export const groupBallots = <C extends string, B extends Ballot<C>>(
+export const groupBallots = <B extends Ballot<string>>(
   ballots: readonly B[],
-): B[] =>
+): (Omit<B, 'weight'> & { weight: number })[] =>
   mergeEquivalentBallots(ballots)
-    .filter((b) => weightOf(b) > 0)
-    .toSorted((a, b) => weightOf(b) - weightOf(a))
+    .filter((b) => b.weight > 0)
+    .toSorted((a, b) => b.weight - a.weight)
 
 /**
 Ballots from rankings, the same ones merged into one weighted ballot.
@@ -122,11 +124,11 @@ Keeps only `candidates` in each ballot, each at its first rank. With
 `appendUnranked` (default true), a ballot that ranks anyone also ranks the
 rest, tied last.
 */
-export const normalizeBallots = <C extends string, B extends Ballot<C>>(
+export const normalizeBallots = <C extends string, B extends Ballot<string>>(
   ballots: readonly B[],
   candidates: readonly C[],
   appendUnranked = true,
-): B[] =>
+): (Omit<B, 'ranking'> & { ranking: C[][] })[] =>
   ballots.map((ballot) => {
     const [ranking, unranked] = withUnranked(ballot.ranking, candidates)
     return {

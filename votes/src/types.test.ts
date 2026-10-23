@@ -1,4 +1,12 @@
-import { type Ballot, Borda, Election, matrixFromBallots, Schulze } from '.'
+import {
+  type Ballot,
+  Borda,
+  Election,
+  groupBallots,
+  matrixFromBallots,
+  normalizeBallots,
+  Schulze,
+} from '.'
 
 const candidates = ['a', 'b', 'c'] as const
 const stray = [{ ranking: [['a'], ['d']] }] as const
@@ -34,5 +42,20 @@ describe('types', () => {
     expect(
       new Borda<string>({ candidates: ['a', 'b'], ballots }).ranking(),
     ).toStrictEqual([['a'], ['b']])
+  })
+
+  it('types normalized and grouped ballots as they come out', () => {
+    const ballots = [
+      { ranking: [['a', 'd'], ['b']], id: 1 },
+      { ranking: [['b'], ['a']], weight: 2, id: 2 },
+    ] as const
+    const [normalized] = normalizeBallots(ballots, ['a', 'b'])
+    const ranking: ('a' | 'b')[][] | undefined = normalized?.ranking
+    expect(ranking).toStrictEqual([['a'], ['b']])
+    expect(normalized?.id).toBe(1)
+    const [grouped] = groupBallots(ballots)
+    const weight: number | undefined = grouped?.weight
+    expect(weight).toBe(2)
+    expect(grouped?.id).toBe(2)
   })
 })
