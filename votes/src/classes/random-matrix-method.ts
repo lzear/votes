@@ -7,12 +7,14 @@ import type { Matrixer } from './matrix-score-method'
 import { RandomMethod } from './random-method'
 
 // Draws candidates one at a time, each with probability proportional to its
-// score among those not yet drawn.
+// score among those not yet drawn. In `candidates` order: object keys put
+// integer-like names first.
 const randomRankingFromScores = <C extends string>(
   scores: ScoreObject<C>,
+  candidates: readonly C[],
   random: () => number,
 ): C[] => {
-  const left = Object.keys(scores) as C[]
+  const left = [...candidates]
   const ranking: C[] = []
   while (left.length > 1) {
     const total = sum(left.map((c) => scores[c]))
@@ -70,9 +72,11 @@ export abstract class RandomMatrixMethod<C extends string>
   @internal
   */
   protected draw(): C[][] {
-    return randomRankingFromScores(this.probabilities(), this.rng).map((c) => [
-      c,
-    ])
+    return randomRankingFromScores(
+      this.probabilities(),
+      this.candidates,
+      this.rng,
+    ).map((c) => [c])
   }
 
   public override restrict(candidates: readonly C[]): this {
