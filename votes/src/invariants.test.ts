@@ -4,6 +4,7 @@ import {
   Election,
   InstantRunoff,
   methods,
+  type Profile,
   type Ranker,
   VotingSystem,
 } from '.'
@@ -60,7 +61,7 @@ const profiles = Array.from({ length: 200 }, (_, i) => {
 
 type RandomProfile = (typeof profiles)[number]
 
-const run = (system: VotingSystem, profile: RandomProfile) =>
+const run = (system: VotingSystem, profile: Profile<string>): Ranker<string> =>
   new methods[system]({ ...profile, rng: rngGenerator(system) })
 
 // Each profile's ranking, ties sorted: one `expect`, its diff indexing the
@@ -149,5 +150,87 @@ describe('invariants on random profiles', () => {
     expect(rankings((p) => election(p).restrict(p.candidates))).toStrictEqual(
       rankings(election),
     )
+  })
+})
+
+// Names that object keys reorder or inherit, integer-like ones first, sorted
+// as a to e are: maximal lotteries pick among several by name.
+const rename = Object.fromEntries(
+  abcde.map((c, i) => [c, ['10', '2', '__proto__', 'b c', 'constructor'][i]!]),
+)
+const renamed = (profile: RandomProfile) => ({
+  ...profile,
+  candidates: profile.candidates.map((c) => rename[c]!),
+  ballots: profile.ballots.map((b) => ({
+    ...b,
+    ranking: b.ranking.map((tier) => tier.map((c) => rename[c]!)),
+  })),
+})
+
+// Each profile's ranking, or for a random method its chances, rounded: a draw
+// reads the ballots in order.
+const outcomes = (system: VotingSystem, change: (p: RandomProfile) => object) =>
+  profiles.map((p) => {
+    const method = run(system, { ...p, ...change(p) })
+    return method.probabilities
+      ? Object.entries(method.probabilities()).map(
+          ([c, x]) => [c, Math.round(x * 1e9)] as const,
+        )
+      : canonizeRanking(method.ranking())
+  })
+
+describe('invariants on random profiles, ballots changed', () => {
+  // Dictator reads the ballots in order.
+  it.each(systems.filter((s) => s !== VotingSystem.Dictator))(
+    'ranks the same in any ballot order (%s)',
+    (system) => {
+      const shuffle = rngGenerator(system)
+      expect(
+        outcomes(system, (p) => ({
+          ballots: shuffleArray(p.ballots, shuffle),
+        })),
+      ).toStrictEqual(outcomes(system, () => ({})))
+    },
+  )
+
+  it.each(systems)('ranks renamed candidates alike (%s)', (system) => {
+    expect(rankings((p) => run(system, renamed(p)))).toStrictEqual(
+      rankings((p) => run(system, p)).map((ranking) =>
+        canonizeRanking(ranking.map((tier) => tier.map((c) => rename[c]!))),
+      ),
+    )
+  })
+
+  it.each(systems)('ranks weights × 3 like whole ones (%s)', (system) => {
+    expect(
+      rankings((p) =>
+        run(system, {
+          ...p,
+          ballots: p.ballots.map((b) => ({ ...b, weight: b.weight * 3 })),
+        }),
+      ),
+    ).toStrictEqual(rankings((p) => run(system, p)))
+  })
+
+  // Each ballot of weight w as w ballots of weight 1, next to each other.
+  it.each(systems)('ranks split ballots like weighted ones (%s)', (system) => {
+    expect(
+      outcomes(system, (p) => ({
+        ballots: p.ballots.flatMap((b) =>
+          Array.from({ length: b.weight }, () => ({ ...b, weight: 1 })),
+        ),
+      })),
+    ).toStrictEqual(outcomes(system, () => ({})))
+  })
+
+  it.each(systems)('ranks as without its zero weights (%s)', (system) => {
+    expect(
+      rankings((p) =>
+        run(system, {
+          ...p,
+          ballots: p.ballots.flatMap((b) => [{ ...b, weight: 0 }, b]),
+        }),
+      ),
+    ).toStrictEqual(rankings((p) => run(system, p)))
   })
 })
