@@ -42,7 +42,7 @@ export abstract class RandomMethod<C extends string> extends Method<C> {
   restrict(candidates: readonly C[]): this {
     type Ctor = new (i: {
       candidates: readonly C[]
-      rng?: () => number
+      rng?: (() => number) | undefined
     }) => this
     return new (this.constructor as Ctor)({ candidates, rng: this.rng })
   }

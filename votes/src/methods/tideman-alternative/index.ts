@@ -35,7 +35,7 @@ export class TidemanAlternative<
 
   constructor(
     input: ConstructorParameters<typeof InstantRunoffHybrid<C>>[0] & {
-      topSet?: TopSet
+      topSet?: TopSet | undefined
     },
   ) {
     super(input)

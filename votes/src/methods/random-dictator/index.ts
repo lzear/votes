@@ -107,7 +107,7 @@ export class RandomDictator<C extends string> extends RandomBallotMethod<C> {
 
   constructor(
     i: ConstructorParameters<typeof RandomBallotMethod<C>>[0] & {
-      maxReads?: number
+      maxReads?: number | undefined
     },
   ) {
     super(i)

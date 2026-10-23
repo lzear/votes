@@ -33,7 +33,7 @@ export class SupplementaryVote<C extends string> extends TwoRoundRunoff<C> {
 
   constructor(
     input: ConstructorParameters<typeof TwoRoundRunoff<C>>[0] & {
-      preferences?: number
+      preferences?: number | undefined
     },
   ) {
     const preferences = input.preferences ?? 2

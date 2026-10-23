@@ -102,22 +102,22 @@ export class MajorityJudgment<C extends string> extends Method<C> {
     Number of grades, best first (default 6). A ballot tier's index is its
     grade.
     */
-    grades?: number
+    grades?: number | undefined
     /**
     Whether a ballot that grades someone gives the candidates it leaves out
     the worst grade (default true). Pass false to count only given grades.
     */
-    unrankedLast?: boolean
+    unrankedLast?: boolean | undefined
     /**
     Whether a ballot that grades no one gives everyone the worst grade too,
     with `unrankedLast` (default false).
     */
-    countBlank?: boolean
+    countBlank?: boolean | undefined
     /**
     Whether a ballot ranked past the worst grade gives its ranks from the
     worst grade on that grade (default false: it throws).
     */
-    clampGrades?: boolean
+    clampGrades?: boolean | undefined
   }) {
     super(i.candidates)
     this.grades = i.grades ?? 6

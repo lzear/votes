@@ -43,7 +43,9 @@ export abstract class RandomMatrixMethod<C extends string>
 {
   private readonly _matrix: Matrix<C>
 
-  constructor(i: (Matrix<C> | Profile<C>) & { rng?: () => number }) {
+  constructor(
+    i: (Matrix<C> | Profile<C>) & { rng?: (() => number) | undefined },
+  ) {
     super(i)
 
     this._matrix = deepFreeze(toMatrix(i))
@@ -65,7 +67,9 @@ export abstract class RandomMatrixMethod<C extends string>
   }
 
   public override restrict(candidates: readonly C[]): this {
-    type Ctor = new (i: Matrix<C> & { rng?: () => number }) => this
+    type Ctor = new (
+      i: Matrix<C> & { rng?: (() => number) | undefined },
+    ) => this
     return new (this.constructor as Ctor)({
       ...subMatrix(this.matrix, candidates),
       rng: this.rng,

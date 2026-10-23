@@ -13,12 +13,12 @@ export type EntryOptions = {
   (`'restricted'`, default), everyone (`'full'`), or the tied ones, then
   those of each tie that leaves, until none splits (`'recursive'`).
   */
-  mode?: 'restricted' | 'full' | 'recursive'
+  mode?: 'restricted' | 'full' | 'recursive' | undefined
   /**
   Name in traces (`TieBreakStep.name`, `StepResult.name`) instead of the
   method's `label`.
   */
-  label?: string
+  label?: string | undefined
 }
 
 /**

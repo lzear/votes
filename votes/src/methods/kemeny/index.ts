@@ -90,7 +90,9 @@ export class Kemeny<C extends string> extends MatrixScoreMethod<C> {
 
   public readonly maxCandidates: number
 
-  constructor(i: (Matrix<C> | Profile<C>) & { maxCandidates?: number }) {
+  constructor(
+    i: (Matrix<C> | Profile<C>) & { maxCandidates?: number | undefined },
+  ) {
     super(i)
     // Subsets are 32-bit masks.
     this.maxCandidates = Math.min(i.maxCandidates ?? 20, 30)

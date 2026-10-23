@@ -77,8 +77,8 @@ export class Minimax<C extends string> extends MatrixScoreMethod<C> {
 
   constructor(
     i: (Matrix<C> | Profile<C>) & {
-      variant?: MinimaxVariant
-      excludeTies?: boolean
+      variant?: MinimaxVariant | undefined
+      excludeTies?: boolean | undefined
     },
   ) {
     super(i)

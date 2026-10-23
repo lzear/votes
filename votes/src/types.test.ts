@@ -4,11 +4,14 @@ import {
   Election,
   type EntryOptions,
   groupBallots,
+  Kemeny,
   matrixFromBallots,
+  MaximalLotteries,
   Method,
   methods,
   normalizeBallots,
   type QE,
+  RandomizedCondorcet,
   RankedPairs,
   type RankedPairsEdgeSorter,
   type Ranker,
@@ -99,5 +102,33 @@ describe('types', () => {
       ballots: [{ ranking: [['a'], ['b'], ['c']] }],
     })
     expect(ranker.iteratedRanking()).toStrictEqual([['a'], ['b'], ['c']])
+  })
+
+  it('takes undefined for any option left out', () => {
+    const profile = {
+      candidates,
+      ballots: [{ ranking: [['a'], ['b'], ['c']], weight: undefined }] as const,
+      unrankedLast: undefined,
+      countBlank: undefined,
+    }
+    const ranking = [['a'], ['b'], ['c']]
+    expect(new Borda(profile).ranking()).toStrictEqual(ranking)
+    expect(
+      new Kemeny({ ...profile, maxCandidates: undefined }).ranking(),
+    ).toStrictEqual(ranking)
+    expect(
+      new MaximalLotteries({ ...profile, rng: undefined }).ranking()[0],
+    ).toStrictEqual(['a'])
+    expect(
+      new RandomizedCondorcet({ ...profile, rng: undefined }).ranking()[0],
+    ).toStrictEqual(['a'])
+    const election = new Election({
+      ...profile,
+      methods: [
+        MaximalLotteries.with({ rng: undefined, mode: undefined }),
+        RandomizedCondorcet.with({ rng: undefined, label: undefined }),
+      ],
+    })
+    expect(election.ranking()[0]).toStrictEqual(['a'])
   })
 })

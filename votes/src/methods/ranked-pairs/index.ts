@@ -128,8 +128,8 @@ export class RankedPairs<C extends string> extends MatrixScoreMethod<C> {
 
   constructor(
     i: (Matrix<C> | Profile<C>) & {
-      edgeSorter?: EdgeSorter
-      strength?: Strength
+      edgeSorter?: EdgeSorter | undefined
+      strength?: Strength | undefined
     },
   ) {
     super(i)

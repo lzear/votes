@@ -3,7 +3,7 @@ export type Ballot<C extends string> = {
   /**
   How many voters cast it (default 1): finite, not negative.
   */
-  weight?: number
+  weight?: number | undefined
 }
 
 export type Matrix<C extends string> = {
@@ -24,13 +24,13 @@ export type Profile<C extends string> = {
   unranked candidates then earn nothing from that ballot (no Borda
   points, no transfers, no last-place counts, no pairwise wins).
   */
-  unrankedLast?: boolean
+  unrankedLast?: boolean | undefined
   /**
   Whether blank ballots, ranking none of the candidates still in the race,
   count as cast (default false): toward absolute majorities and, with
   `unrankedLast`, as worst grades in majority judgment.
   */
-  countBlank?: boolean
+  countBlank?: boolean | undefined
 }
 
 export type ScoreObject<C extends string> = Record<C, number>
