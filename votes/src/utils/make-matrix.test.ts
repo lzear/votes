@@ -35,7 +35,9 @@ describe('matrices', () => {
   it('counts a candidate listed twice at its first rank', () => {
     const ballots = [{ ranking: [['a'], ['b', 'a'], ['c']], weight: 1 }]
 
-    expect(matrixFromBallots(ballots, ['a', 'b', 'c']).array).toStrictEqual([
+    expect(
+      matrixFromBallots<string>(ballots, ['a', 'b', 'c']).array,
+    ).toStrictEqual([
       [0, 1, 1],
       [0, 0, 1],
       [0, 0, 0],
@@ -47,22 +49,21 @@ describe('matrices', () => {
       { ranking: [['a'], ['b']], weight: 0.2 },
       { ranking: [['b'], ['a']], weight: 0.6 },
     ]
-    expect(matrixFromBallots(ballots, ['a', 'b']).array).toStrictEqual([
+    expect(matrixFromBallots<string>(ballots, ['a', 'b']).array).toStrictEqual([
       [0, 0.6],
       [0.6, 0],
     ])
   })
   it('keeps huge counts exact', () => {
     const ballots = [{ ranking: [['a'], ['b']], weight: 1e12 + 1 }]
-    expect(matrixFromBallots(ballots, ['a', 'b']).array[0]).toStrictEqual([
-      0,
-      1e12 + 1,
-    ])
+    expect(
+      matrixFromBallots<string>(ballots, ['a', 'b']).array[0],
+    ).toStrictEqual([0, 1e12 + 1])
   })
   it('lists a candidate given twice once', () => {
     const ballots = [{ ranking: [['a'], ['b']] }]
 
-    expect(matrixFromBallots(ballots, ['a', 'b', 'a'])).toStrictEqual({
+    expect(matrixFromBallots<string>(ballots, ['a', 'b', 'a'])).toStrictEqual({
       array: [
         [0, 1],
         [0, 0],

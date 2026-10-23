@@ -59,7 +59,7 @@ describe('iteratedRanking', () => {
       { ranking: [['a'], ['b']], weight: 1 },
       { ranking: [['b'], ['a']], weight: 1 },
     ]
-    const borda = new Borda({ candidates: ['a', 'b'], ballots })
+    const borda = new Borda<string>({ candidates: ['a', 'b'], ballots })
     expect(borda.iteratedRanking()).toStrictEqual([['a', 'b']])
   })
 

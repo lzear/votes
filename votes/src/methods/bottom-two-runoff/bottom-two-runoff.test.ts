@@ -269,7 +269,10 @@ describe(BottomTwoRunoff, () => {
       ranking: order.split('').map((c) => [c]),
     }))
     expect(
-      new BottomTwoRunoff({ candidates: ['a', 'b', 'c'], ballots }).ranking(),
+      new BottomTwoRunoff<string>({
+        candidates: ['a', 'b', 'c'],
+        ballots,
+      }).ranking(),
     ).toStrictEqual([['a', 'b'], ['c']])
   })
 

@@ -25,7 +25,7 @@ describe(Borda, () => {
   })
 
   it('scores only expressed preferences with unrankedLast: false', () => {
-    const partial: { ranking: string[][]; weight: number }[] = [
+    const partial: { ranking: (typeof abcde)[number][][]; weight: number }[] = [
       { ranking: [['a'], ['b']], weight: 1 },
     ]
     // Default: unranked candidates join as one tied bottom tier.

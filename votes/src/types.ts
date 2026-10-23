@@ -16,7 +16,7 @@ What every method takes.
 */
 export type Profile<C extends string> = {
   candidates: readonly C[]
-  ballots: readonly Ballot<C>[]
+  ballots: readonly Ballot<NoInfer<C>>[]
   /**
   Whether candidates a ballot leaves unranked are appended to it as one
   tied bottom tier (default true — the classic "pessimistic" completion

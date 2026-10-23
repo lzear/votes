@@ -129,7 +129,7 @@ describe('Test all methods', () => {
       { ranking: [['b'], ['a']] },
     ]
     expect(
-      new Bucklin({ candidates: ['a', 'b', 'c'], ballots }).scores(),
+      new Bucklin<string>({ candidates: ['a', 'b', 'c'], ballots }).scores(),
     ).toStrictEqual({ a: 2, b: 1.5, c: 0.5 })
   })
   it('counts each Bucklin round, a tier across the cut by its share', () => {
@@ -138,7 +138,7 @@ describe('Test all methods', () => {
       { ranking: [['b'], ['a']] },
     ]
     expect(
-      new Bucklin({ candidates: ['a', 'b', 'c'], ballots }).counts(),
+      new Bucklin<string>({ candidates: ['a', 'b', 'c'], ballots }).counts(),
     ).toStrictEqual([
       { a: 1, b: 1, c: 0 },
       { a: 2, b: 1.5, c: 0.5 },
@@ -243,7 +243,10 @@ describe('Test all methods', () => {
       { ranking: [['b']], weight: 0.2 },
     ]
     expect(
-      new AbsoluteMajority({ candidates: ['a', 'b'], ballots }).ranking(),
+      new AbsoluteMajority<string>({
+        candidates: ['a', 'b'],
+        ballots,
+      }).ranking(),
     ).toStrictEqual([['a', 'b']])
   })
 

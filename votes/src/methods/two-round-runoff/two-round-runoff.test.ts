@@ -48,7 +48,7 @@ describe(TwoRoundRunoff, () => {
       { ranking: [['c']], weight: 3 },
       { ranking: [['d']], weight: 1 },
     ]
-    const trr = new TwoRoundRunoff({
+    const trr = new TwoRoundRunoff<string>({
       candidates: ['a', 'b', 'c', 'd'],
       ballots,
     })
@@ -63,7 +63,7 @@ describe(TwoRoundRunoff, () => {
       { ranking: [['c'], ['a'], ['b'], ['d']], weight: 2 },
       { ranking: [['d'], ['a'], ['b'], ['c']], weight: 2 },
     ]
-    const { rounds } = firstRun({
+    const { rounds } = firstRun<string>({
       candidates: ['a', 'b', 'c', 'd'],
       ballots,
       methods: [TwoRoundRunoff, Borda],

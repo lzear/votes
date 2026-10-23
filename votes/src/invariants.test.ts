@@ -43,7 +43,7 @@ const pick = (n: number) => Math.floor(rng() * n)
 const profiles = Array.from({ length: 200 }, (_, i) => {
   const candidates = abcde.slice(0, 3 + (i % 3))
   const ballots = Array.from({ length: 1 + pick(8) }, () => {
-    const ranking: string[][] = []
+    const ranking: (typeof candidates)[number][][] = []
     const ranked = shuffleArray(candidates, rng).slice(
       0,
       1 + pick(candidates.length),

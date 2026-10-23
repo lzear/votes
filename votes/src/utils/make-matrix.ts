@@ -34,7 +34,7 @@ fractional weights tie as they should (0.4 + 0.2 floats above 0.6).
 below the others (default true). Pass false to count only what it ranks.
 */
 export const matrixFromBallots = <C extends string>(
-  ballots: readonly Ballot<C>[],
+  ballots: readonly Ballot<NoInfer<C>>[],
   _candidates: readonly C[],
   unrankedLast = true,
 ): Matrix<C> => {

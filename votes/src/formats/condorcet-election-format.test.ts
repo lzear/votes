@@ -300,7 +300,7 @@ describe('stringifyCondorcetElectionFormat', () => {
       '',
     ])
       expect(() =>
-        stringifyCondorcetElectionFormat({
+        stringifyCondorcetElectionFormat<string>({
           candidates: ['Z'],
           ballots: [{ ranking: [[name]], weight: 1 }],
         }),
