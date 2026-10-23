@@ -2,13 +2,25 @@ import {
   type Ballot,
   Borda,
   Election,
+  type EntryOptions,
   groupBallots,
   matrixFromBallots,
+  Method,
+  methods,
   normalizeBallots,
+  type QE,
+  RankedPairs,
+  type RankedPairsEdgeSorter,
+  type Ranker,
+  type Run,
   Schulze,
+  TidemanAlternative,
+  type TidemanAlternativeTopSet,
+  VotingSystem,
 } from '.'
 
 const candidates = ['a', 'b', 'c'] as const
+const edgeSorter: RankedPairsEdgeSorter = (a, b) => a.total - b.total
 const stray = [{ ranking: [['a'], ['d']] }] as const
 
 describe('types', () => {
@@ -57,5 +69,35 @@ describe('types', () => {
     const weight: number | undefined = grouped?.weight
     expect(weight).toBe(2)
     expect(grouped?.id).toBe(2)
+  })
+
+  it('names the types public signatures use', () => {
+    const topSet: TidemanAlternativeTopSet = 'schwartz'
+    const entry: EntryOptions = { mode: 'full', label: 'Pairs' }
+    const pairs = RankedPairs.with({ edgeSorter, ...entry })
+    const tideman = new TidemanAlternative({ candidates, ballots: [], topSet })
+    expect(tideman).toBeInstanceOf(Method)
+    const election = new Election({
+      candidates,
+      ballots: [{ ranking: [['a'], ['b'], ['c']] }],
+      methods: [pairs],
+    })
+    const runs: readonly Run<'a' | 'b' | 'c'>[] =
+      election.result().steps[0]?.runs ?? []
+    expect(runs).toHaveLength(1)
+    const round: QE<'a'> = {
+      qualified: ['a'],
+      eliminated: [],
+      scores: { a: 1 },
+    }
+    expect(round.qualified).toStrictEqual(['a'])
+  })
+
+  it('iterates the ranking of any ranker', () => {
+    const ranker: Ranker<'a' | 'b' | 'c'> = new methods[VotingSystem.Borda]({
+      candidates,
+      ballots: [{ ranking: [['a'], ['b'], ['c']] }],
+    })
+    expect(ranker.iteratedRanking()).toStrictEqual([['a'], ['b'], ['c']])
   })
 })

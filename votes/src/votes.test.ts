@@ -36,7 +36,12 @@ import {
   overTies,
   sW,
 } from './test/test-utils'
-import { makeAntisymmetric, matrixFromBallots, rngGenerator } from './utils'
+import {
+  iterateRanking,
+  makeAntisymmetric,
+  matrixFromBallots,
+  rngGenerator,
+} from './utils'
 
 type ABCD = 'a' | 'b' | 'c' | 'd'
 const tieCandidates: ABCD[] = ['a', 'b', 'c', 'd']
@@ -455,6 +460,10 @@ describe('round tiebreakers', () => {
 
       restrict(candidates: ABCD[]) {
         return new FirstOnly({ candidates })
+      }
+
+      iteratedRanking() {
+        return iterateRanking(this)
       }
     }
     const { rounds } = firstRun({

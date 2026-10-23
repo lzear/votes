@@ -10,6 +10,10 @@ export type Ranker<C extends string> = {
   */
   restrict(candidates: readonly C[]): Ranker<C>
   /**
+  The ranking built by repeated wins, as `Method#iteratedRanking` explains.
+  */
+  iteratedRanking(): Ranking<C>
+  /**
   Points behind the ranking, for methods that score.
   */
   scores?(): ScoreObject<C>

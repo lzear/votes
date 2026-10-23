@@ -17,7 +17,7 @@ preserved.
 export const byTotalParticipation = (a: Edge, b: Edge): number =>
   b.total - a.total
 
-type EdgeSorter = (a: Edge, b: Edge) => number
+export type EdgeSorter = (a: Edge, b: Edge) => number
 
 /**
 A pair in the lock order: `winner` beats `loser` by `strength`, and the pair

@@ -1,5 +1,5 @@
-export type { MethodCtor, Ranker } from './classes/method'
-export type { ElectionMethod } from './classes/tiebreaker'
+export { Method, type MethodCtor, type Ranker } from './classes/method'
+export type { ElectionMethod, EntryOptions, Run } from './classes/tiebreaker'
 export type { ElectionInput, ElectionResult, StepResult } from './election'
 export { Election } from './election'
 export {
@@ -39,6 +39,7 @@ export { RandomizedCondorcet } from './methods/randomized-condorcet'
 export {
   byTotalParticipation,
   RankedPairs,
+  type EdgeSorter as RankedPairsEdgeSorter,
   type LockStep as RankedPairsLockStep,
 } from './methods/ranked-pairs'
 export type { Edge as RankedPairsEdge } from './methods/ranked-pairs/lock-edges'
@@ -48,13 +49,17 @@ export { SmithInstantRunoff } from './methods/smith-instant-runoff'
 export { SplitCycle } from './methods/split-cycle'
 export { StableVoting } from './methods/stable-voting'
 export { SupplementaryVote } from './methods/supplementary-vote'
-export { TidemanAlternative } from './methods/tideman-alternative'
+export {
+  TidemanAlternative,
+  type TopSet as TidemanAlternativeTopSet,
+} from './methods/tideman-alternative'
 export { TwoRoundRunoff } from './methods/two-round-runoff'
 export { Woodall } from './methods/woodall'
 export type {
   Ballot,
   Matrix,
   Profile,
+  QE,
   Ranking,
   Round,
   ScoreObject,

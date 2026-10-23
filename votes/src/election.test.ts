@@ -8,9 +8,10 @@ import {
   type ElectionMethod,
   FirstPastThePost,
   InstantRunoff,
+  Method,
   methods,
+  type Profile,
   RandomCandidates,
-  type Ranker,
   rngGenerator,
   VotingSystem,
 } from '.'
@@ -141,14 +142,18 @@ describe('Election', () => {
   })
 
   it('keeps candidates a fallback method does not rank', () => {
-    class OnlyB implements Ranker<ABC> {
+    class OnlyB extends Method<ABC> {
       static readonly label = 'OnlyB'
+
+      constructor({ candidates }: Profile<ABC>) {
+        super(candidates)
+      }
 
       ranking(): ABC[][] {
         return [['b']]
       }
 
-      restrict() {
+      restrict(): this {
         return this
       }
     }
@@ -195,14 +200,18 @@ describe('Election', () => {
   })
 
   it('stops early when no ties remain', () => {
-    class Unreachable implements Ranker<ABC> {
+    class Unreachable extends Method<ABC> {
       static readonly label = 'Unreachable'
+
+      constructor({ candidates }: Profile<ABC>) {
+        super(candidates)
+      }
 
       ranking(): ABC[][] {
         throw new Error('should not be called')
       }
 
-      restrict() {
+      restrict(): this {
         return this
       }
     }

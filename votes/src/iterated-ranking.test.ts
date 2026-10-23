@@ -1,4 +1,3 @@
-import type { Ranker } from './classes/method'
 import { Election } from './election'
 import { Borda } from './methods/borda'
 import { Copeland } from './methods/copeland'
@@ -11,7 +10,7 @@ import { RankedPairs } from './methods/ranked-pairs'
 import { Schulze } from './methods/schulze'
 import type { Ballot } from './types'
 import { matrixFromBallots } from './utils'
-import { iterateRanking } from './utils/iterate-ranking'
+import { iterateRanking, type Restrictable } from './utils/iterate-ranking'
 import { rngGenerator } from './utils/rng-generator'
 
 const abc = ['a', 'b', 'c']
@@ -94,13 +93,13 @@ describe('iteratedRanking', () => {
   })
 
   it('keeps the rest as one tier when a ranker places nobody first', () => {
-    const stub: Ranker<string> = {
+    const stub: Restrictable<string> = {
       ranking: () => [[], ['a', 'b']],
       restrict: () => stub,
     }
     expect(iterateRanking(stub)).toStrictEqual([['a', 'b']])
 
-    const empty: Ranker<string> = {
+    const empty: Restrictable<string> = {
       ranking: () => [],
       restrict: () => empty,
     }

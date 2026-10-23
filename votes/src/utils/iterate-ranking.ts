@@ -1,5 +1,9 @@
-import type { Ranker } from '../classes/method'
 import type { Ranking } from '../types'
+
+export type Restrictable<C extends string> = {
+  ranking(): Ranking<C>
+  restrict(candidates: readonly C[]): Restrictable<C>
+}
 
 /**
 Ranking built by repeated wins: take the ranker's winning tier, then re-run
@@ -11,7 +15,7 @@ how it ranks subsets: round-based methods order losers by elimination time,
 and score methods can reshuffle once a winner's votes are gone.
 */
 export const iterateRanking = <C extends string>(
-  ranker: Ranker<C>,
+  ranker: Restrictable<C>,
 ): Ranking<C> => {
   const tiers: (readonly C[])[] = []
   let current = ranker
