@@ -66,9 +66,19 @@ out both candidates.
 export class Schulze<C extends string> extends MatrixScoreMethod<C> {
   public static readonly label = 'Schulze'
 
+  /**
+  How it measures a direct win: the `strength` option.
+  */
   public readonly strength: Strength
 
-  constructor(i: (Matrix<C> | Profile<C>) & { strength?: Strength }) {
+  constructor(
+    i: (Matrix<C> | Profile<C>) & {
+      /**
+      How to measure a direct win (default `'winning-votes'`).
+      */
+      strength?: Strength | undefined
+    },
+  ) {
     super(i)
     this.strength = i.strength ?? 'winning-votes'
   }

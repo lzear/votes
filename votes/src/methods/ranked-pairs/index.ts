@@ -17,6 +17,10 @@ preserved.
 export const byTotalParticipation = (a: Edge, b: Edge): number =>
   b.total - a.total
 
+/**
+Orders pairs of equal strength, as `Array#sort` compares: negative when `a`
+locks first. Pairs it gives 0 lock together.
+*/
 export type EdgeSorter = (a: Edge, b: Edge) => number
 
 /**
@@ -124,11 +128,21 @@ export class RankedPairs<C extends string> extends MatrixScoreMethod<C> {
   public static readonly label = 'RankedPairs'
 
   private readonly edgeSorter: EdgeSorter | undefined
+  /**
+  How it measures a pairwise win: the `strength` option.
+  */
   public readonly strength: Strength
 
   constructor(
     i: (Matrix<C> | Profile<C>) & {
+      /**
+      Order in which to lock pairs of equal strength (default none: they
+      lock together), such as `byTotalParticipation`.
+      */
       edgeSorter?: EdgeSorter | undefined
+      /**
+      How to measure a pairwise win (default `'winning-votes'`).
+      */
       strength?: Strength | undefined
     },
   ) {

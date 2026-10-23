@@ -25,10 +25,10 @@ const computeScores = <C extends string>(
 Requested in https://github.com/lzear/votes/issues/76
 
 The Minimax-TD process:
-1. Do the pairwise comparisons using Margins (the number of voters ranking X above Y minus the number of voters ranking Y above X. )
+1. Do the pairwise comparisons using Margins, the default `variant` (the number of voters ranking X above Y minus the number of voters ranking Y above X. )
 1. Find the [Smith Set](https://en.wikipedia.org/wiki/Smith_set), the smallest non-empty set of candidates such that each member defeats every candidate outside the set in a pairwise comparison. [That Algorithm may be found here.](https://electowiki.org/wiki/Maximal_elements_algorithms)
 1. If there is one member of the Smith set, that is the winner.
-1. If there are multiple members of the Smith set, using Margins [Minimax method](https://en.wikipedia.org/wiki/Minimax_Condorcet_method), the candidate in the Smith set with the lowest 'worst pairwise defeat' (which can be negative, equivalent to the lowest 'worst pairwise victory' if there are no defeats) is the winner. See examples below...
+1. If there are multiple members of the Smith set, using the [Minimax method](https://en.wikipedia.org/wiki/Minimax_Condorcet_method), the candidate in the Smith set with the lowest 'worst pairwise defeat' (which can be negative, equivalent to the lowest 'worst pairwise victory' if there are no defeats) is the winner. See examples below...
 1. Remove the winner and repeat the process to find each successive place (2nd, 3rd, etc)
 
 `ranking()` stops at step 4: it orders the Smith set and ties everyone outside it last. `iteratedRanking()` runs step 5.

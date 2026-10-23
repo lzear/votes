@@ -15,16 +15,29 @@ export abstract class RandomBallotMethod<C extends string>
   */
   protected readonly rng: () => number
 
-  constructor(i: Profile<C> & { rng?: undefined | (() => number) }) {
+  constructor(
+    i: Profile<C> & {
+      /**
+      Random number generator, giving numbers from 0 to 1 (default
+      `Math.random`). Pass `rngGenerator(seed)` for draws that repeat.
+      */
+      rng?: undefined | (() => number)
+    },
+  ) {
     super(i)
 
     this.rng = i.rng ?? Math.random
   }
 
-  // Each candidate's chance to win.
+  /**
+  Each candidate's chance to win, from 0 to 1, summing to 1.
+  */
   public abstract probabilities(): ScoreObject<C>
 
-  // Drawn once: every call returns the same ranking.
+  /**
+  A ranking drawn at random with `rng`, once: every call returns the same
+  one.
+  */
   public ranking(): Ranking<C> {
     this._ranking ??= deepFreeze(this.draw())
     return this._ranking

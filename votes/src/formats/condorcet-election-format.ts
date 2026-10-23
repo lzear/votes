@@ -5,8 +5,19 @@ import {
   weightOf,
 } from '../utils'
 
+/**
+What `parseCondorcetElectionFormat` reads: an input every method takes.
+*/
 export type ParsedCondorcetElection<C extends string> = {
+  /**
+  The `#/Candidates` line's, or else those the votes name, in order.
+  */
   candidates: C[]
+  /**
+  One ballot per vote line, its weight the line's quantifier, times its
+  `^` weight when `#/Weight Allowed` is true. Lines of weight 0 are left
+  out.
+  */
   ballots: Ballot<C>[]
 }
 
@@ -189,10 +200,21 @@ const UNWRITABLE = /[>=;,#/*^\0\n\r]|\|\||^\s|\s$|^$/
 
 /**
 Writes the [Condorcet election format](https://github.com/CondorcetVote/CondorcetElectionFormat).
+Weights must be integers, written as quantifiers. Ballots of weight 0 are
+left out. Throws on a candidate name the format cannot hold.
 */
 export const stringifyCondorcetElectionFormat = <C extends string>(
   { candidates, ballots }: Pick<Profile<C>, 'candidates' | 'ballots'>,
-  { implicitRanking = true }: { implicitRanking?: boolean } = {},
+  {
+    implicitRanking = true,
+  }: {
+    /**
+    Whether to write `#/Implicit Ranking: true` (default true) and leave out
+    each ballot's last tier when it holds exactly the candidates the ballot
+    ranks nowhere else.
+    */
+    implicitRanking?: boolean | undefined
+  } = {},
 ): string => {
   for (const name of [
     ...candidates,

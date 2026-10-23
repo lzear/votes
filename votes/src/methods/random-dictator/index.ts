@@ -4,7 +4,7 @@ import { nonBlank, scoresZero, totalBallotsWeight, weightOf } from '../../utils'
 import { sum } from '../../utils/sum'
 import { serialRanking } from '../dictator'
 
-// Ballots probabilities() reads at most by default: about a second.
+// Ballots probabilities() reads at most by default: well under a second.
 const MAX_READS = 2_000_000
 
 const pickBallotIdx = <C extends string>(
@@ -94,8 +94,8 @@ drawn and so on: `Dictator` on ballots in random order.
 
 `probabilities()` is exact, and exponential in the ties ballots leave. It reads
 identical ballots as one, and each tie it explores reads every ballot: past
-`maxReads` ballots read after the first tie (default 2,000,000, about a
-second), it throws. Strict ballots explore the first tie alone, whatever their
+`maxReads` ballots read after the first tie (default 2,000,000, well under
+a second), it throws. Strict ballots explore the first tie alone, whatever their
 size; `ranking()` has no cap.
 
 #### Wikipedia: [Random ballot](https://en.wikipedia.org/wiki/Random_ballot)
@@ -103,10 +103,17 @@ size; `ranking()` has no cap.
 export class RandomDictator<C extends string> extends RandomBallotMethod<C> {
   public static readonly label = 'RandomDictator'
 
+  /**
+  The most ballots `probabilities()` reads: the `maxReads` option.
+  */
   public readonly maxReads: number
 
   constructor(
     i: ConstructorParameters<typeof RandomBallotMethod<C>>[0] & {
+      /**
+      The most ballots `probabilities()` reads after the first tie before it
+      throws (default 2,000,000).
+      */
       maxReads?: number | undefined
     },
   ) {

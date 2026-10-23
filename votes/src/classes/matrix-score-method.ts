@@ -26,6 +26,9 @@ export abstract class MatrixScoreMethod<C extends string>
     this.input = input
   }
 
+  /**
+  The matrix of duels: the one given, or the one the ballots make.
+  */
   get matrix(): Matrix<C> {
     return this._matrix
   }

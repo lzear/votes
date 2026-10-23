@@ -19,6 +19,10 @@ export type CoombsInfo = {
 }
 
 /**
+Each round, a candidate with an absolute majority of first choices wins;
+otherwise the candidate with the most last places goes out. Scores are minus
+those last places, or the first choices in a round won by majority.
+
 #### Wikipedia: [Coombs' method](https://en.wikipedia.org/wiki/Coombs%27_method)
 */
 export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {

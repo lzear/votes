@@ -1,7 +1,16 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
+/**
+A pairwise win, as `RankedPairs` passes it to an `edgeSorter`.
+*/
 export type Edge = {
+  /**
+  The winner's index in the matrix's candidates.
+  */
   from: number
+  /**
+  The loser's index in the matrix's candidates.
+  */
   to: number
   /**
   Strength of the win: the winner's votes, or the margin.

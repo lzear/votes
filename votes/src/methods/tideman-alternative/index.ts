@@ -6,8 +6,8 @@ import { beatpaths } from '../schulze'
 
 /**
 Which top set `TidemanAlternative` narrows the race to: the Smith set, whose
-members beat or tie everyone outside it, or the Schwartz set, the
-candidates no one outside their beatpath cycle beats.
+members each beat everyone outside it, or the Schwartz set, the candidates
+no one outside their beatpath cycle beats.
 */
 export type TopSet = 'smith' | 'schwartz'
 
@@ -31,10 +31,16 @@ export class TidemanAlternative<
 > extends InstantRunoffHybrid<C> {
   public static readonly label = 'TidemanAlternative'
 
+  /**
+  The set each round narrows to: the `topSet` option.
+  */
   public readonly topSet: TopSet
 
   constructor(
     input: ConstructorParameters<typeof InstantRunoffHybrid<C>>[0] & {
+      /**
+      The set each round narrows to (default `'smith'`).
+      */
       topSet?: TopSet | undefined
     },
   ) {

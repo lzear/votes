@@ -35,6 +35,10 @@ import { TidemanAlternative } from './tideman-alternative'
 import { TwoRoundRunoff } from './two-round-runoff'
 import { Woodall } from './woodall'
 
+/**
+Each method's class by its `VotingSystem` id: `methods[VotingSystem.Borda]`
+is `Borda`.
+*/
 export const methods = {
   [VotingSystem.AbsoluteMajority]: AbsoluteMajority,
   [VotingSystem.AntiPlurality]: AntiPlurality,
@@ -72,4 +76,7 @@ export const methods = {
   [VotingSystem.Woodall]: Woodall,
 } as const satisfies Record<VotingSystem, MethodCtor<string>>
 
+/**
+Any method class `methods` holds.
+*/
 export type Methods = (typeof methods)[keyof typeof methods]

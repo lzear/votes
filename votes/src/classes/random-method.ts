@@ -3,7 +3,7 @@ import { deepFreeze } from '../utils/freeze'
 import { Method } from './method'
 
 /**
-Voting method that involves some randomness in the computation in the winners.
+Voting method that draws its ranking at random.
 */
 export abstract class RandomMethod<C extends string> extends Method<C> {
   public static override readonly isRandom = true
@@ -17,6 +17,10 @@ export abstract class RandomMethod<C extends string> extends Method<C> {
   constructor(
     i: Partial<Profile<C>> & {
       candidates: readonly C[]
+      /**
+      Random number generator, giving numbers from 0 to 1 (default
+      `Math.random`). Pass `rngGenerator(seed)` for draws that repeat.
+      */
       rng?: (() => number) | undefined
     },
   ) {
@@ -25,10 +29,15 @@ export abstract class RandomMethod<C extends string> extends Method<C> {
     this.rng = i.rng ?? Math.random
   }
 
-  // Each candidate's chance to win.
+  /**
+  Each candidate's chance to win, from 0 to 1, summing to 1.
+  */
   public abstract probabilities(): ScoreObject<C>
 
-  // Drawn once: every call returns the same ranking.
+  /**
+  A ranking drawn at random with `rng`, once: every call returns the same
+  one.
+  */
   public ranking(): Ranking<C> {
     this._ranking ??= deepFreeze(this.draw())
     return this._ranking

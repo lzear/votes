@@ -67,7 +67,7 @@ who wins without `b`. Below the winners, it ranks by running again without
 them.
 
 ⚠️ Exponential in the number of candidates at worst: majority cycles through
-16 candidates take tens of milliseconds, through 20 seconds. `scores()`
+16 candidates take about a tenth of a second, through 20 a few seconds. `scores()`
 throws beyond `maxCandidates` (default 20, at most 30).
 
 #### Holliday & Pacuit: [Stable Voting](https://arxiv.org/abs/2108.00542)
@@ -75,10 +75,19 @@ throws beyond `maxCandidates` (default 20, at most 30).
 export class StableVoting<C extends string> extends MatrixScoreMethod<C> {
   public static readonly label = 'StableVoting'
 
+  /**
+  The most candidates `scores()` takes: the `maxCandidates` option.
+  */
   public readonly maxCandidates: number
 
   constructor(
-    i: (Matrix<C> | Profile<C>) & { maxCandidates?: number | undefined },
+    i: (Matrix<C> | Profile<C>) & {
+      /**
+      The most candidates `scores()` takes before it throws (default 20,
+      at most 30).
+      */
+      maxCandidates?: number | undefined
+    },
   ) {
     super(i)
     // Sets of candidates are 32-bit masks.

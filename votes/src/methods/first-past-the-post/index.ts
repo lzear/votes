@@ -3,6 +3,9 @@ import type { ScoreObject } from '../../types'
 import { firstChoices } from './iterate-first-choices'
 
 /**
+The most first choices wins. A first tier of several splits its vote evenly
+among them.
+
 #### Wikipedia: [First-past-the-post voting](https://en.wikipedia.org/wiki/First-past-the-post_voting)
 */
 export class FirstPastThePost<C extends string> extends BallotScoreMethod<C> {

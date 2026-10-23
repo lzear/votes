@@ -70,8 +70,11 @@ after them, in order. A round tie they leave goes out at once if no order of it
 changes the outcome; otherwise the count stops, and those who win in some order
 of breaking the ties tie first. The search for them gives up after 10,000 sets
 of candidates still in the race, or after 250,000 ballots read, since each set
-reads every distinct ballot. The count then stops on everyone left. Alone, a
-round method has no tiebreakers.
+reads every distinct ballot. The count then stops on everyone left. Checking
+whether a tie may go out at once tries at most 256 sets of it left, or 250,000
+ballots read; past that, the count stops on the tie, which only leaves the
+ranking below the winners coarser. Alone, a round method has no tiebreakers
+beyond its own, such as `BottomTwoRunoff`'s head-to-head.
 
 ```typescript
 import {
@@ -119,8 +122,12 @@ round method's step:
 
 ```typescript
 const [step] = new Election({
-  candidates,
-  ballots,
+  candidates: ['a', 'b', 'c'],
+  ballots: [
+    { ranking: [['a'], ['b'], ['c']], weight: 5 },
+    { ranking: [['b'], ['c'], ['a']], weight: 3 },
+    { ranking: [['c'], ['b'], ['a']], weight: 3 },
+  ],
   methods: [InstantRunoff, Borda],
 }).result().steps
 
@@ -227,8 +234,9 @@ is `Dictator` on ballots drawn in random order, by weight.
 `Baldwin` and `Nanson` take Borda scores from the pairwise matrix: the same as
 `Borda`'s when ballots rank everyone, and a Condorcet winner always wins.
 
-⚠️ `Kemeny` runs in O(n·2ⁿ) time and memory — slow beyond ~20 candidates, and
-throws beyond `maxCandidates` (default 20, at most 30).
+⚠️ `Kemeny` runs in O(n·2ⁿ) time and memory: 16 candidates take about a tenth of
+a second, 20 over a second. It throws beyond `maxCandidates` (default 20, at
+most 30).
 
 ⚠️ `StableVoting` runs in exponential time at worst — seconds when majority
 cycles span 20 candidates — and throws beyond `maxCandidates` (default 20, at
@@ -237,8 +245,8 @@ most 30). Below its winners, it ranks by running again without them;
 
 ⚠️ `RandomDictator`'s `probabilities()` runs in exponential time on ballots with
 ties. Each tie it explores reads every distinct ballot, and it throws past
-`maxReads` ballots read after the first tie (default 2,000,000, about a second);
-strict ballots explore the first tie alone. `ranking()` has no cap.
+`maxReads` ballots read after the first tie (default 2,000,000, well under a
+second); strict ballots explore the first tie alone. `ranking()` has no cap.
 
 `MajorityJudgment` reads a ballot's tiers as grades, best first (`grades`,
 default 6), and breaks ties one vote at a time: give it whole weights. A ballot
@@ -292,9 +300,9 @@ condorcetWinner({ candidates, ballots }) // who beats everyone else head-to-head
 toWeightedBallots([
   [['a'], ['b']],
   [['a'], ['b']],
-]) // one ballot per ranking
+]) // [{ ranking: [['a'], ['b']], weight: 2 }]
 groupBallots(ballots) // equal ballots merged, heaviest first
-normalizeBallots(ballots, candidates) // unknown and repeated candidates dropped, unranked ones tied last
+normalizeBallots(ballots, candidates) // unknown candidates and repeats dropped, unranked ones tied last
 scoresToRanking({ a: 2, b: 1 }) // [['a'], ['b']]
 rngGenerator('my-seed') // seeded RNG for random methods' `rng`
 ```
@@ -319,6 +327,10 @@ B > C > A * 2
 
 const text = stringifyCondorcetElectionFormat({ candidates, ballots })
 ```
+
+`stringifyCondorcetElectionFormat` writes weights as quantifiers (`* 3`), so
+they must be integers, and leaves each ballot's implicit last tier out; pass
+`{ implicitRanking: false }` as its second argument to write every tier.
 
 ## Documentation
 

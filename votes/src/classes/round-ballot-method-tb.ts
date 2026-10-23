@@ -25,8 +25,12 @@ export abstract class RoundBallotMethodTb<
     this.tieBreakers = input.tieBreakers ?? []
   }
 
-  // Restricts the Election's tiebreakers too, each as its own restrict()
-  // does: majority judgment keeps its grades.
+  /**
+  Return a new instance of the same method restricted to a subset of
+  candidates, as if only they ran. The methods after it in an `Election`
+  are restricted too, each as its own `restrict()` does: majority judgment
+  keeps its grades.
+  */
   public override restrict(candidates: readonly C[]): this {
     const method = super.restrict(candidates)
     method.tieBreakers = this.tieBreakers.map((t) => t.restrict(candidates))

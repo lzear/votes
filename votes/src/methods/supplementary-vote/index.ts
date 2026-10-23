@@ -29,10 +29,17 @@ ranking. The two agree when no ballot ranks past `preferences`.
 export class SupplementaryVote<C extends string> extends TwoRoundRunoff<C> {
   public static override readonly label = 'SupplementaryVote'
 
+  /**
+  How many places of each ballot count: the `preferences` option.
+  */
   public readonly preferences: number
 
   constructor(
     input: ConstructorParameters<typeof TwoRoundRunoff<C>>[0] & {
+      /**
+      How many places of each ballot count (default 2), a tier counting
+      whole if it starts within them.
+      */
       preferences?: number | undefined
     },
   ) {

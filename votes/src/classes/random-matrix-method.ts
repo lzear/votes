@@ -44,13 +44,22 @@ export abstract class RandomMatrixMethod<C extends string>
   private readonly _matrix: Matrix<C>
 
   constructor(
-    i: (Matrix<C> | Profile<C>) & { rng?: (() => number) | undefined },
+    i: (Matrix<C> | Profile<C>) & {
+      /**
+      Random number generator, giving numbers from 0 to 1 (default
+      `Math.random`). Pass `rngGenerator(seed)` for draws that repeat.
+      */
+      rng?: (() => number) | undefined
+    },
   ) {
     super(i)
 
     this._matrix = deepFreeze(toMatrix(i))
   }
 
+  /**
+  The matrix of duels: the one given, or the one the ballots make.
+  */
   get matrix(): Matrix<C> {
     return this._matrix
   }

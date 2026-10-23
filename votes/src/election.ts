@@ -8,12 +8,22 @@ import {
 import type { Profile, Ranking } from './types'
 import { deepFreeze, iterateRanking } from './utils'
 
+/**
+What one method of an `Election` did: the tiers it got, and those it left.
+*/
 export type StepResult<C extends string> = {
   /**
   The method's label: its `with()` option, or its class's.
   */
   readonly name: string
+  /**
+  The ranking the method started from: the previous step's `after`, or
+  every candidate tied for the first method.
+  */
   readonly before: Ranking<C>
+  /**
+  The ranking once the method re-ranked each tied tier of `before`.
+  */
   readonly after: Ranking<C>
   /**
   The method's run on each tier it ranked.
@@ -21,12 +31,29 @@ export type StepResult<C extends string> = {
   readonly runs: readonly (Run<C> & { readonly candidates: readonly C[] })[]
 }
 
+/**
+What `Election#result()` returns.
+*/
 export type ElectionResult<C extends string> = {
+  /**
+  The final ranking, after every method that ran.
+  */
   readonly ranking: Ranking<C>
+  /**
+  One step per method that ran, in order: once no tie is left, the
+  methods after do not run.
+  */
   readonly steps: readonly StepResult<C>[]
 }
 
+/**
+What `Election` takes: the input every method takes, and the methods.
+*/
 export type ElectionInput<C extends string> = Profile<C> & {
+  /**
+  At least one method: each class, or `Class.with(options)`. The first
+  ranks the candidates, each next one re-ranks the tiers still tied.
+  */
   methods: readonly [
     NoInfer<ElectionMethod<C>>,
     ...NoInfer<ElectionMethod<C>>[],
@@ -64,6 +91,10 @@ export class Election<C extends string> implements Ranker<C> {
     this.tiebreakers = after
   }
 
+  /**
+  The final ranking and each method's step, computed once: later calls
+  return the same frozen object.
+  */
   result(): ElectionResult<C> {
     if (this._result) return this._result
 
@@ -86,11 +117,17 @@ export class Election<C extends string> implements Ranker<C> {
     return this._result
   }
 
+  /**
+  The final ranking, after every method: `result().ranking`.
+  */
   ranking(): Ranking<C> {
     return this.result().ranking
   }
 
-  // The same election, every method restricted to `candidates`.
+  /**
+  The same election, every method restricted to `candidates`, as each
+  method's `restrict()` does.
+  */
   restrict(candidates: readonly C[]): Election<C> {
     const election = new Election(this.input)
     election.candidates = [...new Set(candidates)]

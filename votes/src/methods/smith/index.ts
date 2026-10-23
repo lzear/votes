@@ -13,6 +13,9 @@ const computeScores = <C extends string>(matrix: Matrix<C>): ScoreObject<C> => {
 }
 
 /**
+Ranks the Smith set first, everyone else tied below. Scores are 1 for the
+Smith set and 0 for the others.
+
 #### Wikipedia: [Smith's method](https://en.wikipedia.org/wiki/Smith_set#Smith's_method)
 */
 export class Smith<C extends string> extends MatrixScoreMethod<C> {

@@ -2,11 +2,20 @@
 import { MatrixScoreMethod } from '../../classes/matrix-score-method'
 import type { Matrix, Profile, ScoreObject } from '../../types'
 
+/**
+How `Minimax` measures a defeat of x by y: by the margin, y's votes over x
+minus x's over y (`Margins`, the default); by y's votes over x if y wins,
+else 0 (`WinningVotes`); or by y's votes over x, win or lose
+(`PairwiseOpposition`).
+*/
 export const MinimaxVariant = {
   WinningVotes: 'WINNING_VOTES',
   Margins: 'MARGINS',
   PairwiseOpposition: 'PAIRWISE_OPPOSITION',
 } as const
+/**
+How `Minimax` measures a defeat, such as `'MARGINS'`.
+*/
 export type MinimaxVariant =
   (typeof MinimaxVariant)[keyof typeof MinimaxVariant]
 
@@ -67,17 +76,33 @@ const computeWorstDefeats = <C extends string>(
   ) as Record<C, WorstDefeat<C>>
 
 /**
+The candidate whose worst defeat is the smallest wins. Scores are minus each
+candidate's worst defeat, measured by `variant`.
+
 #### Wikipedia: [Minimax Condorcet method](https://en.wikipedia.org/wiki/Minimax_Condorcet_method)
 */
 export class Minimax<C extends string> extends MatrixScoreMethod<C> {
   public static readonly label: string = 'Minimax'
 
+  /**
+  How it measures a defeat: the `variant` option.
+  */
   public readonly minimaxVariant: MinimaxVariant
+  /**
+  Whether it leaves tied duels out: the `excludeTies` option.
+  */
   public readonly excludeTies: boolean
 
   constructor(
     i: (Matrix<C> | Profile<C>) & {
+      /**
+      How to measure a defeat (default `MinimaxVariant.Margins`).
+      */
       variant?: MinimaxVariant | undefined
+      /**
+      Whether to leave tied duels out of a candidate's worst defeat
+      (default false), unless every duel of theirs is a tie.
+      */
       excludeTies?: boolean | undefined
     },
   ) {

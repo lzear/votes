@@ -3,7 +3,14 @@ import { deepFreeze } from '../utils/freeze'
 import { iterateRanking } from '../utils/iterate-ranking'
 import type { EntryOptions, PropsOf } from './tiebreaker'
 
+/**
+What every method and `Election` offer: a ranking, and the same on fewer
+candidates.
+*/
 export type Ranker<C extends string> = {
+  /**
+  Candidates in tiers, best first.
+  */
   ranking(): Ranking<C>
   /**
   The same ranker on a subset of its candidates.
@@ -35,7 +42,13 @@ export type MethodCtor<C extends string> = (new (
   input: Profile<C>,
 ) => Ranker<C>) & { readonly label: string }
 
+/**
+What every voting method extends.
+*/
 export abstract class Method<C extends string> implements Ranker<C> {
+  /**
+  Whether the method draws at random, using its `rng`.
+  */
   public static readonly isRandom: boolean = false
 
   /**
@@ -58,6 +71,9 @@ export abstract class Method<C extends string> implements Ranker<C> {
     return [this, options]
   }
 
+  /**
+  The candidates given, each once.
+  */
   public readonly candidates: readonly C[]
 
   constructor(candidates: readonly C[]) {
@@ -65,10 +81,11 @@ export abstract class Method<C extends string> implements Ranker<C> {
   }
 
   /**
-  Result of the vote. The first item lists the winners of the vote.
+  Result of the vote: candidates in tiers, best first, the first tier
+  listing the winners.
   
-  For example this ranking means that `Bear` wins, `Sheep` is second and `Lion` third
-  `[ [ 'Bear' ], [ 'Sheep' ], [ 'Lion' ] ]`
+  For example, `[['Bear'], ['Sheep'], ['Lion']]` means that Bear wins,
+  Sheep is second and Lion third.
   */
   public abstract ranking(): Ranking<C>
 

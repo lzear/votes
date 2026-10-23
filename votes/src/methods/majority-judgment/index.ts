@@ -93,6 +93,9 @@ export class MajorityJudgment<C extends string> extends Method<C> {
   private readonly gradeBallots: Ballot<C>[]
   private readonly unrankedLast: boolean
   private readonly countBlank: boolean
+  /**
+  Number of grades: the `grades` option.
+  */
   public readonly grades: number
 
   constructor(i: {
@@ -152,6 +155,9 @@ export class MajorityJudgment<C extends string> extends Method<C> {
     })
   }
 
+  /**
+  Each candidate's votes per grade, best grade first.
+  */
   public judgements(): Judgements<C> {
     this._judgements ??= deepFreeze(
       makeJudgement(this.candidates, this.gradeBallots, this.grades),
@@ -159,6 +165,10 @@ export class MajorityJudgment<C extends string> extends Method<C> {
     return this._judgements
   }
 
+  /**
+  Each candidate's majority grade, its median: an index into the grades,
+  0 the best, -1 without votes.
+  */
   public medians(): ScoreObject<C> {
     const judgements = this.judgements()
     return Object.fromEntries(

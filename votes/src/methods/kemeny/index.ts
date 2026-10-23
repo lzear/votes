@@ -79,19 +79,28 @@ const computeScores = <C extends string>({
 
 /**
 Scores are how many candidates each one ranks above, averaged over the
-best orders. Runs in O(n·2ⁿ) time and memory: slow beyond ~20 candidates.
-`scores()` throws beyond `maxCandidates` (default 20, at most 30): about 16
-keep it within tens of milliseconds.
+best orders. Runs in O(n·2ⁿ) time and memory: 16 candidates take about a
+tenth of a second, 20 over a second. `scores()` throws beyond
+`maxCandidates` (default 20, at most 30).
 
 #### Wikipedia: [Kemeny–Young method](https://en.wikipedia.org/wiki/Kemeny%E2%80%93Young_method)
 */
 export class Kemeny<C extends string> extends MatrixScoreMethod<C> {
   public static readonly label = 'Kemeny'
 
+  /**
+  The most candidates `scores()` takes: the `maxCandidates` option.
+  */
   public readonly maxCandidates: number
 
   constructor(
-    i: (Matrix<C> | Profile<C>) & { maxCandidates?: number | undefined },
+    i: (Matrix<C> | Profile<C>) & {
+      /**
+      The most candidates `scores()` takes before it throws (default 20,
+      at most 30).
+      */
+      maxCandidates?: number | undefined
+    },
   ) {
     super(i)
     // Subsets are 32-bit masks.

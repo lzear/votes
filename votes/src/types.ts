@@ -1,4 +1,12 @@
+/**
+One voter's ranking, or several voters' when they cast the same one.
+*/
 export type Ballot<C extends string> = {
+  /**
+  Candidates in tiers, best first: `[['a', 'b'], ['c']]` ranks a and b tied
+  first and c last. Unknown and repeated candidates are dropped, each
+  candidate kept at its first tier.
+  */
   ranking: readonly (readonly C[])[]
   /**
   How many voters cast it (default 1): finite, not negative.
@@ -6,8 +14,19 @@ export type Ballot<C extends string> = {
   weight?: number | undefined
 }
 
+/**
+Pairwise matrix, or matrix of duels, which matrix methods take instead of
+ballots.
+*/
 export type Matrix<C extends string> = {
+  /**
+  The candidates, each once, in the order of the rows and columns.
+  */
   candidates: readonly C[]
+  /**
+  `array[i][j]` is how many voters rank `candidates[i]` above
+  `candidates[j]`: finite numbers, n × n. The diagonal does not count.
+  */
   array: readonly (readonly number[])[]
 }
 
@@ -15,7 +34,13 @@ export type Matrix<C extends string> = {
 What every method takes.
 */
 export type Profile<C extends string> = {
+  /**
+  The candidates, a repeat counting once.
+  */
   candidates: readonly C[]
+  /**
+  The ballots cast. A ballot naming a non-candidate is a type error.
+  */
   ballots: readonly Ballot<NoInfer<C>>[]
   /**
   Whether candidates a ballot leaves unranked are appended to it as one
@@ -33,6 +58,9 @@ export type Profile<C extends string> = {
   countBlank?: boolean | undefined
 }
 
+/**
+A number per candidate: points behind a ranking, or chances to win.
+*/
 export type ScoreObject<C extends string> = Record<C, number>
 
 /**
@@ -76,6 +104,9 @@ export type TieBreakStep<C extends string> = {
   readonly remaining: readonly C[]
 }
 
+/**
+What a round decides: who stays in the race, and who goes out.
+*/
 export type QE<C extends string, I = undefined> = {
   /**
   Candidates still in the race after this round. In the last, the winners:
@@ -83,16 +114,31 @@ export type QE<C extends string, I = undefined> = {
   win in some order of breaking it.
   */
   readonly qualified: readonly C[]
+  /**
+  Candidates put out in this round.
+  */
   readonly eliminated: readonly C[]
+  /**
+  The count the round decides on, such as first choices.
+  */
   readonly scores: Readonly<ScoreObject<C>>
+  /**
+  Each tiebreaker the round ran on a tie, in order.
+  */
   readonly tieBreakSteps?: readonly TieBreakStep<C>[]
   /**
-  Method-specific detail about this round
+  Method-specific detail about this round, such as `CoombsInfo`.
   */
   readonly info?: I
 }
 
+/**
+One round of a method that eliminates, as `rounds()` lists them.
+*/
 export type Round<C extends string, I = undefined> = {
+  /**
+  Position among the rounds, from 0.
+  */
   readonly index: number
   /**
   Candidates still in the race.
@@ -100,6 +146,10 @@ export type Round<C extends string, I = undefined> = {
   readonly candidates: readonly C[]
 } & QE<C, I>
 
+/**
+Each method's id, such as `VotingSystem.Borda` (`'BORDA'`): `methods` maps it
+to the method's class.
+*/
 export const VotingSystem = {
   Approval: 'APPROVAL',
   AbsoluteMajority: 'ABSOLUTE_MAJORITY',
@@ -136,4 +186,7 @@ export const VotingSystem = {
   TwoRoundRunoff: 'TWO_ROUND_RUNOFF',
   Woodall: 'WOODALL',
 } as const
+/**
+A method's id, such as `'BORDA'`.
+*/
 export type VotingSystem = (typeof VotingSystem)[keyof typeof VotingSystem]

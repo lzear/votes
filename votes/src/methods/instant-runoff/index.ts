@@ -6,6 +6,9 @@ import { sum } from '../../utils/sum'
 import { firstChoices } from '../first-past-the-post/iterate-first-choices'
 
 /**
+Each round, the candidate with the fewest first choices among those left
+goes out, until one is left.
+
 #### Wikipedia: [Instant-runoff voting](https://en.wikipedia.org/wiki/Instant-runoff_voting)
 */
 export class InstantRunoff<C extends string> extends TbEliminateLast<C> {

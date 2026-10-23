@@ -17,7 +17,9 @@ export class CandidateOrder<C extends string> extends Method<C> {
     return this.candidates.map((c) => [c])
   }
 
-  // Keeps this order, whatever the order of `candidates`.
+  /**
+  The same order, among `candidates` only, whatever their order.
+  */
   restrict(candidates: readonly C[]): this {
     type Ctor = new (i: { candidates: readonly C[] }) => this
     const kept = new Set(candidates)

@@ -73,7 +73,7 @@ export abstract class BallotMethod<C extends string>
   }
 
   /**
-  Return a matrix of duels from all the ballots
+  The matrix of duels the ballots make, as `matrixFromBallots` builds it.
   */
   get matrix(): Matrix<C> {
     this._matrix ??= deepFreeze(
