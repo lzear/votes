@@ -1,10 +1,10 @@
 import { BallotMethod } from '../../classes/ballot-method'
-import type { Ballot } from '../../types'
+import type { Ballot, Ranking } from '../../types'
 import { weightOf } from '../../utils'
 
 // Splits each tier by the ballot, the candidates it leaves out last.
 export const refine = <C extends string>(
-  tiers: C[][],
+  tiers: Ranking<C>,
   ballot: Ballot<C>,
 ): C[][] => {
   const place = new Map(
@@ -23,10 +23,10 @@ export const refine = <C extends string>(
 // The first ballot's ranking, its ties broken by the next, and so on. Reads
 // `ballots` only until no tie is left.
 export const serialRanking = <C extends string>(
-  candidates: C[],
+  candidates: readonly C[],
   ballots: Iterable<Ballot<C>>,
-): C[][] => {
-  let tiers = candidates.length > 0 ? [candidates] : []
+): Ranking<C> => {
+  let tiers: Ranking<C> = candidates.length > 0 ? [candidates] : []
   for (const ballot of ballots) {
     if (tiers.length === candidates.length) break
     if (weightOf(ballot) > 0) tiers = refine(tiers, ballot)
@@ -44,7 +44,7 @@ deterministic last resort, or a serial dictatorship.
 export class Dictator<C extends string> extends BallotMethod<C> {
   public static readonly label = 'Dictator'
 
-  public ranking(): C[][] {
+  public ranking(): Ranking<C> {
     return serialRanking(this.candidates, this.ballots)
   }
 }

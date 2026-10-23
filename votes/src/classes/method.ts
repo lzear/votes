@@ -1,9 +1,10 @@
-import type { Profile, Round, ScoreObject } from '../types'
+import type { Profile, Ranking, Round, ScoreObject } from '../types'
+import { deepFreeze } from '../utils/freeze'
 import { iterateRanking } from '../utils/iterate-ranking'
 import type { EntryOptions, PropsOf } from './tiebreaker'
 
 export type Ranker<C extends string> = {
-  ranking(): C[][]
+  ranking(): Ranking<C>
   /**
   The same ranker on a subset of its candidates.
   */
@@ -15,7 +16,7 @@ export type Ranker<C extends string> = {
   /**
   Each round, for methods that eliminate.
   */
-  rounds?(): Round<C, unknown>[]
+  rounds?(): readonly Round<C, unknown>[]
   /**
   Each candidate's chance to win, for random methods.
   */
@@ -53,10 +54,10 @@ export abstract class Method<C extends string> implements Ranker<C> {
     return [this, options]
   }
 
-  public readonly candidates: C[]
+  public readonly candidates: readonly C[]
 
   constructor(candidates: readonly C[]) {
-    this.candidates = [...new Set(candidates)]
+    this.candidates = deepFreeze([...new Set(candidates)])
   }
 
   /**
@@ -65,7 +66,7 @@ export abstract class Method<C extends string> implements Ranker<C> {
   For example this ranking means that `Bear` wins, `Sheep` is second and `Lion` third
   `[ [ 'Bear' ], [ 'Sheep' ], [ 'Lion' ] ]`
   */
-  public abstract ranking(): C[][]
+  public abstract ranking(): Ranking<C>
 
   /**
   Return a new instance of the same method restricted to a subset of
@@ -82,7 +83,7 @@ export abstract class Method<C extends string> implements Ranker<C> {
   with how it ranks subsets — e.g. instant runoff orders losers by
   elimination time, while iterating re-elects a winner at every place.
   */
-  public iteratedRanking(): C[][] {
+  public iteratedRanking(): Ranking<C> {
     return iterateRanking(this)
   }
 }

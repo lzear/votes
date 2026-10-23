@@ -55,6 +55,7 @@ export type {
   Ballot,
   Matrix,
   Profile,
+  Ranking,
   Round,
   ScoreObject,
   TieBreakStep,

@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-export const shuffleArray = <T>(_array: T[], rng: () => number): T[] => {
+export const shuffleArray = <T>(
+  _array: readonly T[],
+  rng: () => number,
+): T[] => {
   const array = [..._array]
   let m = array.length
 

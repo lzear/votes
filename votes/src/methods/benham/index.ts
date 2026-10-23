@@ -9,7 +9,7 @@ Instant runoff that stops on a Condorcet winner among the candidates left.
 export class Benham<C extends string> extends InstantRunoffHybrid<C> {
   public static readonly label = 'Benham'
 
-  protected kept(race: C[]): C[] {
+  protected kept(race: readonly C[]): readonly C[] {
     const winner = condorcetWinner(this.duels(race))
     return winner === undefined ? race : [winner]
   }

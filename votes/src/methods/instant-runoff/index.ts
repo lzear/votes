@@ -13,7 +13,10 @@ export class InstantRunoff<C extends string> extends TbEliminateLast<C> {
 
   // Bulk exclusion: what the group passes among itself leaves it below the
   // others.
-  protected override canEliminateTogether(group: C[], race: C[]): boolean {
+  protected override canEliminateTogether(
+    group: readonly C[],
+    race: readonly C[],
+  ): boolean {
     const scores = firstChoices(this.ballots, race)
     const below = Math.min(
       ...race.filter((c) => !group.includes(c)).map((c) => scores[c]),
@@ -24,7 +27,7 @@ export class InstantRunoff<C extends string> extends TbEliminateLast<C> {
     )
   }
 
-  protected oneRound(candidates: C[]): {
+  protected oneRound(candidates: readonly C[]): {
     ranking: C[][]
     scores: ScoreObject<C>
   } {

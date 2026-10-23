@@ -1,4 +1,5 @@
 import type { Ranker } from '../classes/method'
+import type { Ranking } from '../types'
 
 /**
 Ranking built by repeated wins: take the ranker's winning tier, then re-run
@@ -9,8 +10,10 @@ Differs from `ranking()` whenever a method's full ranking disagrees with
 how it ranks subsets: round-based methods order losers by elimination time,
 and score methods can reshuffle once a winner's votes are gone.
 */
-export const iterateRanking = <C extends string>(ranker: Ranker<C>): C[][] => {
-  const tiers: C[][] = []
+export const iterateRanking = <C extends string>(
+  ranker: Ranker<C>,
+): Ranking<C> => {
+  const tiers: (readonly C[])[] = []
   let current = ranker
   for (;;) {
     const [winners = [], ...rest] = current.ranking()

@@ -17,7 +17,7 @@ const ranksAll = <C extends string>(
 // someone does.
 export const antiPluralityScores = <C extends string>(
   ballots: Ballot<C>[],
-  candidates: C[],
+  candidates: readonly C[],
   unrankedLast: boolean,
 ): ScoreObject<C> => {
   const running = new Set(candidates)

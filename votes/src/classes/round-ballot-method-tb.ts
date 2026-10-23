@@ -45,9 +45,9 @@ export abstract class RoundBallotMethodTb<
   Returns qualified survivors, eliminated losers, and a trace of each step.
   If unresolvable, all pending are returned as eliminated.
   */
-  protected resolvePending(pending: C[]): {
+  protected resolvePending(pending: readonly C[]): {
     qualified: C[]
-    eliminated: C[]
+    eliminated: readonly C[]
     tieBreakSteps: TieBreakStep<C>[]
   } {
     let current = pending
@@ -79,7 +79,7 @@ export abstract class RoundBallotMethodTb<
   }
 
   // One with a majority of the ballots cast: no round puts them out.
-  protected sureWinner(race: C[]): C | undefined {
+  protected sureWinner(race: readonly C[]): C | undefined {
     return majorityWinner(
       firstChoices(this.ballots, race),
       this.castBallots(race),
@@ -104,19 +104,22 @@ export abstract class TbEliminateOne<
   Those one of whom the method puts out of `race` next, after its
   tiebreakers: what `openTie` checks orders of elimination with.
   */
-  protected abstract nextOut(race: C[]): C[]
+  protected abstract nextOut(race: readonly C[]): readonly C[]
 
   /**
   Whether putting `group` out of `race` at once ends where every order of
   putting it out one at a time does.
   */
-  protected canEliminateTogether(group: C[], race: C[]): boolean {
+  protected canEliminateTogether(
+    group: readonly C[],
+    race: readonly C[],
+  ): boolean {
     if (this.exploring) return false
     const others = race.filter((c) => !group.includes(c))
     const seen = new Set<string>()
     const most = Math.min(MAX_ORDERS, MAX_READS / this.ballots.length)
     // Whether those put out of what is left are all in `left`, until gone.
-    const safe = (left: C[]): boolean => {
+    const safe = (left: readonly C[]): boolean => {
       const key = this.raceKey(left)
       if (left.length === 0 || seen.has(key)) return true
       seen.add(key)
@@ -133,7 +136,10 @@ export abstract class TbEliminateOne<
   /**
   `group`, a tie the tiebreakers leave, as open when its order matters.
   */
-  protected openTie(group: C[], race: C[]): { open?: C[] } {
+  protected openTie(
+    group: readonly C[],
+    race: readonly C[],
+  ): { open?: readonly C[] } {
     return group.length > 1 &&
       (group.length === race.length ||
         !this.merged(() => this.canEliminateTogether(group, race)))
@@ -153,16 +159,16 @@ export abstract class TbEliminateLast<
   I = undefined,
 > extends TbEliminateOne<C, I> {
   protected abstract oneRound(
-    candidates: C[],
+    candidates: readonly C[],
     index: number,
   ): { ranking: C[][]; scores: ScoreObject<C> }
 
-  protected override nextOut(race: C[]): C[] {
+  protected override nextOut(race: readonly C[]): readonly C[] {
     const last = this.oneRound(race, 0).ranking.at(-1) ?? []
     return last.length > 1 ? this.resolvePending(last).eliminated : last
   }
 
-  protected round(candidates: C[], index: number): Step<C, I> {
+  protected round(candidates: readonly C[], index: number): Step<C, I> {
     const { ranking, scores } = this.oneRound(candidates, index)
     const qualified = ranking.slice(0, -1).flat()
     const lastTier = ranking.at(-1) ?? []

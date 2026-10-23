@@ -1,4 +1,5 @@
-import type { Profile, ScoreObject } from '../types'
+import type { Profile, Ranking, ScoreObject } from '../types'
+import { deepFreeze } from '../utils/freeze'
 import { BallotMethod } from './ballot-method'
 import type { Ranker } from './method'
 
@@ -8,7 +9,7 @@ export abstract class RandomBallotMethod<C extends string>
 {
   public static override readonly isRandom = true
 
-  private _ranking?: C[][]
+  private _ranking?: Ranking<C>
   protected readonly rng: () => number
 
   constructor(i: Profile<C> & { rng?: undefined | (() => number) }) {
@@ -21,10 +22,10 @@ export abstract class RandomBallotMethod<C extends string>
   public abstract probabilities(): ScoreObject<C>
 
   // Drawn once: every call returns the same ranking.
-  public ranking(): C[][] {
-    this._ranking ??= this.draw()
+  public ranking(): Ranking<C> {
+    this._ranking ??= deepFreeze(this.draw())
     return this._ranking
   }
 
-  protected abstract draw(): C[][]
+  protected abstract draw(): Ranking<C>
 }

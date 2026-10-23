@@ -1,4 +1,4 @@
-import type { Profile, Round, ScoreObject } from '../types'
+import type { Profile, Ranking, Round, ScoreObject } from '../types'
 import { completeRanking } from '../utils/normalize'
 import type { MethodCtor, Ranker } from './method'
 
@@ -42,14 +42,14 @@ A ranking of tied candidates, and what the method behind it reports.
 @inline
 */
 export type Run<C extends string> = {
-  ranking: C[][]
-  scores?: ScoreObject<C>
-  rounds?: Round<C, unknown>[]
+  readonly ranking: Ranking<C>
+  readonly scores?: Readonly<ScoreObject<C>>
+  readonly rounds?: readonly Round<C, unknown>[]
 }
 
 export type Tiebreaker<C extends string> = {
   name: string
-  run: (tied: C[]) => Run<C>
+  run: (tied: readonly C[]) => Run<C>
 }
 
 // A tiebreaker backed by a method, which narrows along with it.
@@ -70,7 +70,7 @@ const fromMethod = <C extends string>(
 ): MethodTiebreaker<C> => {
   let method: Ranker<C> | undefined
   const get = () => (method ??= build())
-  const run = (tied: C[]): Run<C> => {
+  const run = (tied: readonly C[]): Run<C> => {
     const m = meta.mode === 'full' ? get() : get().restrict(tied)
     // A tied candidate the method does not rank stays, tied last.
     const ranking = completeRanking(m.ranking(), tied)

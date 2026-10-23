@@ -1,5 +1,5 @@
 import { Method } from '../../classes/method'
-import type { Profile } from '../../types'
+import type { Profile, Ranking } from '../../types'
 
 /**
 Ranks the candidates in the order given, regardless of the ballots: a
@@ -13,7 +13,7 @@ export class CandidateOrder<C extends string> extends Method<C> {
     super(i.candidates)
   }
 
-  public ranking(): C[][] {
+  public ranking(): Ranking<C> {
     return this.candidates.map((c) => [c])
   }
 

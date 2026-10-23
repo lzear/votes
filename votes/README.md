@@ -55,6 +55,10 @@ Every method takes this same `{ candidates, ballots, unrankedLast, countBlank }`
 input. Matrix methods (see the table below) also take a pairwise matrix
 `{ candidates, array }`, such as `matrixFromBallots(ballots, candidates)`.
 
+Results are readonly. A method caches some of them, such as `rounds()` and
+`Election#result()`, and freezes them, so copy a result before changing it:
+`ranking().map((tier) => [...tier])`.
+
 ## Ties: chaining methods
 
 `Election` chains methods on one input. The first ranks the candidates; each

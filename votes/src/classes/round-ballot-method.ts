@@ -1,5 +1,5 @@
-import type { Ballot, QE, Round } from '../types'
-import { groupBallots } from '../utils'
+import type { Ballot, QE, Ranking, Round } from '../types'
+import { deepFreeze, groupBallots } from '../utils'
 import { BallotMethod } from './ballot-method'
 import type { Ranker } from './method'
 
@@ -7,7 +7,7 @@ import type { Ranker } from './method'
 A round, and with `open`, the tie the tiebreakers leave when its order
 decides the outcome: one of it goes out next, but nothing says which.
 */
-export type Step<C extends string, I> = QE<C, I> & { open?: C[] }
+export type Step<C extends string, I> = QE<C, I> & { open?: readonly C[] }
 
 // Races to try at most when finding who wins in some order of breaking ties.
 const MAX_RACES = 10_000
@@ -25,7 +25,7 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
   extends BallotMethod<C>
   implements Ranker<C>
 {
-  private _rounds?: Round<C, I>[]
+  private _rounds?: readonly Round<C, I>[]
 
   private _twins?: Map<C, C>
 
@@ -39,15 +39,18 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
   breaking the ties left; or all of `race` past `MAX_RACES` races or
   `MAX_READS` ballots read. Twins win alike, so results hold one of each.
   */
-  private possibleWinners(race: C[], open: C[]): C[] {
+  private possibleWinners(
+    race: readonly C[],
+    open: readonly C[],
+  ): readonly C[] {
     const memo = new Map<string, ReadonlySet<C>>()
     let budget = Math.min(
       MAX_RACES,
       Math.floor(MAX_READS / this.ballots.length),
     )
-    const branch = (r: C[], out: C[]): C[] =>
+    const branch = (r: readonly C[], out: readonly C[]): C[] =>
       this.oneEach(out).flatMap((c) => [...visit(r.filter((x) => x !== c))])
-    const winnersOf = (r: C[]): C[] => {
+    const winnersOf = (r: readonly C[]): C[] => {
       const sure = this.sureWinner(r)
       if (sure !== undefined) return [this.twin(sure)]
       const step = this.round(r, 0)
@@ -56,7 +59,7 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
         ? [...visit(step.qualified)]
         : step.eliminated.map((c) => this.twin(c))
     }
-    const visit = (r: C[]): ReadonlySet<C> => {
+    const visit = (r: readonly C[]): ReadonlySet<C> => {
       if (r.length <= 1 || budget <= 0)
         return new Set(r.map((c) => this.twin(c)))
       const key = this.raceKey(r)
@@ -112,7 +115,7 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
   }
 
   // `race` as how many of each twin it holds.
-  protected raceKey(race: C[]): string {
+  protected raceKey(race: readonly C[]): string {
     const counts = new Map<C, number>()
     for (const c of race)
       counts.set(this.twin(c), (counts.get(this.twin(c)) ?? 0) + 1)
@@ -125,11 +128,11 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
   }
 
   // One of each twin in `group`.
-  protected oneEach(group: C[]): C[] {
+  protected oneEach(group: readonly C[]): C[] {
     return new Map(group.map((c) => [this.twin(c), c])).values().toArray()
   }
 
-  public rounds(): Round<C, I>[] {
+  public rounds(): readonly Round<C, I>[] {
     if (this._rounds) return this._rounds
     let inRace = this.candidates
     const rounds: Round<C, I>[] = []
@@ -152,11 +155,11 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
       rounds.push({ index, candidates: inRace, ...step })
       inRace = step.qualified
     }
-    this._rounds = rounds
-    return rounds
+    this._rounds = deepFreeze(rounds)
+    return this._rounds
   }
 
-  public ranking(): C[][] {
+  public ranking(): Ranking<C> {
     const rounds = this.rounds()
     const winners = rounds.at(-1)?.qualified ?? this.candidates
     return [
@@ -166,11 +169,11 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
   }
 
   // Only ever called with two candidates or more.
-  protected abstract round(candidates: C[], index: number): Step<C, I>
+  protected abstract round(candidates: readonly C[], index: number): Step<C, I>
 
   /**
   The candidate who wins from `race` whatever order ties break in, if
   known.
   */
-  protected abstract sureWinner(race: C[]): C | undefined
+  protected abstract sureWinner(race: readonly C[]): C | undefined
 }

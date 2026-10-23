@@ -8,7 +8,7 @@ import { config } from '../../utils/config'
 // depth 1, first choices.
 const placedWithin = <C extends string>(
   ballots: Ballot<C>[],
-  candidates: C[],
+  candidates: readonly C[],
   depth: number,
 ): ScoreObject<C> => {
   const scores = scoresZero(candidates)

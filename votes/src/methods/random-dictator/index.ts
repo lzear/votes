@@ -1,5 +1,5 @@
 import { RandomBallotMethod } from '../../classes/random-ballot-method'
-import type { Ballot, ScoreObject } from '../../types'
+import type { Ballot, Ranking, ScoreObject } from '../../types'
 import { nonBlank, scoresZero, totalBallotsWeight, weightOf } from '../../utils'
 import { sum } from '../../utils/sum'
 import { serialRanking } from '../dictator'
@@ -34,7 +34,7 @@ function* drawOrder<C extends string>(
 type Places = { place: number[]; weight: number }
 
 // The candidates of `tier` that `place` ranks highest.
-const topOf = (tier: number[], place: number[]): number[] => {
+const topOf = (tier: readonly number[], place: number[]): number[] => {
   let top: number[] = []
   let best = Infinity
   for (const c of tier) {
@@ -52,12 +52,12 @@ const topOf = (tier: number[], place: number[]): number[] => {
 // `maxReads` ballots read after the first tie, it throws.
 const winChances = (
   ballots: Places[],
-  candidates: number[],
+  candidates: readonly number[],
   maxReads: number,
 ): Map<number, number> => {
   const memo = new Map<string, Map<number, number>>()
   let reads = -ballots.length
-  const chancesFrom = (tier: number[]): Map<number, number> => {
+  const chancesFrom = (tier: readonly number[]): Map<number, number> => {
     if (tier.length === 1) return new Map(tier.map((c) => [c, 1]))
     const key = tier.join(',')
     const known = memo.get(key)
@@ -142,7 +142,7 @@ export class RandomDictator<C extends string> extends RandomBallotMethod<C> {
     return scores
   }
 
-  protected draw(): C[][] {
+  protected draw(): Ranking<C> {
     const ballots = nonBlank(this.ballots, this.candidates)
     return serialRanking(this.candidates, drawOrder(ballots, this.rng))
   }

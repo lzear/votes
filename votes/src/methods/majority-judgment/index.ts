@@ -1,24 +1,26 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
 import { Method } from '../../classes/method'
-import type { Ballot, Matrix, ScoreObject } from '../../types'
-import { matrixFromBallots, weightOf } from '../../utils'
+import type { Ballot, Matrix, Ranking, ScoreObject } from '../../types'
+import { deepFreeze, matrixFromBallots, weightOf } from '../../utils'
 import { config } from '../../utils/config'
 import { sum } from '../../utils/sum'
 
 /**
 Votes per grade, best grade first.
 */
-export type Judgements<C extends string> = Record<C, number[]>
+export type Judgements<C extends string> = Readonly<
+  Record<C, readonly number[]>
+>
 
 const makeJudgement = <C extends string>(
-  candidates: C[],
+  candidates: readonly C[],
   ballots: Ballot<C>[],
   grades: number,
 ): Judgements<C> => {
   const judgements = Object.fromEntries(
     candidates.map((c) => [c, Array.from({ length: grades }, () => 0)]),
-  ) as Judgements<C>
+  ) as Record<C, number[]>
 
   for (const ballot of ballots)
     for (const [grade, rank] of ballot.ranking.entries())
@@ -32,7 +34,7 @@ The majority grade: the best grade a majority awards, i.e. the first whose
 running total passes half the votes. With an even split that is the worse of
 the two middle grades. -1 without votes.
 */
-export const getMedian = (judgement: number[]): number => {
+export const getMedian = (judgement: readonly number[]): number => {
   const half = sum(judgement) / 2
   let total = 0
   return judgement.findIndex((w) => (total += w) > half + config.EPSILON)
@@ -43,7 +45,7 @@ Balinski–Laraki's majority value: the majority grade, then the majority
 grade once one vote at that grade is taken away, and so on, as runs of
 [grade, votes it lasts].
 */
-const majorityValue = (judgement: number[]): [number, number][] => {
+const majorityValue = (judgement: readonly number[]): [number, number][] => {
   const w = [...judgement]
   const runs: [number, number][] = []
   for (let g = getMedian(w); g !== -1; g = getMedian(w)) {
@@ -151,10 +153,8 @@ export class MajorityJudgment<C extends string> extends Method<C> {
   }
 
   public judgements(): Judgements<C> {
-    this._judgements ??= makeJudgement(
-      this.candidates,
-      this.gradeBallots,
-      this.grades,
+    this._judgements ??= deepFreeze(
+      makeJudgement(this.candidates, this.gradeBallots, this.grades),
     )
     return this._judgements
   }
@@ -166,7 +166,7 @@ export class MajorityJudgment<C extends string> extends Method<C> {
     ) as ScoreObject<C>
   }
 
-  public ranking(): C[][] {
+  public ranking(): Ranking<C> {
     const judgements = this.judgements()
     const values = new Map(
       this.candidates.map((c) => [c, majorityValue(judgements[c])]),
@@ -202,10 +202,8 @@ export class MajorityJudgment<C extends string> extends Method<C> {
   }
 
   get matrix(): Matrix<C> {
-    this._matrix ??= matrixFromBallots(
-      this.gradeBallots,
-      this.candidates,
-      this.unrankedLast,
+    this._matrix ??= deepFreeze(
+      matrixFromBallots(this.gradeBallots, this.candidates, this.unrankedLast),
     )
     return this._matrix
   }

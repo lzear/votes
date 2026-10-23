@@ -1,5 +1,5 @@
 import { BallotScoreMethod } from '../../classes/ballot-score-method'
-import type { Ballot, ScoreObject } from '../../types'
+import type { Ballot, Ranking, ScoreObject } from '../../types'
 import { totalBallotsWeight } from '../../utils'
 import { config } from '../../utils/config'
 import { firstChoices } from '../first-past-the-post/iterate-first-choices'
@@ -35,7 +35,7 @@ export class AbsoluteMajority<C extends string> extends BallotScoreMethod<C> {
     return majorityWinner(this.scores(), this.castBallots(this.candidates))
   }
 
-  public override ranking(): C[][] {
+  public override ranking(): Ranking<C> {
     const top = this.winner()
     const tiers =
       top === undefined

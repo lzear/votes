@@ -15,7 +15,7 @@ absolute majority of first choices — which can happen on the very last
 round, so this can't be inferred from round position alone.
 */
 export type CoombsInfo = {
-  resolution: 'majority' | 'elimination'
+  readonly resolution: 'majority' | 'elimination'
 }
 
 /**
@@ -24,7 +24,7 @@ export type CoombsInfo = {
 export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {
   public static readonly label = 'Coombs'
 
-  protected oneRound(candidates: C[]): {
+  protected oneRound(candidates: readonly C[]): {
     ranking: C[][]
     scores: ScoreObject<C>
   } {
@@ -37,7 +37,7 @@ export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {
   }
 
   // A majority ends the count, everyone else out at once.
-  protected override nextOut(race: C[]): C[] {
+  protected override nextOut(race: readonly C[]): readonly C[] {
     const winner = majorityWinner(
       firstChoices(this.ballots, race),
       this.castBallots(race),

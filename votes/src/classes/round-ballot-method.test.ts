@@ -25,7 +25,9 @@ const orders = (candidates: string[]): string[][] =>
       )
 
 // The method's ranking, which must take under two seconds.
-const quickRanking = (method: { ranking: () => string[][] }) => {
+const quickRanking = (method: {
+  ranking: () => readonly (readonly string[])[]
+}) => {
   const start = performance.now()
   const ranking = method.ranking()
   expect(performance.now() - start).toBeLessThan(2000)

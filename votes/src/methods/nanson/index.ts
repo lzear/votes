@@ -8,7 +8,7 @@ import { matrixBordaScores } from '../borda'
 Round-level detail specific to Nanson: the Borda-score cutoff used to eliminate candidates.
 */
 export type NansonInfo = {
-  average: number
+  readonly average: number
 }
 
 /**
@@ -24,7 +24,7 @@ export class Nanson<C extends string> extends RoundBallotMethodTb<
 > {
   public static readonly label = 'Nanson'
 
-  protected round(candidates: C[]): QE<C, NansonInfo> {
+  protected round(candidates: readonly C[]): QE<C, NansonInfo> {
     const scores = matrixBordaScores(this.matrix, this.ballots, candidates)
     const values = Object.values<number>(scores)
     const avg = sum(values) / values.length

@@ -1,4 +1,4 @@
-import type { ScoreObject } from '../types'
+import type { Ranking, ScoreObject } from '../types'
 import { scoresToRanking } from '../utils'
 import { Method, type Ranker } from './method'
 
@@ -17,7 +17,7 @@ export abstract class ScoreMethod<C extends string>
 
   public abstract scores(): ScoreObject<C>
 
-  public ranking(): C[][] {
+  public ranking(): Ranking<C> {
     this._scores ??= this.scores()
     return scoresToRanking(this._scores)
   }

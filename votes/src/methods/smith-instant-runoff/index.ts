@@ -13,7 +13,7 @@ export class SmithInstantRunoff<
 
   private smith?: ReadonlySet<C>
 
-  protected kept(race: C[]): C[] {
+  protected kept(race: readonly C[]): readonly C[] {
     this.smith ??= new Set(findSmithSet(this.matrix).candidates)
     return race.filter((c) => this.smith?.has(c))
   }

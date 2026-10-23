@@ -5,7 +5,7 @@ import { scoresZero, weightOf } from '../../utils'
 // normalized against a superset of them work as they are.
 export const iterateFirstChoices = <C extends string>(
   ballots: Ballot<C>[],
-  candidates: C[],
+  candidates: readonly C[],
   computeBallotScore: (rank: string[]) => number,
 ): ScoreObject<C> => {
   const result = scoresZero(candidates)
@@ -24,6 +24,6 @@ export const iterateFirstChoices = <C extends string>(
 
 export const firstChoices = <C extends string>(
   ballots: Ballot<C>[],
-  candidates: C[],
+  candidates: readonly C[],
 ): ScoreObject<C> =>
   iterateFirstChoices(ballots, candidates, (rank) => 1 / rank.length)

@@ -1,4 +1,5 @@
 import type { Matrix, Profile, ScoreObject } from '../types'
+import { deepFreeze } from '../utils/freeze'
 import { subMatrix, toMatrix } from '../utils/make-matrix'
 import { shuffleArray } from '../utils/shuffle-array'
 import { sum } from '../utils/sum'
@@ -45,7 +46,7 @@ export abstract class RandomMatrixMethod<C extends string>
   constructor(i: (Matrix<C> | Profile<C>) & { rng?: () => number }) {
     super(i)
 
-    this._matrix = toMatrix(i)
+    this._matrix = deepFreeze(toMatrix(i))
   }
 
   get matrix(): Matrix<C> {

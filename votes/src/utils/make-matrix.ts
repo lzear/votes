@@ -87,7 +87,7 @@ export const toMatrix = <C extends string>(
     throw new RangeError(
       `A matrix of ${n} distinct candidates should be ${n} × ${n} finite numbers`,
     )
-  return { array, candidates }
+  return { array: array.map((row) => [...row]), candidates: [...candidates] }
 }
 
 /**

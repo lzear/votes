@@ -24,7 +24,7 @@ export class BottomTwoRunoff<C extends string> extends TbEliminateOne<C> {
   // The bottom two of `race` on first choices, or everyone tied with them:
   // picking two of a tie by list order would make the result depend on the
   // order candidates are given in. Ties split by first choices among the tied.
-  private bottomTwo(race: C[]): C[] {
+  private bottomTwo(race: readonly C[]): C[] {
     const ranked = scoresToRanking(firstChoices(this.ballots, race)).flatMap(
       (tier) =>
         tier.length <= 1
@@ -38,18 +38,18 @@ export class BottomTwoRunoff<C extends string> extends TbEliminateOne<C> {
   protected override builtInTieBreakers(): Tiebreaker<C>[] {
     // First choices on the ballots as they are: a FirstPastThePost would
     // re-normalize them every round.
-    const run = (tied: C[]) => {
+    const run = (tied: readonly C[]) => {
       const scores = firstChoices(this.ballots, tied)
       return { ranking: scoresToRanking(scores), scores }
     }
     return [{ name: 'FirstPastThePost', run }]
   }
 
-  protected override nextOut(race: C[]): C[] {
+  protected override nextOut(race: readonly C[]): readonly C[] {
     return this.resolvePending(this.bottomTwo(race)).eliminated
   }
 
-  protected round(candidates: C[]): Step<C, undefined> {
+  protected round(candidates: readonly C[]): Step<C, undefined> {
     const pending = new Set(this.bottomTwo(candidates))
     const {
       qualified: q2,

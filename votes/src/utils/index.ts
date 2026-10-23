@@ -1,4 +1,5 @@
 export { condorcetWinner, findSmithSet, smithSet } from './condorcet'
+export { deepFreeze } from './freeze'
 export { iterateRanking } from './iterate-ranking'
 export { makeAntisymmetric, matrixFromBallots } from './make-matrix'
 export {

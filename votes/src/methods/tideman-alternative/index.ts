@@ -42,7 +42,7 @@ export class TidemanAlternative<
     this.topSet = input.topSet ?? 'smith'
   }
 
-  protected kept(race: C[]): C[] {
+  protected kept(race: readonly C[]): readonly C[] {
     const duels = this.duels(race)
     return this.topSet === 'schwartz'
       ? schwartzSet(duels)

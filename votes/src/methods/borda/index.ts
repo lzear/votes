@@ -8,7 +8,7 @@ import { sum } from '../../utils/sum'
 // superset of them work as they are.
 export const bordaScores = <C extends string>(
   ballots: Ballot<C>[],
-  candidates: C[],
+  candidates: readonly C[],
 ): ScoreObject<C> => {
   const scores = scoresZero(candidates)
   const running = new Set(candidates)
@@ -36,7 +36,7 @@ always scores above average even when they don't.
 export const matrixBordaScores = <C extends string>(
   matrix: Matrix<C>,
   ballots: Ballot<C>[],
-  candidates: C[],
+  candidates: readonly C[],
 ): ScoreObject<C> => {
   const voters = totalBallotsWeight(nonBlank(ballots, candidates))
   const { array } = makeAntisymmetric(subMatrix(matrix, candidates))

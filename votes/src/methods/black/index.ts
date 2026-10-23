@@ -1,5 +1,5 @@
 import { BallotScoreMethod } from '../../classes/ballot-score-method'
-import type { ScoreObject } from '../../types'
+import type { Ranking, ScoreObject } from '../../types'
 import { findSmithSet } from '../../utils'
 import { bordaScores } from '../borda'
 
@@ -16,7 +16,7 @@ export class Black<C extends string> extends BallotScoreMethod<C> {
     return bordaScores(this.ballots, this.candidates)
   }
 
-  public override ranking(): C[][] {
+  public override ranking(): Ranking<C> {
     const ranking = super.ranking()
     // A Smith set of one is a Condorcet winner.
     const [winner, ...others] = findSmithSet(this.matrix).candidates

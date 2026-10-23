@@ -7,8 +7,8 @@ import { firstChoices } from '../first-past-the-post/iterate-first-choices'
 // Who gets through a cut: those the tiebreakers settle, and `spots` of the
 // tie they leave at it.
 type Cut<C extends string> = {
-  through: C[]
-  tied: C[]
+  through: readonly C[]
+  tied: readonly C[]
   spots: number
 }
 
@@ -29,7 +29,11 @@ export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
 
   // The best `k` of `tied`, found by eliminating its bottom with the
   // tiebreakers.
-  private narrow(tied: C[], k: number, steps: TieBreakStep<C>[]): Cut<C> {
+  private narrow(
+    tied: readonly C[],
+    k: number,
+    steps: TieBreakStep<C>[],
+  ): Cut<C> {
     if (tied.length <= k) return { through: tied, tied: [], spots: 0 }
     const { qualified, eliminated, tieBreakSteps } = this.resolvePending(tied)
     steps.push(...tieBreakSteps)
@@ -40,7 +44,10 @@ export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
   }
 
   // The best `k` candidates on first choices.
-  private top(candidates: C[], k: number): { round: QE<C>; cut: Cut<C> } {
+  private top(
+    candidates: readonly C[],
+    k: number,
+  ): { round: QE<C>; cut: Cut<C> } {
     const scores = firstChoices(this.ballots, candidates)
     let cut: Cut<C> = { through: [], tied: [], spots: 0 }
     const tieBreakSteps: TieBreakStep<C>[] = []
@@ -62,7 +69,7 @@ export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
   }
 
   // Those who win the runoff of some pair that breaking the cut gives.
-  private openRunoff(finalists: C[]): QE<C> {
+  private openRunoff(finalists: readonly C[]): QE<C> {
     const { through, tied, spots } = this.cut
     const pairs =
       spots === 1
@@ -78,7 +85,7 @@ export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
     }
   }
 
-  protected round(candidates: C[], index: number): QE<C> {
+  protected round(candidates: readonly C[], index: number): QE<C> {
     // Runoff winners tied, after eliminating those below them.
     if (index > 1)
       return {

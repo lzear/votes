@@ -5,25 +5,25 @@ import {
   type Run,
   tiebreaker,
 } from './classes/tiebreaker'
-import type { Profile } from './types'
-import { iterateRanking } from './utils'
+import type { Profile, Ranking } from './types'
+import { deepFreeze, iterateRanking } from './utils'
 
 export type StepResult<C extends string> = {
   /**
   The method's label: its `with()` option, or its class's.
   */
-  name: string
-  before: C[][]
-  after: C[][]
+  readonly name: string
+  readonly before: Ranking<C>
+  readonly after: Ranking<C>
   /**
   The method's run on each tier it ranked.
   */
-  runs: (Run<C> & { candidates: C[] })[]
+  readonly runs: readonly (Run<C> & { readonly candidates: readonly C[] })[]
 }
 
 export type ElectionResult<C extends string> = {
-  ranking: C[][]
-  steps: StepResult<C>[]
+  readonly ranking: Ranking<C>
+  readonly steps: readonly StepResult<C>[]
 }
 
 export type ElectionInput<C extends string> = Profile<C> & {
@@ -49,7 +49,7 @@ new Election({
 */
 export class Election<C extends string> implements Ranker<C> {
   private readonly input: ElectionInput<C>
-  private candidates: C[]
+  private candidates: readonly C[]
   private tiebreakers: MethodTiebreaker<C>[]
   private _result?: ElectionResult<C>
 
@@ -71,7 +71,7 @@ export class Election<C extends string> implements Ranker<C> {
     let current = this.candidates.length > 0 ? [this.candidates] : []
     for (const { name, run } of this.tiebreakers) {
       if (current.every((tier) => tier.length <= 1)) break
-      const runs: StepResult<C>['runs'] = []
+      const runs: StepResult<C>['runs'][number][] = []
       const after = current.flatMap((tier) => {
         if (tier.length <= 1) return [tier]
         const r = { candidates: tier, ...run(tier) }
@@ -82,11 +82,11 @@ export class Election<C extends string> implements Ranker<C> {
       current = after
     }
 
-    this._result = { ranking: current, steps }
+    this._result = deepFreeze({ ranking: current, steps })
     return this._result
   }
 
-  ranking(): C[][] {
+  ranking(): Ranking<C> {
     return this.result().ranking
   }
 
@@ -103,7 +103,7 @@ export class Election<C extends string> implements Ranker<C> {
   winning tier, then re-run the whole election restricted to the remaining
   candidates for the next place, and so on. See `Method#iteratedRanking`.
   */
-  iteratedRanking(): C[][] {
+  iteratedRanking(): Ranking<C> {
     return iterateRanking(this)
   }
 }

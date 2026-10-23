@@ -36,6 +36,12 @@ export type Profile<C extends string> = {
 export type ScoreObject<C extends string> = Record<C, number>
 
 /**
+Candidates in tiers, best first: each tier lists candidates tied together.
+A copy of one can be changed: results are readonly, and cached ones frozen.
+*/
+export type Ranking<C extends string> = readonly (readonly C[])[]
+
+/**
 Trace of one tiebreaker's work within a round.
 */
 export type TieBreakStep<C extends string> = {
@@ -43,31 +49,31 @@ export type TieBreakStep<C extends string> = {
   Position among the round's tiebreakers: the method's built-in ones, then
   the `Election` methods after it.
   */
-  index: number
+  readonly index: number
   /**
   The tiebreaker's label: its `with()` option, or its class's.
   */
-  name: string
+  readonly name: string
   /**
   Candidates that were tied going into this step.
   */
-  candidates: C[]
+  readonly candidates: readonly C[]
   /**
   Full ranking produced by the tiebreaker on `candidates`.
   */
-  ranking: C[][]
+  readonly ranking: Ranking<C>
   /**
   Scores produced by the tiebreaker (when the method supports scores()).
   */
-  scores?: Partial<Record<C, number>>
+  readonly scores?: Readonly<Partial<Record<C, number>>>
   /**
   Candidates promoted out of the tie (upper tiers of `ranking`).
   */
-  resolved: C[]
+  readonly resolved: readonly C[]
   /**
   Candidates still tied after this step (last tier of `ranking`).
   */
-  remaining: C[]
+  readonly remaining: readonly C[]
 }
 
 export type QE<C extends string, I = undefined> = {
@@ -76,22 +82,22 @@ export type QE<C extends string, I = undefined> = {
   several when it stops on a tie whose order decides who wins, those who
   win in some order of breaking it.
   */
-  qualified: C[]
-  eliminated: C[]
-  scores: ScoreObject<C>
-  tieBreakSteps?: TieBreakStep<C>[]
+  readonly qualified: readonly C[]
+  readonly eliminated: readonly C[]
+  readonly scores: Readonly<ScoreObject<C>>
+  readonly tieBreakSteps?: readonly TieBreakStep<C>[]
   /**
   Method-specific detail about this round
   */
-  info?: I
+  readonly info?: I
 }
 
 export type Round<C extends string, I = undefined> = {
-  index: number
+  readonly index: number
   /**
   Candidates still in the race.
   */
-  candidates: C[]
+  readonly candidates: readonly C[]
 } & QE<C, I>
 
 export const VotingSystem = {

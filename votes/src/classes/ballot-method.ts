@@ -1,5 +1,10 @@
 import type { Ballot, Matrix, Profile } from '../types'
-import { matrixFromBallots, nonBlank, normalizeBallots } from '../utils'
+import {
+  deepFreeze,
+  matrixFromBallots,
+  nonBlank,
+  normalizeBallots,
+} from '../utils'
 import type { Matrixer } from './matrix-score-method'
 import { Method, type Ranker } from './method'
 
@@ -49,7 +54,7 @@ export abstract class BallotMethod<C extends string>
 
   // The ballots cast in a race between `candidates`: blank ones only with
   // `countBlank`.
-  protected castBallots(candidates: C[]): Ballot<C>[] {
+  protected castBallots(candidates: readonly C[]): Ballot<C>[] {
     return this.countBlank ? this.ballots : nonBlank(this.ballots, candidates)
   }
 
@@ -57,10 +62,8 @@ export abstract class BallotMethod<C extends string>
   Return a matrix of duels from all the ballots
   */
   get matrix(): Matrix<C> {
-    this._matrix ??= matrixFromBallots(
-      this.ballots,
-      this.candidates,
-      this.unrankedLast,
+    this._matrix ??= deepFreeze(
+      matrixFromBallots(this.ballots, this.candidates, this.unrankedLast),
     )
     return this._matrix
   }

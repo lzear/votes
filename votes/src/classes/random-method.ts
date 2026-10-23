@@ -1,4 +1,5 @@
-import type { Profile, ScoreObject } from '../types'
+import type { Profile, Ranking, ScoreObject } from '../types'
+import { deepFreeze } from '../utils/freeze'
 import { Method } from './method'
 
 /**
@@ -7,7 +8,7 @@ Voting method that involves some randomness in the computation in the winners.
 export abstract class RandomMethod<C extends string> extends Method<C> {
   public static override readonly isRandom = true
 
-  private _ranking?: C[][]
+  private _ranking?: Ranking<C>
   protected readonly rng: () => number
 
   constructor(
@@ -25,12 +26,12 @@ export abstract class RandomMethod<C extends string> extends Method<C> {
   public abstract probabilities(): ScoreObject<C>
 
   // Drawn once: every call returns the same ranking.
-  public ranking(): C[][] {
-    this._ranking ??= this.draw()
+  public ranking(): Ranking<C> {
+    this._ranking ??= deepFreeze(this.draw())
     return this._ranking
   }
 
-  protected abstract draw(): C[][]
+  protected abstract draw(): Ranking<C>
 
   restrict(candidates: readonly C[]): this {
     type Ctor = new (i: {

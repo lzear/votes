@@ -1,4 +1,5 @@
 import type { Matrix, Profile } from '../types'
+import { deepFreeze } from '../utils/freeze'
 import { subMatrix, toMatrix } from '../utils/make-matrix'
 import { ScoreMethod, type Scorer } from './score-method'
 
@@ -21,7 +22,7 @@ export abstract class MatrixScoreMethod<C extends string>
 
   constructor(input: Matrix<C> | Profile<C>) {
     super(input.candidates)
-    this._matrix = toMatrix(input)
+    this._matrix = deepFreeze(toMatrix(input))
     this.input = input
   }
 
