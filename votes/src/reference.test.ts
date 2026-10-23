@@ -39,7 +39,8 @@ import * as R from './test/reference'
 import { rngGenerator } from './utils'
 
 // Differential checks: each method against an implementation written from its
-// definition (`./test/reference.ts`), on random profiles of 3 to 6 candidates.
+// definition (`./test/reference.ts`), on random profiles of 3 to 6 candidates:
+// default options on strict and tied ones, random ones on optioned ones.
 const PROFILES = 250
 
 const generate = R.profileGenerator(rngGenerator('reference'))
@@ -50,7 +51,9 @@ const sizes = Array.from({ length: PROFILES }, () => ({
 const profiles = {
   strict: sizes.map(({ n, voters }) => generate.strict(n, voters)),
   tied: sizes.map(({ n, voters }) => generate.tied(n, voters)),
+  optioned: sizes.map(({ n, voters }) => generate.optioned(n, voters)),
 }
+const kinds = ['strict', 'tied', 'optioned'] as const
 
 type Profile = R.RefProfile
 type Scores = Record<string, number>
@@ -81,7 +84,7 @@ const mismatches = <T>(
     return isDeepStrictEqual(out.lib, out.ref) ? [] : { profile, ...out }
   })
 
-describe.each(['strict', 'tied'] as const)('on %s profiles', (kind) => {
+describe.each(kinds)('on %s profiles', (kind) => {
   const ps = profiles[kind]
 
   it.each<Strength>(['winning-votes', 'margins'])('Schulze %s', (strength) => {
@@ -147,12 +150,24 @@ describe.each(['strict', 'tied'] as const)('on %s profiles', (kind) => {
     ).toEqual([])
   })
 
-  it.each(Object.values(MinimaxVariant))('Minimax %s', (variant) => {
+  it.each(
+    Object.values(MinimaxVariant).flatMap((variant) =>
+      [false, true].map((excludeTies) => ({ variant, excludeTies })),
+    ),
+  )('Minimax $variant, excludeTies $excludeTies', (options) => {
     expect(
       mismatches(
         ps,
-        (p) => round(new Minimax({ ...p, variant }).scores()),
-        (p) => round(R.minimaxScores(p.candidates, M(p), variant)),
+        (p) => round(new Minimax({ ...p, ...options }).scores()),
+        (p) =>
+          round(
+            R.minimaxScores(
+              p.candidates,
+              M(p),
+              options.variant,
+              options.excludeTies,
+            ),
+          ),
       ),
     ).toEqual([])
   })
@@ -223,16 +238,6 @@ describe.each(['strict', 'tied'] as const)('on %s profiles', (kind) => {
         ps,
         (p) => round(new Bucklin(p).scores()),
         (p) => round(R.bucklinScores(p)),
-      ),
-    ).toEqual([])
-  })
-
-  it('MajorityJudgment', () => {
-    expect(
-      mismatches(
-        ps,
-        (p) => canon(new MajorityJudgment(p).ranking()),
-        (p) => canon(R.majorityJudgment(p)),
       ),
     ).toEqual([])
   })
@@ -317,11 +322,36 @@ describe.each(['strict', 'tied'] as const)('on %s profiles', (kind) => {
   })
 })
 
-// The winner on strict ballots, when no tie decides it.
+// Grades on whole weights, as the majority value counts votes: the optioned
+// profiles, weights doubled and rounded.
+describe('MajorityJudgment', () => {
+  const ps = profiles.optioned.map((p) => ({
+    ...p,
+    ballots: p.ballots.map((b) => ({ ...b, weight: Math.round(b.weight * 2) })),
+  }))
+
+  it.each([
+    {},
+    { grades: 8 },
+    { grades: 3, clampGrades: true },
+    { grades: 1, clampGrades: true },
+  ])('%o', (options) => {
+    expect(
+      mismatches(
+        [...profiles.strict, ...profiles.tied, ...ps],
+        (p) => canon(new MajorityJudgment({ ...p, ...options }).ranking()),
+        (p) => canon(R.majorityJudgment(p, options)),
+      ),
+    ).toEqual([])
+  })
+})
+
+// The winners: for round methods, those who win in some order of breaking the
+// ties that decide it.
 const winners: [
   string,
   (p: Profile) => readonly (readonly string[])[],
-  (p: Profile) => string | null,
+  (p: Profile) => string[],
 ][] = [
   ['InstantRunoff', (p) => new InstantRunoff(p).ranking(), R.irv],
   ['Benham', (p) => new Benham(p).ranking(), R.benham],
@@ -352,6 +382,11 @@ const winners: [
     (p) => R.supplementary(p, 2),
   ],
   [
+    'SupplementaryVote, 1 preference',
+    (p) => new SupplementaryVote({ ...p, preferences: 1 }).ranking(),
+    (p) => R.supplementary(p, 1),
+  ],
+  [
     'SupplementaryVote, 3 preferences',
     (p) => new SupplementaryVote({ ...p, preferences: 3 }).ranking(),
     (p) => R.supplementary(p, 3),
@@ -359,13 +394,19 @@ const winners: [
   ['BottomTwoRunoff', (p) => new BottomTwoRunoff(p).ranking(), R.bottomTwo],
 ]
 
-describe('winners on strict profiles', () => {
+describe.each(kinds)('winners on %s profiles', (kind) => {
   it.each(winners)('%s', (_, lib, ref) => {
-    const decided = profiles.strict.filter((p) => ref(p) !== null)
-    expect(decided.length).toBeGreaterThan(PROFILES / 4)
-    expect(mismatches(decided, (p) => first(lib(p)), ref)).toEqual([])
+    expect(
+      mismatches(
+        profiles[kind],
+        (p) => first(lib(p)),
+        (p) => sorted(ref(p)),
+      ),
+    ).toEqual([])
   })
+})
 
+describe('winners on strict profiles', () => {
   it('RandomDictator', () => {
     expect(
       mismatches(
