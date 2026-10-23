@@ -1,7 +1,7 @@
 import { majorityWinner } from '../methods/absolute-majority'
 import { firstChoices } from '../methods/first-past-the-post/iterate-first-choices'
 import type { Profile, ScoreObject, TieBreakStep } from '../types'
-import { RoundBallotMethod, type Step } from './round-ballot-method'
+import { MAX_READS, RoundBallotMethod, type Step } from './round-ballot-method'
 import type { MethodTiebreaker, Tiebreaker } from './tiebreaker'
 
 export abstract class RoundBallotMethodTb<
@@ -88,7 +88,8 @@ export abstract class RoundBallotMethodTb<
 }
 
 // States to try at most when checking every order of eliminating a tie: past
-// it, the count stops on the tie, which costs only the ranking below winners.
+// it, or past `MAX_READS` ballots read, the count stops on the tie, which costs
+// only the ranking below winners.
 const MAX_ORDERS = 256
 
 /**
@@ -113,12 +114,13 @@ export abstract class TbEliminateOne<
     if (this.exploring) return false
     const others = race.filter((c) => !group.includes(c))
     const seen = new Set<string>()
+    const most = Math.min(MAX_ORDERS, MAX_READS / this.ballots.length)
     // Whether those put out of what is left are all in `left`, until gone.
     const safe = (left: C[]): boolean => {
       const key = this.raceKey(left)
       if (left.length === 0 || seen.has(key)) return true
       seen.add(key)
-      if (seen.size > MAX_ORDERS) return false
+      if (seen.size > most) return false
       const out = this.nextOut([...others, ...left])
       return (
         out.every((c) => left.includes(c)) &&
@@ -133,7 +135,8 @@ export abstract class TbEliminateOne<
   */
   protected openTie(group: C[], race: C[]): { open?: C[] } {
     return group.length > 1 &&
-      (group.length === race.length || !this.canEliminateTogether(group, race))
+      (group.length === race.length ||
+        !this.merged(() => this.canEliminateTogether(group, race)))
       ? { open: group }
       : {}
   }

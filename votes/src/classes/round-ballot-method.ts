@@ -1,4 +1,5 @@
-import type { QE, Round } from '../types'
+import type { Ballot, QE, Round } from '../types'
+import { groupBallots } from '../utils'
 import { BallotMethod } from './ballot-method'
 import type { Ranker } from './method'
 
@@ -12,6 +13,12 @@ export type Step<C extends string, I> = QE<C, I> & { open?: C[] }
 const MAX_RACES = 10_000
 
 /**
+Ballots a search reads at most, each race or order it tries reading every
+ballot once: about a second.
+*/
+export const MAX_READS = 250_000
+
+/**
 Voting system in which candidates are iteratively eliminated.
 */
 export abstract class RoundBallotMethod<C extends string, I = undefined>
@@ -21,18 +28,23 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
   private _rounds?: Round<C, I>[]
 
   private _twins?: Map<C, C>
+
+  private _merged?: Ballot<C>[]
   // Set while trying every order: branching then finds what checking
   // whether a tie may go out at once would.
   protected exploring = false
 
   /**
   Who wins from `race`, one of `open` going out next, in some order of
-  breaking the ties left; or all of `race` past `MAX_RACES` races. Twins
-  win alike, so results hold one of each.
+  breaking the ties left; or all of `race` past `MAX_RACES` races or
+  `MAX_READS` ballots read. Twins win alike, so results hold one of each.
   */
   private possibleWinners(race: C[], open: C[]): C[] {
     const memo = new Map<string, ReadonlySet<C>>()
-    let budget = MAX_RACES
+    let budget = Math.min(
+      MAX_RACES,
+      Math.floor(MAX_READS / this.ballots.length),
+    )
     const branch = (r: C[], out: C[]): C[] =>
       this.oneEach(out).flatMap((c) => [...visit(r.filter((x) => x !== c))])
     const winnersOf = (r: C[]): C[] => {
@@ -61,6 +73,21 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
       return budget > 0 ? race.filter((c) => winners.has(this.twin(c))) : race
     } finally {
       this.exploring = false
+    }
+  }
+
+  /**
+  `search()` on the ballots merged, identical ones read as one with their
+  weights summed: searches read every ballot for each race they try.
+  */
+  protected merged<T>(search: () => T): T {
+    const { ballots } = this
+    this._merged ??= groupBallots(ballots)
+    this.ballots = this._merged
+    try {
+      return search()
+    } finally {
+      this.ballots = ballots
     }
   }
 
@@ -112,7 +139,7 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
       if (open) {
         // The count stops on those who win in some order of breaking it.
         const race = inRace
-        const winners = this.possibleWinners(race, open)
+        const winners = this.merged(() => this.possibleWinners(race, open))
         rounds.push({
           index,
           candidates: race,

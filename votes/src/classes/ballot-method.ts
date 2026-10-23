@@ -23,7 +23,8 @@ export abstract class BallotMethod<C extends string>
   private readonly options: object
   // The ballots as given, which restrict() counts afresh.
   private input: readonly Ballot<C>[] = []
-  protected readonly ballots: Ballot<C>[]
+  // Searches swap in the same ballots merged, which they read once each.
+  protected ballots: Ballot<C>[]
   protected readonly unrankedLast: boolean
   protected readonly countBlank: boolean
 
