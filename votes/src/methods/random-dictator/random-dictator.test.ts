@@ -20,6 +20,29 @@ const vote = <C extends string>(
     rng: seed ? rngGenerator(seed) : undefined,
   })
 
+// The odds from every draw order, each ballot drawn by weight among those left.
+const everyOrder = (candidates: string[], ballots: Ballot<string>[]) => {
+  const odds = Object.fromEntries(candidates.map((c) => [c, 0]))
+  const draw = (left: Ballot<string>[], p: number, drawn: typeof left) => {
+    const total = sum(left.map((b) => b.weight ?? 1))
+    if (total === 0) {
+      const [top = []] = new Dictator({
+        candidates,
+        ballots: drawn,
+      }).ranking()
+      for (const c of top) odds[c] = (odds[c] ?? 0) + p / top.length
+    } else
+      for (const [i, b] of left.entries())
+        if ((b.weight ?? 1) > 0)
+          draw(left.toSpliced(i, 1), (p * (b.weight ?? 1)) / total, [
+            ...drawn,
+            b,
+          ])
+  }
+  draw(ballots, 1, [])
+  return odds
+}
+
 const names = (n: number) =>
   Array.from({ length: n }, (_, i) => `c${String(i)}`)
 
@@ -207,13 +230,19 @@ describe(RandomDictator, () => {
     ).toMatchObject({ rng })
   })
 
-  describe('maxTies', () => {
+  describe('maxReads', () => {
     const rng = rngGenerator('ties')
     const shuffled = (candidates: string[]) =>
       candidates
         .map((c) => ({ c, r: rng() }))
         .toSorted((x, y) => x.r - y.r)
         .map(({ c }) => c)
+    // Each ballot ranks a random half of the candidates first, the rest tied.
+    const twoTier = (candidates: string[], length: number) =>
+      Array.from({ length }, () => {
+        const top = candidates.filter(() => rng() < 0.5)
+        return { ranking: [top.length > 0 ? top : candidates], weight: 1 }
+      })
 
     it('throws past it on tied ballots', () => {
       const candidates = names(16)
@@ -222,13 +251,38 @@ describe(RandomDictator, () => {
         return { ranking: [order.slice(0, 8), order.slice(8)], weight: 1 }
       })
       expect(() =>
-        new RandomDictator({ candidates, ballots }).probabilities(),
-      ).toThrow(/maxTies/)
-      expect(() =>
-        new RandomDictator({ candidates, ballots, maxTies: 10 })
+        new RandomDictator({ candidates, ballots, maxReads: 1000 })
           .restrict(candidates.slice(0, 8))
           .probabilities(),
-      ).toThrow(RangeError)
+      ).toThrow(/maxReads/)
+      const odds = new RandomDictator({ candidates, ballots }).probabilities()
+      expect(sum(Object.values(odds))).toBeCloseTo(1)
+    })
+
+    it('ends within about a second on many tied ballots', () => {
+      const candidates = names(16)
+      const dictator = new RandomDictator({
+        candidates,
+        ballots: twoTier(candidates, 20_000),
+      })
+      const start = performance.now()
+      expect(() => dictator.probabilities()).toThrow(RangeError)
+      expect(performance.now() - start).toBeLessThan(2000)
+    })
+
+    it('reads identical ballots as one, exactly', () => {
+      const candidates = names(5)
+      for (let n = 0; n < 20; n++) {
+        const ballots = twoTier(candidates, 3)
+        ballots.push(
+          { ...ballots[0]!, weight: 2 },
+          { ...ballots[1]!, weight: 0 },
+          ...twoTier(candidates, 1),
+        )
+        const odds = new RandomDictator({ candidates, ballots }).probabilities()
+        const expected = everyOrder(candidates, ballots)
+        for (const c of candidates) expect(odds[c]).toBeCloseTo(expected[c]!)
+      }
     })
 
     it('never reaches it on strict ballots', () => {
@@ -240,7 +294,7 @@ describe(RandomDictator, () => {
       const odds = new RandomDictator({
         candidates,
         ballots,
-        maxTies: 1,
+        maxReads: 0,
       }).probabilities()
       expect(sum(Object.values(odds))).toBeCloseTo(1)
     })

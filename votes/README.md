@@ -230,8 +230,9 @@ most 30). Below its winners, it ranks by running again without them;
 `SplitCycle` ranks the undefeated first, then those only they defeat, and so on.
 
 ⚠️ `RandomDictator`'s `probabilities()` runs in exponential time on ballots with
-ties, and throws past `maxTies` distinct ties explored (default 2000, well under
-a second); strict ballots explore one. `ranking()` has no cap.
+ties. Each tie it explores reads every distinct ballot, and it throws past
+`maxReads` ballots read after the first tie (default 2,000,000, about a second);
+strict ballots explore the first tie alone. `ranking()` has no cap.
 
 `MajorityJudgment` reads a ballot's tiers as grades, best first (`grades`,
 default 6), and breaks ties one vote at a time: give it whole weights. A ballot

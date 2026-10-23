@@ -2,5 +2,5 @@
 'votes': minor
 ---
 
-`RandomDictator` takes `maxTies`, past which `probabilities()` throws (default
-2000).
+`RandomDictator` takes `maxReads`, the ballots `probabilities()` reads before it
+throws (default 2,000,000), and reads identical ballots once.
