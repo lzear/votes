@@ -123,12 +123,9 @@ const buildBallot = <C extends string = string>(
     throw new RangeError(`Vote "${rawVote}" weighs more than a number holds`)
   if (weight <= 0) return null
 
-  let ranking: C[][] =
-    line === '/EMPTY_RANKING/'
-      ? implicitRanking && candidates.length > 0
-        ? [[...candidates]]
-        : []
-      : parseRanking(line)
+  if (line === '/EMPTY_RANKING/') return { ranking: [], weight }
+
+  let ranking: C[][] = parseRanking(line)
 
   if (candidates.length > 0)
     ranking = removeInvalidCandidates(ranking, candidates)
@@ -148,6 +145,9 @@ const deriveCandidates = <C extends string>(ballots: Ballot<C>[]): C[] => {
 
 /**
 Reads the [Condorcet election format](https://github.com/CondorcetVote/CondorcetElectionFormat).
+
+`/EMPTY_RANKING/` is a blank ballot (`ranking: []`), whatever Implicit Ranking
+says, so it counts as cast only with `countBlank`.
 */
 export const parseCondorcetElectionFormat = <C extends string = string>(
   input: string,

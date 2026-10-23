@@ -1,3 +1,4 @@
+import { AbsoluteMajority } from '../methods/absolute-majority'
 import {
   parseCondorcetElectionFormat,
   stringifyCondorcetElectionFormat,
@@ -48,15 +49,31 @@ Alice`
     ])
   })
 
-  it('handles /EMPTY_RANKING/ with implicit ranking', () => {
+  it('reads /EMPTY_RANKING/ as a blank ballot with implicit ranking', () => {
     const input = `#/Candidates: Alice; Bob; Charlie
 #/Implicit Ranking: true
 
 /EMPTY_RANKING/ * 2`
     const result = parseCondorcetElectionFormat(input)
-    expect(result.ballots).toEqual([
-      { ranking: [['Alice', 'Bob', 'Charlie']], weight: 2 },
-    ])
+    expect(result.ballots).toEqual([{ ranking: [], weight: 2 }])
+  })
+
+  it('ranks alike after a round trip with a blank ballot', () => {
+    const input = {
+      candidates: ['A', 'B', 'C'],
+      ballots: [
+        { ranking: [['A'], ['B'], ['C']], weight: 4 },
+        { ranking: [['B'], ['C'], ['A']], weight: 3 },
+        { ranking: [], weight: 3 },
+      ],
+    }
+    const back = parseCondorcetElectionFormat(
+      stringifyCondorcetElectionFormat(input),
+    )
+    for (const countBlank of [false, true])
+      expect(
+        new AbsoluteMajority({ ...back, countBlank }).ranking(),
+      ).toStrictEqual(new AbsoluteMajority({ ...input, countBlank }).ranking())
   })
 
   it('handles /EMPTY_RANKING/ without implicit ranking', () => {
