@@ -13,6 +13,9 @@ export class InstantRunoff<C extends string> extends TbEliminateLast<C> {
 
   // Bulk exclusion: what the group passes among itself leaves it below the
   // others.
+  /**
+  @internal
+  */
   protected override canEliminateTogether(
     group: readonly C[],
     race: readonly C[],
@@ -27,6 +30,9 @@ export class InstantRunoff<C extends string> extends TbEliminateLast<C> {
     )
   }
 
+  /**
+  @internal
+  */
   protected oneRound(candidates: readonly C[]): {
     ranking: C[][]
     scores: ScoreObject<C>

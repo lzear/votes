@@ -142,6 +142,9 @@ export class RandomDictator<C extends string> extends RandomBallotMethod<C> {
     return scores
   }
 
+  /**
+  @internal
+  */
   protected draw(): Ranking<C> {
     const ballots = nonBlank(this.ballots, this.candidates)
     return serialRanking(this.candidates, drawOrder(ballots, this.rng))

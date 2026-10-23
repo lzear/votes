@@ -9,6 +9,9 @@ Pick a candidate at random, regardless of the ballots
 export class RandomCandidates<C extends string> extends RandomMethod<C> {
   public static readonly label = 'RandomCandidates'
 
+  /**
+  @internal
+  */
   protected draw(): C[][] {
     return shuffleArray(this.candidates, this.rng).map((c) => [c])
   }

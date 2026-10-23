@@ -9,6 +9,9 @@ export abstract class RandomMethod<C extends string> extends Method<C> {
   public static override readonly isRandom = true
 
   private _ranking?: Ranking<C>
+  /**
+  @internal
+  */
   protected readonly rng: () => number
 
   constructor(
@@ -31,6 +34,9 @@ export abstract class RandomMethod<C extends string> extends Method<C> {
     return this._ranking
   }
 
+  /**
+  @internal
+  */
   protected abstract draw(): Ranking<C>
 
   restrict(candidates: readonly C[]): this {

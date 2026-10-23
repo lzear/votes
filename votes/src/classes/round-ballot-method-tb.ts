@@ -35,6 +35,8 @@ export abstract class RoundBallotMethodTb<
 
   /**
   Tiebreakers the method applies before the caller's.
+  
+  @internal
   */
   protected builtInTieBreakers(): Tiebreaker<C>[] {
     return []
@@ -44,6 +46,8 @@ export abstract class RoundBallotMethodTb<
   Apply tiebreakers sequentially to a set of tied candidates.
   Returns qualified survivors, eliminated losers, and a trace of each step.
   If unresolvable, all pending are returned as eliminated.
+  
+  @internal
   */
   protected resolvePending(pending: readonly C[]): {
     qualified: C[]
@@ -79,6 +83,9 @@ export abstract class RoundBallotMethodTb<
   }
 
   // One with a majority of the ballots cast: no round puts them out.
+  /**
+  @internal
+  */
   protected sureWinner(race: readonly C[]): C | undefined {
     return majorityWinner(
       firstChoices(this.ballots, race),
@@ -103,12 +110,16 @@ export abstract class TbEliminateOne<
   /**
   Those one of whom the method puts out of `race` next, after its
   tiebreakers: what `openTie` checks orders of elimination with.
+  
+  @internal
   */
   protected abstract nextOut(race: readonly C[]): readonly C[]
 
   /**
   Whether putting `group` out of `race` at once ends where every order of
   putting it out one at a time does.
+  
+  @internal
   */
   protected canEliminateTogether(
     group: readonly C[],
@@ -135,6 +146,8 @@ export abstract class TbEliminateOne<
 
   /**
   `group`, a tie the tiebreakers leave, as open when its order matters.
+  
+  @internal
   */
   protected openTie(
     group: readonly C[],
@@ -158,16 +171,25 @@ export abstract class TbEliminateLast<
   C extends string,
   I = undefined,
 > extends TbEliminateOne<C, I> {
+  /**
+  @internal
+  */
   protected abstract oneRound(
     candidates: readonly C[],
     index: number,
   ): { ranking: C[][]; scores: ScoreObject<C> }
 
+  /**
+  @internal
+  */
   protected override nextOut(race: readonly C[]): readonly C[] {
     const last = this.oneRound(race, 0).ranking.at(-1) ?? []
     return last.length > 1 ? this.resolvePending(last).eliminated : last
   }
 
+  /**
+  @internal
+  */
   protected round(candidates: readonly C[], index: number): Step<C, I> {
     const { ranking, scores } = this.oneRound(candidates, index)
     const qualified = ranking.slice(0, -1).flat()

@@ -14,6 +14,9 @@ export class Baldwin<C extends string> extends TbEliminateLast<C> {
   public static readonly label = 'Baldwin'
 
   // A Condorcet winner, whose Borda score stays above the average.
+  /**
+  @internal
+  */
   protected override sureWinner(race: readonly C[]): C | undefined {
     const { array } = subMatrix(this.matrix, race)
     return race.find((_, i) =>
@@ -21,6 +24,9 @@ export class Baldwin<C extends string> extends TbEliminateLast<C> {
     )
   }
 
+  /**
+  @internal
+  */
   protected oneRound(candidates: readonly C[]): {
     ranking: C[][]
     scores: ScoreObject<C>

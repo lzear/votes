@@ -85,6 +85,9 @@ export class TwoRoundRunoff<C extends string> extends RoundBallotMethodTb<C> {
     }
   }
 
+  /**
+  @internal
+  */
   protected round(candidates: readonly C[], index: number): QE<C> {
     // Runoff winners tied, after eliminating those below them.
     if (index > 1)

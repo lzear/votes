@@ -15,14 +15,22 @@ export abstract class InstantRunoffHybrid<
   /**
   Those of `race` the method keeps before counting first choices: all of
   them for a plain instant-runoff round.
+  
+  @internal
   */
   protected abstract kept(race: readonly C[]): readonly C[]
 
   // The matrix of duels within `race`.
+  /**
+  @internal
+  */
   protected duels(race: readonly C[]): Matrix<C> {
     return subMatrix(this.matrix, race)
   }
 
+  /**
+  @internal
+  */
   protected oneRound(candidates: readonly C[]): {
     ranking: C[][]
     scores: ScoreObject<C>
@@ -31,11 +39,17 @@ export abstract class InstantRunoffHybrid<
     return { ranking: scoresToRanking(scores), scores }
   }
 
+  /**
+  @internal
+  */
   protected override sureWinner(race: readonly C[]): C | undefined {
     const kept = this.kept(race)
     return kept.length === 1 ? kept[0] : undefined
   }
 
+  /**
+  @internal
+  */
   protected override nextOut(race: readonly C[]): readonly C[] {
     const kept = this.kept(race)
     return kept.length < race.length
@@ -43,6 +57,9 @@ export abstract class InstantRunoffHybrid<
       : super.nextOut(race)
   }
 
+  /**
+  @internal
+  */
   protected override round(
     candidates: readonly C[],
     index: number,

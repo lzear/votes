@@ -7,13 +7,28 @@ export default defineConfig({
   // `.js` and `.d.ts` for ESM, as `"type": "module"` exports expect
   fixedExtension: false,
   target: 'esnext',
-  // the lib tsconfig's declaration maps would emit maps for the JS too
+  // No declaration maps: the package doesn't ship them.
   dts: { sourcemap: false },
+  plugins: [
+    {
+      // rolldown-plugin-dts drops the ESM build's d.ts map, but not the
+      // comment naming it
+      name: 'dts-without-map-comment',
+      generateBundle: (_, bundle) => {
+        for (const chunk of Object.values(bundle))
+          if (chunk.type === 'chunk' && chunk.fileName.endsWith('.d.ts'))
+            chunk.code = chunk.code.replace(/\n\/\/# sourceMappingURL=\S+$/, '')
+      },
+    },
+  ],
   minify: true,
   globalName: 'votes',
   // tsup's name for the IIFE build, which CDN links point at
-  outputOptions: (options, format) =>
+  // The CJS d.ts builds alone, without the plugins above.
+  outputOptions: (options, format, { cjsDts }) =>
     format === 'iife'
       ? { ...options, entryFileNames: '[name].global.js' }
-      : options,
+      : cjsDts
+        ? { ...options, sourcemap: false }
+        : options,
 })

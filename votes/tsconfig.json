@@ -3,6 +3,10 @@
   "extends": "@lzear/forge/tsconfig/lib",
   "compilerOptions": {
     "outDir": "dist",
+    // the d.ts leaves out what is marked @internal (rolldown-plugin-dts reads it)
+    "stripInternal": true,
+    // the lib preset's declaration maps point at a file the package doesn't ship
+    "declarationMap": false,
     "types": ["node", "vitest/globals"]
   },
   "include": ["src", "*.ts"]

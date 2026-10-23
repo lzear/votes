@@ -35,6 +35,9 @@ export class BottomTwoRunoff<C extends string> extends TbEliminateOne<C> {
     return last.length >= 2 ? last : [...last, ...(ranked.at(-2) ?? [])]
   }
 
+  /**
+  @internal
+  */
   protected override builtInTieBreakers(): Tiebreaker<C>[] {
     // First choices on the ballots as they are: a FirstPastThePost would
     // re-normalize them every round.
@@ -45,10 +48,16 @@ export class BottomTwoRunoff<C extends string> extends TbEliminateOne<C> {
     return [{ name: 'FirstPastThePost', run }]
   }
 
+  /**
+  @internal
+  */
   protected override nextOut(race: readonly C[]): readonly C[] {
     return this.resolvePending(this.bottomTwo(race)).eliminated
   }
 
+  /**
+  @internal
+  */
   protected round(candidates: readonly C[]): Step<C, undefined> {
     const pending = new Set(this.bottomTwo(candidates))
     const {

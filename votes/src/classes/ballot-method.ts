@@ -29,8 +29,17 @@ export abstract class BallotMethod<C extends string>
   // The ballots as given, which restrict() counts afresh.
   private input: readonly Ballot<C>[] = []
   // Searches swap in the same ballots merged, which they read once each.
+  /**
+  @internal
+  */
   protected ballots: Ballot<C>[]
+  /**
+  @internal
+  */
   protected readonly unrankedLast: boolean
+  /**
+  @internal
+  */
   protected readonly countBlank: boolean
 
   constructor({ ballots, candidates, ...options }: Profile<C>) {
@@ -45,6 +54,8 @@ export abstract class BallotMethod<C extends string>
   /**
   Keeps `ballots` as given, for restrict() to count afresh: `this.ballots`
   instead when they rank the same, to hold one array.
+  
+  @internal
   */
   protected keepInput(ballots: readonly Ballot<C>[]): void {
     this.input = this.ballots.every((b, i) => sameRanking(b, ballots[i]))
@@ -54,6 +65,9 @@ export abstract class BallotMethod<C extends string>
 
   // The ballots cast in a race between `candidates`: blank ones only with
   // `countBlank`.
+  /**
+  @internal
+  */
   protected castBallots(candidates: readonly C[]): Ballot<C>[] {
     return this.countBlank ? this.ballots : nonBlank(this.ballots, candidates)
   }

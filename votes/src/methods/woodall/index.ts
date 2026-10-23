@@ -11,6 +11,9 @@ export class Woodall<C extends string> extends InstantRunoffHybrid<C> {
 
   private smith?: ReadonlySet<C>
 
+  /**
+  @internal
+  */
   protected kept(race: readonly C[]): readonly C[] {
     this.smith ??= new Set(findSmithSet(this.matrix).candidates)
     const left = race.filter((c) => this.smith?.has(c))

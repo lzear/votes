@@ -32,6 +32,9 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
   private _merged?: Ballot<C>[]
   // Set while trying every order: branching then finds what checking
   // whether a tie may go out at once would.
+  /**
+  @internal
+  */
   protected exploring = false
 
   /**
@@ -82,6 +85,8 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
   /**
   `search()` on the ballots merged, identical ones read as one with their
   weights summed: searches read every ballot for each race they try.
+  
+  @internal
   */
   protected merged<T>(search: () => T): T {
     const { ballots } = this
@@ -97,6 +102,8 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
   /**
   The first of `c`'s twins: those every ballot ranks alike, whom every
   count treats alike.
+  
+  @internal
   */
   protected twin(c: C): C {
     if (!this._twins) {
@@ -115,6 +122,9 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
   }
 
   // `race` as how many of each twin it holds.
+  /**
+  @internal
+  */
   protected raceKey(race: readonly C[]): string {
     const counts = new Map<C, number>()
     for (const c of race)
@@ -128,6 +138,9 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
   }
 
   // One of each twin in `group`.
+  /**
+  @internal
+  */
   protected oneEach(group: readonly C[]): C[] {
     return new Map(group.map((c) => [this.twin(c), c])).values().toArray()
   }
@@ -169,11 +182,16 @@ export abstract class RoundBallotMethod<C extends string, I = undefined>
   }
 
   // Only ever called with two candidates or more.
+  /**
+  @internal
+  */
   protected abstract round(candidates: readonly C[], index: number): Step<C, I>
 
   /**
   The candidate who wins from `race` whatever order ties break in, if
   known.
+  
+  @internal
   */
   protected abstract sureWinner(race: readonly C[]): C | undefined
 }

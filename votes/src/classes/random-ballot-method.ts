@@ -10,6 +10,9 @@ export abstract class RandomBallotMethod<C extends string>
   public static override readonly isRandom = true
 
   private _ranking?: Ranking<C>
+  /**
+  @internal
+  */
   protected readonly rng: () => number
 
   constructor(i: Profile<C> & { rng?: undefined | (() => number) }) {
@@ -27,5 +30,8 @@ export abstract class RandomBallotMethod<C extends string>
     return this._ranking
   }
 
+  /**
+  @internal
+  */
   protected abstract draw(): Ranking<C>
 }

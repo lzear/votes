@@ -24,6 +24,9 @@ export type CoombsInfo = {
 export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {
   public static readonly label = 'Coombs'
 
+  /**
+  @internal
+  */
   protected oneRound(candidates: readonly C[]): {
     ranking: C[][]
     scores: ScoreObject<C>
@@ -37,6 +40,9 @@ export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {
   }
 
   // A majority ends the count, everyone else out at once.
+  /**
+  @internal
+  */
   protected override nextOut(race: readonly C[]): readonly C[] {
     const winner = majorityWinner(
       firstChoices(this.ballots, race),
@@ -47,6 +53,9 @@ export class Coombs<C extends string> extends TbEliminateLast<C, CoombsInfo> {
       : race.filter((c) => c !== winner)
   }
 
+  /**
+  @internal
+  */
   protected override round(
     candidates: C[],
     index: number,
