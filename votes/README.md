@@ -69,9 +69,9 @@ place, at two-round runoff's cut, or Nanson's complete tie) with the methods
 after them, in order. A round tie they leave goes out at once if no order of it
 changes the outcome; otherwise the count stops, and those who win in some order
 of breaking the ties tie first. The search for them gives up after 10,000 sets
-of candidates still in the race, or after 250,000 ballots read, since each set
+of candidates still in the race, or after 1,000,000 ballots read, since each set
 reads every distinct ballot. The count then stops on everyone left. Checking
-whether a tie may go out at once tries at most 256 sets of it left, or 250,000
+whether a tie may go out at once tries at most 256 sets of it left, or 1,000,000
 ballots read; past that, the count stops on the tie, which only leaves the
 ranking below the winners coarser. Alone, a round method has no tiebreakers
 beyond its own, such as `BottomTwoRunoff`'s head-to-head.

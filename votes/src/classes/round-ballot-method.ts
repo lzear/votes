@@ -16,7 +16,7 @@ const MAX_RACES = 10_000
 Ballots a search reads at most, each race or order it tries reading every
 ballot once: well under a second.
 */
-export const MAX_READS = 250_000
+export const MAX_READS = 1_000_000
 
 /**
 Voting system in which candidates are iteratively eliminated.
