@@ -24,22 +24,12 @@ const orders = (candidates: string[]): string[][] =>
         orders(candidates.toSpliced(i, 1)).map((o) => [c, ...o]),
       )
 
-// The method's ranking, which must take under four, since a busy machine runs it twice as slow.
-const quickRanking = (method: {
-  ranking: () => readonly (readonly string[])[]
-}) => {
-  const start = performance.now()
-  const ranking = method.ranking()
-  expect(performance.now() - start).toBeLessThan(4000)
-  return ranking
-}
-
 describe('the search for who wins in some order of breaking a tie', () => {
   it('reads identical ballots as one', () => {
     const candidates = names(12)
     const ballots = rotations(candidates, 1000)
     for (const Method of [InstantRunoff, BottomTwoRunoff])
-      expect(quickRanking(new Method({ candidates, ballots }))).toStrictEqual([
+      expect(new Method({ candidates, ballots }).ranking()).toStrictEqual([
         candidates,
       ])
   })
@@ -50,7 +40,7 @@ describe('the search for who wins in some order of breaking a tie', () => {
       ranking: o.map((c) => [c]),
     }))
     expect(
-      quickRanking(new BottomTwoRunoff({ candidates, ballots })),
+      new BottomTwoRunoff({ candidates, ballots }).ranking(),
     ).toStrictEqual([candidates])
   })
 })

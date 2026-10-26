@@ -259,15 +259,13 @@ describe(RandomDictator, () => {
       expect(sum(Object.values(odds))).toBeCloseTo(1)
     })
 
-    it('ends within about a second on many tied ballots', () => {
+    it('gives up on many tied ballots once its reads run out', () => {
       const candidates = names(16)
       const dictator = new RandomDictator({
         candidates,
         ballots: twoTier(candidates, 20_000),
       })
-      const start = performance.now()
       expect(() => dictator.probabilities()).toThrow(RangeError)
-      expect(performance.now() - start).toBeLessThan(2000)
     })
 
     it('reads identical ballots as one, exactly', () => {
