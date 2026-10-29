@@ -1170,7 +1170,38 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lzear/configs@npm:5.2.0, @lzear/configs@npm:^5":
+"@lzear/configs@npm:6.0.0":
+  version: 6.0.0
+  resolution: "@lzear/configs@npm:6.0.0"
+  dependencies:
+    "@commitlint/config-conventional": "npm:^21"
+    "@commitlint/types": "npm:^21"
+    conventional-changelog-conventionalcommits: "npm:^10"
+    std-env: "npm:^4"
+  peerDependencies:
+    jsdom: ~30
+    tsdown: ^0.23
+    vite: ^8
+    vitest: ^5
+  peerDependenciesMeta:
+    jsdom:
+      optional: true
+    tsdown:
+      optional: true
+    vite:
+      optional: true
+    vitest:
+      optional: true
+  bin:
+    lzear-changelog: src/changelog.mjs
+    lzear-prerelease: src/prerelease.mjs
+    lzear-publish: src/publish.mjs
+    lzear-sync-jsr: src/sync-jsr.mjs
+  checksum: 10c0/a3aa1ecb67508093f96c023a70bb4e25a56e910732067d773fb77906f135522d997c6beda53f0276ab8427a54021ac8565fea8cb8a8b95a6830b21b4baae509e
+  languageName: node
+  linkType: hard
+
+"@lzear/configs@npm:^5":
   version: 5.2.0
   resolution: "@lzear/configs@npm:5.2.0"
   dependencies:
@@ -1201,9 +1232,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lzear/eslint-config@npm:5.2.0":
-  version: 5.2.0
-  resolution: "@lzear/eslint-config@npm:5.2.0"
+"@lzear/eslint-config@npm:6.0.0":
+  version: 6.0.0
+  resolution: "@lzear/eslint-config@npm:6.0.0"
   dependencies:
     "@e18e/eslint-plugin": "npm:^0.8"
     "@eslint-community/eslint-plugin-eslint-comments": "npm:^4"
@@ -1230,7 +1261,7 @@ __metadata:
     eslint-plugin-regexp: "npm:^3"
     eslint-plugin-simple-import-sort: "npm:^14"
     eslint-plugin-sonarjs: "npm:^4"
-    eslint-plugin-unicorn: "npm:^78"
+    eslint-plugin-unicorn: "npm:^79"
     eslint-plugin-yml: "npm:^3"
     globals: "npm:^17"
     prettier: "npm:^3"
@@ -1238,18 +1269,18 @@ __metadata:
   peerDependencies:
     eslint: ^10
     typescript: "*"
-  checksum: 10c0/10714052e13ed6bea73b3677e788953f43562e0e557a74e23f2118c89f70f8b8faffac60f16dfadba602c967013dac04798279105099b050d2eb8f5a26f18b3d
+  checksum: 10c0/13b5937fd607abc4f14d2d33e69cc91d85d006bf17521eeed5baef5b61fa0e176b974d89e722af33f59d2b73c7144c22bfea619b89a06d896a6be0f3471e9d11
   languageName: node
   linkType: hard
 
-"@lzear/forge@npm:^5":
-  version: 5.2.0
-  resolution: "@lzear/forge@npm:5.2.0"
+"@lzear/forge@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "@lzear/forge@npm:6.0.0"
   dependencies:
     "@clack/prompts": "npm:^1"
-    "@lzear/configs": "npm:5.2.0"
-    "@lzear/eslint-config": "npm:5.2.0"
-    "@lzear/repo-lint": "npm:5.2.0"
+    "@lzear/configs": "npm:6.0.0"
+    "@lzear/eslint-config": "npm:6.0.0"
+    "@lzear/repo-lint": "npm:6.0.0"
     commander: "npm:^15"
     picocolors: "npm:^1"
     std-env: "npm:^4"
@@ -1272,13 +1303,13 @@ __metadata:
       optional: true
   bin:
     forge: dist/bin.js
-  checksum: 10c0/e8518936c4f0955d20ae254729024a5f507a1a4973d984d7a4fc78dc637f56c945dde09a7daec3e4db877cb3558656c77f6bc533e0ae3248631b03aee1536493
+  checksum: 10c0/30057e6d83e267f30881a47a6bbe6af1eb7a16f76584f36df2103abfeb655bea848612c2aaf341ff13a0ba3ce970e6494d6b3f0b5988b12cbaa241ea1beba295
   languageName: node
   linkType: hard
 
-"@lzear/repo-lint@npm:5.2.0":
-  version: 5.2.0
-  resolution: "@lzear/repo-lint@npm:5.2.0"
+"@lzear/repo-lint@npm:6.0.0":
+  version: 6.0.0
+  resolution: "@lzear/repo-lint@npm:6.0.0"
   dependencies:
     "@arethetypeswrong/cli": "npm:^0.18"
     fallow: "npm:^3"
@@ -1286,7 +1317,7 @@ __metadata:
     publint: "npm:^0.3"
     semver: "npm:^7"
     sherif: "npm:^1"
-  checksum: 10c0/ef55f24c436d4b78bcbed2c86542e9e51918d7a8b17077a6e8e038d2e20c189bb59354263dc2a17f041a40fa462fea981fab6530d9bfcc4cb9b8a22b1e56afca
+  checksum: 10c0/7333d52ec944a8271b49860b8c1c653d7c20bde6eb8c43d03ce4e2bc385a3d4df70513c728b44bea8b60d741d8490ca813bcbe7b14b643ebce667bfe6166c216
   languageName: node
   linkType: hard
 
@@ -3476,9 +3507,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-unicorn@npm:^78":
-  version: 78.0.0
-  resolution: "eslint-plugin-unicorn@npm:78.0.0"
+"eslint-plugin-unicorn@npm:^79":
+  version: 79.0.0
+  resolution: "eslint-plugin-unicorn@npm:79.0.0"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.10.1"
     "@eslint/css-tree": "npm:^4.1.1"
@@ -3508,7 +3539,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/9d9fd5f73b2b7b8816e3cf886d81086512550fb989fa22d8cf25201ca8f36270190ce3826a2430dbaa45ea45e6e1de965b697d7b32d9900b9cf71ca2b376e6f9
+  checksum: 10c0/0500ca6e90d38e8fa0285ac08b12e2e6dbb5a416645dd31b6f62e64a80651e6ee4c939f30dd69275f316e4c722ced39d49d14d36177f9d4778853bd7cd797885
   languageName: node
   linkType: hard
 
@@ -6851,7 +6882,7 @@ __metadata:
     "@changesets/cli": "npm:^3"
     "@commitlint/cli": "npm:^21"
     "@lzear/configs": "npm:^5"
-    "@lzear/forge": "npm:^5"
+    "@lzear/forge": "npm:^6.0.0"
     "@types/node": "npm:^26"
     "@typescript/native": "npm:typescript@^7.0.2"
     concurrently: "npm:^10"
@@ -6866,7 +6897,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "votes@workspace:votes"
   dependencies:
-    "@lzear/forge": "npm:^5"
+    "@lzear/forge": "npm:^6.0.0"
     "@types/node": "npm:^26"
     "@vitest/coverage-v8": "npm:^5"
     tsdown: "npm:^0.23"
