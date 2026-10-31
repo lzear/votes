@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: lzear/forge/actions/setup@d2ec5167d6e30bd6dffe8c566f56d45a78ecd71f # v5.1.0
+      - uses: lzear/forge/actions/setup@de870ca6954863269d6a3b43a256f7b7e002a37a # v6.1.0
       - run: yarn workspace votes build
       - uses: preactjs/compressed-size-action@f322c295dde06a1cb7ccaef105732dd8a726d1d9 # 2.10.0
         with:
