@@ -22,8 +22,6 @@ import {
 import { matrixFromBallots } from './make-matrix'
 import { canonizeRanking } from './normalize'
 
-type ABC = 'a' | 'b' | 'c'
-
 // Rank by the order of their input, not by the votes alone.
 const byOrder = new Set<VotingSystem>([
   VotingSystem.CandidateOrder,
@@ -31,6 +29,8 @@ const byOrder = new Set<VotingSystem>([
 ])
 
 describe('sanity check', () => {
+  type ABC = 'a' | 'b' | 'c'
+
   it.each(Object.values(VotingSystem))(
     'empty list and empty candidates %s',
     (system) => {
