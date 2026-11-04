@@ -2,7 +2,6 @@ node_modules
 coverage
 dist
 docs
-.turbo
 .yarn
 .DS_Store
 *.log
