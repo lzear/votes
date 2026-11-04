@@ -1,0 +1,12 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "out": "./docs",
+  "entryPoints": ["./src/index.ts"],
+  "exclude": ["**/*.test.ts", "**/test/**/*", "../node_modules/**/*"],
+  "externalPattern": ["../node_modules/**/*"],
+  "excludeExternals": true,
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeInternal": true,
+  "validation": { "notExported": false }
+}
