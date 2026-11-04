@@ -8,6 +8,7 @@ on:
 jobs:
   size:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     # compressed-size-action comments the size diff on the PR
     permissions:
       contents: read
@@ -17,7 +18,6 @@ jobs:
         with:
           persist-credentials: false
       - uses: lzear/forge/actions/setup@d2ec5167d6e30bd6dffe8c566f56d45a78ecd71f # v5.1.0
-      - run: yarn workspace votes build
       - uses: preactjs/compressed-size-action@f322c295dde06a1cb7ccaef105732dd8a726d1d9 # 2.10.0
         with:
-          pattern: '**/dist/**/*.{mjs,js}'
+          pattern: 'votes/dist/*.js'
