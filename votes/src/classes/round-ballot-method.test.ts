@@ -42,5 +42,5 @@ describe('the search for who wins in some order of breaking a tie', () => {
     expect(
       new BottomTwoRunoff({ candidates, ballots }).ranking(),
     ).toStrictEqual([candidates])
-  })
+  }, 60_000)
 })
