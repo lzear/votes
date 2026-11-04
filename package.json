@@ -11,15 +11,15 @@
   "type": "module",
   "sideEffects": false,
   "engines": {
-    "node": ">=22"
+    "node": "^22.12 || >=24"
   },
   "packageManager": "yarn@4.18.1",
   "scripts": {
     "build": "yarn workspaces foreach --all --topological run build",
     "build-docs": "yarn workspaces foreach --all run build-docs",
     "changeset": "changeset",
-    "fix:prettier": "prettier --write \"**/*.*\"",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "fix:prettier": "eslint --fix .",
+    "format": "eslint --fix .",
     "housekeep": "yarn forge update && yarn test run --update && yarn qa",
     "lint": "eslint .",
     "prepare": "lefthook install",
