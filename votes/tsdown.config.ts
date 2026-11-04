@@ -3,7 +3,7 @@ import { defineConfig } from 'tsdown'
 export default defineConfig({
   entry: ['src/index.ts'],
   sourcemap: true,
-  format: ['esm', 'cjs', 'iife'],
+  format: 'esm',
   // `.js` and `.d.ts` for ESM, as `"type": "module"` exports expect
   fixedExtension: false,
   target: 'esnext',
@@ -22,13 +22,4 @@ export default defineConfig({
     },
   ],
   minify: true,
-  globalName: 'votes',
-  // tsup's name for the IIFE build, which CDN links point at
-  // The CJS d.ts builds alone, without the plugins above.
-  outputOptions: (options, format, { cjsDts }) =>
-    format === 'iife'
-      ? { ...options, entryFileNames: '[name].global.js' }
-      : cjsDts
-        ? { ...options, sourcemap: false }
-        : options,
 })
