@@ -1,0 +1,20 @@
+# The oldest Node the package supports. This is its own workflow, not a second
+# job in main.yml, because forge's CI names its concurrency group after the
+# workflow and the ref: two calls in one workflow would cancel each other on a
+# pull request.
+name: Node 22
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    uses: lzear/forge/.github/workflows/ci.yml@de870ca6954863269d6a3b43a256f7b7e002a37a # v6.1.0
+    with:
+      node-version: '22'
