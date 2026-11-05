@@ -22,7 +22,7 @@ const pickBallotIdx = <C extends string>(
 }
 
 // The ballots in random order, each drawn by weight among those left.
-function* drawOrder<C extends string>(
+const drawOrder = function* <C extends string>(
   ballots: Ballot<C>[],
   rng: () => number,
 ): Generator<Ballot<C>> {
