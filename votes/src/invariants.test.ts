@@ -9,7 +9,13 @@ import {
   VotingSystem,
 } from '.'
 import { abcde } from './test/test-utils'
-import { rngGenerator, smithSet } from './utils'
+import {
+  condorcetWinner,
+  matrixFromBallots,
+  rngGenerator,
+  smithSet,
+  totalBallotsWeight,
+} from './utils'
 import { canonizeRanking } from './utils/normalize'
 import { shuffleArray } from './utils/shuffle-array'
 
@@ -232,5 +238,311 @@ describe('invariants on random profiles, ballots changed', () => {
         }),
       ),
     ).toStrictEqual(rankings((p) => run(system, p)))
+  })
+})
+
+// What lzear.org's comparison of the methods says each one meets
+// (`method-criteria.ts` in its votes project). It has no verdict on candidate
+// order or dictator, and a method it marks as meeting a criterion only in part
+// stays out too: anti-plurality on Pareto, random dictator on consistency.
+const except = (...left: VotingSystem[]) =>
+  systems.filter(
+    (s) =>
+      s !== VotingSystem.CandidateOrder &&
+      s !== VotingSystem.Dictator &&
+      !left.includes(s),
+  )
+
+const majority = except(
+  VotingSystem.AntiPlurality,
+  VotingSystem.Borda,
+  VotingSystem.RandomCandidates,
+  VotingSystem.RandomDictator,
+)
+
+const condorcetLoser = except(
+  VotingSystem.AntiPlurality,
+  VotingSystem.Approval,
+  VotingSystem.Bucklin,
+  VotingSystem.FirstPastThePost,
+  VotingSystem.MajorityJudgment,
+  VotingSystem.Minimax,
+  VotingSystem.RandomCandidates,
+  VotingSystem.RandomDictator,
+  VotingSystem.SupplementaryVote,
+)
+
+const pareto = except(
+  VotingSystem.AntiPlurality,
+  VotingSystem.RandomCandidates,
+  VotingSystem.Smith,
+)
+
+const smith = [
+  VotingSystem.Baldwin,
+  VotingSystem.Benham,
+  VotingSystem.BottomTwoRunoff,
+  VotingSystem.Copeland,
+  VotingSystem.Kemeny,
+  VotingSystem.MaximalLotteries,
+  VotingSystem.MinimaxTD,
+  VotingSystem.Nanson,
+  VotingSystem.RandomizedCondorcet,
+  VotingSystem.RankedPairs,
+  VotingSystem.Schulze,
+  VotingSystem.Smith,
+  VotingSystem.SmithInstantRunoff,
+  VotingSystem.SplitCycle,
+  VotingSystem.StableVoting,
+  VotingSystem.TidemanAlternative,
+  VotingSystem.Woodall,
+]
+
+const monotonic = [
+  VotingSystem.AbsoluteMajority,
+  VotingSystem.AntiPlurality,
+  VotingSystem.Approval,
+  VotingSystem.Black,
+  VotingSystem.Borda,
+  VotingSystem.Bucklin,
+  VotingSystem.Copeland,
+  VotingSystem.FirstPastThePost,
+  VotingSystem.Kemeny,
+  VotingSystem.MajorityJudgment,
+  VotingSystem.Minimax,
+  VotingSystem.MinimaxTD,
+  VotingSystem.RandomCandidates,
+  VotingSystem.RandomDictator,
+  VotingSystem.RandomizedCondorcet,
+  VotingSystem.RankedPairs,
+  VotingSystem.Schulze,
+  VotingSystem.Smith,
+  VotingSystem.SplitCycle,
+]
+
+const consistent = [
+  VotingSystem.AbsoluteMajority,
+  VotingSystem.AntiPlurality,
+  VotingSystem.Approval,
+  VotingSystem.Borda,
+  VotingSystem.FirstPastThePost,
+  VotingSystem.MaximalLotteries,
+  VotingSystem.RandomCandidates,
+]
+
+// Full rankings, as the site reads these criteria. An odd number of ballots of
+// odd weights leaves no duel tied, and weights up to 99 rarely tie anything
+// else: a tie would test the tiebreak rather than the method. Majority
+// judgment's time grows with the weights.
+const decided = Array.from({ length: 200 }, (_, i) => {
+  const candidates = abcde.slice(0, 3 + (i % 3))
+  const ballots = Array.from({ length: 5 + 2 * pick(3) }, () => ({
+    ranking: shuffleArray(candidates, rng).map((c) => [c]),
+    weight: 1 + 2 * pick(50),
+  }))
+  return { candidates, ballots }
+})
+
+type DecidedProfile = (typeof decided)[number]
+
+// The candidates who can win, with their chances in `SURE`ths: all of it for
+// each winner of a method that draws nothing.
+const SURE = 1e7
+const lottery = (
+  system: VotingSystem,
+  profile: DecidedProfile,
+): Record<string, number> => {
+  const method = run(system, profile)
+  if (method.probabilities) {
+    const chances = method.probabilities()
+    return Object.fromEntries(
+      profile.candidates.flatMap((c) =>
+        chances[c]! > 1 / SURE ? [[c, Math.round(chances[c]! * SURE)]] : [],
+      ),
+    )
+  }
+  const ranking = method.ranking()
+  // Absolute majority ties everyone when no one has a majority: no winner.
+  const first =
+    system === VotingSystem.AbsoluteMajority && ranking.length === 1
+      ? []
+      : ranking[0]!
+  return Object.fromEntries(
+    profile.candidates.filter((c) => first.includes(c)).map((c) => [c, SURE]),
+  )
+}
+
+const winners = (system: VotingSystem, profile: DecidedProfile) =>
+  Object.keys(lottery(system, profile))
+
+const majorityWinners = decided.flatMap((profile) => {
+  const winner = profile.candidates.find(
+    (c) =>
+      2 *
+        totalBallotsWeight(
+          profile.ballots.filter((b) => b.ranking[0]![0] === c),
+        ) >
+      totalBallotsWeight(profile.ballots),
+  )
+  return winner ? { profile, winner } : []
+})
+
+// A candidate who should not win: one losing every duel, the winner of them
+// all once the ballots are reversed.
+const condorcetLosers = decided.flatMap((profile) => {
+  const loser = condorcetWinner({
+    candidates: profile.candidates,
+    ballots: profile.ballots.map((b) => ({
+      ...b,
+      ranking: b.ranking.toReversed(),
+    })),
+  })
+  return loser ? { profile, loser } : []
+})
+
+// Likewise: `loser` swapped below `x` on every ballot ranking it higher.
+const dominated = decided.map((profile) => {
+  const [x, loser] = shuffleArray(profile.candidates, rng) as [
+    (typeof abcde)[number],
+    (typeof abcde)[number],
+  ]
+  return {
+    loser,
+    profile: {
+      ...profile,
+      ballots: profile.ballots.map((b) => {
+        const order = b.ranking.flat()
+        const [i, j] = [order.indexOf(x), order.indexOf(loser)]
+        return i < j
+          ? b
+          : { ...b, ranking: b.ranking.with(i, [loser]).with(j, [x]) }
+      }),
+    },
+  }
+})
+
+const smithDominated = decided.flatMap((profile) => {
+  const set = smithSet(profile)
+  return set.length < profile.candidates.length ? { profile, set } : []
+})
+
+// `x` lifted one place on `count` voters of ballot `g`, unless it is first.
+const raised = (
+  profile: DecidedProfile,
+  g: number,
+  x: string,
+  count: number,
+): DecidedProfile | undefined => {
+  const ballot = profile.ballots[g]!
+  const i = ballot.ranking.findIndex(([c]) => c === x)
+  if (i === 0) return undefined
+  return {
+    ...profile,
+    ballots: [
+      ...profile.ballots.with(g, { ...ballot, weight: ballot.weight - count }),
+      {
+        ranking: ballot.ranking.toSpliced(
+          i - 1,
+          2,
+          ballot.ranking[i]!,
+          ballot.ranking[i - 1]!,
+        ),
+        weight: count,
+      },
+    ],
+  }
+}
+
+// Ranked pairs locks equal margins together, so a raise can change what they
+// block: the site's verdict on it holds when every margin differs.
+const distinctMargins = ({ ballots, candidates }: DecidedProfile) => {
+  const { array } = matrixFromBallots(ballots, candidates)
+  const margins = array.flatMap((row, i) =>
+    row.flatMap((v, j) => (i < j ? Math.abs(v - array[j]![i]!) : [])),
+  )
+  return new Set(margins).size === margins.length
+}
+
+// Profiles on the same candidates, by index.
+const sameCandidates = decided.flatMap((_, i) =>
+  decided.flatMap((_b, j) =>
+    j > i && (j - i) % 3 === 0 ? [[i, j] as const] : [],
+  ),
+)
+
+describe('fairness criteria on random profiles', () => {
+  it('finds profiles for each criterion', () => {
+    for (const cases of [majorityWinners, condorcetLosers, smithDominated])
+      expect(cases.length).toBeGreaterThan(50)
+  })
+
+  it.each(majority)('elects a majority winner (%s)', (system) => {
+    expect(
+      majorityWinners.map(({ profile }) => winners(system, profile)),
+    ).toStrictEqual(majorityWinners.map(({ winner }) => [winner]))
+  })
+
+  it.each(condorcetLoser)('never elects a Condorcet loser (%s)', (system) => {
+    expect(
+      condorcetLosers.filter(({ profile, loser }) =>
+        winners(system, profile).includes(loser),
+      ),
+    ).toStrictEqual([])
+  })
+
+  it.each(pareto)('never elects a candidate all rank lower (%s)', (system) => {
+    expect(
+      dominated.filter(({ profile, loser }) =>
+        winners(system, profile).includes(loser),
+      ),
+    ).toStrictEqual([])
+  })
+
+  it.each(smith)('elects within the Smith set (%s)', (system) => {
+    expect(
+      smithDominated.filter(({ profile, set }) =>
+        winners(system, profile).some(
+          (c) => !set.includes(c as (typeof abcde)[number]),
+        ),
+      ),
+    ).toStrictEqual([])
+  })
+
+  // A draw can only give a raised candidate better chances, give or take the
+  // rounding.
+  it.each(monotonic)('keeps a raised winner (%s)', (system) => {
+    const count = rngGenerator(system)
+    expect(
+      decided.flatMap((profile) => {
+        const before = lottery(system, profile)
+        return Object.keys(before).flatMap((x) =>
+          profile.ballots.flatMap((b, g) => {
+            const up = raised(profile, g, x, 1 + Math.floor(count() * b.weight))
+            return up &&
+              (lottery(system, up)[x] ?? 0) < before[x]! - 1 &&
+              (system !== VotingSystem.RankedPairs ||
+                (distinctMargins(profile) && distinctMargins(up)))
+              ? { up, x }
+              : []
+          }),
+        )
+      }),
+    ).toStrictEqual([])
+  })
+
+  it.each(consistent)('keeps what two electorates agree on (%s)', (system) => {
+    const alone = decided.map((p) => JSON.stringify(lottery(system, p)))
+    const agreeing = sameCandidates.filter(([i, j]) => alone[i] === alone[j])
+    expect(agreeing.length).toBeGreaterThan(0)
+    expect(
+      agreeing.map(([i, j]) =>
+        JSON.stringify(
+          lottery(system, {
+            ...decided[i]!,
+            ballots: [...decided[i]!.ballots, ...decided[j]!.ballots],
+          }),
+        ),
+      ),
+    ).toStrictEqual(agreeing.map(([i]) => alone[i]))
   })
 })
